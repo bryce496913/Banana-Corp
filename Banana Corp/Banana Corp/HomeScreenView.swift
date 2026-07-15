@@ -45,10 +45,10 @@ struct HomeScreenView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 50, height: 50)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(AppTheme.Colors.text)
 
                                     Text(app.title)
-                                        .foregroundColor(.white)
+                                        .appText(.h3)
                                         .multilineTextAlignment(.center)
                                         .lineLimit(1)
                                 }
@@ -61,7 +61,7 @@ struct HomeScreenView: View {
 
                 HomeButton()
             }
-            .background(Color.black)
+            .background(AppTheme.Colors.background)
             .navigationBarHidden(true)
             .navigationDestination(for: PhoneAppRoute.self) { route in
                 destinationView(for: route)

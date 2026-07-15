@@ -15,12 +15,12 @@ struct SocialXView: View {
             Spacer()
 
             Text("Social X")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

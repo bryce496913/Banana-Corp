@@ -15,12 +15,12 @@ struct PhoneView: View {
             Spacer()
 
             Text("Phone")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

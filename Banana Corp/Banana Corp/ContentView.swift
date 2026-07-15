@@ -12,7 +12,7 @@ struct LaunchView: View {
 
     var body: some View {
         ZStack {
-            Color.black
+            AppTheme.Colors.background
                 .ignoresSafeArea()
 
             if isLaunchComplete {

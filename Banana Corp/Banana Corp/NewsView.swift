@@ -15,12 +15,12 @@ struct NewsView: View {
             Spacer()
 
             Text("News")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }
