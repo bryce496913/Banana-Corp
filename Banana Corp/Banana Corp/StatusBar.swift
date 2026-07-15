@@ -16,10 +16,13 @@ struct StatusBar: View {
     
     var body: some View {
         HStack {
-            // Left side: Real-world time
-            Text(currentTime, style: .time)
-                .padding(.leading, 10)
-                .foregroundColor(.white)
+            // Left side: in-world carrier and real-world time
+            HStack(spacing: 6) {
+                Text("BANANA 5G")
+                Text(currentTime, style: .time)
+            }
+            .padding(.leading, 10)
+            .foregroundColor(.white)
             
             Spacer()
             

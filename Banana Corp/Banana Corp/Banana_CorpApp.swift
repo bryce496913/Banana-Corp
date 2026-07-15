@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Banana_CorpApp: App {
+    @StateObject private var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
-            HomeScreenView()
+            LaunchView()
+                .environmentObject(appState)
         }
     }
 }

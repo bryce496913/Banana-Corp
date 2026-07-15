@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EEAA00022E27000000000001 /* PhoneAppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAA00012E27000000000001 /* PhoneAppRoute.swift */; };
 		EE11F5ED2B6DB5260094F4DE /* PongGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE11F5EC2B6DB5260094F4DE /* PongGameView.swift */; };
 		EE9899ED2B6C3142003201BE /* Banana_CorpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9899EC2B6C3142003201BE /* Banana_CorpApp.swift */; };
 		EE9899EF2B6C3142003201BE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9899EE2B6C3142003201BE /* ContentView.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EEAA00012E27000000000001 /* PhoneAppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAppRoute.swift; sourceTree = "<group>"; };
 		EE11F5EC2B6DB5260094F4DE /* PongGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PongGameView.swift; sourceTree = "<group>"; };
 		EE9899E92B6C3142003201BE /* Banana Corp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Banana Corp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE9899EC2B6C3142003201BE /* Banana_CorpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banana_CorpApp.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				EE989A042B6C39BB003201BE /* HomeButton.swift */,
 				EE989A022B6C398A003201BE /* StatusBar.swift */,
 				EE989A002B6C34DB003201BE /* AppState.swift */,
+				EEAA00012E27000000000001 /* PhoneAppRoute.swift */,
 				EE989A072B6C50FF003201BE /* EmailView.swift */,
 				EE989A092B6C5137003201BE /* WebBrowserView.swift */,
 				EE989A0B2B6C517A003201BE /* SocialXView.swift */,
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE989A222B6C5207003201BE /* FlapFlapGameView.swift in Sources */,
+				EEAA00022E27000000000001 /* PhoneAppRoute.swift in Sources */,
 				EE11F5ED2B6DB5260094F4DE /* PongGameView.swift in Sources */,
 				EE9899EF2B6C3142003201BE /* ContentView.swift in Sources */,
 				EE989A0C2B6C517A003201BE /* SocialXView.swift in Sources */,

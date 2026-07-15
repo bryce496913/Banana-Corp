@@ -9,6 +9,18 @@ import SwiftUI
 
 struct NewsView: View {
     var body: some View {
-        Text("News")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("News")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

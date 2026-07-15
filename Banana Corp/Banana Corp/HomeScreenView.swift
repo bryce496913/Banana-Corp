@@ -8,51 +8,52 @@
 import SwiftUI
 
 struct HomeScreenView: View {
-    let apps = [
-        AppInfo("Email", "envelope.fill", EmailView()),
-        AppInfo("Web Browser", "safari.fill", WebBrowserView()),
-        AppInfo("Social X", "bubble.left.and.bubble.right.fill", SocialXView()),
-        AppInfo("WatchVideo", "play.circle.fill", WatchVideoView()),
-        AppInfo("Messager", "message.fill", MessagerView()),
-        AppInfo("Photo Album", "photo.fill", PhotoAlbumView()),
-        AppInfo("Settings", "gearshape.fill", SettingsView()),
-        AppInfo("Phone", "phone.fill", PhoneView()),
-        AppInfo("News", "newspaper.fill", NewsView()),
-        AppInfo("AI Assistant", "waveform.path.ecg.rectangle.fill", AIAssistantView()),
-        AppInfo("Snake", "gamecontroller.fill", SnakeGameView()), //done
-        AppInfo("X / O", "gamecontroller.fill", XOGameView()), //done
-        AppInfo("VR Experience", "eyeglasses", VRExperienceView()),
-        AppInfo("Pong", "flame.fill", PongGameView()) //done
-        // Add more apps as needed
+    @EnvironmentObject private var appState: AppState
+
+    private let apps = [
+        PhoneAppInfo(title: "Email", systemImage: "envelope.fill", route: .email),
+        PhoneAppInfo(title: "Web Browser", systemImage: "safari.fill", route: .browser),
+        PhoneAppInfo(title: "Social X", systemImage: "bubble.left.and.bubble.right.fill", route: .social),
+        PhoneAppInfo(title: "WatchVideo", systemImage: "play.circle.fill", route: .watchVideo),
+        PhoneAppInfo(title: "Messager", systemImage: "message.fill", route: .messager),
+        PhoneAppInfo(title: "Photo Album", systemImage: "photo.fill", route: .photoAlbum),
+        PhoneAppInfo(title: "Settings", systemImage: "gearshape.fill", route: .settings),
+        PhoneAppInfo(title: "Phone", systemImage: "phone.fill", route: .phone),
+        PhoneAppInfo(title: "News", systemImage: "newspaper.fill", route: .news),
+        PhoneAppInfo(title: "AI Assistant", systemImage: "waveform.path.ecg.rectangle.fill", route: .aiAssistant),
+        PhoneAppInfo(title: "Snake", systemImage: "gamecontroller.fill", route: .snake),
+        PhoneAppInfo(title: "X / O", systemImage: "gamecontroller.fill", route: .xo),
+        PhoneAppInfo(title: "VR Experience", systemImage: "eyeglasses", route: .vrExperience),
+        PhoneAppInfo(title: "Pong", systemImage: "flame.fill", route: .pong)
     ]
 
-    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
+    private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
 
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $appState.navigationPath) {
             VStack {
                 StatusBar()
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 30) {
-                        ForEach(apps, id: \.name) { app in
-                            NavigationLink(
-                                destination: app.destination,
-                                label: {
-                                    VStack {
-                                        Image(systemName: app.icon)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 50, height: 50)
-                                            .foregroundColor(.white)
+                        ForEach(visibleApps) { app in
+                            Button {
+                                appState.open(app.route)
+                            } label: {
+                                VStack {
+                                    Image(systemName: app.systemImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(.white)
 
-                                        Text(app.name)
-                                            .foregroundColor(.white)
-                                            .multilineTextAlignment(.center)
-                                            .lineLimit(1)
-                                    }
+                                    Text(app.title)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(1)
                                 }
-                            )
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding()
@@ -62,25 +63,62 @@ struct HomeScreenView: View {
             }
             .background(Color.black)
             .navigationBarHidden(true)
+            .navigationDestination(for: PhoneAppRoute.self) { route in
+                destinationView(for: route)
+                    .navigationBarHidden(true)
+            }
+        }
+    }
+
+    private var visibleApps: [PhoneAppInfo] {
+        apps.filter { appState.unlockedApps.contains($0.route) }
+    }
+
+    @ViewBuilder
+    private func destinationView(for route: PhoneAppRoute) -> some View {
+        switch route {
+        case .email:
+            EmailView()
+        case .browser:
+            WebBrowserView()
+        case .social:
+            SocialXView()
+        case .watchVideo:
+            WatchVideoView()
+        case .messager:
+            MessagerView()
+        case .photoAlbum:
+            PhotoAlbumView()
+        case .settings:
+            SettingsView()
+        case .phone:
+            PhoneView()
+        case .news:
+            NewsView()
+        case .aiAssistant:
+            AIAssistantView()
+        case .vrExperience:
+            VRExperienceView()
+        case .snake:
+            SnakeGameView()
+        case .pong:
+            PongGameView()
+        case .xo:
+            XOGameView()
         }
     }
 }
 
-struct AppInfo: Identifiable {
+struct PhoneAppInfo: Identifiable {
     let id = UUID()
-    let name: String
-    let icon: String
-    let destination: AnyView
-
-    init<T: View>(_ name: String, _ icon: String, _ destination: T) {
-        self.name = name
-        self.icon = icon
-        self.destination = AnyView(destination)
-    }
+    let title: String
+    let systemImage: String
+    let route: PhoneAppRoute
 }
 
 struct HomeScreenView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreenView()
+            .environmentObject(AppState())
     }
 }

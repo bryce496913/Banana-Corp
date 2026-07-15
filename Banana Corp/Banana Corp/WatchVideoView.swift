@@ -9,6 +9,18 @@ import SwiftUI
 
 struct WatchVideoView: View {
     var body: some View {
-        Text("Watch Video")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Watch Video")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

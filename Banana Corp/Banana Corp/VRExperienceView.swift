@@ -9,6 +9,18 @@ import SwiftUI
 
 struct VRExperienceView: View {
     var body: some View {
-        Text("VR Experience")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("VR Experience")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

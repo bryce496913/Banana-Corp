@@ -9,6 +9,18 @@ import SwiftUI
 
 struct AIAssistantView: View {
     var body: some View {
-        Text("AI Assistant")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("AI Assistant")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }
