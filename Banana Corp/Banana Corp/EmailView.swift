@@ -9,7 +9,18 @@ import SwiftUI
 
 struct EmailView: View {
     var body: some View {
-        Text("Email View")
-            .navigationBarTitle("Email")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Email View")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

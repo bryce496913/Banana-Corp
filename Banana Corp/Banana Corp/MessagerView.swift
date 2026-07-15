@@ -9,6 +9,18 @@ import SwiftUI
 
 struct MessagerView: View {
     var body: some View {
-        Text("Messager")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Messager")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

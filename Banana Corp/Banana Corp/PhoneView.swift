@@ -9,6 +9,18 @@ import SwiftUI
 
 struct PhoneView: View {
     var body: some View {
-        Text("Phone")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Phone")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

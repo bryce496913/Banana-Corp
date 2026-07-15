@@ -9,6 +9,18 @@ import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        Text("Settings")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Settings")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

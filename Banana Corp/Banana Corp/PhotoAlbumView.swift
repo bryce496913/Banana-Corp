@@ -9,6 +9,18 @@ import SwiftUI
 
 struct PhotoAlbumView: View {
     var body: some View {
-        Text("Photo Album")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Photo Album")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

@@ -9,6 +9,18 @@ import SwiftUI
 
 struct WebBrowserView: View {
     var body: some View {
-        Text("Web Browser")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Web Browser")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }

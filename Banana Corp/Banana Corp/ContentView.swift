@@ -7,47 +7,37 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @State private var isActive: Bool = false
+struct LaunchView: View {
+    @State private var isLaunchComplete = false
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black
-                    .edgesIgnoringSafeArea(.all)
-                
-                ZStack {
-                    Color.black
-                    Image("Logo-Black")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200) // Adjust the size as needed
-                }
-                .opacity(isActive ? 1 : 0)
-                //.animation(.easeInOut(duration: 1))
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+
+            if isLaunchComplete {
+                HomeScreenView()
+            } else {
+                Image("Logo-Black")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .transition(.opacity)
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) { // Increased delay to 4 seconds
-                    withAnimation {
-                        self.isActive = true
-                    }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                withAnimation {
+                    isLaunchComplete = true
                 }
             }
-            .background(
-                NavigationLink(
-                    destination: HomeScreenView(),
-                    isActive: $isActive,
-                    label: { EmptyView() }
-                )
-                .hidden()
-            )
         }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct LaunchView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        LaunchView()
+            .environmentObject(AppState())
     }
 }
-

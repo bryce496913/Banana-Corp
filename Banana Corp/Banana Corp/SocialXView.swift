@@ -9,6 +9,18 @@ import SwiftUI
 
 struct SocialXView: View {
     var body: some View {
-        Text("Social X")
+        VStack {
+            StatusBar()
+
+            Spacer()
+
+            Text("Social X")
+                .foregroundColor(.white)
+
+            Spacer()
+
+            HomeButton()
+        }
+        .background(Color.black)
     }
 }
