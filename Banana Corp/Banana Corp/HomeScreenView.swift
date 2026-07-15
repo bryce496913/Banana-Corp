@@ -12,87 +12,119 @@ struct HomeScreenView: View {
 
     private let apps = [
         PhoneAppInfo(title: "Email", systemImage: "envelope.fill", route: .email),
-        PhoneAppInfo(title: "Web Browser", systemImage: "safari.fill", route: .browser),
+        PhoneAppInfo(title: "Web", systemImage: "safari.fill", route: .browser),
         PhoneAppInfo(title: "Social X", systemImage: "bubble.left.and.bubble.right.fill", route: .social),
-        PhoneAppInfo(title: "WatchVideo", systemImage: "play.circle.fill", route: .watchVideo),
-        PhoneAppInfo(title: "Messager", systemImage: "message.fill", route: .messager),
-        PhoneAppInfo(title: "Photo Album", systemImage: "photo.fill", route: .photoAlbum),
+        PhoneAppInfo(title: "Video", systemImage: "play.circle.fill", route: .watchVideo),
+        PhoneAppInfo(title: "Messages", systemImage: "message.fill", route: .messager),
+        PhoneAppInfo(title: "Photos", systemImage: "photo.fill", route: .photoAlbum),
         PhoneAppInfo(title: "Settings", systemImage: "gearshape.fill", route: .settings),
         PhoneAppInfo(title: "Phone", systemImage: "phone.fill", route: .phone),
-        PhoneAppInfo(title: "News", systemImage: "newspaper.fill", route: .news),
-        PhoneAppInfo(title: "AI Assistant", systemImage: "waveform.path.ecg.rectangle.fill", route: .aiAssistant),
         PhoneAppInfo(title: "Snake", systemImage: "gamecontroller.fill", route: .snake),
-        PhoneAppInfo(title: "X / O", systemImage: "gamecontroller.fill", route: .xo),
-        PhoneAppInfo(title: "VR Experience", systemImage: "eyeglasses", route: .vrExperience),
-        PhoneAppInfo(title: "Pong", systemImage: "flame.fill", route: .pong)
+        PhoneAppInfo(title: "X / O", systemImage: "square.grid.3x3.fill", route: .xo),
+        PhoneAppInfo(title: "VR", systemImage: "visionpro.fill", route: .vrExperience),
+        PhoneAppInfo(title: "Pong", systemImage: "circle.grid.cross.fill", route: .pong)
     ]
 
-    private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
+    private let dockApps = [
+        PhoneAppInfo(title: "Email", systemImage: "envelope.fill", route: .email),
+        PhoneAppInfo(title: "Messages", systemImage: "message.fill", route: .messager),
+        PhoneAppInfo(title: "News", systemImage: "newspaper.fill", route: .news),
+        PhoneAppInfo(title: "AI", systemImage: "waveform.path.ecg.rectangle.fill", route: .aiAssistant)
+    ]
+
+    private let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: AppTheme.Spacing.md), count: 4)
 
     var body: some View {
-        NavigationView {
-            VStack {
-                StatusBar()
+        NavigationStack(path: $appState.navigationPath) {
+            PhoneShellView(title: nil, showsStatusBar: true, showsHomeIndicator: false) {
+                VStack(spacing: AppTheme.Spacing.lg) {
+                    Spacer(minLength: AppTheme.Spacing.md)
 
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 30) {
-                        ForEach(visibleApps) { app in
-                            Button {
-                                appState.open(app.route)
-                            } label: {
-                                VStack {
-                                    Image(systemName: app.systemImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(AppTheme.Colors.text)
+                    appGrid
 
-                                    Text(app.title)
-                                        .appText(.h3)
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(1)
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding()
+                    Spacer(minLength: AppTheme.Spacing.md)
+
+                    dock
                 }
-
-                HomeButton()
+                .padding(.horizontal, AppTheme.Spacing.md)
             }
-            .background(
-                navigationLinks
-            )
-            .background(AppTheme.Colors.background)
-            .navigationBarHidden(true)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-    }
-
-    @ViewBuilder
-    private var navigationLinks: some View {
-        ForEach(apps) { app in
-            NavigationLink(
-                destination: destinationView(for: app.route)
-                    .navigationBarHidden(true),
-                isActive: isRouteActive(app.route)
-            ) {
-                EmptyView()
+            .navigationDestination(for: PhoneAppRoute.self) { route in
+                destinationView(for: route)
             }
-            .hidden()
         }
     }
 
-    private func isRouteActive(_ route: PhoneAppRoute) -> Binding<Bool> {
-        Binding(
-            get: { appState.navigationPath.last == route },
-            set: { isActive in
-                if !isActive, appState.navigationPath.last == route {
-                    appState.goHome()
-                }
+    private var appGrid: some View {
+        LazyVGrid(columns: columns, spacing: AppTheme.Spacing.lg) {
+            ForEach(visibleApps) { app in
+                appIcon(app)
             }
+        }
+    }
+
+    private var dock: some View {
+        HStack(spacing: AppTheme.Spacing.lg) {
+            ForEach(dockApps.filter { appState.unlockedApps.contains($0.route) }) { app in
+                appIcon(app, compact: true)
+            }
+        }
+        .padding(.vertical, AppTheme.Spacing.md)
+        .padding(.horizontal, AppTheme.Spacing.lg)
+        .modernSurface(
+            in: RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous),
+            tint: AppTheme.Colors.highlight.opacity(0.16)
         )
+        .padding(.bottom, AppTheme.Spacing.sm)
+    }
+
+    private func appIcon(_ app: PhoneAppInfo, compact: Bool = false) -> some View {
+        Button {
+            appState.open(app.route)
+        } label: {
+            VStack(spacing: AppTheme.Spacing.xs) {
+                ZStack(alignment: .topTrailing) {
+                    RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous)
+                        .fill(AppTheme.Colors.accent.opacity(0.26))
+                        .modernSurface(
+                            in: RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous),
+                            tint: AppTheme.Colors.accent.opacity(0.20),
+                            interactive: true
+                        )
+                        .frame(width: compact ? 44 : 52, height: compact ? 44 : 52)
+
+                    Image(systemName: app.systemImage)
+                        .font(.system(size: compact ? 20 : 24, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.text)
+                        .frame(width: compact ? 44 : 52, height: compact ? 44 : 52)
+
+                    if badgeCount(for: app.route) > 0 {
+                        Text("\(badgeCount(for: app.route))")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.text)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(AppTheme.Colors.highlight))
+                            .offset(x: 5, y: -5)
+                    }
+                }
+
+                Text(app.title)
+                    .appText(.paragraph)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(1)
+                    .frame(maxWidth: 72)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(app.title)
+    }
+
+    private func badgeCount(for route: PhoneAppRoute) -> Int {
+        switch route {
+        case .email: return appState.unreadEmails
+        case .messager: return appState.unreadMessages
+        default: return 0
+        }
     }
 
     private var visibleApps: [PhoneAppInfo] {
@@ -102,34 +134,20 @@ struct HomeScreenView: View {
     @ViewBuilder
     private func destinationView(for route: PhoneAppRoute) -> some View {
         switch route {
-        case .email:
-            EmailView()
-        case .browser:
-            WebBrowserView()
-        case .social:
-            SocialXView()
-        case .watchVideo:
-            WatchVideoView()
-        case .messager:
-            MessagerView()
-        case .photoAlbum:
-            PhotoAlbumView()
-        case .settings:
-            SettingsView()
-        case .phone:
-            PhoneView()
-        case .news:
-            NewsView()
-        case .aiAssistant:
-            AIAssistantView()
-        case .vrExperience:
-            VRExperienceView()
-        case .snake:
-            SnakeGameView()
-        case .pong:
-            PongGameView()
-        case .xo:
-            XOGameView()
+        case .email: EmailView()
+        case .browser: WebBrowserView()
+        case .social: SocialXView()
+        case .watchVideo: WatchVideoView()
+        case .messager: MessagerView()
+        case .photoAlbum: PhotoAlbumView()
+        case .settings: SettingsView()
+        case .phone: PhoneView()
+        case .news: NewsView()
+        case .aiAssistant: AIAssistantView()
+        case .vrExperience: VRExperienceView()
+        case .snake: SnakeGameView()
+        case .pong: PongGameView()
+        case .xo: XOGameView()
         }
     }
 }

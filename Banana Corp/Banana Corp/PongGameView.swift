@@ -133,10 +133,9 @@ struct PongGameView: View {
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        VStack(spacing: 12) {
-            StatusBar()
-
-            Text("Pong")
+        PhoneShellView(title: nil) {
+            VStack(spacing: 12) {
+                Text("Pong")
                 .appText(.h1, color: AppTheme.Colors.highlight)
 
             HStack(spacing: 28) {
@@ -165,12 +164,8 @@ struct PongGameView: View {
             Text(model.roundMessage ?? "Drag left paddle to train reflexes")
                 .appText(.paragraph, color: model.roundMessage == nil ? AppTheme.Colors.text.opacity(0.75) : AppTheme.Colors.highlight)
                 .frame(minHeight: 20)
-
-            HomeButton()
+            }
         }
-        .padding(.bottom, 10)
-        .background(AppTheme.Colors.background.ignoresSafeArea())
-        .navigationBarHidden(true)
         .onReceive(timer) { _ in
             model.tick(boardSize: currentBoardSize)
         }

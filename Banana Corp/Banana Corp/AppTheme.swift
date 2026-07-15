@@ -97,3 +97,36 @@ extension ButtonStyle where Self == AppPrimaryButtonStyle {
         AppPrimaryButtonStyle()
     }
 }
+
+
+struct ModernPhoneButtonStyle: ButtonStyle {
+    let prominent: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        let shape = RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+
+        configuration.label
+            .appText(.h3)
+            .foregroundColor(AppTheme.Colors.text)
+            .padding(.vertical, AppTheme.Spacing.sm)
+            .padding(.horizontal, AppTheme.Spacing.md)
+            .frame(minHeight: 36)
+            .modernSurface(
+                in: shape,
+                tint: prominent ? AppTheme.Colors.highlight.opacity(0.25) : AppTheme.Colors.accent.opacity(0.18),
+                interactive: true
+            )
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+extension ButtonStyle where Self == ModernPhoneButtonStyle {
+    static var modernPhone: ModernPhoneButtonStyle {
+        ModernPhoneButtonStyle(prominent: false)
+    }
+
+    static var modernPhoneProminent: ModernPhoneButtonStyle {
+        ModernPhoneButtonStyle(prominent: true)
+    }
+}

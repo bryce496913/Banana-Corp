@@ -2,25 +2,30 @@
 //  SettingsView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Settings") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("DEVICE SETTINGS")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Banana Corp OS")
+                    .appText(.paragraph)
 
-            Text("Settings")
-                .appText(.h1)
+                Text("Core device controls are online. Advanced settings remain managed.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

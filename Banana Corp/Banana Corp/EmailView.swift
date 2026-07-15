@@ -2,25 +2,30 @@
 //  EmailView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct EmailView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Email") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("BANANA MAIL")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Inbox syncing...")
+                    .appText(.paragraph)
 
-            Text("Email View")
-                .appText(.h1)
+                Text("Secure messages will appear after device activation.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

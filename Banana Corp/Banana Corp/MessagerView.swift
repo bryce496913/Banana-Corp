@@ -2,25 +2,30 @@
 //  MessagerView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct MessagerView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Messages") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("BANANA MESSAGES")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("No active conversations...")
+                    .appText(.paragraph)
 
-            Text("Messager")
-                .appText(.h1)
+                Text("Encrypted threads are waiting for device activation.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

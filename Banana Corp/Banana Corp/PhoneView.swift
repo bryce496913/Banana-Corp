@@ -2,25 +2,30 @@
 //  PhoneView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct PhoneView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Phone") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("BANANA PHONE")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Service limited...")
+                    .appText(.paragraph)
 
-            Text("Phone")
-                .appText(.h1)
+                Text("Calls are restricted until the device finishes registration.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }
