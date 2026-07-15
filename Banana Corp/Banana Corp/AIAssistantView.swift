@@ -2,25 +2,30 @@
 //  AIAssistantView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct AIAssistantView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "AI Assistant") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("BANANA ASSIST")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Connection pending...")
+                    .appText(.paragraph)
 
-            Text("AI Assistant")
-                .appText(.h1)
+                Text("System access will become available after device activation.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

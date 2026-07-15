@@ -2,25 +2,30 @@
 //  PhotoAlbumView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct PhotoAlbumView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Photo Album") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("BANANA PHOTOS")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Album indexing...")
+                    .appText(.paragraph)
 
-            Text("Photo Album")
-                .appText(.h1)
+                Text("Recovered media will appear here when access is granted.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

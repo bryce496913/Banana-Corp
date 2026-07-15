@@ -2,25 +2,30 @@
 //  SocialXView.swift
 //  Banana Corp
 //
-//  Created by Aditi Abrol on 1/2/24.
-//
 
 import SwiftUI
 
 struct SocialXView: View {
     var body: some View {
-        VStack {
-            StatusBar()
+        PhoneShellView(title: "Social X") {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Text("SOCIAL X")
+                    .appText(.h2, color: AppTheme.Colors.highlight)
 
-            Spacer()
+                Text("Feed unavailable...")
+                    .appText(.paragraph)
 
-            Text("Social X")
-                .appText(.h1)
+                Text("Network identity verification is still in progress.")
+                    .appText(.paragraph)
+                    .padding(AppTheme.Spacing.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modernSurface(
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+                    )
 
-            Spacer()
-
-            HomeButton()
+                Spacer()
+            }
+            .padding(AppTheme.Spacing.lg)
         }
-        .background(AppTheme.Colors.background)
     }
 }

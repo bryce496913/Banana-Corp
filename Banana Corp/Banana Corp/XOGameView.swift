@@ -16,10 +16,9 @@ struct XOGameView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 3)
 
     var body: some View {
-        VStack(spacing: 18) {
-            StatusBar()
-
-            Text("XO Training Grid")
+        PhoneShellView(title: nil) {
+            VStack(spacing: 18) {
+                Text("XO Training Grid")
                 .appText(.h1, color: AppTheme.Colors.highlight)
 
             Text(statusMessage)
@@ -48,15 +47,12 @@ struct XOGameView: View {
             Button("Reset Grid") {
                 resetGame()
             }
-            .buttonStyle(.appPrimary)
+            .buttonStyle(.modernPhoneProminent)
 
-            Spacer(minLength: 0)
-            HomeButton()
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 16)
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 10)
-        .background(AppTheme.Colors.background.ignoresSafeArea())
-        .navigationBarHidden(true)
     }
 
     private var statusMessage: String {

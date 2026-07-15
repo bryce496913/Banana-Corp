@@ -15,10 +15,9 @@ struct FlapFlapGameView: View {
     @State private var pipes: [Pipe] = []
 
     var body: some View {
-        VStack {
-            StatusBar()
-
-            Spacer()
+        PhoneShellView(title: "Flap Flap") {
+            VStack {
+                Spacer()
 
             if isGameRunning {
                 ZStack {
@@ -53,23 +52,19 @@ struct FlapFlapGameView: View {
             else {
                 VStack {
                     Text("Start Screen")
-                        .font(.largeTitle)
-                        .foregroundColor(.blue)
+                        .appText(.h1, color: AppTheme.Colors.highlight)
                         .padding()
 
                     Button("Start Game") {
                         startGame()
                     }
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                    .buttonStyle(.modernPhoneProminent)
                 }
             }
 
             Spacer()
 
-            HomeButton()
+            }
         }
     }
 

@@ -103,10 +103,9 @@ struct SnakeGameView: View {
     private let timer = Timer.publish(every: 0.18, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        VStack(spacing: 12) {
-            StatusBar()
-
-            HStack {
+        PhoneShellView(title: nil) {
+            VStack(spacing: 12) {
+                HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Snake")
                         .appText(.h1, color: AppTheme.Colors.highlight)
@@ -146,12 +145,14 @@ struct SnakeGameView: View {
                             Text("Score: \(model.score)")
                                 .font(.system(size: AppTextStyle.h2.size, weight: AppTextStyle.h2.weight).monospacedDigit())
                             Button("Restart") { model.reset() }
-                                .buttonStyle(.appPrimary)
+                                .buttonStyle(.modernPhoneProminent)
                         }
                         .padding(24)
-                        .background(AppTheme.Colors.surface.opacity(0.9))
+                        .modernSurface(
+                            in: RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous),
+                            tint: AppTheme.Colors.highlight.opacity(0.20)
+                        )
                         .foregroundColor(AppTheme.Colors.text)
-                        .cornerRadius(16)
                     }
                 }
                 .frame(width: boardSize, height: boardSize)
@@ -161,13 +162,9 @@ struct SnakeGameView: View {
             }
             .frame(maxHeight: 390)
 
-            SnakeControlPadView { model.changeDirection($0) }
-
-            HomeButton()
+                SnakeControlPadView { model.changeDirection($0) }
+            }
         }
-        .padding(.bottom, 10)
-        .background(AppTheme.Colors.background.ignoresSafeArea())
-        .navigationBarHidden(true)
         .onReceive(timer) { _ in
             guard !model.isGameOver else { return }
             model.tick()
