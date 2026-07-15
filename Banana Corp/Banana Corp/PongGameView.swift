@@ -6,221 +6,229 @@
 //
 
 import SwiftUI
-import Charts
-import Combine
-import Foundation
 
-final class GameState: ObservableObject {
-    struct Player {
-        var position: Int
-        var halfSize: Int = 150
+final class PongGameModel: ObservableObject {
+    @Published var ballPosition: CGPoint = .zero
+    @Published var ballVelocity: CGVector = .zero
+    @Published var playerPaddleY: CGFloat = 0
+    @Published var aiPaddleY: CGFloat = 0
+    @Published var playerScore = 0
+    @Published var aiScore = 0
+    @Published var roundMessage: String?
 
-        var yStart: Int {
-            position - halfSize
+    let paddleWidth: CGFloat = 8
+    let paddleHeight: CGFloat = 72
+    let ballSize: CGFloat = 14
+
+    private let horizontalInset: CGFloat = 24
+    private var didInitialize = false
+    private var messageTicksRemaining = 0
+
+    func reset(boardSize: CGSize) {
+        guard boardSize.width > 0, boardSize.height > 0 else { return }
+        didInitialize = true
+        playerPaddleY = boardSize.height / 2
+        aiPaddleY = boardSize.height / 2
+        resetBall(boardSize: boardSize, towardPlayer: Bool.random())
+        roundMessage = "Banana Corp training round armed"
+        messageTicksRemaining = 90
+    }
+
+    func tick(boardSize: CGSize) {
+        guard boardSize.width > 0, boardSize.height > 0 else { return }
+        if !didInitialize { reset(boardSize: boardSize) }
+
+        if messageTicksRemaining > 0 {
+            messageTicksRemaining -= 1
+            if messageTicksRemaining == 0 { roundMessage = nil }
         }
 
-        var yEnd: Int {
-            position + halfSize
+        ballPosition.x += ballVelocity.dx
+        ballPosition.y += ballVelocity.dy
+
+        if ballPosition.y <= ballSize / 2 {
+            ballPosition.y = ballSize / 2
+            ballVelocity.dy = abs(ballVelocity.dy)
+        } else if ballPosition.y >= boardSize.height - ballSize / 2 {
+            ballPosition.y = boardSize.height - ballSize / 2
+            ballVelocity.dy = -abs(ballVelocity.dy)
+        }
+
+        moveAI(boardHeight: boardSize.height)
+        handlePaddleCollisions(boardSize: boardSize)
+
+        if ballPosition.x < -ballSize {
+            aiScore += 1
+            scorePoint(message: "Signal lost on left node", boardSize: boardSize, towardPlayer: true)
+        } else if ballPosition.x > boardSize.width + ballSize {
+            playerScore += 1
+            scorePoint(message: "Right node captured a point", boardSize: boardSize, towardPlayer: false)
         }
     }
 
-    let boardSize: Int = 1000
-    var velocity: CGPoint = .zero
-    let speed: CGFloat = 5
-    var loser: String?
-    var direction: CGFloat = .zero {
-        didSet {
-            self.velocity = .init(
-                x: cos(self.direction) * self.speed,
-                y: sin(self.direction) * self.speed
-            )
-        }
-    }
-    var cancels = Set<AnyCancellable>()
-
-    init() {
-        self.paused = true
-        self.started = false
-        self.p0 = .init(position: Int(boardSize / 2))
-        self.p1 = .init(position: Int(boardSize / 2))
-        self.ball = .init(x: boardSize / 2, y: boardSize / 2)
-        Timer.publish(every: 0.013333333, on: .main, in: .common)
-            .autoconnect()
-            .sink { _ in
-                self.update()
-            }
-            .store(in: &cancels)
-    }
-    
-    func moveComputerPlayer() {
-        // Adjust the computer player's position based on the ball's position
-        let speed = CGFloat(10)
-
-        // Simple AI: Move towards the ball's y-position
-        if p1.position < Int(ball.y) {
-            p1.position += Int(speed)
-        } else {
-            p1.position -= Int(speed)
-        }
-
-        // Ensure the computer player stays within the board limits
-        p1.position = min(boardSize - p1.halfSize, max(p1.halfSize, p1.position))
+    func movePlayerPaddle(to y: CGFloat, boardHeight: CGFloat) {
+        playerPaddleY = clampedPaddleY(y, boardHeight: boardHeight)
     }
 
-    func update() {
-        guard !self.paused else {
-            return
-        }
+    private func moveAI(boardHeight: CGFloat) {
+        aiPaddleY += (ballPosition.y - aiPaddleY) * 0.08
+        aiPaddleY = clampedPaddleY(aiPaddleY, boardHeight: boardHeight)
+    }
 
-        self.ball = .init(
-            x: self.ball.x + self.velocity.x,
-            y: self.ball.y + self.velocity.y
+    private func handlePaddleCollisions(boardSize: CGSize) {
+        let playerRect = CGRect(
+            x: horizontalInset - paddleWidth / 2,
+            y: playerPaddleY - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight
+        )
+        let aiRect = CGRect(
+            x: boardSize.width - horizontalInset - paddleWidth / 2,
+            y: aiPaddleY - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight
+        )
+        let ballRect = CGRect(
+            x: ballPosition.x - ballSize / 2,
+            y: ballPosition.y - ballSize / 2,
+            width: ballSize,
+            height: ballSize
         )
 
-        if ball.x < 0 || ball.x >= CGFloat(boardSize) {
-            self.paused = true
-            self.loser = ball.x < 0 ? "0" : "1"
-            return
-        }
-
-        if ball.y >= CGFloat(boardSize) - 5 || ball.y <= 5 {
-            self.direction = 2 * .pi - self.direction
-        }
-
-        if CGRect(
-            x: 50,
-            y: self.p0.yStart,
-            width: 10,
-            height: self.p0.halfSize * 2
-        ).contains(ball)
-        {
-            let newDirection = (CGFloat(p0.position) - ball.y) / CGFloat(p0.halfSize) * (.pi / 1.8)
-            self.direction = -newDirection
-        }
-
-        if CGRect(
-            x: 940,
-            y: self.p1.yStart,
-            width: 10,
-            height: self.p1.halfSize * 2
-        ).contains(ball)
-        {
-            let newDirection = (CGFloat(p1.position) - ball.y) / CGFloat(p1.halfSize) * (.pi / 1.8)
-            self.direction = newDirection - .pi
-        }
-
-        // Move the computer player
-        moveComputerPlayer()
-    }
-
-    @Published var started: Bool {
-        didSet {
-            self.paused = !started
-            self.loser = nil
-            if started {
-                self.direction = Double.random(in: 0 ... .pi * 2)
-            } else {
-                self.p0 = .init(position: Int(boardSize / 2))
-                self.p1 = .init(position: Int(boardSize / 2))
-                self.ball = .init(x: boardSize / 2, y: boardSize / 2)
-            }
+        if ballVelocity.dx < 0, ballRect.intersects(playerRect) {
+            ballPosition.x = playerRect.maxX + ballSize / 2
+            bounce(from: playerPaddleY, direction: 1)
+        } else if ballVelocity.dx > 0, ballRect.intersects(aiRect) {
+            ballPosition.x = aiRect.minX - ballSize / 2
+            bounce(from: aiPaddleY, direction: -1)
         }
     }
 
-    @Published var paused: Bool
-    @Published var p0: Player
-    @Published var p1: Player
-    @Published var ball: CGPoint
-
-    func moveP0(up: Bool) {
-        self.p0.position = min(boardSize - self.p0.halfSize, max(self.p0.halfSize, self.p0.position + (up ? 50 : -50)))
+    private func bounce(from paddleY: CGFloat, direction: CGFloat) {
+        let normalizedOffset = max(-1, min(1, (ballPosition.y - paddleY) / (paddleHeight / 2)))
+        let speed: CGFloat = 4.6
+        ballVelocity = CGVector(dx: direction * speed, dy: normalizedOffset * 3.2)
     }
 
-    func moveP1(up: Bool) {
-        self.p1.position = min(boardSize - self.p1.halfSize, max(self.p1.halfSize, self.p1.position + (up ? 50 : -50)))
+    private func scorePoint(message: String, boardSize: CGSize, towardPlayer: Bool) {
+        roundMessage = message
+        messageTicksRemaining = 80
+        resetBall(boardSize: boardSize, towardPlayer: towardPlayer)
+    }
+
+    private func resetBall(boardSize: CGSize, towardPlayer: Bool) {
+        ballPosition = CGPoint(x: boardSize.width / 2, y: boardSize.height / 2)
+        let xSpeed: CGFloat = towardPlayer ? -4 : 4
+        ballVelocity = CGVector(dx: xSpeed, dy: CGFloat.random(in: -2.4...2.4))
+    }
+
+    private func clampedPaddleY(_ y: CGFloat, boardHeight: CGFloat) -> CGFloat {
+        min(boardHeight - paddleHeight / 2, max(paddleHeight / 2, y))
     }
 }
 
 struct PongGameView: View {
-    @StateObject var state = GameState()
+    @StateObject private var model = PongGameModel()
+    @State private var currentBoardSize: CGSize = .zero
+    private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        VStack {
+        VStack(spacing: 12) {
             StatusBar()
-            ZStack {
-                ChartView(state: state)
-                if let loser = state.loser {
-                    Text("Player \(loser) is the loser!")
-                }
+
+            Text("Pong")
+                .font(.title2.weight(.bold))
+                .foregroundColor(.yellow)
+
+            HStack(spacing: 28) {
+                scoreBlock(label: "LEFT", score: model.playerScore)
+                scoreBlock(label: "RIGHT", score: model.aiScore)
             }
-            .gesture(
-                DragGesture()
-                    .onChanged { gesture in
-                        let translation = gesture.translation
-                        let speed: CGFloat = 5
-                        state.p0.position -= Int(translation.height / speed) // Adjust here
-                        state.p0.position = min(state.boardSize - state.p0.halfSize, max(state.p0.halfSize, state.p0.position))
+
+            GeometryReader { geometry in
+                let boardSize = CGSize(width: geometry.size.width - 24, height: geometry.size.height)
+
+                PongBoardView(model: model, boardSize: boardSize)
+                    .frame(width: boardSize.width, height: boardSize.height)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .onAppear {
+                        currentBoardSize = boardSize
+                        model.reset(boardSize: boardSize)
                     }
-            )
-            
-            HStack(spacing: 5) {
-                Button(action: { state.started.toggle() }) {
-                    Text(state.started ? "Reset" : "Start")
-                        .frame(width: 100)
-                }
-                Button(action: { state.paused.toggle() }) {
-                    Text(state.paused ? "Unpause" : "Pause")
-                        .frame(width: 100)
-                }
-                .disabled(!state.started || state.loser != nil)
+                    .onChange(of: boardSize) { newSize in
+                        currentBoardSize = newSize
+                        model.reset(boardSize: newSize)
+                    }
             }
-            .buttonStyle(.borderedProminent)
+            .frame(maxHeight: 420)
+            .padding(.horizontal, 12)
+
+            Text(model.roundMessage ?? "Drag left paddle to train reflexes")
+                .font(.caption.weight(.semibold))
+                .foregroundColor(model.roundMessage == nil ? .white.opacity(0.75) : .yellow)
+                .frame(minHeight: 20)
+
+            HomeButton()
         }
+        .padding(.bottom, 10)
         .background(Color.black.ignoresSafeArea())
         .navigationBarHidden(true)
-        HomeButton()
-    }
-}
-
-struct ChartView: View {
-    @ObservedObject var state: GameState
-    var body: some View {
-        GeometryReader { geometry in
-            if #available(iOS 16.0, *) {
-                Chart {
-                    PointMark(
-                        x: .value("X", Int(state.ball.x)),
-                        y: .value("Y", Int(state.ball.y))
-                    )
-                    .foregroundStyle(.red)
-                    BarMark(
-                        x: .value("P0", 50),
-                        yStart: .value("Y0", state.p0.yStart),
-                        yEnd: .value("Y1", state.p0.yEnd)
-                    )
-                    BarMark(
-                        x: .value("P1", 950),
-                        yStart: .value("Y0", state.p1.yStart),
-                        yEnd: .value("Y1", state.p1.yEnd)
-                    )
-                }
-                .chartXAxis(.hidden)
-                .chartYAxis(.hidden)
-                .chartYScale(domain: 0 ... state.boardSize)
-                .chartXScale(domain: 0 ... state.boardSize)
-                .chartPlotStyle { area in
-                    area.border(.yellow)
-                }
-                .frame(height: min(geometry.size.width, geometry.size.height))
-            } else {
-                // Fallback on earlier versions
-            }
+        .onReceive(timer) { _ in
+            model.tick(boardSize: currentBoardSize)
         }
     }
+
+    private func scoreBlock(label: String, score: Int) -> some View {
+        VStack(spacing: 2) {
+            Text(label)
+                .font(.caption)
+            Text("\(score)")
+                .font(.title3.monospacedDigit().weight(.bold))
+        }
+        .foregroundColor(.white)
+    }
 }
 
-struct PongGameView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+private struct PongBoardView: View {
+    @ObservedObject var model: PongGameModel
+    let boardSize: CGSize
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(Color.black)
+
+            VStack(spacing: 10) {
+                ForEach(0..<18, id: \.self) { _ in
+                    Rectangle()
+                        .fill(Color.white.opacity(0.35))
+                        .frame(width: 3, height: 10)
+                }
+            }
+
+            Rectangle()
+                .fill(Color.white)
+                .frame(width: model.paddleWidth, height: model.paddleHeight)
+                .position(x: 24, y: model.playerPaddleY)
+
+            Rectangle()
+                .fill(Color.white)
+                .frame(width: model.paddleWidth, height: model.paddleHeight)
+                .position(x: boardSize.width - 24, y: model.aiPaddleY)
+
+            Circle()
+                .fill(Color.yellow)
+                .frame(width: model.ballSize, height: model.ballSize)
+                .position(model.ballPosition)
+        }
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    model.movePlayerPaddle(to: value.location.y, boardHeight: boardSize.height)
+                }
+        )
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.yellow, lineWidth: 2))
+        .cornerRadius(12)
     }
 }
