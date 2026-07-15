@@ -30,7 +30,7 @@ struct HomeScreenView: View {
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
 
     var body: some View {
-        NavigationStack(path: $appState.navigationPath) {
+        NavigationView {
             VStack {
                 StatusBar()
 
@@ -61,13 +61,38 @@ struct HomeScreenView: View {
 
                 HomeButton()
             }
+            .background(
+                navigationLinks
+            )
             .background(AppTheme.Colors.background)
             .navigationBarHidden(true)
-            .navigationDestination(for: PhoneAppRoute.self) { route in
-                destinationView(for: route)
-                    .navigationBarHidden(true)
-            }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+
+    @ViewBuilder
+    private var navigationLinks: some View {
+        ForEach(apps) { app in
+            NavigationLink(
+                destination: destinationView(for: app.route)
+                    .navigationBarHidden(true),
+                isActive: isRouteActive(app.route)
+            ) {
+                EmptyView()
+            }
+            .hidden()
+        }
+    }
+
+    private func isRouteActive(_ route: PhoneAppRoute) -> Binding<Bool> {
+        Binding(
+            get: { appState.navigationPath.last == route },
+            set: { isActive in
+                if !isActive, appState.navigationPath.last == route {
+                    appState.goHome()
+                }
+            }
+        )
     }
 
     private var visibleApps: [PhoneAppInfo] {
