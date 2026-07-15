@@ -15,12 +15,12 @@ struct VRExperienceView: View {
             Spacer()
 
             Text("VR Experience")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

@@ -15,12 +15,12 @@ struct PhotoAlbumView: View {
             Spacer()
 
             Text("Photo Album")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

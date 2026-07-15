@@ -22,7 +22,7 @@ struct StatusBar: View {
                 Text(currentTime, style: .time)
             }
             .padding(.leading, 10)
-            .foregroundColor(.white)
+            .appText(.paragraph)
             
             Spacer()
             
@@ -31,14 +31,15 @@ struct StatusBar: View {
                 Image(systemName: "antenna.radiowaves.left.and.right")
                 Image(systemName: "wifi")
                 Image(systemName: "battery.100")
+                    .foregroundColor(AppTheme.Colors.highlight)
             }
             .padding(.trailing, 10)
-            .foregroundColor(.white)
+            .appText(.paragraph)
         }
         .onReceive(timer) { _ in
             currentTime = Date()
         }
         .frame(height: 20)
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

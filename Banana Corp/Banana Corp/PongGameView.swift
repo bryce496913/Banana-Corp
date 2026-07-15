@@ -137,8 +137,7 @@ struct PongGameView: View {
             StatusBar()
 
             Text("Pong")
-                .font(.title2.weight(.bold))
-                .foregroundColor(.yellow)
+                .appText(.h1, color: AppTheme.Colors.highlight)
 
             HStack(spacing: 28) {
                 scoreBlock(label: "LEFT", score: model.playerScore)
@@ -164,14 +163,13 @@ struct PongGameView: View {
             .padding(.horizontal, 12)
 
             Text(model.roundMessage ?? "Drag left paddle to train reflexes")
-                .font(.caption.weight(.semibold))
-                .foregroundColor(model.roundMessage == nil ? .white.opacity(0.75) : .yellow)
+                .appText(.paragraph, color: model.roundMessage == nil ? AppTheme.Colors.text.opacity(0.75) : AppTheme.Colors.highlight)
                 .frame(minHeight: 20)
 
             HomeButton()
         }
         .padding(.bottom, 10)
-        .background(Color.black.ignoresSafeArea())
+        .background(AppTheme.Colors.background.ignoresSafeArea())
         .navigationBarHidden(true)
         .onReceive(timer) { _ in
             model.tick(boardSize: currentBoardSize)
@@ -181,11 +179,11 @@ struct PongGameView: View {
     private func scoreBlock(label: String, score: Int) -> some View {
         VStack(spacing: 2) {
             Text(label)
-                .font(.caption)
+                .appText(.paragraph)
             Text("\(score)")
-                .font(.title3.monospacedDigit().weight(.bold))
+                .font(.system(size: AppTextStyle.h2.size, weight: .bold).monospacedDigit())
         }
-        .foregroundColor(.white)
+        .foregroundColor(AppTheme.Colors.text)
     }
 }
 
@@ -196,7 +194,7 @@ private struct PongBoardView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(Color.black)
+                .fill(AppTheme.Colors.background)
 
             VStack(spacing: 10) {
                 ForEach(0..<18, id: \.self) { _ in
@@ -217,7 +215,7 @@ private struct PongBoardView: View {
                 .position(x: boardSize.width - 24, y: model.aiPaddleY)
 
             Circle()
-                .fill(Color.yellow)
+                .fill(AppTheme.Colors.highlight)
                 .frame(width: model.ballSize, height: model.ballSize)
                 .position(model.ballPosition)
         }
@@ -228,7 +226,7 @@ private struct PongBoardView: View {
                     model.movePlayerPaddle(to: value.location.y, boardHeight: boardSize.height)
                 }
         )
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.yellow, lineWidth: 2))
+        .overlay(RoundedRectangle(cornerRadius: AppTheme.Radius.md).stroke(AppTheme.Colors.accent, lineWidth: 2))
         .cornerRadius(12)
     }
 }

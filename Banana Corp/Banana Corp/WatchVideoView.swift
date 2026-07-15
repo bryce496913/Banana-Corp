@@ -15,12 +15,12 @@ struct WatchVideoView: View {
             Spacer()
 
             Text("Watch Video")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

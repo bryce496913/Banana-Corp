@@ -109,16 +109,16 @@ struct SnakeGameView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Snake")
-                        .font(.title2.weight(.bold))
+                        .appText(.h1, color: AppTheme.Colors.highlight)
                     Text("Banana Corp reflex audit")
-                        .font(.caption)
+                        .appText(.paragraph)
                 }
                 Spacer()
                 Text("Score \(model.score)")
-                    .font(.headline.monospacedDigit())
+                    .font(.system(size: AppTextStyle.h2.size, weight: AppTextStyle.h2.weight).monospacedDigit())
             }
-            .foregroundColor(.yellow)
-            .padding(.horizontal, 18)
+            .foregroundColor(AppTheme.Colors.highlight)
+            .padding(.horizontal, AppTheme.Spacing.lg)
 
             GeometryReader { geometry in
                 let boardSize = min(geometry.size.width - 24, geometry.size.height)
@@ -126,7 +126,7 @@ struct SnakeGameView: View {
 
                 ZStack {
                     Rectangle()
-                        .fill(Color.black)
+                        .fill(AppTheme.Colors.background)
                     gridLines(cellSize: cellSize, boardSize: boardSize)
                     ForEach(Array(model.snake.enumerated()), id: \.offset) { index, segment in
                         Rectangle()
@@ -142,25 +142,20 @@ struct SnakeGameView: View {
                     if model.isGameOver {
                         VStack(spacing: 10) {
                             Text("Game Over")
-                                .font(.title.weight(.bold))
+                                .appText(.h1, color: AppTheme.Colors.highlight)
                             Text("Score: \(model.score)")
-                                .font(.headline.monospacedDigit())
+                                .font(.system(size: AppTextStyle.h2.size, weight: AppTextStyle.h2.weight).monospacedDigit())
                             Button("Restart") { model.reset() }
-                                .font(.headline)
-                                .padding(.horizontal, 18)
-                                .padding(.vertical, 8)
-                                .background(Color.yellow)
-                                .foregroundColor(.black)
-                                .cornerRadius(10)
+                                .buttonStyle(.appPrimary)
                         }
                         .padding(24)
-                        .background(Color.black.opacity(0.86))
-                        .foregroundColor(.white)
+                        .background(AppTheme.Colors.surface.opacity(0.9))
+                        .foregroundColor(AppTheme.Colors.text)
                         .cornerRadius(16)
                     }
                 }
                 .frame(width: boardSize, height: boardSize)
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.yellow, lineWidth: 3))
+                .overlay(RoundedRectangle(cornerRadius: AppTheme.Radius.md).stroke(AppTheme.Colors.accent, lineWidth: 3))
                 .cornerRadius(12)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -171,7 +166,7 @@ struct SnakeGameView: View {
             HomeButton()
         }
         .padding(.bottom, 10)
-        .background(Color.black.ignoresSafeArea())
+        .background(AppTheme.Colors.background.ignoresSafeArea())
         .navigationBarHidden(true)
         .onReceive(timer) { _ in
             guard !model.isGameOver else { return }
@@ -212,7 +207,7 @@ struct SnakeControlPadView: View {
         Button { onDirectionChanged(direction) } label: {
             Image(systemName: systemName)
                 .font(.system(size: 50))
-                .foregroundColor(.white)
+                .foregroundColor(AppTheme.Colors.text)
                 .frame(width: 62, height: 54)
                 .contentShape(Rectangle())
         }

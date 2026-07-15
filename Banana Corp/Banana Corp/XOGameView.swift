@@ -20,12 +20,10 @@ struct XOGameView: View {
             StatusBar()
 
             Text("XO Training Grid")
-                .font(.title2.weight(.bold))
-                .foregroundColor(.yellow)
+                .appText(.h1, color: AppTheme.Colors.highlight)
 
             Text(statusMessage)
-                .font(.headline)
-                .foregroundColor(statusColor)
+                .appText(.h2, color: statusColor)
                 .frame(minHeight: 28)
 
             GeometryReader { geometry in
@@ -50,19 +48,14 @@ struct XOGameView: View {
             Button("Reset Grid") {
                 resetGame()
             }
-            .font(.headline)
-            .padding(.horizontal, 22)
-            .padding(.vertical, 10)
-            .background(Color.yellow)
-            .foregroundColor(.black)
-            .cornerRadius(10)
+            .buttonStyle(.appPrimary)
 
             Spacer(minLength: 0)
             HomeButton()
         }
         .padding(.horizontal, 16)
         .padding(.bottom, 10)
-        .background(Color.black.ignoresSafeArea())
+        .background(AppTheme.Colors.background.ignoresSafeArea())
         .navigationBarHidden(true)
     }
 
@@ -74,7 +67,7 @@ struct XOGameView: View {
 
     private var statusColor: Color {
         if let winner { return colorForCell(winner) }
-        if isDraw { return .white }
+        if isDraw { return AppTheme.Colors.text }
         return colorForCell(currentPlayer)
     }
 
@@ -82,7 +75,7 @@ struct XOGameView: View {
         switch value {
         case "X": return .yellow
         case "O": return .green
-        default: return .white
+        default: return AppTheme.Colors.text
         }
     }
 
@@ -134,7 +127,7 @@ struct CellView: View {
         Button(action: onTap) {
             ZStack {
                 Rectangle()
-                    .fill(Color.black)
+                    .fill(AppTheme.Colors.surface)
                 Text(value)
                     .font(.system(size: 56, weight: .heavy, design: .rounded))
                     .foregroundColor(color)

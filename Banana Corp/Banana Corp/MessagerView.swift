@@ -15,12 +15,12 @@ struct MessagerView: View {
             Spacer()
 
             Text("Messager")
-                .foregroundColor(.white)
+                .appText(.h1)
 
             Spacer()
 
             HomeButton()
         }
-        .background(Color.black)
+        .background(AppTheme.Colors.background)
     }
 }

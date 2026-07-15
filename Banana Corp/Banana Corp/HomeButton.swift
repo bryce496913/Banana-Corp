@@ -18,7 +18,7 @@ struct HomeButton: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
-                .foregroundColor(Color.yellow)
+                .foregroundColor(AppTheme.Colors.highlight)
         }
         .buttonStyle(PlainButtonStyle())
         .accessibilityLabel("Home")
