@@ -15,6 +15,7 @@ struct Banana_CorpApp: App {
         WindowGroup {
             LaunchView()
                 .environmentObject(appState)
+                .statusBarHidden(true)
         }
     }
 }

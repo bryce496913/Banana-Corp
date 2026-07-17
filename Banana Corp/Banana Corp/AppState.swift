@@ -8,7 +8,12 @@
 import SwiftUI
 
 final class AppState: ObservableObject {
-    @Published var navigationPath: [PhoneAppRoute] = []
+    @Published var activeApp: PhoneAppRoute?
+    @Published var homeScreenLayout: HomeScreenLayout = HomeScreenLayoutStore.load() {
+        didSet { HomeScreenLayoutStore.save(homeScreenLayout) }
+    }
+    @Published var isEditingHomeScreen = false
+    @Published var draggedApp: PhoneAppRoute?
 
     @Published var currentDay: Int = 1
     @Published var hasOpenedVRApp = false
@@ -34,10 +39,12 @@ final class AppState: ObservableObject {
     @Published var aiCorruptionLevel = 0
 
     func open(_ route: PhoneAppRoute) {
-        navigationPath.append(route)
+        activeApp = route
     }
 
     func goHome() {
-        navigationPath.removeAll()
+        activeApp = nil
+        isEditingHomeScreen = false
+        draggedApp = nil
     }
 }

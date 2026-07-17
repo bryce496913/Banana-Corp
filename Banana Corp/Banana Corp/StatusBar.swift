@@ -12,26 +12,31 @@ struct StatusBar: View {
     @State private var currentTime = Date()
 
     var body: some View {
-        HStack(spacing: AppTheme.Spacing.sm) {
-            Text("BANANA 5G")
-                .lineLimit(1)
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("BANANA 5G")
+                    .font(.system(size: 16, weight: .semibold))
 
-            Text(currentTime, style: .time)
-                .monospacedDigit()
+                Text(currentTime, style: .time)
+                    .font(.system(size: 16, weight: .semibold))
+                    .monospacedDigit()
+            }
+            .foregroundColor(AppTheme.Colors.text.opacity(0.94))
 
             Spacer()
 
-            HStack(spacing: 7) {
+            HStack(spacing: 12) {
                 Image(systemName: "cellularbars")
                 Image(systemName: "wifi")
-                Image(systemName: "battery.100")
+                Image(systemName: "battery.75")
                     .foregroundColor(AppTheme.Colors.highlight)
             }
-            .imageScale(.small)
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(AppTheme.Colors.text.opacity(0.94))
         }
-        .appText(.paragraph, color: AppTheme.Colors.text.opacity(0.92))
         .padding(.horizontal, AppTheme.Spacing.md)
-        .frame(height: 24)
+        .padding(.top, AppTheme.Spacing.sm)
+        .frame(minHeight: 48)
         .onReceive(timer) { _ in
             currentTime = Date()
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC00012E29000000000001 /* HomeScreenLayout.swift */; };
 		EEBB00062E28000000000001 /* PhoneShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBB00052E28000000000001 /* PhoneShellView.swift */; };
 		EEBB00042E28000000000001 /* PhoneHomeIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */; };
 		EEBB00022E28000000000001 /* GlassCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBB00012E28000000000001 /* GlassCompatibility.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EECC00012E29000000000001 /* HomeScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenLayout.swift; sourceTree = "<group>"; };
 		EEBB00052E28000000000001 /* PhoneShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneShellView.swift; sourceTree = "<group>"; };
 		EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneHomeIndicator.swift; sourceTree = "<group>"; };
 		EEBB00012E28000000000001 /* GlassCompatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCompatibility.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				EE9899EE2B6C3142003201BE /* ContentView.swift */,
 				EEAA00112E28000000000001 /* AppTheme.swift */,
 				EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */,
+				EECC00012E29000000000001 /* HomeScreenLayout.swift */,
 				EE989A042B6C39BB003201BE /* HomeButton.swift */,
 				EE989A022B6C398A003201BE /* StatusBar.swift */,
 				EEBB00052E28000000000001 /* PhoneShellView.swift */,
@@ -212,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEAA00122E28000000000001 /* AppTheme.swift in Sources */,
+				EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */,
 				EE989A222B6C5207003201BE /* FlapFlapGameView.swift in Sources */,
 				EEAA00022E27000000000001 /* PhoneAppRoute.swift in Sources */,
 				EE11F5ED2B6DB5260094F4DE /* PongGameView.swift in Sources */,
