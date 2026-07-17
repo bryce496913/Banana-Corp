@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PhoneAppRoute: Hashable {
+enum PhoneAppRoute: String, Codable, Hashable, CaseIterable {
     case email
     case browser
     case social
