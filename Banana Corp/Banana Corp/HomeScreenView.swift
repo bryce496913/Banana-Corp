@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeScreenView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.osPresentation) private var presentation
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
@@ -106,10 +107,14 @@ struct HomeScreenView: View {
             badgeCount: badgeCount(for: app.route),
             isLocked: !appState.unlockedApps.contains(app.route),
             isEditing: appState.isEditingHomeScreen,
+            appearance: AppIconAppearance(
+                surface: presentation.resolved(at: Date()).visualPalette.surface,
+                foreground: AppTheme.Colors.text
+            ),
             action: { appState.open(app.route) },
             editAction: appState.beginEditingHomeScreen
         )
-        if appState.isEditingHomeScreen {
+        if appState.isEditingHomeScreen && appState.unlockedApps.contains(app.route) {
             icon.draggable(app.route.rawValue) {
                 BananaAppIconArtwork(image: app.image, size: size, isLocked: false, appearance: .standard)
             }
@@ -132,15 +137,17 @@ struct HomeScreenView: View {
     }
 
     private var gridApps: [PhoneAppInfo] {
-        appState.homeScreenLayout.normalized.gridApps
-            .filter { appState.unlockedApps.contains($0) }
-            .compactMap(PhoneAppInfo.info(for:))
+        let configuration = presentation.resolved(at: Date())
+        return appState.homeScreenLayout.normalized.gridApps
+            .filter { appState.unlockedApps.contains($0) || configuration.visibleLockedApps.contains($0) }
+            .compactMap { configuration.appInfo(for: $0) }
     }
 
     private var dockApps: [PhoneAppInfo] {
-        appState.homeScreenLayout.normalized.dockApps
-            .filter { appState.unlockedApps.contains($0) }
-            .compactMap(PhoneAppInfo.info(for:))
+        let configuration = presentation.resolved(at: Date())
+        return appState.homeScreenLayout.normalized.dockApps
+            .filter { appState.unlockedApps.contains($0) || configuration.visibleLockedApps.contains($0) }
+            .compactMap { configuration.appInfo(for: $0) }
     }
 }
 

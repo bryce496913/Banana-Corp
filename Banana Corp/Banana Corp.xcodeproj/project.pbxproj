@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EEF500062E33000000000001 /* OSVisualPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500052E33000000000001 /* OSVisualPreviews.swift */; };
+        EEF500042E33000000000001 /* OSVisualComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500032E33000000000001 /* OSVisualComponents.swift */; };
+        EEF500022E33000000000001 /* OSPresentationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500012E33000000000001 /* OSPresentationState.swift */; };
         EEFA00042E32000000000001 /* AppMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA00032E32000000000001 /* AppMotion.swift */; };
         EEFA00022E32000000000001 /* OSNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA00012E32000000000001 /* OSNavigationState.swift */; };
         EEFF00022E31000000000001 /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFF00012E31000000000001 /* AppComponents.swift */; };
@@ -42,6 +45,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EEF500052E33000000000001 /* OSVisualPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVisualPreviews.swift; sourceTree = "<group>"; };
+        EEF500032E33000000000001 /* OSVisualComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVisualComponents.swift; sourceTree = "<group>"; };
+        EEF500012E33000000000001 /* OSPresentationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSPresentationState.swift; sourceTree = "<group>"; };
         EEFA00032E32000000000001 /* AppMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMotion.swift; sourceTree = "<group>"; };
         EEFA00012E32000000000001 /* OSNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSNavigationState.swift; sourceTree = "<group>"; };
         EEFF00012E31000000000001 /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
@@ -118,6 +124,9 @@
                 EEFF00012E31000000000001 /* AppComponents.swift */,
                 EEFA00032E32000000000001 /* AppMotion.swift */,
                 EEFA00012E32000000000001 /* OSNavigationState.swift */,
+                EEF500052E33000000000001 /* OSVisualPreviews.swift */,
+                EEF500032E33000000000001 /* OSVisualComponents.swift */,
+                EEF500012E33000000000001 /* OSPresentationState.swift */,
 				EE989A022B6C398A003201BE /* StatusBar.swift */,
 				EEBB00052E28000000000001 /* PhoneShellView.swift */,
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
@@ -229,6 +238,9 @@
                 EEFF00022E31000000000001 /* AppComponents.swift in Sources */,
                 EEFA00042E32000000000001 /* AppMotion.swift in Sources */,
                 EEFA00022E32000000000001 /* OSNavigationState.swift in Sources */,
+                EEF500062E33000000000001 /* OSVisualPreviews.swift in Sources */,
+                EEF500042E33000000000001 /* OSVisualComponents.swift in Sources */,
+                EEF500022E33000000000001 /* OSPresentationState.swift in Sources */,
 				EE989A222B6C5207003201BE /* FlapFlapGameView.swift in Sources */,
 				EEAA00022E27000000000001 /* PhoneAppRoute.swift in Sources */,
 				EE11F5ED2B6DB5260094F4DE /* PongGameView.swift in Sources */,

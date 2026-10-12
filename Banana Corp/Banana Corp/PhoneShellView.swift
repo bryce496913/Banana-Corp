@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PhoneShellView<Content: View>: View {
+    @Environment(\.osPresentation) private var presentation
     let title: String?
     let subtitle: String?
     let showsStatusBar: Bool
@@ -23,7 +24,7 @@ struct PhoneShellView<Content: View>: View {
 
     var body: some View {
         ZStack {
-            AppTheme.Colors.background
+            presentation.resolved(at: Date()).visualPalette.background
                 .ignoresSafeArea()
 
             VStack(spacing: AppTheme.Spacing.sm) {

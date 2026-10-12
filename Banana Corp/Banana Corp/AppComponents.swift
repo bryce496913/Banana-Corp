@@ -17,12 +17,20 @@ struct AppCard<Content: View>: View {
 }
 
 struct AppScreenHeader: View {
+    @Environment(\.osPresentation) private var presentation
+    @Environment(\.osAppRoute) private var appRoute
     let title: String
     var subtitle: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
-            Text(title).appText(.screenTitle).accessibilityAddTraits(.isHeader)
+            OSStoryText(
+                text: title,
+                target: appRoute.map { .screenTitle($0) },
+                displayNameOverride: appRoute.flatMap { presentation.resolved(at: Date()).apps[$0]?.displayName }
+            )
+            .appText(.screenTitle)
+            .accessibilityAddTraits(.isHeader)
             if let subtitle {
                 Text(subtitle).appText(.caption, color: AppTheme.Colors.secondaryText)
             }

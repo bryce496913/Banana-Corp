@@ -63,6 +63,7 @@ extension View {
 }
 
 struct AppPrimaryButtonStyle: ButtonStyle {
+    @Environment(\.osPresentation) private var presentation
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
@@ -72,7 +73,7 @@ struct AppPrimaryButtonStyle: ButtonStyle {
             .padding(.vertical, AppTheme.Spacing.sm)
             .frame(minHeight: AppTheme.Layout.touchTarget)
             .background(
-                AppTheme.Colors.accent.opacity(configuration.isPressed ? 0.75 : 1),
+                presentation.resolved(at: Date()).visualPalette.accent.opacity(configuration.isPressed ? 0.75 : 1),
                 in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
             )
             .opacity(isEnabled ? 1 : 0.45)
@@ -81,6 +82,7 @@ struct AppPrimaryButtonStyle: ButtonStyle {
 }
 
 struct ModernPhoneButtonStyle: ButtonStyle {
+    @Environment(\.osPresentation) private var presentation
     let prominent: Bool
     @Environment(\.isEnabled) private var isEnabled
 
@@ -92,7 +94,7 @@ struct ModernPhoneButtonStyle: ButtonStyle {
             .frame(minHeight: AppTheme.Layout.touchTarget)
             .modernSurface(
                 in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous),
-                tint: prominent ? AppTheme.Colors.accent.opacity(0.25) : AppTheme.Colors.surface.opacity(0.5),
+                tint: prominent ? presentation.resolved(at: Date()).visualPalette.accent.opacity(0.25) : AppTheme.Colors.surface.opacity(0.5),
                 interactive: true
             )
             .opacity(isEnabled ? 1 : 0.45)
