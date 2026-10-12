@@ -14,7 +14,6 @@ final class AppState: ObservableObject {
         didSet { HomeScreenLayoutStore.save(homeScreenLayout) }
     }
     @Published var isEditingHomeScreen = false
-    @Published var draggedApp: PhoneAppRoute?
 
     @Published var currentDay: Int = 1
     @Published var hasOpenedVRApp = false
@@ -39,16 +38,28 @@ final class AppState: ObservableObject {
     @Published var unreadMessages = 0
     @Published var aiCorruptionLevel = 0
 
-    func open(_ route: PhoneAppRoute) {
-        guard activeApp == nil, unlockedApps.contains(route) else { return }
+    func finishEditingHomeScreen() {
         isEditingHomeScreen = false
-        draggedApp = nil
+    }
+
+    @discardableResult
+    func moveHomeApp(_ route: PhoneAppRoute, to section: HomeSection, before target: PhoneAppRoute?) -> Bool {
+        guard isEditingHomeScreen, activeApp == nil, unlockedApps.contains(route) else { return false }
+        if let target, !unlockedApps.contains(target) { return false }
+        var layout = homeScreenLayout
+        guard layout.move(route, to: section, before: target) else { return false }
+        homeScreenLayout = layout
+        return true
+    }
+
+    func open(_ route: PhoneAppRoute) {
+        guard activeApp == nil, !isEditingHomeScreen, unlockedApps.contains(route) else { return }
+        isEditingHomeScreen = false
         activeApp = route
     }
 
     func goHome() {
         activeApp = nil
         isEditingHomeScreen = false
-        draggedApp = nil
     }
 }
