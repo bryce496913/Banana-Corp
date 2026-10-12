@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EEFA00042E32000000000001 /* AppMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA00032E32000000000001 /* AppMotion.swift */; };
+        EEFA00022E32000000000001 /* OSNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA00012E32000000000001 /* OSNavigationState.swift */; };
         EEFF00022E31000000000001 /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFF00012E31000000000001 /* AppComponents.swift */; };
         EEDD00022E30000000000001 /* BananaAppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD00012E30000000000001 /* BananaAppIcon.swift */; };
 		EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC00012E29000000000001 /* HomeScreenLayout.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EEFA00032E32000000000001 /* AppMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMotion.swift; sourceTree = "<group>"; };
+        EEFA00012E32000000000001 /* OSNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSNavigationState.swift; sourceTree = "<group>"; };
         EEFF00012E31000000000001 /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
         EEDD00012E30000000000001 /* BananaAppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BananaAppIcon.swift; sourceTree = "<group>"; };
 		EECC00012E29000000000001 /* HomeScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenLayout.swift; sourceTree = "<group>"; };
@@ -112,6 +116,8 @@
 				EECC00012E29000000000001 /* HomeScreenLayout.swift */,
                 EEDD00012E30000000000001 /* BananaAppIcon.swift */,
                 EEFF00012E31000000000001 /* AppComponents.swift */,
+                EEFA00032E32000000000001 /* AppMotion.swift */,
+                EEFA00012E32000000000001 /* OSNavigationState.swift */,
 				EE989A022B6C398A003201BE /* StatusBar.swift */,
 				EEBB00052E28000000000001 /* PhoneShellView.swift */,
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
@@ -221,6 +227,8 @@
 				EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */,
                 EEDD00022E30000000000001 /* BananaAppIcon.swift in Sources */,
                 EEFF00022E31000000000001 /* AppComponents.swift in Sources */,
+                EEFA00042E32000000000001 /* AppMotion.swift in Sources */,
+                EEFA00022E32000000000001 /* OSNavigationState.swift in Sources */,
 				EE989A222B6C5207003201BE /* FlapFlapGameView.swift in Sources */,
 				EEAA00022E27000000000001 /* PhoneAppRoute.swift in Sources */,
 				EE11F5ED2B6DB5260094F4DE /* PongGameView.swift in Sources */,

@@ -28,7 +28,6 @@ struct BananaAppIcon: View {
     let editAction: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var wiggles = false
     @ScaledMetric(relativeTo: .caption) private var labelHeight: CGFloat = 32
 
     private var wiggleDirection: Double {
@@ -41,41 +40,41 @@ struct BananaAppIcon: View {
             guard !isEditing, !isLocked else { return }
             action()
         } label: {
-            VStack(spacing: 7) {
-                BananaAppIconArtwork(image: app.image, size: size, isLocked: isLocked, appearance: appearance)
-                    .overlay(alignment: .topTrailing) {
-                        if badgeCount > 0 {
-                            AppNotificationBadge(count: badgeCount)
-                                .offset(x: 6, y: -5)
-                        }
-                    }
-                Text(app.title)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.white.opacity(isLocked ? 0.55 : 0.92))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .frame(height: labelHeight, alignment: .top)
+            if isEditing && !reduceMotion {
+                iconLabel.phaseAnimator([-1.0, 1.0]) { content, phase in
+                    content.rotationEffect(.degrees(phase * 1.2 * wiggleDirection))
+                } animation: { _ in AppMotion.editWiggle }
+            } else {
+                iconLabel
             }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
-            .rotationEffect(.degrees(wiggles ? 1.2 * wiggleDirection : 0))
-            .animation(
-                isEditing && !reduceMotion
-                    ? .easeInOut(duration: 0.16).repeatForever(autoreverses: true)
-                    : .easeOut(duration: 0.12),
-                value: wiggles
-            )
         }
-        .buttonStyle(AppIconPressStyle())
+        .buttonStyle(.appIcon)
         .simultaneousGesture(LongPressGesture(minimumDuration: 0.4).onEnded { _ in editAction() })
-        .onAppear { wiggles = isEditing && !reduceMotion }
-        .onChange(of: isEditing) { _, editing in wiggles = editing && !reduceMotion }
-        .onChange(of: reduceMotion) { _, reduced in wiggles = isEditing && !reduced }
         .accessibilityLabel(app.title)
         .accessibilityValue(accessibilityValue)
         .accessibilityHint(isEditing ? "Drag to rearrange." : "Long press to rearrange apps.")
         .accessibilityAction(named: Text("Rearrange apps")) { editAction() }
         .accessibilityIdentifier("bananaOS.app.\(app.route.rawValue)")
+    }
+
+    private var iconLabel: some View {
+        VStack(spacing: 7) {
+            BananaAppIconArtwork(image: app.image, size: size, isLocked: isLocked, appearance: appearance)
+                .overlay(alignment: .topTrailing) {
+                    if badgeCount > 0 {
+                        AppNotificationBadge(count: badgeCount)
+                            .offset(x: 6, y: -5)
+                    }
+                }
+            Text(app.title)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.white.opacity(isLocked ? 0.55 : 0.92))
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .frame(height: labelHeight, alignment: .top)
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
     }
 
     private var accessibilityValue: String {
@@ -124,17 +123,6 @@ struct BananaAppIconArtwork: View {
             }
         }
         .accessibilityHidden(true)
-    }
-}
-
-private struct AppIconPressStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
-            .opacity(configuration.isPressed ? 0.8 : 1)
-            .animation(.easeOut(duration: 0.14), value: configuration.isPressed)
     }
 }
 

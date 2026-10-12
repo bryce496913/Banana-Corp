@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LaunchView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isLaunchComplete = false
 
     var body: some View {
@@ -30,7 +31,7 @@ struct LaunchView: View {
             guard !isLaunchComplete else { return }
             do {
                 try await Task.sleep(for: .seconds(4))
-                withAnimation(.easeInOut(duration: 0.45)) {
+                withAnimation(reduceMotion ? AppMotion.reduced : AppMotion.opening) {
                     isLaunchComplete = true
                 }
             } catch {
@@ -52,31 +53,48 @@ struct LaunchView_Previews: PreviewProvider {
 struct BananaOSView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var presentedRoute: PhoneAppRoute?
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             HomeScreenView()
-                .allowsHitTesting(appState.activeApp == nil)
-                .accessibilityHidden(appState.activeApp != nil)
+                .scaleEffect(reduceMotion || presentedRoute == nil ? 1 : 0.99)
+                .opacity(presentedRoute == nil ? 1 : 0.95)
+                .allowsHitTesting(appState.navigation.isHomeReady)
+                .accessibilityHidden(!appState.navigation.isHomeReady)
 
-            if let route = appState.activeApp {
+            if let route = presentedRoute {
                 NavigationStack {
                     destinationView(for: route)
                 }
                 .id(route)
                 .statusBarHidden(true)
-                .transition(reduceMotion ? .opacity : .asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)
-                ))
+                .transition(AppMotion.appTransition(reduceMotion: reduceMotion))
+                .allowsHitTesting(appState.navigation.phase == .active)
                 .zIndex(1)
             }
         }
         .clipped()
         .statusBarHidden(true)
-        .animation(reduceMotion ? .easeOut(duration: 0.15) :
-            .spring(response: 0.4, dampingFraction: 0.86), value: appState.activeApp)
+        .modifier(AppFeedbackModifier(event: appState.feedbackEvent))
+        .onChange(of: appState.navigation.transitionID) { _, id in
+            let animation = reduceMotion ? AppMotion.reduced :
+                (appState.navigation.phase == .closing ? AppMotion.closing : AppMotion.opening)
+            withAnimation(animation, completionCriteria: .removed) {
+                presentedRoute = appState.activeApp
+            } completion: {
+                appState.completeNavigationTransition(id)
+            }
+        }
+        .onAppear {
+            // Synchronize a recreated shell without leaving a transition locked.
+            presentedRoute = appState.activeApp
+            appState.completeNavigationTransition(appState.navigation.transitionID)
+        }
+        .onDisappear {
+            appState.completeNavigationTransition(appState.navigation.transitionID)
+        }
     }
 
     @ViewBuilder
