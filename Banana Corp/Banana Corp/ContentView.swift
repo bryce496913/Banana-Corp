@@ -53,12 +53,14 @@ struct LaunchView_Previews: PreviewProvider {
 struct BananaOSView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @State private var presentedRoute: PhoneAppRoute?
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             HomeScreenView()
+                .environment(\.osEffectsEnabled, appState.navigation.isHomeReady)
                 .scaleEffect(reduceMotion || presentedRoute == nil ? 1 : 0.99)
                 .opacity(presentedRoute == nil ? 1 : 0.95)
                 .allowsHitTesting(appState.navigation.isHomeReady)
@@ -67,6 +69,7 @@ struct BananaOSView: View {
             if let route = presentedRoute {
                 NavigationStack {
                     destinationView(for: route)
+                        .environment(\.osAppRoute, route)
                 }
                 .id(route)
                 .statusBarHidden(true)
@@ -75,6 +78,25 @@ struct BananaOSView: View {
                 .zIndex(1)
             }
         }
+        .overlay(alignment: .top) {
+            if appState.presentation.event(at: Date())?.payload.interruption != nil {
+                GeometryReader { geometry in
+                    OSInterruptionHost()
+                        // Reserve the Home strip even in short/keyboard-constrained layouts.
+                        .frame(
+                            maxHeight: CGFloat(OSVisualSafety.interruptionHeight(
+                                availableHeight: Double(geometry.size.height)
+                            )),
+                            alignment: .top
+                        )
+                        .clipped()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                }
+                .allowsHitTesting(false)
+            }
+        }
+        .environment(\.osPresentation, appState.presentation)
+        .tint(appState.presentation.resolved(at: Date()).visualPalette.accent)
         .clipped()
         .statusBarHidden(true)
         .modifier(AppFeedbackModifier(event: appState.feedbackEvent))
@@ -87,7 +109,11 @@ struct BananaOSView: View {
                 appState.completeNavigationTransition(id)
             }
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { appState.expirePresentationEvents() }
+        }
         .onAppear {
+            appState.expirePresentationEvents()
             // Synchronize a recreated shell without leaving a transition locked.
             presentedRoute = appState.activeApp
             appState.completeNavigationTransition(appState.navigation.transitionID)

@@ -60,13 +60,14 @@ struct BananaAppIcon: View {
     private var iconLabel: some View {
         VStack(spacing: 7) {
             BananaAppIconArtwork(image: app.image, size: size, isLocked: isLocked, appearance: appearance)
+                .modifier(OSControlledEffect(target: .appIcon(app.route)))
                 .overlay(alignment: .topTrailing) {
                     if badgeCount > 0 {
                         AppNotificationBadge(count: badgeCount)
                             .offset(x: 6, y: -5)
                     }
                 }
-            Text(app.title)
+            OSStoryText(text: app.title, target: .appName(app.route))
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.white.opacity(isLocked ? 0.55 : 0.92))
                 .multilineTextAlignment(.center)
