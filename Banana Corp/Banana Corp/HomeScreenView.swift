@@ -1,218 +1,125 @@
-//
-//  HomeScreenView.swift
-//  Banana Corp
-//
-//  Created by Aditi Abrol on 1/2/24.
-//
-
 import SwiftUI
 
 struct HomeScreenView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: AppTheme.Spacing.md), count: 4)
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
 
     var body: some View {
-        ZStack {
-            PhoneShellView(title: nil, showsStatusBar: true, showsHomeIndicator: false) {
-                GeometryReader { proxy in
-                    VStack(spacing: AppTheme.Spacing.lg) {
-                        editHeader
+        PhoneShellView(showsHomeIndicator: false) {
+            GeometryReader { geometry in
+                let width = min(geometry.size.width - 24, 440)
+                // Four equal dock cells determine the shared icon size, including small phones.
+                let iconSize = min(64, max(44, (width - 48) / 4))
+                VStack(spacing: 12) {
+                    editHeader
+                        .frame(height: 36)
 
-                        ScrollView {
-                            appGrid
-                                .padding(.top, AppTheme.Spacing.md)
-                                .padding(.horizontal, AppTheme.Spacing.sm)
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 20) {
+                            ForEach(gridApps) { app in
+                                icon(app, size: iconSize)
+                                    .dropDestination(for: String.self) { items, _ in
+                                        accept(items, in: .grid, before: app.route)
+                                    }
+                            }
                         }
-                        .dropDestination(for: String.self) { items, _ in
-                            guard let route = route(from: items.first) else { return false }
-                            move(route, to: .grid, before: nil)
-                            return true
-                        }
+                        .padding(.top, 4)
+                        .padding(.bottom, 20)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        .background(outsideTapArea)
+                    }
+                    .scrollIndicators(.hidden)
+                    .background(outsideTapArea)
+                    .dropDestination(for: String.self) { items, _ in
+                        accept(items, in: .grid)
+                    }
 
-                        dock
-                            .padding(.bottom, max(proxy.safeAreaInsets.bottom, AppTheme.Spacing.sm))
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        if appState.isEditingHomeScreen { stopEditing() }
-                    }
+                    dock(iconSize: iconSize)
+                        .padding(.bottom, 8)
                 }
+                .frame(width: width)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .background(outsideTapArea)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: appState.homeScreenLayout)
             }
         }
+        .onDisappear { appState.finishEditingHomeScreen() }
+    }
+
+    private var outsideTapArea: some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .onTapGesture { appState.finishEditingHomeScreen() }
+            .accessibilityHidden(true)
     }
 
     @ViewBuilder
     private var editHeader: some View {
         if appState.isEditingHomeScreen {
             HStack {
-                Text("Rearrange Banana OS")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(AppTheme.Colors.text.opacity(0.82))
-
+                Text("Rearrange apps")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.75))
                 Spacer()
-
-                Button("Done") { stopEditing() }
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(AppTheme.Colors.text)
-                    .padding(.vertical, 7)
-                    .padding(.horizontal, 14)
-                    .modernSurface(
-                        in: Capsule(),
-                        tint: AppTheme.Colors.highlight.opacity(0.22),
-                        interactive: true
-                    )
+                Button("Done") { appState.finishEditingHomeScreen() }
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 36)
+                    .modernSurface(in: Capsule(), tint: AppTheme.Colors.accent.opacity(0.12), interactive: true)
             }
-            .padding(.horizontal, AppTheme.Spacing.lg)
         }
     }
 
-    private var appGrid: some View {
-        LazyVGrid(columns: columns, spacing: AppTheme.Spacing.xl) {
-            ForEach(gridApps) { app in
-                appIcon(app)
-                    .dropDestination(for: String.self) { items, _ in
-                        guard let route = route(from: items.first), route != app.route else { return false }
-                        move(route, to: .grid, before: app.route)
-                        return true
-                    }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .top)
-    }
-
-    private var dock: some View {
-        HStack(spacing: AppTheme.Spacing.lg) {
+    private func dock(iconSize: CGFloat) -> some View {
+        HStack(alignment: .top, spacing: 8) {
             ForEach(dockApps) { app in
-                appIcon(app)
+                icon(app, size: iconSize)
                     .dropDestination(for: String.self) { items, _ in
-                        guard let route = route(from: items.first), route != app.route else { return false }
-                        move(route, to: .dock, before: app.route)
-                        return true
+                        accept(items, in: .dock, before: app.route)
                     }
             }
+            // Keep dock slots stable and provide an append target even with an empty dock.
+            ForEach(0..<(4 - dockApps.count), id: \.self) { _ in
+                Color.clear
+                    .frame(maxWidth: .infinity)
+                    .frame(height: iconSize + 38)
+                    .accessibilityHidden(true)
+            }
         }
-        .frame(minHeight: 92)
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, AppTheme.Spacing.md)
-        .padding(.horizontal, AppTheme.Spacing.lg)
-        .modernSurface(
-            in: RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous),
-            tint: AppTheme.Colors.highlight.opacity(0.16)
-        )
+        .padding(12)
+        .background(outsideTapArea)
+        .modifier(HomeDockSurface())
         .dropDestination(for: String.self) { items, _ in
-            guard let route = route(from: items.first) else { return false }
-            return move(route, to: .dock, before: nil)
+            accept(items, in: .dock)
         }
-        .padding(.horizontal, AppTheme.Spacing.md)
+        .accessibilityIdentifier("bananaOS.dock")
     }
 
-    private func appIcon(_ app: PhoneAppInfo) -> some View {
-        Button {
-            guard !appState.isEditingHomeScreen, appState.draggedApp == nil else { return }
-            appState.open(app.route)
-        } label: {
-            VStack(spacing: 6) {
-                ZStack(alignment: .topTrailing) {
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(AppTheme.Colors.surface)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(AppTheme.Colors.accent.opacity(0.45), lineWidth: 1)
-                        )
-                        .frame(width: 60, height: 60)
-
-                    Image(systemName: app.systemImage)
-                        .font(.system(size: 27, weight: .medium))
-                        .foregroundColor(AppTheme.Colors.text)
-                        .frame(width: 60, height: 60)
-
-                    if badgeCount(for: app.route) > 0 {
-                        Text("\(badgeCount(for: app.route))")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(AppTheme.Colors.text)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 2)
-                            .background(Capsule().fill(AppTheme.Colors.highlight))
-                            .offset(x: 5, y: -5)
-                    }
-                }
-
-                Text(app.title)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundStyle(AppTheme.Colors.text)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(1)
-                    .frame(maxWidth: 76)
+    @ViewBuilder
+    private func icon(_ app: PhoneAppInfo, size: CGFloat) -> some View {
+        let icon = BananaAppIcon(
+            app: app,
+            size: size,
+            badgeCount: badgeCount(for: app.route),
+            isLocked: !appState.unlockedApps.contains(app.route),
+            isEditing: appState.isEditingHomeScreen,
+            action: { appState.open(app.route) },
+            editAction: { appState.isEditingHomeScreen = true }
+        )
+        if appState.isEditingHomeScreen {
+            icon.draggable(app.route.rawValue) {
+                BananaAppIconArtwork(image: app.image, size: size, isLocked: false, appearance: .standard)
             }
-            .rotationEffect(appState.isEditingHomeScreen ? .degrees(app.route.hashValue.isMultiple(of: 2) ? 1.4 : -1.4) : .zero)
-            .animation(appState.isEditingHomeScreen ? .easeInOut(duration: 0.16).repeatForever(autoreverses: true) : .default, value: appState.isEditingHomeScreen)
-        }
-        .buttonStyle(.plain)
-        .simultaneousGesture(LongPressGesture(minimumDuration: 0.35).onEnded { _ in startEditing() })
-        .draggable(app.route.rawValue) {
-            appIconPreview(app)
-                .onAppear {
-                    startEditing()
-                    appState.draggedApp = app.route
-                }
-        }
-        .accessibilityLabel(app.title)
-    }
-
-    private func appIconPreview(_ app: PhoneAppInfo) -> some View {
-        Image(systemName: app.systemImage)
-            .font(.system(size: 27, weight: .medium))
-            .foregroundStyle(AppTheme.Colors.text)
-            .frame(width: 60, height: 60)
-            .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-    }
-
-    private func startEditing() {
-        appState.isEditingHomeScreen = true
-    }
-
-    private func stopEditing() {
-        appState.isEditingHomeScreen = false
-        appState.draggedApp = nil
-    }
-
-    @discardableResult
-    private func move(_ route: PhoneAppRoute, to destination: HomeSection, before target: PhoneAppRoute?) -> Bool {
-        guard appState.unlockedApps.contains(route) else { return false }
-        var layout = appState.homeScreenLayout.normalized
-        layout.gridApps.removeAll { $0 == route }
-        layout.dockApps.removeAll { $0 == route }
-
-        switch destination {
-        case .grid:
-            insert(route, before: target, in: &layout.gridApps)
-        case .dock:
-            guard target != nil || layout.dockApps.count < 4 else { return false }
-            guard target != nil || !layout.dockApps.contains(route) else { return false }
-            if let target, let index = layout.dockApps.firstIndex(of: target) {
-                layout.dockApps.insert(route, at: index)
-            } else if layout.dockApps.count < 4 {
-                layout.dockApps.append(route)
-            }
-            if layout.dockApps.count > 4 { return false }
-        }
-
-        appState.homeScreenLayout = layout.normalized
-        appState.draggedApp = nil
-        return true
-    }
-
-    private func insert(_ route: PhoneAppRoute, before target: PhoneAppRoute?, in routes: inout [PhoneAppRoute]) {
-        if let target, let index = routes.firstIndex(of: target) {
-            routes.insert(route, at: index)
         } else {
-            routes.append(route)
+            icon
         }
     }
 
-    private func route(from value: String?) -> PhoneAppRoute? {
-        value.flatMap(PhoneAppRoute.init(rawValue:))
+    private func accept(_ items: [String], in section: HomeSection, before target: PhoneAppRoute? = nil) -> Bool {
+        guard let route = HomeAppDrop.route(from: items) else { return false }
+        return appState.moveHomeApp(route, to: section, before: target)
     }
 
     private func badgeCount(for route: PhoneAppRoute) -> Int {
@@ -236,40 +143,33 @@ struct HomeScreenView: View {
     }
 }
 
-private enum HomeSection {
-    case grid
-    case dock
-}
+private struct HomeDockSurface: ViewModifier {
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
-struct PhoneAppInfo: Identifiable {
-    var id: PhoneAppRoute { route }
-    let title: String
-    let systemImage: String
-    let route: PhoneAppRoute
+    private let shape = RoundedRectangle(cornerRadius: 28, style: .continuous)
 
-    static func info(for route: PhoneAppRoute) -> PhoneAppInfo? {
-        switch route {
-        case .email: return PhoneAppInfo(title: "Email", systemImage: "envelope.fill", route: .email)
-        case .browser: return PhoneAppInfo(title: "Web", systemImage: "safari.fill", route: .browser)
-        case .social: return PhoneAppInfo(title: "Social X", systemImage: "bubble.left.and.bubble.right.fill", route: .social)
-        case .watchVideo: return PhoneAppInfo(title: "Video", systemImage: "play.circle.fill", route: .watchVideo)
-        case .messager: return PhoneAppInfo(title: "Messages", systemImage: "message.fill", route: .messager)
-        case .photoAlbum: return PhoneAppInfo(title: "Photos", systemImage: "photo.fill", route: .photoAlbum)
-        case .settings: return PhoneAppInfo(title: "Settings", systemImage: "gearshape.fill", route: .settings)
-        case .phone: return PhoneAppInfo(title: "Phone", systemImage: "phone.fill", route: .phone)
-        case .news: return PhoneAppInfo(title: "News", systemImage: "newspaper.fill", route: .news)
-        case .aiAssistant: return PhoneAppInfo(title: "AI", systemImage: "waveform.path.ecg.rectangle.fill", route: .aiAssistant)
-        case .vrExperience: return PhoneAppInfo(title: "VR", systemImage: "visionpro.fill", route: .vrExperience)
-        case .snake: return PhoneAppInfo(title: "Snake", systemImage: "gamecontroller.fill", route: .snake)
-        case .pong: return PhoneAppInfo(title: "Pong", systemImage: "circle.grid.cross.fill", route: .pong)
-        case .xo: return PhoneAppInfo(title: "X / O", systemImage: "square.grid.3x3.fill", route: .xo)
+    func body(content: Content) -> some View {
+        if reduceTransparency {
+            content.background(AppTheme.Colors.surface, in: shape)
+        } else if #available(iOS 26.0, *) {
+            content.glassEffect(.regular.tint(AppTheme.Colors.surface.opacity(0.55)), in: shape)
+        } else {
+            content
+                .background(AppTheme.Colors.surface.opacity(0.78), in: shape)
+                .overlay(shape.stroke(.white.opacity(0.09), lineWidth: 1))
+                .shadow(color: .black.opacity(0.35), radius: 16, y: 6)
         }
     }
 }
 
-struct HomeScreenView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeScreenView()
-            .environmentObject(AppState())
-    }
+#Preview("Compact iPhone") {
+    HomeScreenView()
+        .environmentObject(AppState())
+        .frame(width: 320, height: 568)
+}
+
+#Preview("Large iPhone") {
+    HomeScreenView()
+        .environmentObject(AppState())
+        .frame(width: 430, height: 932)
 }
