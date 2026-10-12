@@ -39,19 +39,7 @@ struct HomeScreenView: View {
                     }
                 }
             }
-
-            if let activeApp = appState.activeApp {
-                destinationView(for: activeApp)
-                    .transition(
-                        .asymmetric(
-                            insertion: .move(edge: .bottom),
-                            removal: .move(edge: .top)
-                        )
-                    )
-                    .zIndex(1)
-            }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.86), value: appState.activeApp)
     }
 
     @ViewBuilder
@@ -245,26 +233,6 @@ struct HomeScreenView: View {
         appState.homeScreenLayout.normalized.dockApps
             .filter { appState.unlockedApps.contains($0) }
             .compactMap(PhoneAppInfo.info(for:))
-    }
-
-    @ViewBuilder
-    private func destinationView(for route: PhoneAppRoute) -> some View {
-        switch route {
-        case .email: EmailView()
-        case .browser: WebBrowserView()
-        case .social: SocialXView()
-        case .watchVideo: WatchVideoView()
-        case .messager: MessagerView()
-        case .photoAlbum: PhotoAlbumView()
-        case .settings: SettingsView()
-        case .phone: PhoneView()
-        case .news: NewsView()
-        case .aiAssistant: AIAssistantView()
-        case .vrExperience: VRExperienceView()
-        case .snake: SnakeGameView()
-        case .pong: PongGameView()
-        case .xo: XOGameView()
-        }
     }
 }
 

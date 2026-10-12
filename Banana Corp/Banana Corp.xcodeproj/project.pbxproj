@@ -21,7 +21,6 @@
 		EE9899FF2B6C33D9003201BE /* HomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */; };
 		EE989A012B6C34DB003201BE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A002B6C34DB003201BE /* AppState.swift */; };
 		EE989A032B6C398A003201BE /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A022B6C398A003201BE /* StatusBar.swift */; };
-		EE989A052B6C39BB003201BE /* HomeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A042B6C39BB003201BE /* HomeButton.swift */; };
 		EE989A082B6C50FF003201BE /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A072B6C50FF003201BE /* EmailView.swift */; };
 		EE989A0A2B6C5137003201BE /* WebBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A092B6C5137003201BE /* WebBrowserView.swift */; };
 		EE989A0C2B6C517A003201BE /* SocialXView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A0B2B6C517A003201BE /* SocialXView.swift */; };
@@ -54,7 +53,6 @@
 		EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenView.swift; sourceTree = "<group>"; };
 		EE989A002B6C34DB003201BE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EE989A022B6C398A003201BE /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
-		EE989A042B6C39BB003201BE /* HomeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeButton.swift; sourceTree = "<group>"; };
 		EE989A062B6C476A003201BE /* Banana-Corp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Banana-Corp-Info.plist"; sourceTree = SOURCE_ROOT; };
 		EE989A072B6C50FF003201BE /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
 		EE989A092B6C5137003201BE /* WebBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebBrowserView.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				EEAA00112E28000000000001 /* AppTheme.swift */,
 				EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */,
 				EECC00012E29000000000001 /* HomeScreenLayout.swift */,
-				EE989A042B6C39BB003201BE /* HomeButton.swift */,
 				EE989A022B6C398A003201BE /* StatusBar.swift */,
 				EEBB00052E28000000000001 /* PhoneShellView.swift */,
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
@@ -232,7 +229,6 @@
 				EE989A082B6C50FF003201BE /* EmailView.swift in Sources */,
 				EE989A0A2B6C5137003201BE /* WebBrowserView.swift in Sources */,
 				EE989A0E2B6C5187003201BE /* WatchVideoView.swift in Sources */,
-				EE989A052B6C39BB003201BE /* HomeButton.swift in Sources */,
 				EE989A1E2B6C51F2003201BE /* XOGameView.swift in Sources */,
 				EE989A032B6C398A003201BE /* StatusBar.swift in Sources */,
 				EEBB00062E28000000000001 /* PhoneShellView.swift in Sources */,
