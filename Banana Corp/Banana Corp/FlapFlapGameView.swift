@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct FlapFlapGameView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var gameTimer: Timer?
+    @State private var pipeGenerationTimer: Timer?
+    @State private var showsGameOver = false
     @State private var isGameRunning = false
     @State private var playerPosition: CGFloat = 150
     @State private var playerVelocity: CGFloat = 0
@@ -66,9 +70,29 @@ struct FlapFlapGameView: View {
 
             }
         }
+        .sheet(isPresented: $showsGameOver) {
+            PhoneShellView(title: "Flap Flap", showsHomeIndicator: false) {
+                GameOverView(score: score) {
+                    showsGameOver = false
+                    startGame()
+                }
+                Button("Dismiss") { showsGameOver = false }
+                    .buttonStyle(.modernPhoneProminent)
+            }
+            .statusBarHidden(true)
+            .presentationBackground(.black)
+        }
+        .onDisappear { cancelTimers() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active {
+                cancelTimers()
+                isGameRunning = false
+            }
+        }
     }
 
     private func startGame() {
+        guard gameTimer == nil else { return }
         isGameRunning = true
         score = 0
         pipes = []
@@ -76,7 +100,7 @@ struct FlapFlapGameView: View {
 
         let gravity: CGFloat = 0.5
 
-        let gameTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
+        gameTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             // Update player position
             playerVelocity += gravity
             playerPosition += playerVelocity
@@ -110,26 +134,29 @@ struct FlapFlapGameView: View {
                 pipes[i].x -= 5
             }
         }
-        gameTimer.fire()
+        gameTimer?.fire()
     }
 
     private func stopGame() {
         isGameRunning = false
         pipes = [] // Reset pipes if needed
 
-        let gameOverView = GameOverView(score: score) {
-            // Restart game action
-            startGame()
-        }
+        cancelTimers()
+        showsGameOver = true
+    }
 
-        UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: gameOverView), animated: true, completion: nil)
+    private func cancelTimers() {
+        gameTimer?.invalidate()
+        pipeGenerationTimer?.invalidate()
+        gameTimer = nil
+        pipeGenerationTimer = nil
     }
 
     private func startPipeGeneration() {
-        let pipeGenerationTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
+        pipeGenerationTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
             generatePipe()
         }
-        pipeGenerationTimer.fire()
+        pipeGenerationTimer?.fire()
     }
 
     private func generatePipe() {

@@ -99,6 +99,8 @@ final class SnakeGameModel: ObservableObject {
 }
 
 struct SnakeGameView: View {
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var model = SnakeGameModel()
     private let timer = Timer.publish(every: 0.18, on: .main, in: .common).autoconnect()
 
@@ -166,6 +168,7 @@ struct SnakeGameView: View {
             }
         }
         .onReceive(timer) { _ in
+            guard appState.activeApp == .snake, scenePhase == .active else { return }
             guard !model.isGameOver else { return }
             model.tick()
         }

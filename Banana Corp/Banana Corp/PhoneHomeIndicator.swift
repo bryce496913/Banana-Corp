@@ -4,27 +4,26 @@ struct PhoneHomeIndicator: View {
     @EnvironmentObject private var appState: AppState
 
     var body: some View {
-        VStack(spacing: 6) {
+        Button(action: appState.goHome) {
             Capsule()
-                .fill(AppTheme.Colors.text.opacity(0.8))
+                .fill(AppTheme.Colors.text.opacity(0.85))
                 .frame(width: 110, height: 5)
-                .padding(.top, 6)
-                .padding(.bottom, 8)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .contentShape(Rectangle())
         }
-        .frame(maxWidth: .infinity)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            appState.goHome()
-        }
-        .gesture(
+        .buttonStyle(.plain)
+        // This reserved strip is inside the safe area, above the real Home gesture.
+        // No OS gesture is attached to app content or game boards.
+        .simultaneousGesture(
             DragGesture(minimumDistance: 16)
                 .onEnded { value in
-                    if abs(value.translation.height) > 12 {
-                        appState.goHome()
-                    }
+                    guard value.translation.height < -24,
+                          abs(value.translation.height) > abs(value.translation.width) else { return }
+                    appState.goHome()
                 }
         )
         .accessibilityLabel("Return to Home")
-        .accessibilityHint("Tap or swipe on the home indicator to return to the phone home screen.")
+        .accessibilityHint("Activate to return to Banana OS.")
+        .accessibilityIdentifier("bananaOS.home")
     }
 }

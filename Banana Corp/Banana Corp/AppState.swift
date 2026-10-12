@@ -7,8 +7,9 @@
 
 import SwiftUI
 
+@MainActor
 final class AppState: ObservableObject {
-    @Published var activeApp: PhoneAppRoute?
+    @Published private(set) var activeApp: PhoneAppRoute?
     @Published var homeScreenLayout: HomeScreenLayout = HomeScreenLayoutStore.load() {
         didSet { HomeScreenLayoutStore.save(homeScreenLayout) }
     }
@@ -39,6 +40,9 @@ final class AppState: ObservableObject {
     @Published var aiCorruptionLevel = 0
 
     func open(_ route: PhoneAppRoute) {
+        guard activeApp == nil, unlockedApps.contains(route) else { return }
+        isEditingHomeScreen = false
+        draggedApp = nil
         activeApp = route
     }
 

@@ -45,6 +45,7 @@ struct PhoneShellView<Content: View>: View {
             .padding(.horizontal, AppTheme.Spacing.sm)
             .padding(.bottom, AppTheme.Spacing.xs)
         }
+        .statusBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
     }

@@ -128,6 +128,8 @@ final class PongGameModel: ObservableObject {
 }
 
 struct PongGameView: View {
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var model = PongGameModel()
     @State private var currentBoardSize: CGSize = .zero
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
@@ -167,6 +169,7 @@ struct PongGameView: View {
             }
         }
         .onReceive(timer) { _ in
+            guard appState.activeApp == .pong, scenePhase == .active else { return }
             model.tick(boardSize: currentBoardSize)
         }
     }
