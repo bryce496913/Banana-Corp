@@ -1,31 +1,19 @@
-//
-//  VRExperienceView.swift
-//  Banana Corp
-//
-
 import SwiftUI
 
 struct VRExperienceView: View {
     var body: some View {
-        PhoneShellView(title: "VR Experience") {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                Text("BANANA VR")
-                    .appText(.h2, color: AppTheme.Colors.highlight)
-
-                Text("Calibration required...")
-                    .appText(.paragraph)
-
-                Text("Immersive access is waiting for headset confirmation.")
-                    .appText(.paragraph)
-                    .padding(AppTheme.Spacing.lg)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modernSurface(
-                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+        PhoneShellView(title: "VR Experience", subtitle: "BANANA VR") {
+            VStack(spacing: 0) {
+                AppScreenScroll {
+                    AppSectionHeader("Headset")
+                    AppEmptyState(
+                        symbol: "visionpro",
+                        title: "Calibration required...",
+                        message: "Immersive access is waiting for headset confirmation.",
+                        symbolSize: 72
                     )
-
-                Spacer()
+                }
             }
-            .padding(AppTheme.Spacing.lg)
         }
     }
 }

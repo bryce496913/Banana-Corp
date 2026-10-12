@@ -16,6 +16,8 @@ struct Banana_CorpApp: App {
             LaunchView()
                 .environmentObject(appState)
                 .statusBarHidden(true)
+                .preferredColorScheme(.dark)
+                .tint(AppTheme.Colors.accent)
         }
     }
 }

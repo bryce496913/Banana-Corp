@@ -135,53 +135,45 @@ struct PongGameView: View {
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        PhoneShellView(title: nil) {
+        PhoneShellView(title: "Pong") {
             VStack(spacing: 12) {
-                Text("Pong")
-                .appText(.h1, color: AppTheme.Colors.highlight)
+                HStack(spacing: AppTheme.Spacing.sm) {
+                    AppScorePanel(label: "LEFT", value: String(model.playerScore))
+                    AppScorePanel(label: "RIGHT", value: String(model.aiScore))
+                }
+                .padding(.horizontal, AppTheme.Spacing.lg)
+                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
-            HStack(spacing: 28) {
-                scoreBlock(label: "LEFT", score: model.playerScore)
-                scoreBlock(label: "RIGHT", score: model.aiScore)
-            }
+                GeometryReader { geometry in
+                    let boardSize = CGSize(width: geometry.size.width - 24, height: geometry.size.height)
 
-            GeometryReader { geometry in
-                let boardSize = CGSize(width: geometry.size.width - 24, height: geometry.size.height)
+                    PongBoardView(model: model, boardSize: boardSize)
+                        .frame(width: boardSize.width, height: boardSize.height)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .onAppear {
+                            currentBoardSize = boardSize
+                            model.reset(boardSize: boardSize)
+                        }
+                        .onChange(of: boardSize) { _, newSize in
+                            currentBoardSize = newSize
+                            model.reset(boardSize: newSize)
+                        }
+                }
+                .frame(maxHeight: 420)
+                .padding(.horizontal, 12)
 
-                PongBoardView(model: model, boardSize: boardSize)
-                    .frame(width: boardSize.width, height: boardSize.height)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onAppear {
-                        currentBoardSize = boardSize
-                        model.reset(boardSize: boardSize)
-                    }
-                    .onChange(of: boardSize) { newSize in
-                        currentBoardSize = newSize
-                        model.reset(boardSize: newSize)
-                    }
-            }
-            .frame(maxHeight: 420)
-            .padding(.horizontal, 12)
-
-            Text(model.roundMessage ?? "Drag left paddle to train reflexes")
-                .appText(.paragraph, color: model.roundMessage == nil ? AppTheme.Colors.text.opacity(0.75) : AppTheme.Colors.highlight)
-                .frame(minHeight: 20)
+                Text(model.roundMessage ?? "Drag left paddle to train reflexes")
+                    .appText(.caption, color: model.roundMessage == nil ? AppTheme.Colors.text.opacity(0.75) : AppTheme.Colors.highlight)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, AppTheme.Spacing.lg)
+                    .frame(minHeight: 20)
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             }
         }
         .onReceive(timer) { _ in
             guard appState.activeApp == .pong, scenePhase == .active else { return }
             model.tick(boardSize: currentBoardSize)
         }
-    }
-
-    private func scoreBlock(label: String, score: Int) -> some View {
-        VStack(spacing: 2) {
-            Text(label)
-                .appText(.paragraph)
-            Text("\(score)")
-                .font(.system(size: AppTextStyle.h2.size, weight: .bold).monospacedDigit())
-        }
-        .foregroundColor(AppTheme.Colors.text)
     }
 }
 

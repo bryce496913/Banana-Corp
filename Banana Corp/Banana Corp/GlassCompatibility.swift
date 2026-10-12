@@ -4,9 +4,12 @@ struct ModernSurfaceModifier<S: Shape>: ViewModifier {
     let shape: S
     let tint: Color
     let isInteractive: Bool
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
+        if reduceTransparency {
+            content.background(AppTheme.Colors.surface, in: shape)
+        } else if #available(iOS 26.0, *) {
             content
                 .background(.clear)
                 .glassEffect(
@@ -23,7 +26,7 @@ struct ModernSurfaceModifier<S: Shape>: ViewModifier {
                 )
                 .overlay(
                     shape
-                        .stroke(AppTheme.Colors.accent.opacity(0.35), lineWidth: 1)
+                        .stroke(AppTheme.Colors.separator, lineWidth: 1)
                 )
         }
     }
