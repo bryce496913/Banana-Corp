@@ -42,7 +42,7 @@ struct HomeScreenView: View {
                 .frame(width: width)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .background(outsideTapArea)
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: appState.homeScreenLayout)
+                .animation(reduceMotion ? nil : AppMotion.reorder, value: appState.homeScreenLayout)
             }
         }
         .onDisappear { appState.finishEditingHomeScreen() }
@@ -68,6 +68,7 @@ struct HomeScreenView: View {
                     .padding(.horizontal, 16)
                     .frame(minHeight: AppTheme.Layout.touchTarget)
                     .modernSurface(in: Capsule(), tint: AppTheme.Colors.accent.opacity(0.12), interactive: true)
+                    .buttonStyle(.appContent)
             }
         }
     }
@@ -106,7 +107,7 @@ struct HomeScreenView: View {
             isLocked: !appState.unlockedApps.contains(app.route),
             isEditing: appState.isEditingHomeScreen,
             action: { appState.open(app.route) },
-            editAction: { appState.isEditingHomeScreen = true }
+            editAction: appState.beginEditingHomeScreen
         )
         if appState.isEditingHomeScreen {
             icon.draggable(app.route.rawValue) {

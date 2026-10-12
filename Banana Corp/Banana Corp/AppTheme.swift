@@ -64,7 +64,6 @@ extension View {
 
 struct AppPrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -77,15 +76,13 @@ struct AppPrimaryButtonStyle: ButtonStyle {
                 in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
             )
             .opacity(isEnabled ? 1 : 0.45)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
+            .modifier(AppPressFeedback(isPressed: configuration.isPressed))
     }
 }
 
 struct ModernPhoneButtonStyle: ButtonStyle {
     let prominent: Bool
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -99,8 +96,7 @@ struct ModernPhoneButtonStyle: ButtonStyle {
                 interactive: true
             )
             .opacity(isEnabled ? 1 : 0.45)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
+            .modifier(AppPressFeedback(isPressed: configuration.isPressed))
     }
 }
 

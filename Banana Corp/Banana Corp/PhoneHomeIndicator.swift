@@ -11,14 +11,13 @@ struct PhoneHomeIndicator: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.appContent)
         // This reserved strip is inside the safe area, above the real Home gesture.
         // No OS gesture is attached to app content or game boards.
-        .simultaneousGesture(
+        .highPriorityGesture(
             DragGesture(minimumDistance: 16)
                 .onEnded { value in
-                    guard value.translation.height < -24,
-                          abs(value.translation.height) > abs(value.translation.width) else { return }
+                    guard HomeSwipeIntent.shouldReturnHome(translation: value.translation) else { return }
                     appState.goHome()
                 }
         )

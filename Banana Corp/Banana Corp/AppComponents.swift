@@ -171,6 +171,30 @@ struct AppListRow: View {
     }
 }
 
+struct AppCardButton<Content: View>: View {
+    let label: String
+    let action: () -> Void
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        Button(action: action) {
+            AppCard(content: content)
+        }
+        .buttonStyle(.appContent)
+        .accessibilityLabel(label)
+    }
+}
+
+struct AppListButton: View {
+    let row: AppListRow
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) { row }
+            .buttonStyle(.appContent)
+    }
+}
+
 struct AppTextInput: View {
     let label: String
     @Binding var text: String
@@ -290,6 +314,7 @@ struct AppSegmentedControl: View {
     let label: String
     let options: [String]
     @Binding var selection: String
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         Picker(label, selection: $selection) {
@@ -298,6 +323,7 @@ struct AppSegmentedControl: View {
         .pickerStyle(.segmented)
         .tint(AppTheme.Colors.accent)
         .frame(minHeight: AppTheme.Layout.touchTarget)
+        .animation(reduceMotion ? nil : AppMotion.selection, value: selection)
     }
 }
 
@@ -383,12 +409,14 @@ extension View {
         role: ButtonRole? = nil,
         action: @escaping () -> Void
     ) -> some View {
-        confirmationDialog(title, isPresented: isPresented, titleVisibility: .visible) {
-            Button(actionTitle, role: role, action: action)
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text(message)
-        }
+        modifier(AppConfirmationModifier(
+            title: title,
+            message: message,
+            actionTitle: actionTitle,
+            isPresented: isPresented,
+            role: role,
+            action: action
+        ))
     }
 }
 
@@ -414,6 +442,14 @@ private struct AppComponentsPreview: View {
                             AppSegmentedControl(label: "Preview options", options: ["First", "Second"], selection: $selected)
                         }
                     }
+                    AppSectionHeader("Interactive surfaces")
+                    AppCardButton(label: "Preview card", action: { showsAlert = true }) {
+                        Text("Preview card").appText(.body)
+                    }
+                    AppListButton(
+                        row: AppListRow(title: "Preview interactive row", symbol: "square"),
+                        action: { showsAlert = true }
+                    )
                     AppSectionHeader("Rows and states")
                     AppCard {
                         AppListRow(
