@@ -1,5 +1,7 @@
 # Story-aware Banana OS visual system
 
+Story design is governed by [BANANA_CORP_GAME_BIBLE.md](../BANANA_CORP_GAME_BIBLE.md). This document describes existing presentation infrastructure; modes, debug demonstrations, and example predicates do not approve story triggers or replace the canonical five acts. See [STORY_IMPLEMENTATION.md](STORY_IMPLEMENTATION.md) for implementation gaps and future review conventions.
+
 Built on merged motion/interaction PR #10. This adds presentation infrastructure, not chapters or an independent progression engine.
 
 ## Ownership and defaults
