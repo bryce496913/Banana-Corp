@@ -1,31 +1,35 @@
-//
-//  WebBrowserView.swift
-//  Banana Corp
-//
-
 import SwiftUI
 
 struct WebBrowserView: View {
     var body: some View {
         PhoneShellView(title: "Web Browser") {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                Text("BANANA WEB")
-                    .appText(.h2, color: AppTheme.Colors.highlight)
-
-                Text("Connection pending...")
-                    .appText(.paragraph)
-
-                Text("Corporate browsing is currently routing through a protected relay.")
-                    .appText(.paragraph)
-                    .padding(AppTheme.Spacing.lg)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modernSurface(
-                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+            VStack(spacing: 0) {
+                AppScreenScroll {
+                    AppTextInput(
+                        label: "Address or search",
+                        text: .constant(""),
+                        symbol: "magnifyingglass",
+                        keyboard: .URL,
+                        submitLabel: .go
                     )
-
-                Spacer()
+                    .disabled(true)
+                    .accessibilityHint("Connection pending...")
+                    AppEmptyState(
+                        symbol: "globe",
+                        title: "Connection pending...",
+                        message: "Corporate browsing is currently routing through a protected relay."
+                    )
+                }
+                AppBottomActionArea {
+                    HStack {
+                        AppNavigationControl(label: "Back", symbol: "chevron.left")
+                        AppNavigationControl(label: "Forward", symbol: "chevron.right")
+                        Spacer()
+                        AppNavigationControl(label: "Reload", symbol: "arrow.clockwise")
+                    }
+                    .accessibilityHint("Connection pending...")
+                }
             }
-            .padding(AppTheme.Spacing.lg)
         }
     }
 }

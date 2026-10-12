@@ -45,12 +45,7 @@ struct BananaAppIcon: View {
                 BananaAppIconArtwork(image: app.image, size: size, isLocked: isLocked, appearance: appearance)
                     .overlay(alignment: .topTrailing) {
                         if badgeCount > 0 {
-                            Text(badgeCount > 99 ? "99+" : String(badgeCount))
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 5)
-                                .frame(minWidth: 20, minHeight: 20)
-                                .background(AppTheme.Colors.highlight, in: Capsule())
+                            AppNotificationBadge(count: badgeCount)
                                 .offset(x: 6, y: -5)
                         }
                     }

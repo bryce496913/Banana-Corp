@@ -1,31 +1,21 @@
-//
-//  EmailView.swift
-//  Banana Corp
-//
-
 import SwiftUI
 
 struct EmailView: View {
     var body: some View {
         PhoneShellView(title: "Email") {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                Text("BANANA MAIL")
-                    .appText(.h2, color: AppTheme.Colors.highlight)
-
-                Text("Inbox syncing...")
-                    .appText(.paragraph)
-
-                Text("Secure messages will appear after device activation.")
-                    .appText(.paragraph)
-                    .padding(AppTheme.Spacing.lg)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modernSurface(
-                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
+            VStack(spacing: 0) {
+                AppScreenScroll {
+                    AppSearchField(label: "Search mail", text: .constant(""))
+                        .disabled(true)
+                        .accessibilityHint("Secure messages will appear after device activation.")
+                    AppSectionHeader("Inbox")
+                    AppEmptyState(
+                        symbol: "envelope",
+                        title: "Inbox syncing...",
+                        message: "Secure messages will appear after device activation."
                     )
-
-                Spacer()
+                }
             }
-            .padding(AppTheme.Spacing.lg)
         }
     }
 }

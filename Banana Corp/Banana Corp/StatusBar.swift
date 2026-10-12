@@ -15,10 +15,12 @@ struct StatusBar: View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("BANANA 5G")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(AppTextStyle.body.font)
+                    .fontWeight(.semibold)
 
                 Text(currentTime, style: .time)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(AppTextStyle.body.font)
+                    .fontWeight(.semibold)
                     .monospacedDigit()
             }
             .foregroundColor(AppTheme.Colors.text.opacity(0.94))
@@ -34,12 +36,13 @@ struct StatusBar: View {
                     .accessibilityLabel("Banana battery: 75 percent")
                     .foregroundColor(AppTheme.Colors.highlight)
             }
-            .font(.system(size: 18, weight: .semibold))
+            .font(AppTextStyle.body.font.weight(.semibold))
             .foregroundColor(AppTheme.Colors.text.opacity(0.94))
         }
         .padding(.horizontal, AppTheme.Spacing.md)
         .padding(.top, AppTheme.Spacing.sm)
         .frame(minHeight: 56)
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .onReceive(timer) { _ in
             currentTime = Date()
         }

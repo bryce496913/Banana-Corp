@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct XOGameView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var board = Array(repeating: "", count: 9)
     @State private var currentPlayer = "X"
     @State private var winner: String?
@@ -16,43 +17,52 @@ struct XOGameView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 3)
 
     var body: some View {
-        PhoneShellView(title: nil) {
-            VStack(spacing: 18) {
-                Text("XO Training Grid")
-                .appText(.h1, color: AppTheme.Colors.highlight)
-
-            Text(statusMessage)
-                .appText(.h2, color: statusColor)
-                .frame(minHeight: 28)
-
+        PhoneShellView(title: "XO Training Grid") {
             GeometryReader { geometry in
-                let boardSize = min(geometry.size.width - 32, geometry.size.height)
-
-                LazyVGrid(columns: columns, spacing: 6) {
-                    ForEach(0..<board.count, id: \.self) { index in
-                        CellView(value: board[index], color: colorForCell(board[index])) {
-                            makeMove(at: index)
-                        }
-                        .aspectRatio(1, contentMode: .fit)
+                if dynamicTypeSize >= .xxLarge || geometry.size.height < 300 {
+                    ScrollView {
+                        gameContent(boardHeight: min(geometry.size.width - 32, 360))
                     }
+                    .scrollIndicators(.hidden)
+                } else {
+                    gameContent(boardHeight: nil)
                 }
-                .padding(6)
-                .frame(width: boardSize, height: boardSize)
-                .background(Color.white)
-                .cornerRadius(12)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(maxHeight: 360)
-
-            Button("Reset Grid") {
-                resetGame()
-            }
-            .buttonStyle(.modernPhoneProminent)
-
-                Spacer(minLength: 0)
-            }
-            .padding(.horizontal, 16)
         }
+    }
+
+    private func gameContent(boardHeight: CGFloat?) -> some View {
+        VStack(spacing: 18) {
+            AppScorePanel(label: "Game", value: statusMessage, color: statusColor)
+            gameBoard.frame(height: boardHeight)
+            AppBottomActionArea {
+                Button("Reset Grid", action: resetGame).buttonStyle(.appPrimary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 16)
+    }
+
+    private var gameBoard: some View {
+        GeometryReader { geometry in
+            let boardSize = min(geometry.size.width - 32, geometry.size.height)
+
+            LazyVGrid(columns: columns, spacing: 6) {
+                ForEach(0..<board.count, id: \.self) { index in
+                    CellView(value: board[index], color: colorForCell(board[index])) {
+                        makeMove(at: index)
+                    }
+                    .aspectRatio(1, contentMode: .fit)
+                    .accessibilityLabel("Row \(index / 3 + 1), column \(index % 3 + 1), \(board[index].isEmpty ? "Empty cell" : board[index])")
+                }
+            }
+            .padding(6)
+            .frame(width: boardSize, height: boardSize)
+            .background(Color.white)
+            .cornerRadius(12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(maxHeight: 360)
     }
 
     private var statusMessage: String {

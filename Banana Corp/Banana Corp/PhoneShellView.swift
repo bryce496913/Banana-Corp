@@ -2,17 +2,20 @@ import SwiftUI
 
 struct PhoneShellView<Content: View>: View {
     let title: String?
+    let subtitle: String?
     let showsStatusBar: Bool
     let showsHomeIndicator: Bool
     let content: Content
 
     init(
         title: String? = nil,
+        subtitle: String? = nil,
         showsStatusBar: Bool = true,
         showsHomeIndicator: Bool = true,
         @ViewBuilder content: () -> Content
     ) {
         self.title = title
+        self.subtitle = subtitle
         self.showsStatusBar = showsStatusBar
         self.showsHomeIndicator = showsHomeIndicator
         self.content = content()
@@ -29,10 +32,7 @@ struct PhoneShellView<Content: View>: View {
                 }
 
                 if let title {
-                    Text(title)
-                        .appText(.h1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, AppTheme.Spacing.lg)
+                    AppScreenHeader(title: title, subtitle: subtitle)
                 }
 
                 content

@@ -14,7 +14,7 @@ struct HomeScreenView: View {
                 let iconSize = min(64, max(44, (width - 48) / 4))
                 VStack(spacing: 12) {
                     editHeader
-                        .frame(height: 36)
+                        .frame(height: AppTheme.Layout.touchTarget)
 
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
@@ -66,7 +66,7 @@ struct HomeScreenView: View {
                 Button("Done") { appState.finishEditingHomeScreen() }
                     .font(.subheadline.weight(.semibold))
                     .padding(.horizontal, 16)
-                    .frame(minHeight: 36)
+                    .frame(minHeight: AppTheme.Layout.touchTarget)
                     .modernSurface(in: Capsule(), tint: AppTheme.Colors.accent.opacity(0.12), interactive: true)
             }
         }

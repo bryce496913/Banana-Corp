@@ -22,62 +22,56 @@ struct FlapFlapGameView: View {
         PhoneShellView(title: "Flap Flap") {
             VStack {
                 Spacer()
+                if isGameRunning {
+                    ZStack {
+                        FlappyBirdGame(
+                            playerPosition: $playerPosition,
+                            playerVelocity: $playerVelocity,
+                            score: $score,
+                            pipes: $pipes,
+                            stopGame: stopGame
+                        )
+                        .onTapGesture { playerVelocity = -10 }
+                        .onAppear { startGame() }
 
-            if isGameRunning {
-                ZStack {
-                    FlappyBirdGame(playerPosition: $playerPosition, playerVelocity: $playerVelocity, score: $score, pipes: $pipes, stopGame: stopGame)
-                        .onTapGesture {
-                            // Handle tap gesture to lift the player character
-                            playerVelocity = -10  // Adjust the lifting force as needed
-                        }
-                        .onAppear {
-                            // Start the game logic
-                            startGame()
-                        }
-
-                    // Draw pipes
-                    ForEach(pipes) { pipe in
-                        Group {
-                            // Top pipe
-                            Rectangle()
-                                .fill(Color.green)
-                                .frame(width: pipe.width, height: pipe.topHeight)
-                                .offset(x: pipe.x, y: pipe.y - pipe.topHeight)
-
-                            // Bottom pipe
-                            Rectangle()
-                                .fill(Color.green)
-                                .frame(width: pipe.width, height: pipe.bottomHeight)
-                                .offset(x: pipe.x, y: pipe.y + pipe.gap)
+                        ForEach(pipes) { pipe in
+                            Group {
+                                Rectangle()
+                                    .fill(Color.green)
+                                    .frame(width: pipe.width, height: pipe.topHeight)
+                                    .offset(x: pipe.x, y: pipe.y - pipe.topHeight)
+                                Rectangle()
+                                    .fill(Color.green)
+                                    .frame(width: pipe.width, height: pipe.bottomHeight)
+                                    .offset(x: pipe.x, y: pipe.y + pipe.gap)
+                            }
                         }
                     }
+                } else {
+                    AppGameOverlay(
+                        title: "Start Screen",
+                        message: nil,
+                        actionTitle: "Start Game",
+                        action: startGame
+                    )
                 }
-            }
-            else {
-                VStack {
-                    Text("Start Screen")
-                        .appText(.h1, color: AppTheme.Colors.highlight)
-                        .padding()
-
-                    Button("Start Game") {
-                        startGame()
-                    }
-                    .buttonStyle(.modernPhoneProminent)
-                }
-            }
-
-            Spacer()
-
+                Spacer()
             }
         }
         .sheet(isPresented: $showsGameOver) {
             PhoneShellView(title: "Flap Flap", showsHomeIndicator: false) {
-                GameOverView(score: score) {
-                    showsGameOver = false
-                    startGame()
+                VStack(spacing: 0) {
+                    AppScreenScroll {
+                        GameOverView(score: score) {
+                            showsGameOver = false
+                            startGame()
+                        }
+                    }
+                    AppBottomActionArea {
+                        Button("Dismiss") { showsGameOver = false }
+                            .buttonStyle(.modernPhone)
+                    }
                 }
-                Button("Dismiss") { showsGameOver = false }
-                    .buttonStyle(.modernPhoneProminent)
             }
             .statusBarHidden(true)
             .presentationBackground(.black)
@@ -174,28 +168,17 @@ struct GameOverView: View {
     var restartAction: () -> Void
 
     var body: some View {
-        VStack {
-            Text("Game Over")
-                .font(.title)
-                .foregroundColor(.red)
-                .padding()
-
-            Text("Score: \(score)")
-                .font(.headline)
-                .padding()
-
-            Button("Restart Game") {
-                restartAction()
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-        }
+        AppGameOverlay(
+            title: "Game Over",
+            message: "Score: \(score)",
+            actionTitle: "Restart Game",
+            action: restartAction
+        )
     }
 }
 
 struct FlappyBirdGame: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var playerPosition: CGFloat
     @Binding var playerVelocity: CGFloat
     @Binding var score: Int
@@ -207,7 +190,7 @@ struct FlappyBirdGame: View {
             .resizable()
             .frame(width: 50, height: 50)
             .offset(x: 100, y: playerPosition)
-            .animation(.linear)
+            .animation(reduceMotion ? nil : .linear, value: playerPosition)
             .onReceive(Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()) { _ in
                 updateGame()
             }
@@ -257,5 +240,6 @@ struct Pipe: Identifiable, Hashable {
 struct FlapFlapGameView_Previews: PreviewProvider {
     static var previews: some View {
         FlapFlapGameView()
+            .environmentObject(AppState())
     }
 }

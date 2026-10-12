@@ -1,34 +1,17 @@
 import SwiftUI
 
 enum AppTextStyle {
-    case h1
-    case h2
-    case h3
-    case paragraph
+    case screenTitle, sectionTitle, body, caption, systemLabel
+    // Compatibility names for existing call sites.
+    case h1, h2, h3, paragraph
 
-    var size: CGFloat {
+    var font: Font {
         switch self {
-        case .h1:
-            return 16
-        case .h2:
-            return 14
-        case .h3:
-            return 12
-        case .paragraph:
-            return 10
-        }
-    }
-
-    var weight: Font.Weight {
-        switch self {
-        case .h1:
-            return .bold
-        case .h2:
-            return .semibold
-        case .h3:
-            return .medium
-        case .paragraph:
-            return .regular
+        case .screenTitle, .h1: return .system(.title2, design: .default).weight(.bold)
+        case .sectionTitle, .h2: return .system(.headline, design: .default)
+        case .body, .paragraph: return .system(.body, design: .default)
+        case .caption: return .system(.caption, design: .default)
+        case .systemLabel, .h3: return .system(.subheadline, design: .default).weight(.semibold)
         }
     }
 }
@@ -40,6 +23,8 @@ enum AppTheme {
         static let accent = Color(red: 0.72, green: 0.29, blue: 0.95)
         static let highlight = Color(red: 0.98, green: 0.32, blue: 0.67)
         static let text = Color.white
+        static let secondaryText = text.opacity(0.75)
+        static let separator = text.opacity(0.10)
     }
 
     enum Spacing {
@@ -55,6 +40,11 @@ enum AppTheme {
         static let md: CGFloat = 12
         static let lg: CGFloat = 18
     }
+
+    enum Layout {
+        static let touchTarget: CGFloat = 44
+        static let readingWidth: CGFloat = 600
+    }
 }
 
 struct AppTextModifier: ViewModifier {
@@ -62,71 +52,63 @@ struct AppTextModifier: ViewModifier {
     let color: Color
 
     func body(content: Content) -> some View {
-        content
-            .font(.system(size: style.size, weight: style.weight))
-            .foregroundColor(color)
+        content.font(style.font).foregroundStyle(color)
     }
 }
 
 extension View {
-    func appText(
-        _ style: AppTextStyle,
-        color: Color = AppTheme.Colors.text
-    ) -> some View {
+    func appText(_ style: AppTextStyle, color: Color = AppTheme.Colors.text) -> some View {
         modifier(AppTextModifier(style: style, color: color))
     }
 }
 
 struct AppPrimaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .appText(.h3)
+            .appText(.systemLabel)
+            .padding(.horizontal, AppTheme.Spacing.lg)
             .padding(.vertical, AppTheme.Spacing.sm)
-            .padding(.horizontal, AppTheme.Spacing.md)
+            .frame(minHeight: AppTheme.Layout.touchTarget)
             .background(
-                RoundedRectangle(cornerRadius: AppTheme.Radius.md)
-                    .fill(AppTheme.Colors.accent.opacity(configuration.isPressed ? 0.7 : 1))
+                AppTheme.Colors.accent.opacity(configuration.isPressed ? 0.75 : 1),
+                in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
             )
-            .foregroundColor(AppTheme.Colors.text)
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .opacity(isEnabled ? 1 : 0.45)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+struct ModernPhoneButtonStyle: ButtonStyle {
+    let prominent: Bool
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .appText(.systemLabel)
+            .padding(.horizontal, AppTheme.Spacing.lg)
+            .padding(.vertical, AppTheme.Spacing.sm)
+            .frame(minHeight: AppTheme.Layout.touchTarget)
+            .modernSurface(
+                in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous),
+                tint: prominent ? AppTheme.Colors.accent.opacity(0.25) : AppTheme.Colors.surface.opacity(0.5),
+                interactive: true
+            )
+            .opacity(isEnabled ? 1 : 0.45)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
 extension ButtonStyle where Self == AppPrimaryButtonStyle {
-    static var appPrimary: AppPrimaryButtonStyle {
-        AppPrimaryButtonStyle()
-    }
-}
-
-
-struct ModernPhoneButtonStyle: ButtonStyle {
-    let prominent: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        let shape = RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
-
-        configuration.label
-            .appText(.h3)
-            .foregroundColor(AppTheme.Colors.text)
-            .padding(.vertical, AppTheme.Spacing.sm)
-            .padding(.horizontal, AppTheme.Spacing.md)
-            .frame(minHeight: 36)
-            .modernSurface(
-                in: shape,
-                tint: prominent ? AppTheme.Colors.highlight.opacity(0.25) : AppTheme.Colors.accent.opacity(0.18),
-                interactive: true
-            )
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
-    }
+    static var appPrimary: AppPrimaryButtonStyle { AppPrimaryButtonStyle() }
 }
 
 extension ButtonStyle where Self == ModernPhoneButtonStyle {
-    static var modernPhone: ModernPhoneButtonStyle {
-        ModernPhoneButtonStyle(prominent: false)
-    }
-
-    static var modernPhoneProminent: ModernPhoneButtonStyle {
-        ModernPhoneButtonStyle(prominent: true)
-    }
+    static var modernPhone: ModernPhoneButtonStyle { ModernPhoneButtonStyle(prominent: false) }
+    static var modernPhoneProminent: ModernPhoneButtonStyle { ModernPhoneButtonStyle(prominent: true) }
 }

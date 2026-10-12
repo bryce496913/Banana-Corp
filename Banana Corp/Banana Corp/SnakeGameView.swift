@@ -101,70 +101,24 @@ final class SnakeGameModel: ObservableObject {
 struct SnakeGameView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @StateObject private var model = SnakeGameModel()
     private let timer = Timer.publish(every: 0.18, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        PhoneShellView(title: nil) {
-            VStack(spacing: 12) {
-                HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Snake")
-                        .appText(.h1, color: AppTheme.Colors.highlight)
-                    Text("Banana Corp reflex audit")
-                        .appText(.paragraph)
-                }
-                Spacer()
-                Text("Score \(model.score)")
-                    .font(.system(size: AppTextStyle.h2.size, weight: AppTextStyle.h2.weight).monospacedDigit())
-            }
-            .foregroundColor(AppTheme.Colors.highlight)
-            .padding(.horizontal, AppTheme.Spacing.lg)
-
+        PhoneShellView(title: "Snake", subtitle: "Banana Corp reflex audit") {
             GeometryReader { geometry in
-                let boardSize = min(geometry.size.width - 24, geometry.size.height)
-                let cellSize = boardSize / CGFloat(model.gridSize)
-
-                ZStack {
-                    Rectangle()
-                        .fill(AppTheme.Colors.background)
-                    gridLines(cellSize: cellSize, boardSize: boardSize)
-                    ForEach(Array(model.snake.enumerated()), id: \.offset) { index, segment in
-                        Rectangle()
-                            .fill(index == 0 ? Color.yellow : Color.green)
-                            .frame(width: cellSize - 1, height: cellSize - 1)
-                            .position(x: segment.x * cellSize + cellSize / 2, y: segment.y * cellSize + cellSize / 2)
-                    }
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: cellSize * 0.8, height: cellSize * 0.8)
-                        .position(x: model.food.x * cellSize + cellSize / 2, y: model.food.y * cellSize + cellSize / 2)
-
-                    if model.isGameOver {
-                        VStack(spacing: 10) {
-                            Text("Game Over")
-                                .appText(.h1, color: AppTheme.Colors.highlight)
-                            Text("Score: \(model.score)")
-                                .font(.system(size: AppTextStyle.h2.size, weight: AppTextStyle.h2.weight).monospacedDigit())
-                            Button("Restart") { model.reset() }
-                                .buttonStyle(.modernPhoneProminent)
-                        }
-                        .padding(24)
-                        .modernSurface(
-                            in: RoundedRectangle(cornerRadius: AppTheme.Radius.lg, style: .continuous),
-                            tint: AppTheme.Colors.highlight.opacity(0.20)
+                if dynamicTypeSize.isAccessibilitySize || geometry.size.height < 300 {
+                    ScrollView {
+                        gameContent(
+                            boardHeight: min(geometry.size.width - 24, 390),
+                            compactControls: true
                         )
-                        .foregroundColor(AppTheme.Colors.text)
                     }
+                    .scrollIndicators(.hidden)
+                } else {
+                    gameContent(boardHeight: nil, compactControls: geometry.size.height < 480)
                 }
-                .frame(width: boardSize, height: boardSize)
-                .overlay(RoundedRectangle(cornerRadius: AppTheme.Radius.md).stroke(AppTheme.Colors.accent, lineWidth: 3))
-                .cornerRadius(12)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .frame(maxHeight: 390)
-
-                SnakeControlPadView { model.changeDirection($0) }
             }
         }
         .onReceive(timer) { _ in
@@ -172,6 +126,53 @@ struct SnakeGameView: View {
             guard !model.isGameOver else { return }
             model.tick()
         }
+    }
+
+    private func gameContent(boardHeight: CGFloat?, compactControls: Bool) -> some View {
+        VStack(spacing: AppTheme.Spacing.md) {
+            AppScorePanel(label: "Score", value: String(model.score))
+                .padding(.horizontal, AppTheme.Spacing.lg)
+            gameBoard.frame(height: boardHeight)
+            SnakeControlPadView(compact: compactControls) { model.changeDirection($0) }
+        }
+    }
+
+    private var gameBoard: some View {
+        GeometryReader { geometry in
+            let boardSize = min(geometry.size.width - 24, geometry.size.height)
+            let cellSize = boardSize / CGFloat(model.gridSize)
+
+            ZStack {
+                Rectangle()
+                    .fill(AppTheme.Colors.background)
+                gridLines(cellSize: cellSize, boardSize: boardSize)
+                ForEach(Array(model.snake.enumerated()), id: \.offset) { index, segment in
+                    Rectangle()
+                        .fill(index == 0 ? Color.yellow : Color.green)
+                        .frame(width: cellSize - 1, height: cellSize - 1)
+                        .position(x: segment.x * cellSize + cellSize / 2, y: segment.y * cellSize + cellSize / 2)
+                }
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: cellSize * 0.8, height: cellSize * 0.8)
+                    .position(x: model.food.x * cellSize + cellSize / 2, y: model.food.y * cellSize + cellSize / 2)
+
+                if model.isGameOver {
+                    AppGameOverlay(
+                        title: "Game Over",
+                        message: "Score: \(model.score)",
+                        actionTitle: "Restart",
+                        action: model.reset
+                    )
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                }
+            }
+            .frame(width: boardSize, height: boardSize)
+            .overlay(RoundedRectangle(cornerRadius: AppTheme.Radius.md).stroke(AppTheme.Colors.accent, lineWidth: 3))
+            .cornerRadius(12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(maxHeight: 390)
     }
 
     private func gridLines(cellSize: CGFloat, boardSize: CGFloat) -> some View {
@@ -189,17 +190,30 @@ struct SnakeGameView: View {
 }
 
 struct SnakeControlPadView: View {
+    var compact = false
     let onDirectionChanged: (SnakeGameModel.Direction) -> Void
 
     var body: some View {
-        VStack(spacing: 6) {
-            directionButton(systemName: "arrow.up.circle.fill", direction: .up)
-            HStack(spacing: 54) {
-                directionButton(systemName: "arrow.left.circle.fill", direction: .left)
-                directionButton(systemName: "arrow.right.circle.fill", direction: .right)
+        Group {
+            if compact {
+                HStack(spacing: 8) {
+                    directionButton(systemName: "arrow.left.circle.fill", direction: .left)
+                    directionButton(systemName: "arrow.up.circle.fill", direction: .up)
+                    directionButton(systemName: "arrow.down.circle.fill", direction: .down)
+                    directionButton(systemName: "arrow.right.circle.fill", direction: .right)
+                }
+            } else {
+                VStack(spacing: 6) {
+                    directionButton(systemName: "arrow.up.circle.fill", direction: .up)
+                    HStack(spacing: 54) {
+                        directionButton(systemName: "arrow.left.circle.fill", direction: .left)
+                        directionButton(systemName: "arrow.right.circle.fill", direction: .right)
+                    }
+                    directionButton(systemName: "arrow.down.circle.fill", direction: .down)
+                }
             }
-            directionButton(systemName: "arrow.down.circle.fill", direction: .down)
         }
+        .frame(maxWidth: .infinity)
         .padding(.vertical, 4)
     }
 
@@ -212,11 +226,13 @@ struct SnakeControlPadView: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Move \(String(describing: direction))")
     }
 }
 
 struct SnakeGameView_Previews: PreviewProvider {
     static var previews: some View {
         SnakeGameView()
+            .environmentObject(AppState())
     }
 }
