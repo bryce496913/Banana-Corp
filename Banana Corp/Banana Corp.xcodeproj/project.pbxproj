@@ -6,6 +6,16 @@
 	objectVersion = 56;
 	objects = {
 
+/* Begin PBXTargetDependency section */
+		FE180000000000000000000A = {isa = PBXTargetDependency; target = EE9899E82B6C3141003201BE /* Banana Corp */; targetProxy = FE1800000000000000000009; };
+		FE180000000000000000001E = {isa = PBXTargetDependency; target = EE9899E82B6C3141003201BE /* Banana Corp */; targetProxy = FE180000000000000000001D; };
+/* End PBXTargetDependency section */
+
+/* Begin PBXContainerItemProxy section */
+		FE1800000000000000000009 = {isa = PBXContainerItemProxy; containerPortal = EE9899E12B6C3141003201BE /* Project object */; proxyType = 1; remoteGlobalIDString = EE9899E82B6C3141003201BE; remoteInfo = "Banana Corp"; };
+		FE180000000000000000001D = {isa = PBXContainerItemProxy; containerPortal = EE9899E12B6C3141003201BE /* Project object */; proxyType = 1; remoteGlobalIDString = EE9899E82B6C3141003201BE; remoteInfo = "Banana Corp"; };
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXBuildFile section */
         EE5800082E3A000000000001 /* RestrictedAccess.json in Resources */ = {isa = PBXBuildFile; fileRef = EE5800072E3A000000000001 /* RestrictedAccess.json */; };
         EE5800062E3A000000000001 /* RestrictedAccessViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800052E3A000000000001 /* RestrictedAccessViews.swift */; };
@@ -59,6 +69,8 @@
 		EE989A1E2B6C51F2003201BE /* XOGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A1D2B6C51F2003201BE /* XOGameView.swift */; };
 		EE989A202B6C51FD003201BE /* VRExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A1F2B6C51FD003201BE /* VRExperienceView.swift */; };
 		EE989A222B6C5207003201BE /* FlapFlapGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE989A212B6C5207003201BE /* FlapFlapGameView.swift */; };
+		FE1800000000000000000004 /* IOSIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1800000000000000000003 /* IOSIntegrationTests.swift */; };
+		FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1800000000000000000017 /* LaunchSmokeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +128,10 @@
 		EE989A1D2B6C51F2003201BE /* XOGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XOGameView.swift; sourceTree = "<group>"; };
 		EE989A1F2B6C51FD003201BE /* VRExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VRExperienceView.swift; sourceTree = "<group>"; };
 		EE989A212B6C5207003201BE /* FlapFlapGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlapFlapGameView.swift; sourceTree = "<group>"; };
+		FE1800000000000000000003 /* IOSIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSIntegrationTests.swift; sourceTree = "<group>"; };
+		FE1800000000000000000005 /* Banana CorpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Banana CorpTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE1800000000000000000017 /* LaunchSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchSmokeTests.swift; sourceTree = "<group>"; };
+		FE1800000000000000000019 /* Banana CorpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Banana CorpUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +142,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE1800000000000000000007 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		FE180000000000000000001B = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -133,6 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				EE9899EB2B6C3142003201BE /* Banana Corp */,
+				FE1800000000000000000002 /* Banana CorpTests */,
+				FE1800000000000000000016 /* Banana CorpUITests */,
 				EE9899EA2B6C3142003201BE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -140,6 +160,8 @@
 		EE9899EA2B6C3142003201BE /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				FE1800000000000000000005 /* Banana CorpTests.xctest */,
+				FE1800000000000000000019 /* Banana CorpUITests.xctest */,
 				EE9899E92B6C3142003201BE /* Banana Corp.app */,
 			);
 			name = Products;
@@ -213,6 +235,8 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		FE1800000000000000000002 /* Banana CorpTests */ = {isa = PBXGroup; children = (FE1800000000000000000003 /* IOSIntegrationTests.swift */,); path = "Banana CorpTests"; sourceTree = "<group>"; };
+		FE1800000000000000000016 /* Banana CorpUITests */ = {isa = PBXGroup; children = (FE1800000000000000000017 /* LaunchSmokeTests.swift */,); path = "Banana CorpUITests"; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -233,6 +257,28 @@
 			productReference = EE9899E92B6C3142003201BE /* Banana Corp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FE1800000000000000000001 /* Banana CorpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE180000000000000000000D;
+			buildPhases = (FE1800000000000000000006, FE1800000000000000000007, FE1800000000000000000008,);
+			buildRules = ();
+			dependencies = (FE180000000000000000000A,);
+			name = "Banana CorpTests";
+			productName = "Banana CorpTests";
+			productReference = FE1800000000000000000005;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FE1800000000000000000015 /* Banana CorpUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE1800000000000000000021;
+			buildPhases = (FE180000000000000000001A, FE180000000000000000001B, FE180000000000000000001C,);
+			buildRules = ();
+			dependencies = (FE180000000000000000001E,);
+			name = "Banana CorpUITests";
+			productName = "Banana CorpUITests";
+			productReference = FE1800000000000000000019;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -243,6 +289,8 @@
 				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					FE1800000000000000000015 = { CreatedOnToolsVersion = 26.0; TestTargetID = EE9899E82B6C3141003201BE; };
+					FE1800000000000000000001 = { CreatedOnToolsVersion = 26.0; TestTargetID = EE9899E82B6C3141003201BE; };
 					EE9899E82B6C3141003201BE = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -261,6 +309,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				FE1800000000000000000015 /* Banana CorpUITests */,
+				FE1800000000000000000001 /* Banana CorpTests */,
 				EE9899E82B6C3141003201BE /* Banana Corp */,
 			);
 		};
@@ -278,6 +328,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE1800000000000000000008 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		FE180000000000000000001C = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -336,6 +388,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE1800000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FE1800000000000000000004 /* IOSIntegrationTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
+		FE180000000000000000001A = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -470,7 +524,6 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -481,6 +534,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Banana_Corp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -507,7 +561,6 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -518,12 +571,83 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Banana_Corp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FE180000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Banana Corp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Banana Corp";
+			};
+			name = Debug;
+		};
+		FE180000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Banana Corp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Banana Corp";
+			};
+			name = Release;
+		};
+		FE180000000000000000001F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp.UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = "Banana Corp";
+			};
+			name = Debug;
+		};
+		FE1800000000000000000020 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+				PRODUCT_BUNDLE_IDENTIFIER = "Bryce-Cameron-Design.Banana-Corp.UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = "Banana Corp";
 			};
 			name = Release;
 		};
@@ -548,6 +672,8 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FE180000000000000000000D = {isa = XCConfigurationList; buildConfigurations = (FE180000000000000000000B /* Debug */, FE180000000000000000000C /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		FE1800000000000000000021 = {isa = XCConfigurationList; buildConfigurations = (FE180000000000000000001F /* Debug */, FE1800000000000000000020 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 	};
 	rootObject = EE9899E12B6C3141003201BE /* Project object */;
