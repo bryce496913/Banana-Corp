@@ -6,6 +6,7 @@ struct EvidenceBackControl: View {
         Button { dismiss() } label: { Label("Back", systemImage: "chevron.left").padding(8).frame(minHeight: 44) }
             .buttonStyle(.appContent)
             .accessibilityLabel("Back")
+            .accessibilityIdentifier("story.back")
     }
 }
 
@@ -52,6 +53,7 @@ struct PreserveEvidenceButton: View {
             Label(isSaved ? "Preserved in Evidence" : "Preserve Evidence", systemImage: isSaved ? "archivebox.fill" : "archivebox")
         }
         .buttonStyle(.modernPhone)
+        .accessibilityIdentifier("story.preserve.\(versionID)")
         .disabled(isSaved || !appState.content.isPreservable(contentID, versionID: versionID))
         .accessibilityLabel(isSaved ? "Evidence preserved" : "Preserve Evidence")
         .accessibilityHint(isSaved ? "The saved snapshot is available in Evidence." : "Save this exact version separately from its live source.")
@@ -86,6 +88,7 @@ struct EvidenceVaultView: View {
                                     .accessibilityLabel("Preserved \(record.capturedAt.formatted(date: .abbreviated, time: .shortened))")
                             }
                         }
+                        .accessibilityIdentifier("story.evidence.\(record.id)")
                         .accessibilityHint("\(saved?.snapshot.appSurface.displayName ?? "Unknown source"), preserved \(record.capturedAt.formatted(date: .abbreviated, time: .shortened)). Opens the saved snapshot.")
                     }
                 }
@@ -118,6 +121,7 @@ struct EvidenceDetailView: View {
                         showsComparison = true
                     } label: { Label("Compare with live source", systemImage: "rectangle.split.2x1") }
                         .buttonStyle(.appPrimary)
+                        .accessibilityIdentifier("story.compare.\(evidenceID)")
                         .accessibilityHint("Compare your preserved copy with the currently available source.")
                     AppCard { EvidencePayloadView(version: saved.snapshot.version) }
                 } else {

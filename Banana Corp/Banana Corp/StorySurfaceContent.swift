@@ -45,6 +45,7 @@ struct StorySurfaceContent<Placeholder: View>: View {
                                                metadata: StoryContentTime.label(for: item.version, context: appState.storyTimeContext), symbol: surface.symbol, isUnread: item.availability == .availableUnread)
                                 }
                                 .buttonStyle(.appContent)
+                                .accessibilityIdentifier("story.open.\(item.version.id)")
                                 .accessibilityHint(surface == .video ? "Open the presentation. This does not mark it viewed." : "Open this content.")
                                 if item.version.preservedEvidenceID != nil { PreserveEvidenceButton(contentID: item.id, versionID: item.version.id) }
                             }
@@ -235,9 +236,11 @@ struct StoryPromotionView: View {
                         case .failure: failure = true
                         }
                     }.buttonStyle(.appPrimary).disabled(viewed)
+                        .accessibilityIdentifier("story.video.finish.\(version.id)")
                         .accessibilityHint("Records this presentation as viewed.")
                 } else {
                     Button("Continue") { progress.advance(count: cues.count) }.buttonStyle(.appPrimary)
+                        .accessibilityIdentifier("story.video.next.\(version.id)")
                 }
                 if progress.index > 0 { Button("Previous") { progress.goBack() }.buttonStyle(.modernPhone) }
             } else {
@@ -261,6 +264,7 @@ struct FirstAnomalyHandoffControl: View {
             Button("Continue investigation") {
                 if case .failure = appState.story.advanceAct(to: .somethingIsntRight) { failure = true }
             }.buttonStyle(.appPrimary)
+                .accessibilityIdentifier("story.advance.act2")
                 .accessibilityHint("Continue to Something Isn't Right.")
                 .alert("Progress could not be saved", isPresented: $failure) { Button("OK", role: .cancel) {} }
                     message: { Text("Your investigation has not advanced. Please try again.") }
@@ -289,6 +293,7 @@ struct ActTwoInvestigationControl: View {
                     case .failure: failure = true
                     }
                 }.buttonStyle(.appPrimary)
+                    .accessibilityIdentifier("story.advance.act3")
                     .accessibilityHint("Continue to The Conspiracy.")
             } else if appState.content.actTwoConfirmationAvailable {
                 Button("Connect the changed source and research findings") {
@@ -298,6 +303,7 @@ struct ActTwoInvestigationControl: View {
                     case .failure: failure = true
                     }
                 }.buttonStyle(.appPrimary)
+                    .accessibilityIdentifier("story.connect.act2")
                     .accessibilityHint("Connect what you learned from the changed recording and research.")
             }
             if let lead = appState.content.actTwoSuggestedLead, lead.id != currentContentID {
@@ -307,6 +313,7 @@ struct ActTwoInvestigationControl: View {
                 } label: {
                     Label(lead.version.title, systemImage: lead.surface.symbol)
                 }.buttonStyle(.modernPhone)
+                    .accessibilityIdentifier("story.lead.\(lead.version.id)")
                     .accessibilityHint("Open the next available investigation source. Video requires an explicit Finish action.")
             }
         }
