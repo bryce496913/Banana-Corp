@@ -21,28 +21,44 @@ final class AppState: ObservableObject {
     }
     @Published var isEditingHomeScreen = false
 
-    @Published var currentDay: Int = 1
-    @Published var hasOpenedVRApp = false
-    @Published var hasSeenFirstGlitch = false
-    @Published var unlockedApps: Set<PhoneAppRoute> = [
-        .email,
-        .browser,
-        .social,
-        .watchVideo,
-        .messager,
-        .photoAlbum,
-        .settings,
-        .phone,
-        .news,
-        .aiAssistant,
-        .vrExperience,
-        .snake,
-        .pong,
-        .xo
-    ]
-    @Published var unreadEmails = 0
-    @Published var unreadMessages = 0
+    let story: StoryProgressionStore
+
+    // Compatibility queries now read the single saved narrative authority.
+    var currentDay: Int { story.state.time.relativeDay }
+    var hasOpenedVRApp: Bool { story.state.compatibility.hasOpenedVRApp }
+    var hasSeenFirstGlitch: Bool { story.state.compatibility.hasSeenFirstGlitch }
+    var unlockedApps: Set<PhoneAppRoute> {
+        Set(PhoneAppRoute.allCases.filter { !story.state.lockedAppIDs.contains($0.rawValue) })
+    }
+    // No content catalogue exists yet. Counts remain zero until derived from actual content.
+    @Published private(set) var unreadEmails = 0
+    @Published private(set) var unreadMessages = 0
+    // Cosmetic legacy input only; not a trust score or narrative progression source.
     @Published var aiCorruptionLevel = 0
+
+    init(story: StoryProgressionStore? = nil) {
+        self.story = story ?? StoryProgressionStore()
+        self.story.onStateWillChange = { [weak self] in self?.objectWillChange.send() }
+        self.story.onStateDidChange = { [weak self] in
+            guard let self, let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) else { return }
+            self.goHome()
+        }
+    }
+
+    var storyTimeContext: StoryTimeContext {
+        StoryTimeContext(deviceTime: Date(), timeZoneIdentifier: TimeZone.current.identifier, story: story.state.time)
+    }
+
+    @discardableResult
+    func resetStoryForNewGame() -> StoryActionResult {
+        let result = story.resetForNewGame()
+        if case .success = result {
+            goHome()
+            restoreNormalPresentation()
+            aiCorruptionLevel = 0
+        }
+        return result
+    }
 
     var storyPresentationContext: StoryPresentationContext {
         StoryPresentationContext(currentDay: currentDay, hasOpenedVRApp: hasOpenedVRApp,
@@ -113,20 +129,15 @@ final class AppState: ObservableObject {
         OSEnvironmentContext(date: Date())
     }
 
-    /// Actual app authorization stays in the existing unlockedApps story property.
+    /// Availability commits to the story save; failures do not change access or navigation.
     @discardableResult
     func setStoryAppAvailability(
         _ route: PhoneAppRoute, unlocked: Bool,
         when condition: (StoryPresentationContext) -> Bool
     ) -> Bool {
         guard condition(storyPresentationContext), unlocked || route != .settings else { return false }
-        if unlocked {
-            unlockedApps.insert(route)
-        } else {
-            unlockedApps.remove(route)
-            if activeApp == route { goHome() }
-        }
-        return true
+        if case .success = story.perform(.setAppAvailability(route, unlocked: unlocked)) { return true }
+        return false
     }
 
     deinit { presentationExpiryTask?.cancel() }

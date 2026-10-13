@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Last updated:** 2026-10-12  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -367,6 +367,19 @@ Keep at least these concepts separate:
 
 These are conceptual responsibilities, not mandated Swift names. Any numerical trust meter, morality score, credibility threshold, or hidden scoring formula is `[TBD]`.
 
+### Implemented progression infrastructure — Pass 2
+
+Pass 2 adopts the conceptual tracking responsibilities above as persistent infrastructure, without implementing content or deciding unresolved story requirements. `AppState` owns one `StoryProgressionStore`; its versioned state records discoveries, reads, immutable preserved evidence snapshots, replacement records, puzzles, access, milestones, explicit Assistant facts/cooperation, optional ASCENSION milestones, route prerequisite facts, Observer clues, and completed event IDs.
+
+- New games begin in The Perfect Product with no discoveries or earned story facts. Existing app availability defaults remain unchanged; no new app gate is established.
+- A read is an explicit content-engagement action, never inferred from row rendering or opening an app. Evidence copies retain separate IDs and source-version identities.
+- Act advancement requires the next consecutive act, an explicitly configured nonempty milestone requirement, and a satisfied declarative condition. Production transition rules are empty until their story requirements are approved. No later act is activated by this pass.
+- Significant actions save locally before becoming observable; repeated facts/events are idempotent and event effects commit together. Invalid or newer-schema saves block writes and remain intact. Reset/new game is explicit and preserves prior bytes in an archive. Story saves are independent of customized home layouts.
+- Assistant cooperation is an explicit fact, not a computed trust score. Recording ASCENSION, compatibility flags, elapsed time, or app usage does not automatically advance acts or choose an ending.
+- A configurable time model separates real device time, relative story days, fictional time, and fixed narrative timestamps. The current live clock remains unchanged. The 9:41 opening transition, “tomorrow” framing, schedules, weather triggers, and calendar rules remain `[TBD]`.
+
+These are implementation contracts authorized by Pass 2, not new chapters, puzzle solutions, final-route requirements, scoring, or an approved content library. Detailed architecture and save-validation notes live in `docs/story-progression-engine.md`.
+
 ## 14. The in-game phone and app roles
 
 | App / surface | Narrative role | Interaction and evolution |
@@ -591,4 +604,5 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | Date | Version | Change |
 | --- | --- | --- |
 | 2026-10-12 | 1.0 | Created the consolidated game bible from the established premise and five-act Story progression planning discussion. Added names, research systems, character responsibility, spoiler boundaries, access/rescue frameworks, all established endings, copy inventory, and maintenance instructions. Marked unresolved details `[TBD]` and new implementation defaults `[PROPOSED]`. |
+| 2026-10-12 | 1.1 | Pass 2: documented the authorized persistent progression infrastructure, explicit/idempotent actions, controlled consecutive-act validation, independent local story saves, recovery/reset contracts, and separated story-time concepts. No content, later-act rules, puzzle solutions, scoring, or ending requirements were added. |
 

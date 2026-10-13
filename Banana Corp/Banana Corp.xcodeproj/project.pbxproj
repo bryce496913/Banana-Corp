@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EE52000A2E34000000000001 /* StoryProgressionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200092E34000000000001 /* StoryProgressionStore.swift */; };
+        EE5200082E34000000000001 /* StoryPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200072E34000000000001 /* StoryPersistence.swift */; };
+        EE5200062E34000000000001 /* StoryPrerequisites.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200052E34000000000001 /* StoryPrerequisites.swift */; };
+        EE5200042E34000000000001 /* StoryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200032E34000000000001 /* StoryState.swift */; };
+        EE5200022E34000000000001 /* StoryTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200012E34000000000001 /* StoryTime.swift */; };
         EEF500062E33000000000001 /* OSVisualPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500052E33000000000001 /* OSVisualPreviews.swift */; };
         EEF500042E33000000000001 /* OSVisualComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500032E33000000000001 /* OSVisualComponents.swift */; };
         EEF500022E33000000000001 /* OSPresentationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF500012E33000000000001 /* OSPresentationState.swift */; };
@@ -45,6 +50,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EE5200092E34000000000001 /* StoryProgressionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryProgressionStore.swift; sourceTree = "<group>"; };
+        EE5200072E34000000000001 /* StoryPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPersistence.swift; sourceTree = "<group>"; };
+        EE5200052E34000000000001 /* StoryPrerequisites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPrerequisites.swift; sourceTree = "<group>"; };
+        EE5200032E34000000000001 /* StoryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryState.swift; sourceTree = "<group>"; };
+        EE5200012E34000000000001 /* StoryTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryTime.swift; sourceTree = "<group>"; };
         EEF500052E33000000000001 /* OSVisualPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVisualPreviews.swift; sourceTree = "<group>"; };
         EEF500032E33000000000001 /* OSVisualComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVisualComponents.swift; sourceTree = "<group>"; };
         EEF500012E33000000000001 /* OSPresentationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSPresentationState.swift; sourceTree = "<group>"; };
@@ -132,6 +142,11 @@
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
 				EEBB00012E28000000000001 /* GlassCompatibility.swift */,
 				EE989A002B6C34DB003201BE /* AppState.swift */,
+                EE5200092E34000000000001 /* StoryProgressionStore.swift */,
+                EE5200072E34000000000001 /* StoryPersistence.swift */,
+                EE5200052E34000000000001 /* StoryPrerequisites.swift */,
+                EE5200032E34000000000001 /* StoryState.swift */,
+                EE5200012E34000000000001 /* StoryTime.swift */,
 				EEAA00012E27000000000001 /* PhoneAppRoute.swift */,
 				EE989A072B6C50FF003201BE /* EmailView.swift */,
 				EE989A092B6C5137003201BE /* WebBrowserView.swift */,
@@ -247,6 +262,11 @@
 				EE9899EF2B6C3142003201BE /* ContentView.swift in Sources */,
 				EE989A0C2B6C517A003201BE /* SocialXView.swift in Sources */,
 				EE989A012B6C34DB003201BE /* AppState.swift in Sources */,
+                EE52000A2E34000000000001 /* StoryProgressionStore.swift in Sources */,
+                EE5200082E34000000000001 /* StoryPersistence.swift in Sources */,
+                EE5200062E34000000000001 /* StoryPrerequisites.swift in Sources */,
+                EE5200042E34000000000001 /* StoryState.swift in Sources */,
+                EE5200022E34000000000001 /* StoryTime.swift in Sources */,
 				EE989A182B6C51CC003201BE /* NewsView.swift in Sources */,
 				EE989A162B6C51C1003201BE /* PhoneView.swift in Sources */,
 				EE9899ED2B6C3142003201BE /* Banana_CorpApp.swift in Sources */,
