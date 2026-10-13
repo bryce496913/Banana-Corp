@@ -215,7 +215,7 @@ struct StoryProgressionChecks {
         let oldMemory = InMemoryStoryPersistence(data: old)
         let noMigration = StoryProgressionStore(persistence: oldMemory)
         precondition(noMigration.saveStatus == .recoveryRequired(.migrationRequired(0)) && oldMemory.data == old)
-        let migration = StorySaveCodec(migrations: [0: { try versioned($0, 1) }])
+        let migration = StorySaveCodec(migrations: [0: { try versioned($0, 1) }, 1: StorySaveCodec.migrateSchema1])
         let migrated = StoryProgressionStore(persistence: oldMemory, codec: migration)
         precondition(migrated.state == fixture && migrated.saveStatus == .migrated(from: 0))
         precondition(StoryProgressionStore(persistence: oldMemory).state == fixture)
@@ -262,7 +262,7 @@ struct StoryProgressionChecks {
         migrationBackend.failWrite = true
         let migrationBytes = migrationBackend.data
         let migrationStore = StoryProgressionStore(persistence: migrationBackend,
-            codec: StorySaveCodec(migrations: [0: { try versioned($0, 1) }]))
+            codec: StorySaveCodec(migrations: [0: { try versioned($0, 1) }, 1: StorySaveCodec.migrateSchema1]))
         precondition(!migrationStore.isWritable && migrationBackend.data == migrationBytes)
 
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)

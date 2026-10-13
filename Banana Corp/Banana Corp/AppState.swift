@@ -22,6 +22,7 @@ final class AppState: ObservableObject {
     @Published var isEditingHomeScreen = false
 
     let story: StoryProgressionStore
+    let content: StoryContentStore
 
     // Compatibility queries now read the single saved narrative authority.
     var currentDay: Int { story.state.time.relativeDay }
@@ -30,14 +31,15 @@ final class AppState: ObservableObject {
     var unlockedApps: Set<PhoneAppRoute> {
         Set(PhoneAppRoute.allCases.filter { !story.state.lockedAppIDs.contains($0.rawValue) })
     }
-    // No content catalogue exists yet. Counts remain zero until derived from actual content.
-    @Published private(set) var unreadEmails = 0
-    @Published private(set) var unreadMessages = 0
+    var unreadEmails: Int { content.unreadCount(for: .email) }
+    var unreadMessages: Int { content.unreadCount(for: .messages) }
     // Cosmetic legacy input only; not a trust score or narrative progression source.
     @Published var aiCorruptionLevel = 0
 
-    init(story: StoryProgressionStore? = nil) {
+    init(story: StoryProgressionStore? = nil,
+         catalogue: Result<StoryContentCatalogue, StoryContentLoadFailure>? = nil) {
         self.story = story ?? StoryProgressionStore()
+        self.content = StoryContentStore(progression: self.story, catalogue: catalogue ?? StoryContentCatalogueLoader.load())
         self.story.onStateWillChange = { [weak self] in self?.objectWillChange.send() }
         self.story.onStateDidChange = { [weak self] in
             guard let self, let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) else { return }

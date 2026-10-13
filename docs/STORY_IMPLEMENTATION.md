@@ -2,7 +2,7 @@
 
 ## Canon and scope
 
-The approved [root game bible](../BANANA_CORP_GAME_BIBLE.md) is authoritative for story, narrative, mechanics, progression, puzzles, and endings. Pass 1 installed the supplied version 1.0 unchanged. Version 1.1 records the infrastructure authorized by Pass 2 without changing the plot. [Repository instructions](../AGENTS.md) govern agent work. No narrative content is implemented by either pass.
+The approved [root game bible](../BANANA_CORP_GAME_BIBLE.md) is authoritative for story, narrative, mechanics, progression, puzzles, and endings. Pass 1 installed the supplied version 1.0 unchanged. Versions 1.1 and 1.2 record the progression and content infrastructure authorized by Passes 2–3 without changing the plot. [Repository instructions](../AGENTS.md) govern agent work. No narrative content is implemented by these passes.
 
 The current structure is:
 
@@ -21,13 +21,13 @@ Source paths below are relative to the repository root; the app source directory
 | Responsibility | Current implementation | Future work (planned, not implemented) |
 | --- | --- | --- |
 | Shared state | AppState.swift owns StoryProgressionStore; day, VR/glitch flags and availability derive from its saved state. OS navigation/presentation remain in AppState | Approved content should integrate with this authority; do not create another story store |
-| Content | Eleven non-game app views contain placeholder presentation, not a narrative content library | Dedicated content models under the app source directory, separate from views; exact types/files and schemas require an implementation task |
+| Content | StoryContentModels/Rules/Catalogue/Store provide typed offline content, validation, availability and explicit delivery. The production JSON is empty and all eleven app views remain placeholders | Approved narrative authoring and app-content UI migration are planned; development fixtures are tests only |
 | Progression | StoryState.swift, StoryPrerequisites.swift and StoryProgressionStore.swift provide five-act facts, deterministic conditions and guarded actions | Content-specific prerequisites, production act-transition rules and ending evaluators still require story approval |
 | Visual presentation | OSPresentationState.swift, OSVisualComponents.swift and AppState's explicit predicate APIs | Approved progression callers may request effects; visual modes are not acts or autonomous story triggers |
 | Navigation | OSNavigationState.swift and ContentView.swift present routes from PhoneAppRoute.swift | Preserve existing centralized root behavior and per-app nested navigation |
-| Persistence | StoryPersistence.swift atomically writes schema-v1 story JSON in Application Support, separately from HomeScreenLayout.swift's existing UserDefaults layout | Register and test migrations when the story schema changes; no historical story-save migration is required yet |
+| Persistence | StoryPersistence.swift atomically writes schema-v2 story JSON in Application Support, separately from HomeScreenLayout.swift's existing UserDefaults layout | The registered v1→v2 migration preserves prior progress; future migrations need retained save fixtures |
 | Story time | StoryTime.swift separates device time, fictional timestamps and relative story-day context | Final opening clock/calendar and environmental trigger rules remain TBD |
-| Regression checks | Tests/ contains Foundation story, navigation, layout and presentation checks | Extend progression/save fixtures with approved content rules as they are implemented |
+| Regression checks | Tests/ contains Foundation content, story, navigation, layout and presentation checks | Extend progression/save fixtures with approved content rules as they are implemented |
 
 See [the visual-system contract](story-visual-system.md) for presentation limits and restoration. Its example `hasSeenFirstGlitch` predicate demonstrates the API only; it does not approve a story trigger. Normal/subtleAnomaly/interference/compromised/critical are presentation modes, not a replacement five-stage progression system. Navigation's home/opening/active/closing phases are also unrelated to narrative acts.
 
@@ -43,6 +43,8 @@ Run the existing `scripts/check-home-layout.sh` for current layout serialization
 
 Run `scripts/check-story-progression.sh` for the implemented story contract, including real file writes across separate processes, explicit reset archives, corrupt/newer-schema write blocking, migration fixtures, event atomicity and deterministic prerequisites. See [the engine architecture](story-progression-engine.md) for current tests and limitations. Future approved content must extend these checks for prerequisite/reveal order, earned unlocks and decisions; do not invent schedules, scoring or replay policy to fill test cases.
 
+Run `scripts/check-story-content.sh` for the shared catalogue/delivery contract. See [the content schema](story-content-schema.md) for stable versions, read-only queries, explicit read effects, offline resources and migration rules.
+
 ## Review and approval
 
 Every future story PR should identify the affected bible sections and acts, approved design changes, reveal boundaries, save compatibility, and applicable validation. Update the bible and its change log in the same PR when approved story, mechanics, puzzle paths, progression contracts, or ending requirements change. An implementation-only refactor with no design change should say so and leave the bible intact. Report contradictions separately instead of treating current code as canon.
@@ -57,8 +59,8 @@ These observations do not authorize fixes or new design decisions:
 - `currentDay` defaults to 1 and derives from saved relative-day context. VR/glitch compatibility facts and app availability are saved, but have no automatic story triggers. Corruption level remains a cosmetic in-memory input. All fourteen routed apps initially appear in `unlockedApps`; no canonical clue gates or mandatory elapsed days are implemented.
 - App shells describe device activation/registration/calibration limits, but there is no activation progression. Those placeholders must not become new story prerequisites by inference.
 - VRExperienceView currently displays “BANANA VR”; the canonical product is Banana Vision. This copy difference is recorded, not changed in this documentation pass. Real headset ownership is not a canon requirement.
-- Persistent evidence/version records, access/puzzle/route facts and an optional ASCENSION milestone now have infrastructure. Their player interactions and story-specific rules, narrative content, Banana Wall access, LANTERN, BLACKOUT, Maya's identity puzzle, DAWN, negotiation and Observer endings remain unimplemented. No bible act or ending should be reported complete based on the existing UI or generic engine.
+- Persistent evidence/version records, access/puzzle/route facts and an optional ASCENSION milestone now have infrastructure. Their shared catalogue delivery now exists, but player UI interactions and story-specific rules, narrative content, Banana Wall access, LANTERN, BLACKOUT, Maya's identity puzzle, DAWN, negotiation and Observer endings remain unimplemented. No bible act or ending should be reported complete based on the existing UI or generic engine.
 - Snake, Pong and XO have OS routes. Flap Flap is compiled but unrouted. The bible treats possible story integration as proposed; none is an approved mandatory gate.
 - Presentation APIs have explicit caller predicates and bounded effects; they do not establish when story disturbances occur. Environmental context exposes local time/date and optional supplied weather without a weather service or location collection. Approved context triggers remain future work.
 
-Pass 1 found no conflicting standalone story outline or prior AGENTS.md and established canon precedence. Pass 2 adds only progression infrastructure and its AppState integration/source references; it preserves the existing launch flow, UI, navigation mechanics, home persistence, mini-games, deployment target and dependencies.
+Pass 1 found no conflicting standalone story outline or prior AGENTS.md and established canon precedence. Passes 2–3 add progression/content infrastructure, offline resources and their AppState integration/source references; it preserves the existing launch flow, UI, navigation mechanics, home persistence, mini-games, deployment target and dependencies.

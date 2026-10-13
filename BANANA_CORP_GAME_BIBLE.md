@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Last updated:** 2026-10-12  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -380,6 +380,18 @@ Pass 2 adopts the conceptual tracking responsibilities above as persistent infra
 
 These are implementation contracts authorized by Pass 2, not new chapters, puzzle solutions, final-route requirements, scoring, or an approved content library. Detailed architecture and save-validation notes live in `docs/story-progression-engine.md`.
 
+### Implemented local content infrastructure — Pass 3
+
+Pass 3 adds an offline, shared content catalogue and delivery engine. Stable content IDs and explicit version IDs are separate from surface metadata. Typed payloads support email, news, conversations, social posts, video metadata, local web pages, photo metadata, Assistant turns/diagnostics, and fictional notifications. Load validation checks schemas, IDs, versions, references, rules, payloads and cyclic delivery effects.
+
+- Availability queries are read-only. Act/fact conditions, hidden/revealed status, removals, live versions, per-version unread state, and preserved archives are distinct. Meaningful content engagement explicitly commits a read and its validated effects once; rendering a list does not read content.
+- Declarative effects can reveal content, mark milestones, unlock existing routes, queue fictional notifications, switch an explicit version, remove content, and record Observer clues. Queueing is passive and does not read another item or recursively run its effects. These mechanisms do not establish any new story trigger or Observer requirement.
+- Original versions remain in the catalogue. Saved version receipts detect edits under previously used version IDs; preserved snapshots retain their original bytes independently of later catalogue changes. Missing or changed definitions produce diagnostics rather than deleting progress or refreshing preserved evidence.
+- Story save schema 2 adds delivery facts and a version-1 migration that preserves existing progress. Home layout persistence remains separate. Unread Email/Messages counts now derive from shared available/read content.
+- The production catalogue is intentionally empty. Neutral development fixtures cover the formats only in tests and are not bundled as player content. Existing story-app placeholders remain unchanged; no complete Act 1, Act 2 replacement scene, new character, ending rule, or narrative text is implemented.
+
+The authored JSON schema and delivery contracts are documented in `docs/story-content-schema.md`. Content production, exact availability gates, and scene timing remain subject to canon and story approval.
+
 ## 14. The in-game phone and app roles
 
 | App / surface | Narrative role | Interaction and evolution |
@@ -605,4 +617,5 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | --- | --- | --- |
 | 2026-10-12 | 1.0 | Created the consolidated game bible from the established premise and five-act Story progression planning discussion. Added names, research systems, character responsibility, spoiler boundaries, access/rescue frameworks, all established endings, copy inventory, and maintenance instructions. Marked unresolved details `[TBD]` and new implementation defaults `[PROPOSED]`. |
 | 2026-10-12 | 1.1 | Pass 2: documented the authorized persistent progression infrastructure, explicit/idempotent actions, controlled consecutive-act validation, independent local story saves, recovery/reset contracts, and separated story-time concepts. No content, later-act rules, puzzle solutions, scoring, or ending requirements were added. |
+| 2026-10-12 | 1.2 | Pass 3: documented local structured content/catalogue validation, read-only availability, explicit once-per-version read effects, immutable evidence/version receipts, passive notification delivery and save schema 2 migration. Only test fixtures were authored; player-facing content, chronology and ending requirements remain unchanged. |
 

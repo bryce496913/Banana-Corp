@@ -10,7 +10,7 @@ The app source directory `Banana Corp/Banana Corp/` contains:
 
 | File | Responsibility |
 | --- | --- |
-| StoryState.swift | Five acts; schema-v1 Codable facts, immutable evidence/version records, explicit Assistant cooperation, optional ASCENSION milestone, route/Observer/event facts, compatibility flags and app locks |
+| StoryState.swift | Five acts; schema-v2 Codable facts (v1 facts plus Pass 3 delivery state), immutable evidence/version records, explicit Assistant cooperation, optional ASCENSION milestone, route/Observer/event facts, compatibility flags and app locks |
 | StoryPrerequisites.swift | Pure deterministic AND/OR conditions and injected act-transition requirements |
 | StoryProgressionStore.swift | Validated actions, idempotent transactions/events, controlled next-act advancement, load/save/reset and observable recovery status |
 | StoryPersistence.swift | Native atomic JSON file adapter, injectable test/preview adapter and explicit version migration registry |
@@ -38,7 +38,7 @@ Use `perform(_:when:)` for explicit player/story actions. It returns a typed cha
 | hasOpenedVRApp | Saved compatibility fact, initially false; explicit action only, with no new app-open trigger |
 | hasSeenFirstGlitch | Saved compatibility fact, initially false; no new glitch/event is introduced |
 | unlockedApps | Derived from all existing routes minus saved locked raw IDs; initial availability unchanged; Settings stays available |
-| unreadEmails / unreadMessages | Read-only zero placeholders until actual content exists; future counts must derive from available/read content, not a second saved counter |
+| unreadEmails / unreadMessages | Pass 3 derives counts from shared available/read live versions; the empty production catalogue keeps them zero |
 | aiCorruptionLevel | Retained cosmetic input, initially zero and transient; not narrative authority, scoring or act progression |
 
 The existing conditional availability API now saves before changing access. Failed persistence leaves access/navigation unchanged. A successful lock through either AppState or its store returns the active app home through the current coordinator, preserving game cleanup. Unlocking never resets saved icon positions. `resetStoryForNewGame()` is the OS-facing explicit reset action: it resets story facts after a successful archive/save, returns home, restores normal cosmetics and leaves the home layout intact. There is no new reset button in this pass.
@@ -51,7 +51,7 @@ Load distinguishes no file from read/decode/invariant/migration failures. Missin
 
 Callers must handle typed errors and observe saveStatus when future content/recovery UI is built; this infrastructure pass does not add player-facing recovery controls. `load()` retries an externally restored save. `resetForNewGame()` is explicit and archives existing bytes as `story-reset-<UUID>.json` before replacing the save. If archiving or writing fails, it does not publish a reset. Archives are local and deliberately retained for recovery; there is no silent deletion or automatic reset. Home customization is independent.
 
-Schema version 1 is the first shipped story schema. Registered migrations transform one version at a time and must emit the next version before validation/write. There is no fabricated production v0 migration. Synthetic v0 tests prove registration, missing/broken migration blocking, relaunch of migrated facts and original-byte preservation on write failure. Newer versions are rejected without overwriting. Future migrations must preserve stable IDs and approved facts and be tested against retained old-save fixtures.
+Schema version 1 is the first shipped story schema. Pass 3 adds schema 2 with a registered v1→v2 migration that preserves previous facts and adds empty content delivery state; see [the content schema](story-content-schema.md). Registered migrations transform one version at a time and must emit the next version before validation/write. There is no fabricated production v0 migration. Synthetic v0 tests prove registration, missing/broken migration blocking, relaunch of migrated facts and original-byte preservation on write failure. Newer versions are rejected without overwriting. Future migrations must preserve stable IDs and approved facts and be tested against retained old-save fixtures.
 
 This is a single-owner local save, not a cross-process concurrent-writer system. Development locking previews inject InMemoryStoryPersistence and cannot modify the player's story save.
 
