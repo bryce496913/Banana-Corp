@@ -18,6 +18,12 @@ enum StoryAction {
     case recordVRAppOpened
     case recordFirstGlitch
     case configureTime(StoryTimeState)
+    case revealContent(String)
+    case makeContentUnavailable(String)
+    case rememberContentVersion(SavedContentVersion)
+    case activateContentVersion(contentID: String, versionID: String)
+    case queueNotification(contentID: String, versionID: String)
+    case acknowledgeNotification(String)
 }
 
 enum StoryActionError: Error, Equatable {
@@ -183,7 +189,8 @@ final class StoryProgressionStore {
         guard StoryID.isValid(id) else { throw StoryActionError.invalidIdentifier(id) }
     }
 
-    private static func apply(_ action: StoryAction, to state: inout StoryState) throws {
+    /// Shared by declarative delivery staging and the final atomic transaction.
+    static func apply(_ action: StoryAction, to state: inout StoryState) throws {
         switch action {
         case .discoverContent(let id):
             try requireID(id); state.discoveredContentIDs.insert(id)
@@ -227,6 +234,34 @@ final class StoryProgressionStore {
         case .configureTime(let time):
             guard time.isValid else { throw StoryActionError.invalidRecord }
             state.time = time
+        case .revealContent(let id):
+            try requireID(id); state.contentDelivery.revealedContentIDs.insert(id)
+        case .makeContentUnavailable(let id):
+            try requireID(id); state.contentDelivery.unavailableContentIDs.insert(id)
+        case .rememberContentVersion(let record):
+            guard record.isValid else { throw StoryActionError.invalidRecord }
+            if let old = state.contentDelivery.versionReceipts[record.versionID], old != record { throw StoryActionError.conflictingRecord(record.versionID) }
+            state.contentDelivery.versionReceipts[record.versionID] = record
+        case .activateContentVersion(let id, let versionID):
+            try requireID(id); try requireID(versionID)
+            guard state.contentDelivery.versionReceipts[versionID]?.contentID == id else { throw StoryActionError.invalidRecord }
+            state.contentDelivery.activeVersionIDs[id] = versionID
+        case .queueNotification(let id, let versionID):
+            guard state.contentDelivery.versionReceipts[versionID]?.contentID == id else { throw StoryActionError.invalidRecord }
+            let notificationID = "notification." + versionID
+            try requireID(notificationID)
+            if let old = state.contentDelivery.notifications[notificationID] {
+                guard old.contentID == id && old.versionID == versionID else { throw StoryActionError.conflictingRecord(notificationID) }
+            } else {
+                let last = state.contentDelivery.notifications.values.map(\.sequence).max() ?? -1
+                guard last < Int.max else { throw StoryActionError.invalidRecord }
+                state.contentDelivery.notifications[notificationID] = QueuedStoryNotification(id: notificationID, contentID: id, versionID: versionID, sequence: last + 1)
+            }
+            state.contentDelivery.revealedContentIDs.insert(id)
+        case .acknowledgeNotification(let id):
+            try requireID(id)
+            guard state.contentDelivery.notifications[id] != nil else { throw StoryActionError.invalidRecord }
+            state.contentDelivery.notifications[id]?.status = .delivered
         }
     }
 }

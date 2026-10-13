@@ -8,7 +8,7 @@ Built on merged motion/interaction PR #10. This adds presentation infrastructure
 
 AppState owns the published OSPresentationState beside the existing day, VR/glitch flags, corruption level, unread counts, unlockedApps, and navigation state. Those existing declarations/defaults and all eleven app placeholder/story files remain unchanged.
 
-Pass 2 integration: day, VR/glitch compatibility facts and unlockedApps now derive from AppState's saved StoryProgressionStore. Availability changes save before taking effect, and direct store changes also return a newly locked active app home. Unread counts remain zero pending actual content, and corruption level is a cosmetic input. Visual state remains transient and does not advance acts. The locking preview uses an isolated in-memory story save. See [the progression engine](story-progression-engine.md).
+Pass 2 integration: day, VR/glitch compatibility facts and unlockedApps now derive from AppState's saved StoryProgressionStore. Availability changes save before taking effect, and direct store changes also return a newly locked active app home. Pass 3 derives unread counts from the shared content catalogue (empty in production); corruption level remains a cosmetic input. Visual state remains transient and does not advance acts. The locking preview uses an isolated in-memory story save. See [the progression engine](story-progression-engine.md).
 
 BananaOSView injects a read-only presentation snapshot through EnvironmentValues. Individual apps do not create a second visual/story store. Shared headers, status indicators, icon metadata, theme controls, and dedicated modifiers consume that snapshot.
 

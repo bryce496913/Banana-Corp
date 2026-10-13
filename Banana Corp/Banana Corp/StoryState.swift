@@ -65,8 +65,40 @@ struct StoryCompatibilityFacts: Codable, Equatable {
     var hasSeenFirstGlitch = false
 }
 
+struct SavedContentVersion: Codable, Equatable {
+    let contentID: String
+    let versionID: String
+    let snapshot: Data
+    var isValid: Bool { StoryID.isValid(contentID) && StoryID.isValid(versionID) && contentID != versionID && !snapshot.isEmpty }
+}
+
+struct QueuedStoryNotification: Codable, Equatable {
+    enum Status: String, Codable { case pending, delivered }
+    let id: String
+    let contentID: String
+    let versionID: String
+    let sequence: Int
+    var status: Status = .pending
+    var isValid: Bool { [id, contentID, versionID].allSatisfy(StoryID.isValid) && sequence >= 0 }
+}
+
+struct StoryContentDeliveryState: Codable, Equatable {
+    var revealedContentIDs: Set<String> = []
+    var unavailableContentIDs: Set<String> = []
+    var activeVersionIDs: [String: String] = [:]
+    var versionReceipts: [String: SavedContentVersion] = [:]
+    var notifications: [String: QueuedStoryNotification] = [:]
+    var isValid: Bool {
+        revealedContentIDs.allSatisfy(StoryID.isValid) && unavailableContentIDs.allSatisfy(StoryID.isValid)
+            && versionReceipts.allSatisfy { $0.key == $0.value.versionID && $0.value.isValid }
+            && activeVersionIDs.allSatisfy { StoryID.isValid($0.key) && versionReceipts[$0.value]?.contentID == $0.key }
+            && notifications.allSatisfy { $0.key == $0.value.id && $0.value.isValid && versionReceipts[$0.value.versionID]?.contentID == $0.value.contentID }
+            && Set(notifications.values.map(\.sequence)).count == notifications.count
+    }
+}
+
 struct StoryState: Codable, Equatable {
-    static let currentSchemaVersion = 1
+    static let currentSchemaVersion = 2
     var schemaVersion = currentSchemaVersion
     var currentAct: StoryAct = .thePerfectProduct
     var discoveredContentIDs: Set<String> = []
@@ -85,6 +117,7 @@ struct StoryState: Codable, Equatable {
     var compatibility = StoryCompatibilityFacts()
     // Strings retain future app identities across older builds; existing raw values stay stable.
     var lockedAppIDs: Set<String> = []
+    var contentDelivery = StoryContentDeliveryState()
 
     var isValid: Bool {
         let groups = [discoveredContentIDs, readContentIDs, solvedPuzzleIDs, accessMilestoneIDs,
@@ -102,5 +135,6 @@ struct StoryState: Codable, Equatable {
             && ascensionMilestone?.isValid != false && time.isValid
             && lockedAppIDs.allSatisfy { !$0.isEmpty && $0.utf8.count <= 128 && $0.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) } }
             && !lockedAppIDs.contains(PhoneAppRoute.settings.rawValue)
+            && contentDelivery.isValid
     }
 }

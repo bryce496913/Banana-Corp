@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EE53000A2E35000000000001 /* StoryContent.json in Resources */ = {isa = PBXBuildFile; fileRef = EE5300092E35000000000001 /* StoryContent.json */; };
+        EE5300082E35000000000001 /* StoryContentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300072E35000000000001 /* StoryContentStore.swift */; };
+        EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300052E35000000000001 /* StoryContentCatalogue.swift */; };
+        EE5300042E35000000000001 /* StoryContentRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300032E35000000000001 /* StoryContentRules.swift */; };
+        EE5300022E35000000000001 /* StoryContentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300012E35000000000001 /* StoryContentModels.swift */; };
         EE52000A2E34000000000001 /* StoryProgressionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200092E34000000000001 /* StoryProgressionStore.swift */; };
         EE5200082E34000000000001 /* StoryPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200072E34000000000001 /* StoryPersistence.swift */; };
         EE5200062E34000000000001 /* StoryPrerequisites.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5200052E34000000000001 /* StoryPrerequisites.swift */; };
@@ -50,6 +55,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EE5300092E35000000000001 /* StoryContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryContent.json; sourceTree = "<group>"; };
+        EE5300072E35000000000001 /* StoryContentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentStore.swift; sourceTree = "<group>"; };
+        EE5300052E35000000000001 /* StoryContentCatalogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentCatalogue.swift; sourceTree = "<group>"; };
+        EE5300032E35000000000001 /* StoryContentRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentRules.swift; sourceTree = "<group>"; };
+        EE5300012E35000000000001 /* StoryContentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentModels.swift; sourceTree = "<group>"; };
         EE5200092E34000000000001 /* StoryProgressionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryProgressionStore.swift; sourceTree = "<group>"; };
         EE5200072E34000000000001 /* StoryPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPersistence.swift; sourceTree = "<group>"; };
         EE5200052E34000000000001 /* StoryPrerequisites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPrerequisites.swift; sourceTree = "<group>"; };
@@ -142,6 +152,11 @@
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
 				EEBB00012E28000000000001 /* GlassCompatibility.swift */,
 				EE989A002B6C34DB003201BE /* AppState.swift */,
+                EE5300092E35000000000001 /* StoryContent.json */,
+                EE5300072E35000000000001 /* StoryContentStore.swift */,
+                EE5300052E35000000000001 /* StoryContentCatalogue.swift */,
+                EE5300032E35000000000001 /* StoryContentRules.swift */,
+                EE5300012E35000000000001 /* StoryContentModels.swift */,
                 EE5200092E34000000000001 /* StoryProgressionStore.swift */,
                 EE5200072E34000000000001 /* StoryPersistence.swift */,
                 EE5200052E34000000000001 /* StoryPrerequisites.swift */,
@@ -237,6 +252,7 @@
 			files = (
 				EE9899F42B6C3144003201BE /* Preview Assets.xcassets in Resources */,
 				EE9899F12B6C3144003201BE /* Assets.xcassets in Resources */,
+                EE53000A2E35000000000001 /* StoryContent.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +278,10 @@
 				EE9899EF2B6C3142003201BE /* ContentView.swift in Sources */,
 				EE989A0C2B6C517A003201BE /* SocialXView.swift in Sources */,
 				EE989A012B6C34DB003201BE /* AppState.swift in Sources */,
+                EE5300082E35000000000001 /* StoryContentStore.swift in Sources */,
+                EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */,
+                EE5300042E35000000000001 /* StoryContentRules.swift in Sources */,
+                EE5300022E35000000000001 /* StoryContentModels.swift in Sources */,
                 EE52000A2E34000000000001 /* StoryProgressionStore.swift in Sources */,
                 EE5200082E34000000000001 /* StoryPersistence.swift in Sources */,
                 EE5200062E34000000000001 /* StoryPrerequisites.swift in Sources */,

@@ -49,10 +49,21 @@ struct StoryFilePersistence: StoryPersistence {
     }
 }
 
-/// No historical story save exists yet. Future migrations must be registered explicitly.
+/// Schema 1 is the Pass 2 save. Its facts remain intact when delivery state is added.
 struct StorySaveCodec {
     typealias Migration = (Data) throws -> Data
-    var migrations: [Int: Migration] = [:]
+    var migrations: [Int: Migration] = [1: migrateSchema1]
+
+    static func migrateSchema1(_ data: Data) throws -> Data {
+        guard var object = try JSONSerialization.jsonObject(with: data) as? [String: Any], object["schemaVersion"] as? Int == 1 else {
+            throw StorySaveIssue.migrationFailed
+        }
+        if object["contentDelivery"] == nil {
+            object["contentDelivery"] = try JSONSerialization.jsonObject(with: JSONEncoder().encode(StoryContentDeliveryState()))
+        }
+        object["schemaVersion"] = 2
+        return try JSONSerialization.data(withJSONObject: object, options: [.sortedKeys])
+    }
 
     private struct Header: Decodable { let schemaVersion: Int }
 
