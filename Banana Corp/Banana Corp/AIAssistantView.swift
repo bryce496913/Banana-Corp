@@ -14,6 +14,7 @@ struct AIAssistantView: View {
                 if let selectedID, let response = responses.first(where: { $0.id == selectedID }) {
                     StoryReadableContent(version: response.version)
                 }
+                FirstAnomalyHandoffControl()
                 if responses.isEmpty {
                     AppErrorState(title: "Assistant unavailable", message: "The local responses or saved progress could not be loaded.")
                 } else {

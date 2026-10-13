@@ -135,6 +135,7 @@ struct EvidenceComparisonView: View {
         PhoneShellView(title: "Compare", subtitle: "Preserved and live") {
             AppScreenScroll {
                 EvidenceBackControl()
+                FirstAnomalyHandoffControl()
                 switch appState.content.comparison(for: evidenceID) {
                 case .failure:
                     AppErrorState(title: "No usable preserved copy", message: "A comparison needs an existing saved snapshot. No earlier copy has been reconstructed.")

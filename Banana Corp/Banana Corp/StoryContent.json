@@ -5,7 +5,15 @@
       "milestone.act1.news_context",
       "milestone.act1.promo_viewed",
       "milestone.act1.first_suspicious_material",
-      "milestone.act1.vr_preview_engaged"
+      "milestone.act1.vr_preview_engaged",
+      "milestone.act1.first_contradiction_investigated"
+    ],
+    "eventCompleted": [
+      "event.act1.first_anomaly.email_removed",
+      "event.act1.first_anomaly.presentation_consumed"
+    ],
+    "assistantFact": [
+      "assistant.act1.first_anomaly_questioned"
     ]
   },
   "items": [
@@ -922,6 +930,294 @@
           }
         }
       ]
+    },
+    {
+      "id": "content.act1.first_anomaly.trace",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 220,
+      "initialVersionID": "version.act1.first_anomaly.trace.v1",
+      "versions": [
+        {
+          "id": "version.act1.first_anomaly.trace.v1",
+          "version": 1,
+          "title": "Delivery record: Project ECHO",
+          "subtitle": "Message content unavailable",
+          "source": "Mail delivery service",
+          "author": "Mail delivery service",
+          "timestampLabel": "Today · 09:43",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 43
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Mail delivery service",
+              "recipients": [
+                "Device owner"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The delivery record lists “RE: Project ECHO — Internal Review” as a message opened on this device. The message is no longer available in the live inbox."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This record retains the subject and delivery status, not the original message body. It confirms a delivery, but is not a saved copy of the correspondence."
+                }
+              ],
+              "attachments": [
+                {
+                  "label": "Ask Banana Assist about the missing email",
+                  "contentID": "content.act1.first_anomaly.denial"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.first_contradiction_investigated"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act1.first_anomaly.email_removed"
+        }
+      ],
+      "visibility": "hiddenUntilRevealed"
+    },
+    {
+      "id": "content.act1.first_anomaly.warning",
+      "appSurface": "messages",
+      "actAvailable": 1,
+      "order": 221,
+      "initialVersionID": "version.act1.first_anomaly.warning.v1",
+      "versions": [
+        {
+          "id": "version.act1.first_anomaly.warning.v1",
+          "version": 1,
+          "title": "Unknown sender",
+          "subtitle": "New message",
+          "source": "Unknown sender",
+          "author": "Unknown sender",
+          "timestampLabel": "Today · 09:43",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 43
+          },
+          "payload": {
+            "type": "messages",
+            "data": {
+              "participants": [
+                "Unknown sender",
+                "Device owner"
+              ],
+              "messages": [
+                {
+                  "id": "message.act1.first_anomaly.warning",
+                  "sender": "Unknown sender",
+                  "text": "You found the email… Do not trust the assistant.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 09:43"
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the mail delivery record",
+                  "contentID": "content.act1.first_anomaly.trace"
+                },
+                {
+                  "label": "Ask Banana Assist about the missing email",
+                  "contentID": "content.act1.first_anomaly.denial"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act1.first_anomaly.email_removed"
+        }
+      ],
+      "visibility": "hiddenUntilRevealed"
+    },
+    {
+      "id": "content.act1.first_anomaly.denial",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 222,
+      "initialVersionID": "version.act1.first_anomaly.denial.v1",
+      "versions": [
+        {
+          "id": "version.act1.first_anomaly.denial.v1",
+          "version": 1,
+          "title": "What happened to the ECHO email?",
+          "subtitle": null,
+          "source": "Banana Assist",
+          "author": "Banana Assist",
+          "timestampLabel": "Today · 09:43",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 43
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.first_anomaly.denial.user",
+                  "role": "user",
+                  "text": "I read the Project ECHO email. Why is it missing from the inbox?"
+                },
+                {
+                  "id": "turn.act1.first_anomaly.denial.assistant",
+                  "role": "assistant",
+                  "text": "That sounds like a mail synchronization issue. A delivery entry can remain after message content becomes unavailable. An incomplete record is not a reliable account of what the original message said. I would not take it as a reason for concern about Banana Vision. You can inspect the delivery record while I help you find your way."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the mail delivery record",
+                  "contentID": "content.act1.first_anomaly.trace"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act1.first_anomaly_questioned"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act1.first_anomaly.email_removed"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act1.first_anomaly.warning.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.first_anomaly.challenge",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 223,
+      "initialVersionID": "version.act1.first_anomaly.challenge.v1",
+      "versions": [
+        {
+          "id": "version.act1.first_anomaly.challenge.v1",
+          "version": 1,
+          "title": "I saved the original email.",
+          "subtitle": null,
+          "source": "Banana Assist",
+          "author": "Banana Assist",
+          "timestampLabel": "Today · 09:43",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 43
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.first_anomaly.challenge.user",
+                  "role": "user",
+                  "text": "I preserved the original email. Its saved copy is still in Evidence, but the live message is gone."
+                },
+                {
+                  "id": "turn.act1.first_anomaly.challenge.assistant",
+                  "role": "assistant",
+                  "text": "Your saved copy remains available to you. A difference between a saved copy and the current inbox can occur during routine synchronization or housekeeping. I understand why you noticed it, but I would not assume it indicates a problem with Banana Vision."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the mail delivery record",
+                  "contentID": "content.act1.first_anomaly.trace"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act1.first_anomaly_questioned"
+            },
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.first_contradiction_investigated"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act1.first_anomaly.email_removed"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act1.first_anomaly.warning.v1"
+        },
+        {
+          "type": "evidencePreserved",
+          "id": "evidence.act1.echo_review.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.first_anomaly.notification",
+      "appSurface": "notifications",
+      "actAvailable": 1,
+      "order": 224,
+      "initialVersionID": "version.act1.first_anomaly.notification.v1",
+      "versions": [
+        {
+          "id": "version.act1.first_anomaly.notification.v1",
+          "version": 1,
+          "title": "Unknown sender",
+          "subtitle": "New message",
+          "source": "Messages",
+          "author": "Messages",
+          "timestampLabel": "Today · 09:43",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 43
+          },
+          "payload": {
+            "type": "notifications",
+            "data": {
+              "message": "You found the email… Do not trust the assistant.",
+              "targetContentID": "content.act1.first_anomaly.warning"
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act1.first_anomaly.email_removed"
+        }
+      ],
+      "visibility": "hiddenUntilRevealed"
     }
   ]
 }

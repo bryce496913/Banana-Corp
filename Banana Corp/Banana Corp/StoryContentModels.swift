@@ -40,6 +40,7 @@ struct StoryMessageRecord: Codable, Equatable {
 struct StoryConversationPayload: Codable, Equatable {
     let participants: [String]
     let messages: [StoryMessageRecord]
+    let links: [StoryContentLink]?
 }
 
 struct StorySocialPayload: Codable, Equatable {
@@ -82,7 +83,7 @@ struct StoryAssistantTurn: Codable, Equatable {
     let text: String
 }
 
-struct StoryAssistantPayload: Codable, Equatable { let turns: [StoryAssistantTurn] }
+struct StoryAssistantPayload: Codable, Equatable { let turns: [StoryAssistantTurn]; let links: [StoryContentLink]? }
 
 struct StoryDiagnosticEntry: Codable, Equatable {
     enum Level: String, Codable { case info, warning, error }

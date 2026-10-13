@@ -80,7 +80,7 @@ enum EvidenceContentFields {
         switch version.payload {
         case .email(let p): add("sender", "From", p.sender); add("recipients", "To", p.recipients.joined(separator: ", ")); blocks(p.blocks); links(p.attachments ?? [])
         case .news(let p): add("publication", "Publication", p.publication); blocks(p.blocks); links(p.relatedContent ?? [])
-        case .messages(let p): add("participants", "Participants", p.participants.joined(separator: ", ")); messages(p.messages)
+        case .messages(let p): add("participants", "Participants", p.participants.joined(separator: ", ")); messages(p.messages); links(p.links ?? [])
         case .social(let p):
             add("handle", "Account", p.handle); add("post", "Post", p.text, .body); messages(p.replies ?? [])
             add("media", "Media references", p.mediaAssetIDs?.joined(separator: ", "), reference: true)
@@ -101,6 +101,7 @@ enum EvidenceContentFields {
                 add("turn.\(turn.id).role", "Turn \(index + 1) from", turn.role.rawValue)
                 add("turn.\(turn.id).text", "Turn \(index + 1)", turn.text, .body)
             }
+            links(p.links ?? [])
         case .diagnostics(let p):
             for (index, entry) in p.entries.enumerated() {
                 add("diagnostic.\(entry.id).position", "Entry position", String(index + 1))

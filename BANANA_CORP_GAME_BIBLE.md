@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.4  
+**Version:** 1.5  
 **Last updated:** 2026-10-13  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -195,13 +195,25 @@ Reading the leak records **first suspicious material encountered**, a readiness 
 
 The Assistant uses locally authored question/answer choices rather than pretending to understand arbitrary input. The welcome service conversation supports incoming messages and per-thread unread/read state; it introduces no named story contact or reply puzzle. The optional on-phone VR teaser records engagement without requiring physical headset hardware. Its exact later horror sequences remain `[TBD]`. See `docs/act-one-content.md` for the immutable inventory and engagement contracts.
 
+### Approved first mystery loop — Pass 6
+
+Pass 6 completes the opening anomaly without implementing the full Act 2 narrative. After article context, explicit promo completion and reading the original ECHO email, a deliberate return to the inbox or fictional Home removes the live source once. It does not run on a timer, mutate its original catalogue version or delete preserved evidence. The original detail offers unlimited time to Preserve Evidence before leaving.
+
+Removal atomically reveals a legitimate subject/status delivery record and an incoming unknown conversation with the established **“You found the email… Do not trust the assistant.”** warning. Neither delivery nor its fictional notification marks the conversation read. A saved copy remains authentic proof of the original; without preservation, the delivery record explicitly contains no original body, and the warning/trace provide a viable investigative path. No archive is fabricated from internal read receipts.
+
+After the warning is read, the Assistant's authored synchronization explanation becomes available. An optional saved-copy challenge requires valid preserved evidence. These choices record an explicit interaction fact; they do not establish cooperation, calculate trust, confess or threaten. Explicit delivery-record inspection, saved-versus-removed comparison or evidence challenge records the first-contradiction investigation milestone. Opening an app/list alone cannot earn it.
+
+The player explicitly chooses **Continue investigation** to advance to **Something Isn’t Right**. Required facts are article context, completed promo, original email read/first-suspicious-material milestone, completed removal, warning read, Assistant question and contradiction investigation. Preservation, optional apps, mini-games, waits and scores are not requirements. Only this Act 1 → Act 2 transition is configured; later act gates remain `[TBD]`.
+
+One durably consumed two-second carrier-label irregularity and fictional warning card use the standard palette, no flashing and no recurring animation. Dismissal/expiry restores Normal. The readable warning remains available after relaunch even if the cosmetic moment was missed. Detailed IDs, persistence, both paths and manual validation are in `docs/first-anomaly.md`.
+
 ### Assistant behavior
 
 Helpful, polished, reassuring, and brand-positive. It explains anomalies away and encourages trust. Early defensiveness should be subtle enough that a benign interpretation remains possible.
 
 ### Transition
 
-The player leaves the act with a concrete reason to investigate Project ECHO. Exact clue prerequisites and puzzle solutions are `[TBD]`; preserve the discovery sequence without inventing a passcode.
+The player leaves the act with a concrete reason to investigate Project ECHO. Pass 6 approves the first-loop handoff prerequisites above. Later clue/puzzle solutions remain `[TBD]`; do not invent a passcode.
 
 ## 9. Act 2 — Something Isn’t Right
 
@@ -222,7 +234,7 @@ Turn isolated anomalies into a pattern the player can verify. Make evidence pres
 
 ### Mechanics established here
 
-Evidence can be preserved before a source is edited or removed. Pass 4 implements the basic **Preserve Evidence** interaction and the **Evidence** archive utility; scene-specific timing, eligibility and recovery clues remain `[TBD]`. A preserved copy must remain distinguishable from a later live version.
+Evidence can be preserved before a source is edited or removed. Pass 4 implements the basic **Preserve Evidence** interaction and the **Evidence** archive utility; Pass 6 approves the initial email removal boundary and delivery-record recovery path; later timing, eligibility and recovery clues remain `[TBD]`. A preserved copy must remain distinguishable from a later live version.
 
 ### Assistant behavior
 
@@ -385,7 +397,7 @@ Pass 2 adopts the conceptual tracking responsibilities above as persistent infra
 
 - New games begin in The Perfect Product with no discoveries or earned story facts. Existing app availability defaults remain unchanged; no new app gate is established.
 - A read is an explicit content-engagement action, never inferred from row rendering or opening an app. Evidence copies retain separate IDs and source-version identities.
-- Act advancement requires the next consecutive act, an explicitly configured nonempty milestone requirement, and a satisfied declarative condition. Production transition rules are empty until their story requirements are approved. No later act is activated by this pass.
+- Act advancement requires the next consecutive act, an explicitly configured nonempty milestone requirement, and a satisfied declarative condition. Pass 2 initially left production transition rules empty. Pass 6 configures only the approved first mystery handoff into Act 2; later transitions remain unconfigured.
 - Significant actions save locally before becoming observable; repeated facts/events are idempotent and event effects commit together. Invalid or newer-schema saves block writes and remain intact. Reset/new game is explicit and preserves prior bytes in an archive. Story saves are independent of customized home layouts.
 - Assistant cooperation is an explicit fact, not a computed trust score. Recording ASCENSION, compatibility flags, elapsed time, or app usage does not automatically advance acts or choose an ending.
 - A configurable time model separates real device time, relative story days, fictional time, and fixed narrative timestamps. The current live clock remains unchanged. The 9:41 opening transition, “tomorrow” framing, schedules, weather triggers, and calendar rules remain `[TBD]`.
@@ -397,7 +409,7 @@ These are implementation contracts authorized by Pass 2, not new chapters, puzzl
 Pass 3 adds an offline, shared content catalogue and delivery engine. Stable content IDs and explicit version IDs are separate from surface metadata. Typed payloads support email, news, conversations, social posts, video metadata, local web pages, photo metadata, Assistant turns/diagnostics, and fictional notifications. Load validation checks schemas, IDs, versions, references, rules, payloads and cyclic delivery effects.
 
 - Availability queries are read-only. Act/fact conditions, hidden/revealed status, removals, live versions, per-version unread state, and preserved archives are distinct. Meaningful content engagement explicitly commits a read and its validated effects once; rendering a list does not read content.
-- Declarative effects can reveal content, mark milestones, unlock existing routes, queue fictional notifications, switch an explicit version, remove content, and record Observer clues. Queueing is passive and does not read another item or recursively run its effects. These mechanisms do not establish any new story trigger or Observer requirement.
+- Declarative effects can reveal content, mark milestones, unlock existing routes, queue fictional notifications, switch an explicit version, remove content, and record Observer clues. Queueing is passive and does not read another item or recursively run its effects. Pass 6 uses these mechanisms for its explicitly approved first-loop trigger, without adding an Observer requirement.
 - Original versions remain in the catalogue. Saved version receipts detect edits under previously used version IDs; preserved snapshots retain their original bytes independently of later catalogue changes. Missing or changed definitions produce diagnostics rather than deleting progress or refreshing preserved evidence.
 - Story save schema 2 adds delivery facts and a version-1 migration that preserves existing progress. Home layout persistence remains separate. Unread Email/Messages counts now derive from shared available/read content.
 - Pass 3 initially left the production catalogue empty and authored only neutral test fixtures outside the bundle. Pass 5 now authors the approved opening Act 1 catalogue; Act 2 replacement scenes and ending requirements remain outside that pass.
@@ -411,7 +423,7 @@ The canonical utility route and title are **Evidence** (`evidence`). It is avail
 - Preserve Evidence freezes an eligible exact source version in the existing progression save. The immutable snapshot includes source surface, title, author/source metadata, original fictional timestamps where supplied, structured payload and optional narrative/evidence metadata. The player's real preservation time remains separate. No second evidence store or generic evidence score is introduced.
 - Shared controls/readers support Email, News, Social X, Browser, Video and Photos content. Their existing empty layouts remain until approved catalogue entries are authored. Preservation is explicit and does not run read effects; repeated preservation of the same version creates no duplicate or refreshed copy.
 - Evidence lists and opens saved snapshots independently of live-source replacement/removal. Comparison shows actual displayed-field differences or a factual unavailable-source state. Version IDs/numbers alone do not prove a content edit, and ordinary changes or missing data are not labeled supernatural interference.
-- Optional, explicitly authored evidence rules may secure a declared Observer clue or preservation milestone for that exact eligible version. An authored comparison milestone requires visible differences against an accessible live version. Unrelated saves, missing proof and unverified/missing live definitions award no such milestone. Comparison events remain idempotent and do not read another source or activate a chapter.
+- Optional, explicitly authored evidence rules may secure a declared Observer clue or preservation milestone for that exact eligible version. Pass 4 authored version-specific comparison milestones require visible differences against an accessible live version. Pass 6 separately recognizes an explicit authentic-original-versus-deliberately-removed-source comparison through its approved first-contradiction milestone. Unrelated saves, missing proof and unverified/missing live definitions award no such milestone. Comparison events remain idempotent and do not read another source or activate a chapter.
 - Source definitions, preserved bytes and timestamps remain stable through navigation and relaunch. Unreadable evidence is retained and shown as unavailable rather than silently replaced or removed.
 
 This pass authors only neutral test fixtures, not new player-facing story scenes, clues, puzzle answers or ending prerequisites. Detailed behavior and validation are documented in `docs/evidence-vault.md`.
@@ -645,3 +657,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-12 | 1.2 | Pass 3: documented local structured content/catalogue validation, read-only availability, explicit once-per-version read effects, immutable evidence/version receipts, passive notification delivery and save schema 2 migration. Only test fixtures were authored; player-facing content, chronology and ending requirements remain unchanged. |
 | 2026-10-12 | 1.3 | Pass 4: approved Evidence as the neutral archive utility, explicit eligible-version preservation, frozen source metadata/timestamps, factual comparison, exact-version deduplication and optional version-specific preservation/comparison facts. No new narrative scenes, reveal timing, puzzle gates or ending requirements were introduced. |
 | 2026-10-13 | 1.4 | Pass 5: authorized opening Act 1 catalogue drafts, relative launch context/9:41 welcome timestamps, explicit article/promo prerequisites for the anonymous ECHO leak, readiness-only milestone, local Assistant/service messages and optional product teaser. The first contradiction, warning, denial and Act 2 handoff remain reserved for Pass 6; no later reveals, puzzle gates, scoring or ending contracts changed. |
+| 2026-10-13 | 1.5 | Pass 6: approved once-only original-email removal at a return boundary, truthful preserved/unpreserved recovery, exact unknown warning, conditional scripted denial/challenge and factual Assistant interaction, restrained consumed carrier/notification event, explicit investigation and documented Act 1 → Act 2 prerequisites. Original sources/snapshots, later reveals, mini-games, scoring and ending requirements are unchanged. |

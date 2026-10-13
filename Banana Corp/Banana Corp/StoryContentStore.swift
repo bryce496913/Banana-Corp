@@ -93,6 +93,12 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
         guard state.currentAct.rawValue >= item.actAvailable.rawValue, (item.unlockConditions ?? []).allSatisfy({ $0.evaluate(in: state) }) else { return .locked }
         let requested = versionID ?? liveID
         guard resolvedVersion(item: item, versionID: requested, state: state) != nil else { return .unresolved }
+        if id == FirstAnomalyContract.challenge {
+            guard let record = state.preservedEvidence[FirstAnomalyContract.evidence],
+                  record.sourceContentID == FirstAnomalyContract.originalContent,
+                  record.sourceVersionID == FirstAnomalyContract.originalVersion,
+                  validatedEvidence(record) != nil else { return .locked }
+        }
         if requested != liveID { return .replaced(liveVersionID: liveID) }
         return state.readContentIDs.contains(requested) ? .read : .availableUnread
     }
@@ -131,6 +137,7 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
                 case .revealContent(let target): try append(.revealContent(target))
                 case .markMilestone(let fact): try append(.recordMilestone(fact))
                 case .recordClue(let fact): try append(.recordObserverClue(fact))
+                case .recordAssistantFact(let fact): try append(.recordAssistantFact(fact))
                 case .unlockRoute(let route): try append(.setAppAvailability(route, unlocked: true))
                 case .makeUnavailable(let target): try append(.makeContentUnavailable(target))
                 case .queueNotification(let target):
@@ -238,10 +245,22 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
             let performedID = "event.compare." + evidenceID
             let changedID = "event.diff." + evidenceID
             var actions: [StoryAction] = [.recordEvidenceComparison(evidenceID: evidenceID, changed: comparison.hasVisibleDifferences)]
+            if evidenceID == FirstAnomalyContract.evidence,
+               comparison.preserved.record.sourceContentID == FirstAnomalyContract.originalContent,
+               comparison.preserved.record.sourceVersionID == FirstAnomalyContract.originalVersion,
+               progression.satisfies(.eventCompleted(FirstAnomalyContract.removalEvent)),
+               case .unavailable(.removed) = comparison.current {
+                actions.append(.recordMilestone(FirstAnomalyContract.investigated))
+            }
             if comparison.hasVisibleDifferences, let milestone = comparison.preserved.snapshot.version.evidenceRules?.comparisonMilestoneID {
                 actions.append(.recordMilestone(milestone))
             }
-            return progression.completeEvent(comparison.hasVisibleDifferences ? changedID : performedID, actions: actions).mapError(StoryContentDeliveryError.progression)
+            let investigatesFirstAnomaly = actions.contains { action in
+                if case .recordMilestone(let id) = action { return id == FirstAnomalyContract.investigated }
+                return false
+            }
+            let eventID = investigatesFirstAnomaly ? "event.act1.first_anomaly.evidence_compared" : (comparison.hasVisibleDifferences ? changedID : performedID)
+            return progression.completeEvent(eventID, actions: actions).mapError(StoryContentDeliveryError.progression)
         }
     }
 
@@ -313,4 +332,68 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
               let second = try? JSONDecoder().decode(StoryContentSnapshot.self, from: expected.snapshot) else { return false }
         return first == second
     }
+}
+
+// MARK: - First mystery slice
+extension StoryContentStore {
+    /// Called only at a real return-to-inbox/Home boundary, never by a timer or a read callback.
+    /// Every delivery fact commits together; a read receipt is not a preserved evidence copy.
+    @discardableResult
+    func activateFirstAnomalyAtBoundary() -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        if progression.state.completedEventIDs.contains(FirstAnomalyContract.removalEvent) { return .success(.unchanged) }
+        guard progression.state.currentAct == .thePerfectProduct,
+              progression.satisfies(FirstAnomalyContract.removalPrerequisites) else { return .failure(.progression(.prerequisitesNotMet)) }
+        guard let item = catalogue?.itemsByID[FirstAnomalyContract.originalContent],
+              let original = currentVersion(for: item.id), original.id == FirstAnomalyContract.originalVersion,
+              availability(for: item.id, versionID: original.id).isAvailable else { return .failure(.contentUnavailable) }
+        do {
+            var actions: [StoryAction] = [.rememberContentVersion(try receipt(item: item, version: original, state: progression.state)),
+                                         .makeContentUnavailable(item.id)]
+            for id in [FirstAnomalyContract.trace, FirstAnomalyContract.warning, FirstAnomalyContract.notification] {
+                guard let target = catalogue?.itemsByID[id], let version = currentVersion(for: id) else { return .failure(.unknownContent(id)) }
+                let expectedSurface: StoryAppSurface = id == FirstAnomalyContract.trace ? .email : (id == FirstAnomalyContract.warning ? .messages : .notifications)
+                guard version.payload.surface == expectedSurface else { return .failure(.invalidSnapshot) }
+                actions.append(.rememberContentVersion(try receipt(item: target, version: version, state: progression.state)))
+                actions.append(.revealContent(id))
+                if id == FirstAnomalyContract.notification {
+                    guard version.payload.surface == .notifications else { return .failure(.invalidSnapshot) }
+                    actions.append(.queueNotification(contentID: id, versionID: version.id))
+                }
+            }
+            return progression.completeEvent(FirstAnomalyContract.removalEvent, actions: actions,
+                                             when: FirstAnomalyContract.removalPrerequisites).mapError(StoryContentDeliveryError.progression)
+        } catch let error as StoryContentDeliveryError { return .failure(error) }
+        catch { return .failure(.invalidSnapshot) }
+    }
+
+    /// At-most-once cosmetic delivery is consumed durably before drawing; the warning itself remains unread.
+    @discardableResult
+    func consumeFirstAnomalyPresentation() -> StoryContentDeliveryResult {
+        guard let queued = progression.state.contentDelivery.notifications.values.first(where: { $0.contentID == FirstAnomalyContract.notification }) else { return .failure(.contentUnavailable) }
+        return progression.completeEvent(FirstAnomalyContract.presentationEvent,
+            actions: [.recordFirstGlitch, .acknowledgeNotification(queued.id)],
+            when: .eventCompleted(FirstAnomalyContract.removalEvent)).mapError(StoryContentDeliveryError.progression)
+    }
+
+    var firstAnomalyHandoffAvailable: Bool {
+        progression.state.currentAct == .thePerfectProduct && progression.satisfies(FirstAnomalyContract.handoffPrerequisites)
+    }
+
+    #if DEBUG
+    /// Replays real catalogue actions after an explicit debug reset, without bypassing prerequisites.
+    func debugReplayFirstAnomaly(preserving: Bool) -> StoryContentDeliveryResult {
+        let news = "content.act1.news.interface"
+        guard let newsVersion = currentVersion(for: news), let promo = currentVersion(for: "content.act1.promo"),
+              case .video(let payload) = promo.payload else { return .failure(.contentUnavailable) }
+        if case .failure(let error) = read(news, versionID: newsVersion.id) { return .failure(error) }
+        var panels = StoryPresentationProgress()
+        let count = payload.transcript?.count ?? 0
+        for _ in 1..<max(1, count) { panels.advance(count: count) }
+        if case .failure(let error) = completePresentation("content.act1.promo", versionID: promo.id, progress: panels) { return .failure(error) }
+        if case .failure(let error) = read(FirstAnomalyContract.originalContent, versionID: FirstAnomalyContract.originalVersion) { return .failure(error) }
+        if preserving, case .failure(let error) = preserve(FirstAnomalyContract.originalContent, versionID: FirstAnomalyContract.originalVersion) { return .failure(error) }
+        return activateFirstAnomalyAtBoundary()
+    }
+    #endif
 }

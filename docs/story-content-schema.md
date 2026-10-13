@@ -110,3 +110,9 @@ Actual results in this workspace:
 ## Explicit presentation completion — Pass 5
 
 `StoryContentStore.completePresentation` checks the selected live video version and a bounded final-panel progress state before invoking the ordinary atomic read/effects transaction. Opening a video row and stepping through panels never read it. The final confirmation is the engagement criterion for the asset-free Act 1 promo; there is no imaginary media duration. This adds no persisted schema field or migration. Source timestamps are displayed through the existing relative story-time context; stored snapshot labels/timestamps remain immutable.
+
+## First anomaly extensions — Pass 6
+
+Conversation and Assistant payloads accept optional typed `links` with the same validated local label/content-ID schema as web sources. Missing fields decode as nil, preserving old source/snapshot semantics. The declarative `recordAssistantFact` effect requires a declared `assistantFact` ID and cannot produce its own availability prerequisite. It records an explicit interaction and does not change cooperation or calculate scores. The five new catalogue items are additive; published opening versions remain unchanged.
+
+The first-loop boundary transaction uses the existing original receipt, unavailable-source state, hidden/revealed records and frozen notification queue. It never deletes or overwrites a source version. Its ephemeral presentation is consumed separately from reading the persistent message; shared links permit explicit trace inspection and Assistant questioning. See [the contract and handoff](first-anomaly.md). No save/schema migration is needed.

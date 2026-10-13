@@ -151,9 +151,11 @@ enum StoryContentCatalogueLoader {
                             effectEdges[version.id, default: []].insert(target.initialVersionID)
                             if id == item.id { report(.invalidRule, path, "Self-reveal is not allowed") }
                         }
-                    case .markMilestone(let id), .recordClue(let id):
+                    case .markMilestone(let id), .recordClue(let id), .recordAssistantFact(let id):
                         let kind: String
-                        if case .markMilestone = effect { kind = "milestoneCompleted" } else { kind = "observerClueFound" }
+                        if case .markMilestone = effect { kind = "milestoneCompleted" }
+                        else if case .recordAssistantFact = effect { kind = "assistantFact" }
+                        else { kind = "observerClueFound" }
                         if !(document.facts[kind] ?? []).contains(id) { report(.missingReference, path, "Undeclared \(kind): \(id)") }
                         if conditions.flatMap(\.allFactReferences).contains(where: { $0.kind == kind && $0.id == id }) {
                             report(.invalidRule, path, "Read effects cannot produce their own unlock prerequisite")
@@ -210,6 +212,8 @@ enum StoryContentCatalogueLoader {
     private static func payloadReferences(_ payload: StoryContentPayload) -> [(id: String, asset: Bool)] {
         switch payload {
         case .email(let p): return (p.attachments ?? []).map { ($0.contentID, false) }
+        case .messages(let p): return (p.links ?? []).map { ($0.contentID, false) }
+        case .assistant(let p): return (p.links ?? []).map { ($0.contentID, false) }
         case .news(let p): return (p.relatedContent ?? []).map { ($0.contentID, false) }
         case .social(let p): return (p.mediaAssetIDs ?? []).map { ($0, true) }
         case .video(let p): return [p.mediaAssetID, p.thumbnailAssetID].compactMap { $0 }.map { ($0, true) }

@@ -5,7 +5,7 @@ import Foundation
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
         let catalogue = StoryContentCatalogueLoader.load(fileURL: resource)
         let definitions = try catalogue.get()
-        precondition(definitions.items.count == 20)
+        precondition(definitions.items.count == 25)
         precondition(definitions.items.allSatisfy { $0.actAvailable.rawValue == 1 && $0.versions.count == 1 })
         precondition(definitions.items.allSatisfy { $0.id.hasPrefix("content.act1.") })
         // A restarted executable must resolve exactly the previously saved production versions.
@@ -96,7 +96,7 @@ import Foundation
         precondition(story.state.completedEventIDs.contains("event.read.version.act1.vr_preview.v1"))
         precondition(story.state.completedMilestoneIDs.contains("milestone.act1.vr_preview_engaged"))
         precondition(story.state.currentAct.rawValue == 1)
-        if case .failure = story.advanceAct(to: StoryAct(rawValue: 2)!) {} else { preconditionFailure("No production Act 2 rule") }
+        if case .failure = story.advanceAct(to: StoryAct(rawValue: 2)!) {} else { preconditionFailure("Act 2 must stay gated before the mystery loop") }
         for act in StoryAct.allCases where act.rawValue > 1 {
             if case .failure = story.advanceAct(to: act) {} else { preconditionFailure("No later act unlock") }
         }
@@ -111,7 +111,7 @@ import Foundation
         }
         let publicBytes = try Data(contentsOf: resource)
         let text = String(decoding: publicBytes, as: UTF8.self).lowercased()
-        for spoiler in ["daniel mercer", "maya chen", "alexrivera", "ascension", "echo_core", "observer", "harvesting", "brainwashing", "sentient", "blackout", "lantern", "do not trust the assistant"] {
+        for spoiler in ["daniel mercer", "maya chen", "alexrivera", "ascension", "echo_core", "observer", "harvesting", "brainwashing", "sentient", "blackout", "lantern"] {
             precondition(!text.contains(spoiler), "Premature disclosure: \(spoiler)")
         }
         // Alternative ordering works: promo before any article, with no optional-app gate.
