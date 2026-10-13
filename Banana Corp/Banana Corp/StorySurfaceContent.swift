@@ -23,6 +23,7 @@ struct StorySurfaceContent<Placeholder: View>: View {
             } else if appState.content.catalogue?.items.contains(where: { $0.appSurface == surface }) == true {
                 AppScreenScroll {
                     let items = appState.content.availableItems(for: surface)
+                    FirstAnomalyHandoffControl()
                     if items.isEmpty {
                         AppEmptyState(symbol: surface.symbol, title: "No content available", message: "There are no available items in this source right now.")
                     }
@@ -54,11 +55,13 @@ struct StorySurfaceContent<Placeholder: View>: View {
         }
         .onAppear {
             if surface == .email && selection == nil { appState.reconcileFirstAnomalyAtBoundary() }
+            if selection == nil { appState.reconcileActTwoAtBoundary(surface: surface) }
         }
         .onChange(of: selection) { old, new in
             if surface == .email && old?.contentID == FirstAnomalyContract.originalContent && new == nil {
                 appState.reconcileFirstAnomalyAtBoundary()
             }
+            if old != nil && new == nil { appState.reconcileActTwoAtBoundary(surface: surface) }
         }
         .navigationDestination(item: $selection) { selected in
             StorySourceDetailView(selection: selected)
@@ -95,7 +98,7 @@ struct StorySourceDetailView: View {
                         }
                         StoryReadableContent(version: version)
                     }
-                    FirstAnomalyHandoffControl()
+                    FirstAnomalyHandoffControl(currentContentID: selection.contentID)
                     ForEach(links(for: version), id: \.contentID) { link in
                         Button(link.label) { open(link.contentID) }
                             .buttonStyle(.modernPhone)
@@ -106,6 +109,7 @@ struct StorySourceDetailView: View {
                 }
             }
         }
+        .onDisappear { appState.reconcileActTwoAtBoundary(surface: selection.surface) }
         .navigationDestination(item: $linkedSelection) { StorySourceDetailView(selection: $0) }
         .alert("Page unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
             message: { Text("This source cannot be opened right now. Your progress has not changed.") }
@@ -118,6 +122,7 @@ struct StorySourceDetailView: View {
         case .email(let data): return data.attachments ?? []
         case .messages(let data): return data.links ?? []
         case .assistant(let data): return data.links ?? []
+        case .video(let data): return data.links ?? []
         default: return []
         }
     }
@@ -210,8 +215,9 @@ struct StoryPromotionView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Image(systemName: "visionpro").font(.system(size: 64)).foregroundStyle(AppTheme.Colors.accent).accessibilityHidden(true)
                     Text(version.title).appText(.screenTitle)
-                    Text("Official product presentation").appText(.systemLabel)
-                    Text("The finished promotional video is not included. Explore its on-phone presentation below.").appText(.caption, color: AppTheme.Colors.secondaryText)
+                    Text(payload.creator ?? "Video presentation").appText(.systemLabel)
+                    if let location = payload.sourcePath { Text(location).appText(.caption) }
+                    Text("Text presentation. No playable video is included; explore the transcript sections below.").appText(.caption, color: AppTheme.Colors.secondaryText)
                 }
             }
             if cues.indices.contains(progress.index) {
@@ -247,6 +253,7 @@ struct StoryPromotionView: View {
 
 /// Explicit progression confirmation; rendering this control never advances an act.
 struct FirstAnomalyHandoffControl: View {
+    var currentContentID: String? = nil
     @EnvironmentObject private var appState: AppState
     @State private var failure = false
     var body: some View {
@@ -258,7 +265,54 @@ struct FirstAnomalyHandoffControl: View {
                 .alert("Progress could not be saved", isPresented: $failure) { Button("OK", role: .cancel) {} }
                     message: { Text("Your investigation has not advanced. Please try again.") }
         } else if appState.story.state.currentAct == .somethingIsntRight {
-            Text("Something Isn’t Right").appText(.sectionTitle)
+            ActTwoInvestigationControl(currentContentID: currentContentID)
+        } else if appState.story.state.currentAct == .theConspiracy {
+            Text("The Conspiracy").appText(.sectionTitle)
         }
+    }
+}
+
+/// Only explicit player actions connect the records and advance. Guidance uses shared-store queries.
+struct ActTwoInvestigationControl: View {
+    var currentContentID: String? = nil
+    @EnvironmentObject private var appState: AppState
+    @State private var selection: StoryContentSelection?
+    @State private var failure = false
+    @State private var feedback: AppFeedbackEvent?
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if appState.content.actThreeHandoffAvailable {
+                Button("Investigate beyond the curated sources") {
+                    switch appState.story.advanceAct(to: .theConspiracy) {
+                    case .success(.changed): feedback = AppFeedbackEvent(kind: .confirmedAction)
+                    case .success(.unchanged): break
+                    case .failure: failure = true
+                    }
+                }.buttonStyle(.appPrimary)
+                    .accessibilityHint("Continue to The Conspiracy.")
+            } else if appState.content.actTwoConfirmationAvailable {
+                Button("Connect the changed source and research findings") {
+                    switch appState.content.confirmActTwoInvestigation() {
+                    case .success(.changed): feedback = AppFeedbackEvent(kind: .confirmedAction)
+                    case .success(.unchanged): break
+                    case .failure: failure = true
+                    }
+                }.buttonStyle(.appPrimary)
+                    .accessibilityHint("Connect what you learned from the changed recording and research.")
+            }
+            if let lead = appState.content.actTwoSuggestedLead, lead.id != currentContentID {
+                Button {
+                    if lead.surface != .video, case .failure = appState.content.read(lead.id, versionID: lead.version.id) { failure = true; return }
+                    selection = .init(contentID: lead.id, versionID: lead.version.id, surface: lead.surface)
+                } label: {
+                    Label(lead.version.title, systemImage: lead.surface.symbol)
+                }.buttonStyle(.modernPhone)
+                    .accessibilityHint("Open the next available investigation source. Video requires an explicit Finish action.")
+            }
+        }
+        .navigationDestination(item: $selection) { StorySourceDetailView(selection: $0) }
+        .modifier(AppFeedbackModifier(event: feedback))
+        .alert("Investigation update unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
+            message: { Text("The action could not be saved. Your existing records remain intact.") }
     }
 }

@@ -109,13 +109,14 @@ struct BananaOSView: View {
                 appState.completeNavigationTransition(id)
             }
         }
-        .alert("Mail update unavailable", isPresented: $appState.firstAnomalyDeliveryFailed) {
+        .alert("Source update unavailable", isPresented: $appState.firstAnomalyDeliveryFailed) {
             Button("Retry") {
                 appState.reconcileFirstAnomalyAtBoundary()
                 appState.deliverFirstAnomalyPresentationIfNeeded()
+                appState.reconcileActTwoAtBoundary()
             }
             Button("Later", role: .cancel) {}
-        } message: { Text("The update could not be saved. Your existing messages and progress remain intact.") }
+        } message: { Text("The update could not be saved. Existing source records and progress remain intact.") }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 appState.expirePresentationEvents()

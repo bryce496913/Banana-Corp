@@ -99,6 +99,12 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
                   record.sourceVersionID == FirstAnomalyContract.originalVersion,
                   validatedEvidence(record) != nil else { return .locked }
         }
+        if id == ActTwoContract.assistantEvidenceChallenge {
+            guard let record = state.preservedEvidence[ActTwoContract.warningEvidence],
+                  record.sourceContentID == ActTwoContract.alex,
+                  record.sourceVersionID == ActTwoContract.originalWarning,
+                  validatedEvidence(record) != nil else { return .locked }
+        }
         if requested != liveID { return .replaced(liveVersionID: liveID) }
         return state.readContentIDs.contains(requested) ? .read : .availableUnread
     }
@@ -396,4 +402,97 @@ extension StoryContentStore {
         return activateFirstAnomalyAtBoundary()
     }
     #endif
+}
+
+// MARK: - Act 2 source changes and explicit synthesis
+extension StoryContentStore {
+    /// Surface-scoped return boundaries preserve the opportunity to inspect/save an original.
+    /// Home uses nil scope. Each source change is a separate validated atomic, idempotent event.
+    @discardableResult
+    func activateActTwoChangesAtBoundary(surface: StoryAppSurface? = nil) -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        guard progression.state.currentAct == .somethingIsntRight else { return .success(.unchanged) }
+        guard let catalogue else { return .failure(.catalogueUnavailable) }
+        var changed = false
+        for change in ActTwoContract.changes {
+            guard !progression.state.completedEventIDs.contains(change.eventID),
+                  progression.satisfies(change.prerequisites) else { continue }
+            guard let item = catalogue.itemsByID[change.contentID] else { return .failure(.unknownContent(change.contentID)) }
+            if let surface, item.appSurface != surface { continue }
+            guard (catalogue.declaredFacts["eventCompleted"] ?? []).contains(change.eventID),
+                  let original = currentVersion(for: item.id), original.id == change.originalVersionID,
+                  availability(for: item.id, versionID: original.id).isAvailable else { return .failure(.contentUnavailable) }
+            do {
+                var actions: [StoryAction] = [.rememberContentVersion(try receipt(item: item, version: original, state: progression.state))]
+                if let replacementID = change.replacementVersionID {
+                    guard let replacement = resolvedVersion(item: item, versionID: replacementID, state: progression.state) else { return .failure(.unknownVersion(replacementID)) }
+                    actions += [.rememberContentVersion(try receipt(item: item, version: replacement, state: progression.state)),
+                                .recordReplacement(.init(id: "replacement." + change.eventID, contentID: item.id,
+                                                       originalVersionID: original.id, replacementVersionID: replacement.id)),
+                                .activateContentVersion(contentID: item.id, versionID: replacement.id)]
+                } else { actions.append(.makeContentUnavailable(item.id)) }
+                if let milestone = change.milestoneID {
+                    guard (catalogue.declaredFacts["milestoneCompleted"] ?? []).contains(milestone) else { return .failure(.invalidSnapshot) }
+                    actions.append(.recordMilestone(milestone))
+                }
+                // The initial Alex explanation is no longer offered after its source changes.
+                if change.contentID == ActTwoContract.alex {
+                    guard catalogue.itemsByID["content.act2.assistant.alex_original"] != nil else { return .failure(.unknownContent("content.act2.assistant.alex_original")) }
+                    actions.append(.makeContentUnavailable("content.act2.assistant.alex_original"))
+                }
+                switch progression.completeEvent(change.eventID, actions: actions, when: change.prerequisites) {
+                case .success(.changed): changed = true
+                case .success(.unchanged): break
+                case .failure(let error): return .failure(.progression(error))
+                }
+            } catch let error as StoryContentDeliveryError { return .failure(error) }
+            catch { return .failure(.invalidSnapshot) }
+        }
+        return .success(changed ? .changed : .unchanged)
+    }
+
+    var actTwoConfirmationAvailable: Bool {
+        progression.state.currentAct == .somethingIsntRight && progression.satisfies(ActTwoContract.confirmationPrerequisites)
+            && currentVersion(for: ActTwoContract.alex)?.id == ActTwoContract.replacementWarning
+    }
+    var actThreeHandoffAvailable: Bool {
+        progression.state.currentAct == .somethingIsntRight && progression.satisfies(ActTwoContract.handoffPrerequisites)
+    }
+    @discardableResult
+    func confirmActTwoInvestigation() -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        if progression.state.completedEventIDs.contains(ActTwoContract.confirmationEvent) { return .success(.unchanged) }
+        guard actTwoConfirmationAvailable else { return .failure(.progression(.prerequisitesNotMet)) }
+        guard let item = catalogue?.itemsByID[ActTwoContract.summary], item.appSurface == .web,
+              let version = currentVersion(for: item.id),
+              (catalogue?.declaredFacts["eventCompleted"] ?? []).contains(ActTwoContract.confirmationEvent),
+              (catalogue?.declaredFacts["milestoneCompleted"] ?? []).contains(ActTwoContract.connected) else { return .failure(.contentUnavailable) }
+        do {
+            return progression.completeEvent(ActTwoContract.confirmationEvent,
+                actions: [.rememberContentVersion(try receipt(item: item, version: version, state: progression.state)),
+                          .revealContent(item.id), .recordMilestone(ActTwoContract.connected)],
+                when: ActTwoContract.confirmationPrerequisites).mapError(StoryContentDeliveryError.progression)
+        } catch { return .failure(.invalidSnapshot) }
+    }
+
+    /// A catalogue-backed next lead is guidance, never an automatic read/unlock.
+    var actTwoSuggestedLead: DeliveredStoryContent? {
+        guard progression.state.currentAct == .somethingIsntRight else { return nil }
+        let state = progression.state
+        var id: String?
+        if !state.completedMilestoneIDs.contains(ActTwoContract.warningViewed) { id = ActTwoContract.alex }
+        else if !state.completedEventIDs.contains(ActTwoContract.alexReplaced) { return nil }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.replacementViewed) { id = ActTwoContract.alex }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.symptomsInvestigated) { id = "content.act2.news.concerns" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.officialRead) { id = "content.act2.news.official" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.danielFollowed) { id = "content.act2.messages.daniel" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.mayaFollowed) { id = "content.act2.email.maya" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.echoRead) { id = "content.act2.web.echo07" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.diagnosticsRead) { id = "content.act2.diagnostics.excerpt" }
+        else if !state.completedMilestoneIDs.contains(ActTwoContract.savedCompared) && !state.completedMilestoneIDs.contains(ActTwoContract.independentRead) { id = "content.act2.news.corroboration" }
+        else if !state.assistant.relationshipFacts.contains(ActTwoContract.assistantQuestioned) { id = "content.act2.assistant.edits" }
+        else if state.completedEventIDs.contains(ActTwoContract.confirmationEvent) { id = ActTwoContract.summary }
+        guard let id, let item = catalogue?.itemsByID[id] else { return nil }
+        return availableItems(for: item.appSurface).first { $0.id == id }
+    }
 }

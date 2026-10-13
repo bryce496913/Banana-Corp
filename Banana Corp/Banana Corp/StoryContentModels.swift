@@ -60,6 +60,9 @@ struct StoryVideoPayload: Codable, Equatable {
     let durationSeconds: Double?
     let mediaAssetID: String?
     let thumbnailAssetID: String?
+    /// In-world local source location; never fetched from the internet.
+    let sourcePath: String?
+    let links: [StoryContentLink]?
     let transcript: [StoryTranscriptCue]?
 }
 
