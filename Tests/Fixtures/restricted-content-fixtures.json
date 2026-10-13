@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "facts": {},
+  "items": [
+    {
+      "id": "content.fixture.access_hint",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 0,
+      "initialVersionID": "version.fixture.access_hint.v1",
+      "versions": [
+        {
+          "id": "version.fixture.access_hint.v1",
+          "version": 1,
+          "title": "Neutral instruction record",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/fixture/access_hint",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Development fixture"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The development test token is OPEN."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.access_hint.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.protected_memo",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 1,
+      "initialVersionID": "version.fixture.protected_memo.v1",
+      "versions": [
+        {
+          "id": "version.fixture.protected_memo.v1",
+          "version": 1,
+          "title": "Neutral protected memo",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/fixture/protected_memo",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Development fixture"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Neutral structured research-format fixture. No story revelation."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.protected_memo.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.fixture.research"
+    }
+  ]
+}

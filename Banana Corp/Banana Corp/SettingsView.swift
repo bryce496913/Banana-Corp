@@ -10,6 +10,7 @@ struct SettingsView: View {
                 }
 
                 #if DEBUG
+                DevelopmentPuzzleEntry()
                 NavigationLink("Story slice diagnostics") { FirstAnomalyDebugView() }
                     .buttonStyle(.modernPhone)
                 #endif

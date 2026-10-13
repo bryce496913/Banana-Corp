@@ -25,28 +25,29 @@ struct StoryContentCatalogue {
 }
 
 enum StoryContentCatalogueLoader {
-    static func load(bundle: Bundle = .main, resource: String = "StoryContent") -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
-        load(fileURL: bundle.url(forResource: resource, withExtension: "json"), assetExists: { name in
+    static func load(bundle: Bundle = .main, resource: String = "StoryContent", restrictedResourceIDs: Set<String>? = nil) -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
+        let ids = restrictedResourceIDs ?? Set((try? RestrictedAccessCatalogueLoader.load(bundle: bundle).get().resources.map(\.id)) ?? [])
+        return load(fileURL: bundle.url(forResource: resource, withExtension: "json"), restrictedResourceIDs: ids, assetExists: { name in
             guard let url = bundle.url(forResource: name, withExtension: nil), url.isFileURL else { return false }
             return FileManager.default.fileExists(atPath: url.path)
         })
     }
 
-    static func load(fileURL: URL?, assetExists: (String) -> Bool = { _ in false }) -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
+    static func load(fileURL: URL?, restrictedResourceIDs: Set<String> = [], assetExists: (String) -> Bool = { _ in false }) -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
         guard let fileURL, fileURL.isFileURL else {
             return .failure(StoryContentLoadFailure(diagnostics: [.init(code: .missingResource, path: "resource", message: "Local catalogue resource is missing")]))
         }
-        do { return load(data: try Data(contentsOf: fileURL), assetExists: assetExists) }
+        do { return load(data: try Data(contentsOf: fileURL), restrictedResourceIDs: restrictedResourceIDs, assetExists: assetExists) }
         catch { return .failure(.init(diagnostics: [.init(code: .missingResource, path: fileURL.lastPathComponent, message: String(describing: error))])) }
     }
 
-    static func load(data: Data, assetExists: (String) -> Bool = { _ in false }) -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
+    static func load(data: Data, restrictedResourceIDs: Set<String> = [], assetExists: (String) -> Bool = { _ in false }) -> Result<StoryContentCatalogue, StoryContentLoadFailure> {
         struct Header: Decodable { let schemaVersion: Int }
         do {
             let schema = try JSONDecoder().decode(Header.self, from: data).schemaVersion
             guard schema == 1 else { return .failure(.init(diagnostics: [.init(code: .unsupportedSchema, path: "schemaVersion", message: "Unsupported catalogue schema \(schema)")])) }
             let document = try JSONDecoder().decode(StoryContentDocument.self, from: data)
-            let diagnostics = validate(document, assetExists: assetExists)
+            let diagnostics = validate(document, restrictedResourceIDs: restrictedResourceIDs, assetExists: assetExists)
             if !diagnostics.isEmpty { return .failure(.init(diagnostics: diagnostics)) }
             return .success(StoryContentCatalogue(document))
         } catch {
@@ -54,7 +55,7 @@ enum StoryContentCatalogueLoader {
         }
     }
 
-    private static func validate(_ document: StoryContentDocument, assetExists: (String) -> Bool) -> [StoryContentDiagnostic] {
+    private static func validate(_ document: StoryContentDocument, restrictedResourceIDs: Set<String>, assetExists: (String) -> Bool) -> [StoryContentDiagnostic] {
         var diagnostics: [StoryContentDiagnostic] = []
         func report(_ code: StoryContentDiagnostic.Code, _ path: String, _ message: String) {
             diagnostics.append(.init(code: code, path: path, message: message))
@@ -92,6 +93,9 @@ enum StoryContentCatalogueLoader {
             let numbers = item.versions.map(\.version).sorted()
             if numbers.isEmpty || numbers != Array(1...max(1, numbers.count)) || item.versions.first(where: { $0.version == 1 })?.id != item.initialVersionID {
                 report(.invalidVersion, item.id, "Retain contiguous immutable versions starting at 1, with version 1 as initial")
+            }
+            if let resourceID = item.restrictedResourceID, !restrictedResourceIDs.contains(resourceID) {
+                report(.missingReference, item.id, "Unknown restricted resource: " + resourceID)
             }
             let conditions = item.unlockConditions ?? []
             for condition in conditions {

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EE5800082E3A000000000001 /* RestrictedAccess.json in Resources */ = {isa = PBXBuildFile; fileRef = EE5800072E3A000000000001 /* RestrictedAccess.json */; };
+        EE5800062E3A000000000001 /* RestrictedAccessViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800052E3A000000000001 /* RestrictedAccessViews.swift */; };
+        EE5800042E3A000000000001 /* RestrictedAccessStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800032E3A000000000001 /* RestrictedAccessStore.swift */; };
+        EE5800022E3A000000000001 /* RestrictedAccessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800012E3A000000000001 /* RestrictedAccessModels.swift */; };
         EE5400062E36000000000001 /* StorySurfaceContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400052E36000000000001 /* StorySurfaceContent.swift */; };
         EE5400042E36000000000001 /* EvidenceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400032E36000000000001 /* EvidenceViews.swift */; };
         EE5400022E36000000000001 /* EvidenceComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400012E36000000000001 /* EvidenceComparison.swift */; };
@@ -58,6 +62,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EE5800072E3A000000000001 /* RestrictedAccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RestrictedAccess.json; sourceTree = "<group>"; };
+        EE5800052E3A000000000001 /* RestrictedAccessViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedAccessViews.swift; sourceTree = "<group>"; };
+        EE5800032E3A000000000001 /* RestrictedAccessStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedAccessStore.swift; sourceTree = "<group>"; };
+        EE5800012E3A000000000001 /* RestrictedAccessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedAccessModels.swift; sourceTree = "<group>"; };
         EE5400052E36000000000001 /* StorySurfaceContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySurfaceContent.swift; sourceTree = "<group>"; };
         EE5400032E36000000000001 /* EvidenceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceViews.swift; sourceTree = "<group>"; };
         EE5400012E36000000000001 /* EvidenceComparison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceComparison.swift; sourceTree = "<group>"; };
@@ -161,6 +169,10 @@
                 EE5400052E36000000000001 /* StorySurfaceContent.swift */,
                 EE5400032E36000000000001 /* EvidenceViews.swift */,
                 EE5400012E36000000000001 /* EvidenceComparison.swift */,
+                EE5800012E3A000000000001 /* RestrictedAccessModels.swift */,
+                EE5800032E3A000000000001 /* RestrictedAccessStore.swift */,
+                EE5800052E3A000000000001 /* RestrictedAccessViews.swift */,
+                EE5800072E3A000000000001 /* RestrictedAccess.json */,
                 EE5300092E35000000000001 /* StoryContent.json */,
                 EE5300072E35000000000001 /* StoryContentStore.swift */,
                 EE5300052E35000000000001 /* StoryContentCatalogue.swift */,
@@ -261,6 +273,7 @@
 			files = (
 				EE9899F42B6C3144003201BE /* Preview Assets.xcassets in Resources */,
 				EE9899F12B6C3144003201BE /* Assets.xcassets in Resources */,
+                EE5800082E3A000000000001 /* RestrictedAccess.json in Resources */,
                 EE53000A2E35000000000001 /* StoryContent.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,6 +303,9 @@
                 EE5400062E36000000000001 /* StorySurfaceContent.swift in Sources */,
                 EE5400042E36000000000001 /* EvidenceViews.swift in Sources */,
                 EE5400022E36000000000001 /* EvidenceComparison.swift in Sources */,
+                EE5800022E3A000000000001 /* RestrictedAccessModels.swift in Sources */,
+                EE5800042E3A000000000001 /* RestrictedAccessStore.swift in Sources */,
+                EE5800062E3A000000000001 /* RestrictedAccessViews.swift in Sources */,
                 EE5300082E35000000000001 /* StoryContentStore.swift in Sources */,
                 EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */,
                 EE5300042E35000000000001 /* StoryContentRules.swift in Sources */,

@@ -25,6 +25,7 @@ final class AppState: ObservableObject {
 
     let story: StoryProgressionStore
     let content: StoryContentStore
+    let access: RestrictedAccessStore
 
     // Compatibility queries now read the single saved narrative authority.
     var currentDay: Int { story.state.time.relativeDay }
@@ -41,7 +42,9 @@ final class AppState: ObservableObject {
     init(story: StoryProgressionStore? = nil,
          catalogue: Result<StoryContentCatalogue, StoryContentLoadFailure>? = nil) {
         self.story = story ?? StoryProgressionStore()
-        self.content = StoryContentStore(progression: self.story, catalogue: catalogue ?? StoryContentCatalogueLoader.load())
+        self.access = RestrictedAccessStore(progression: self.story, catalogue: RestrictedAccessCatalogueLoader.load())
+        let contentCatalogue = catalogue ?? StoryContentCatalogueLoader.load(restrictedResourceIDs: Set(self.access.catalogue?.resources.map(\.id) ?? []))
+        self.content = StoryContentStore(progression: self.story, catalogue: contentCatalogue, access: self.access)
         self.story.onStateWillChange = { [weak self] in self?.objectWillChange.send() }
         self.story.onStateDidChange = { [weak self] in
             guard let self, let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) else { return }
