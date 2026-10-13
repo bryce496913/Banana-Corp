@@ -140,6 +140,7 @@ struct BananaOSView: View {
         case .snake: SnakeGameView()
         case .pong: PongGameView()
         case .xo: XOGameView()
+        case .evidence: EvidenceVaultView()
         }
     }
 }

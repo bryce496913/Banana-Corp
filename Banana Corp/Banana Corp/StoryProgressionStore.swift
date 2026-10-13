@@ -24,6 +24,7 @@ enum StoryAction {
     case activateContentVersion(contentID: String, versionID: String)
     case queueNotification(contentID: String, versionID: String)
     case acknowledgeNotification(String)
+    case recordEvidenceComparison(evidenceID: String, changed: Bool)
 }
 
 enum StoryActionError: Error, Equatable {
@@ -203,6 +204,9 @@ final class StoryProgressionStore {
             for id in [record.sourceContentID, record.sourceVersionID] where !state.discoveredContentIDs.contains(id) {
                 throw StoryActionError.contentNotDiscovered(id)
             }
+            if let old = state.preservedEvidence.values.first(where: { $0.sourceContentID == record.sourceContentID && $0.sourceVersionID == record.sourceVersionID }), old != record {
+                throw StoryActionError.conflictingRecord(record.id)
+            }
             if let old = state.preservedEvidence[record.id], old != record { throw StoryActionError.conflictingRecord(record.id) }
             state.preservedEvidence[record.id] = record
         case .recordReplacement(let record):
@@ -262,6 +266,14 @@ final class StoryProgressionStore {
             try requireID(id)
             guard state.contentDelivery.notifications[id] != nil else { throw StoryActionError.invalidRecord }
             state.contentDelivery.notifications[id]?.status = .delivered
+        case .recordEvidenceComparison(let evidenceID, let changed):
+            guard state.preservedEvidence[evidenceID] != nil else { throw StoryActionError.invalidRecord }
+            let performedID = "event.compare." + evidenceID
+            try requireID(performedID); state.completedEventIDs.insert(performedID)
+            if changed {
+                let changedID = "event.diff." + evidenceID
+                try requireID(changedID); state.completedEventIDs.insert(changedID)
+            }
         }
     }
 }

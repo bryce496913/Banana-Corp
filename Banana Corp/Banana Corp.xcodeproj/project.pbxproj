@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EE5400062E36000000000001 /* StorySurfaceContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400052E36000000000001 /* StorySurfaceContent.swift */; };
+        EE5400042E36000000000001 /* EvidenceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400032E36000000000001 /* EvidenceViews.swift */; };
+        EE5400022E36000000000001 /* EvidenceComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5400012E36000000000001 /* EvidenceComparison.swift */; };
         EE53000A2E35000000000001 /* StoryContent.json in Resources */ = {isa = PBXBuildFile; fileRef = EE5300092E35000000000001 /* StoryContent.json */; };
         EE5300082E35000000000001 /* StoryContentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300072E35000000000001 /* StoryContentStore.swift */; };
         EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5300052E35000000000001 /* StoryContentCatalogue.swift */; };
@@ -55,6 +58,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EE5400052E36000000000001 /* StorySurfaceContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySurfaceContent.swift; sourceTree = "<group>"; };
+        EE5400032E36000000000001 /* EvidenceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceViews.swift; sourceTree = "<group>"; };
+        EE5400012E36000000000001 /* EvidenceComparison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceComparison.swift; sourceTree = "<group>"; };
         EE5300092E35000000000001 /* StoryContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryContent.json; sourceTree = "<group>"; };
         EE5300072E35000000000001 /* StoryContentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentStore.swift; sourceTree = "<group>"; };
         EE5300052E35000000000001 /* StoryContentCatalogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentCatalogue.swift; sourceTree = "<group>"; };
@@ -152,6 +158,9 @@
 				EEBB00032E28000000000001 /* PhoneHomeIndicator.swift */,
 				EEBB00012E28000000000001 /* GlassCompatibility.swift */,
 				EE989A002B6C34DB003201BE /* AppState.swift */,
+                EE5400052E36000000000001 /* StorySurfaceContent.swift */,
+                EE5400032E36000000000001 /* EvidenceViews.swift */,
+                EE5400012E36000000000001 /* EvidenceComparison.swift */,
                 EE5300092E35000000000001 /* StoryContent.json */,
                 EE5300072E35000000000001 /* StoryContentStore.swift */,
                 EE5300052E35000000000001 /* StoryContentCatalogue.swift */,
@@ -278,6 +287,9 @@
 				EE9899EF2B6C3142003201BE /* ContentView.swift in Sources */,
 				EE989A0C2B6C517A003201BE /* SocialXView.swift in Sources */,
 				EE989A012B6C34DB003201BE /* AppState.swift in Sources */,
+                EE5400062E36000000000001 /* StorySurfaceContent.swift in Sources */,
+                EE5400042E36000000000001 /* EvidenceViews.swift in Sources */,
+                EE5400022E36000000000001 /* EvidenceComparison.swift in Sources */,
                 EE5300082E35000000000001 /* StoryContentStore.swift in Sources */,
                 EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */,
                 EE5300042E35000000000001 /* StoryContentRules.swift in Sources */,

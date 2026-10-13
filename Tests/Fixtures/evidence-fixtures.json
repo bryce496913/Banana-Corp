@@ -1,0 +1,450 @@
+{
+  "schemaVersion": 1,
+  "facts": {
+    "milestoneCompleted": [
+      "milestone.fixture.email_read",
+      "milestone.fixture.preserved",
+      "milestone.fixture.compared"
+    ],
+    "observerClueFound": [
+      "observer.fixture.email",
+      "observer.fixture.secured"
+    ],
+    "accessGranted": [
+      "access.fixture.external"
+    ]
+  },
+  "items": [
+    {
+      "id": "content.fixture.email",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 10,
+      "initialVersionID": "version.fixture.email.v1",
+      "versions": [
+        {
+          "id": "version.fixture.email.v1",
+          "version": 1,
+          "title": "Development email fixture",
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Development fixture",
+              "recipients": [
+                "Device fixture"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Neutral email format fixture."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "revealContent",
+              "id": "content.fixture.web"
+            },
+            {
+              "type": "markMilestone",
+              "id": "milestone.fixture.email_read"
+            },
+            {
+              "type": "unlockRoute",
+              "route": "vrExperience"
+            },
+            {
+              "type": "queueNotification",
+              "id": "content.fixture.notifications"
+            },
+            {
+              "type": "recordClue",
+              "id": "observer.fixture.email"
+            }
+          ],
+          "preservedEvidenceID": "evidence.fixture.email.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.news",
+      "appSurface": "news",
+      "actAvailable": 1,
+      "order": 20,
+      "initialVersionID": "version.fixture.news.v1",
+      "versions": [
+        {
+          "id": "version.fixture.news.v1",
+          "version": 1,
+          "title": "Development news fixture",
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Development fixture",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Fixture heading"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Original development article fixture."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.news.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          },
+          "evidenceRules": {
+            "securedObserverClueID": "observer.fixture.secured",
+            "preservationMilestoneID": "milestone.fixture.preserved",
+            "comparisonMilestoneID": "milestone.fixture.compared"
+          }
+        },
+        {
+          "id": "version.fixture.news.v2",
+          "version": 2,
+          "title": "Alternate development article fixture",
+          "preservedEvidenceID": "evidence.fixture.news.v2",
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Development fixture",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Alternate development version. No story scene."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.messages",
+      "appSurface": "messages",
+      "actAvailable": 1,
+      "order": 30,
+      "initialVersionID": "version.fixture.messages.v1",
+      "versions": [
+        {
+          "id": "version.fixture.messages.v1",
+          "version": 1,
+          "title": "Development messages fixture",
+          "payload": {
+            "type": "messages",
+            "data": {
+              "participants": [
+                "Development fixture",
+                "Device fixture"
+              ],
+              "messages": [
+                {
+                  "id": "message.fixture.one",
+                  "sender": "Development fixture",
+                  "text": "Incoming format fixture.",
+                  "direction": "incoming"
+                },
+                {
+                  "id": "message.fixture.two",
+                  "sender": "Device fixture",
+                  "text": "Outgoing format fixture.",
+                  "direction": "outgoing"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "changeVersion",
+              "contentID": "content.fixture.news",
+              "versionID": "version.fixture.news.v2"
+            },
+            {
+              "type": "makeUnavailable",
+              "id": "content.fixture.social"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "content.fixture.email"
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.social",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 40,
+      "initialVersionID": "version.fixture.social.v1",
+      "versions": [
+        {
+          "id": "version.fixture.social.v1",
+          "version": 1,
+          "title": "Development social fixture",
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@DevelopmentFixture",
+              "text": "Neutral social format fixture.",
+              "replies": []
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.social.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.video",
+      "appSurface": "video",
+      "actAvailable": 1,
+      "order": 50,
+      "initialVersionID": "version.fixture.video.v1",
+      "versions": [
+        {
+          "id": "version.fixture.video.v1",
+          "version": 1,
+          "title": "Development video fixture",
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Development fixture",
+              "durationSeconds": 12,
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "Neutral transcript fixture."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.video.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.web",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 60,
+      "initialVersionID": "version.fixture.web.v1",
+      "versions": [
+        {
+          "id": "version.fixture.web.v1",
+          "version": 1,
+          "title": "Development web fixture",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/development-fixture",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Neutral local page fixture."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Development article",
+                  "contentID": "content.fixture.news"
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.web.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.photos",
+      "appSurface": "photos",
+      "actAvailable": 1,
+      "order": 70,
+      "initialVersionID": "version.fixture.photos.v1",
+      "versions": [
+        {
+          "id": "version.fixture.photos.v1",
+          "version": 1,
+          "title": "Development photos fixture",
+          "payload": {
+            "type": "photos",
+            "data": {
+              "caption": "Metadata format fixture.",
+              "metadata": {
+                "fixture": "metadata",
+                "camera": "Development fixture"
+              }
+            }
+          },
+          "preservedEvidenceID": "evidence.fixture.photos.v1",
+          "timestampLabel": "Fixture morning",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "author": "Development fixture",
+          "source": "Local development fixture",
+          "narrativeMetadata": {
+            "fixturePurpose": "evidence test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.assistant",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 80,
+      "initialVersionID": "version.fixture.assistant.v1",
+      "versions": [
+        {
+          "id": "version.fixture.assistant.v1",
+          "version": 1,
+          "title": "Development assistant fixture",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.fixture.one",
+                  "role": "assistant",
+                  "text": "Neutral response format fixture."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "all",
+          "conditions": [
+            {
+              "type": "observerClueFound",
+              "id": "observer.fixture.email"
+            },
+            {
+              "type": "accessGranted",
+              "id": "access.fixture.external"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.diagnostics",
+      "appSurface": "diagnostics",
+      "actAvailable": 1,
+      "order": 90,
+      "initialVersionID": "version.fixture.diagnostics.v1",
+      "versions": [
+        {
+          "id": "version.fixture.diagnostics.v1",
+          "version": 1,
+          "title": "Development diagnostics fixture",
+          "payload": {
+            "type": "diagnostics",
+            "data": {
+              "entries": [
+                {
+                  "id": "diagnostic.fixture.one",
+                  "level": "info",
+                  "key": "fixture",
+                  "value": "neutral diagnostic format"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.read.version.fixture.email.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.fixture.notifications",
+      "appSurface": "notifications",
+      "actAvailable": 1,
+      "order": 100,
+      "initialVersionID": "version.fixture.notifications.v1",
+      "versions": [
+        {
+          "id": "version.fixture.notifications.v1",
+          "version": 1,
+          "title": "Development notifications fixture",
+          "payload": {
+            "type": "notifications",
+            "data": {
+              "message": "Neutral notification format fixture.",
+              "targetContentID": "content.fixture.email"
+            }
+          }
+        }
+      ],
+      "visibility": "hiddenUntilRevealed"
+    }
+  ]
+}

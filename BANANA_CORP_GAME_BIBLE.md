@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Last updated:** 2026-10-12  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -210,7 +210,7 @@ Turn isolated anomalies into a pattern the player can verify. Make evidence pres
 
 ### Mechanics established here
 
-Evidence can be preserved before a source is edited or removed. The precise saving interaction and storage surface are `[TBD]`. A preserved copy must remain distinguishable from a later live version.
+Evidence can be preserved before a source is edited or removed. Pass 4 implements the basic **Preserve Evidence** interaction and the **Evidence** archive utility; scene-specific timing, eligibility and recovery clues remain `[TBD]`. A preserved copy must remain distinguishable from a later live version.
 
 ### Assistant behavior
 
@@ -392,6 +392,18 @@ Pass 3 adds an offline, shared content catalogue and delivery engine. Stable con
 
 The authored JSON schema and delivery contracts are documented in `docs/story-content-schema.md`. Content production, exact availability gates, and scene timing remain subject to canon and story approval.
 
+### Implemented evidence utility — Pass 4
+
+The canonical utility route and title are **Evidence** (`evidence`). It is available from the start without a new introduction, puzzle or act gate. Existing customized home layouts append this route once without resetting other placements or duplicating it in the dock.
+
+- Preserve Evidence freezes an eligible exact source version in the existing progression save. The immutable snapshot includes source surface, title, author/source metadata, original fictional timestamps where supplied, structured payload and optional narrative/evidence metadata. The player's real preservation time remains separate. No second evidence store or generic evidence score is introduced.
+- Shared controls/readers support Email, News, Social X, Browser, Video and Photos content. Their existing empty layouts remain until approved catalogue entries are authored. Preservation is explicit and does not run read effects; repeated preservation of the same version creates no duplicate or refreshed copy.
+- Evidence lists and opens saved snapshots independently of live-source replacement/removal. Comparison shows actual displayed-field differences or a factual unavailable-source state. Version IDs/numbers alone do not prove a content edit, and ordinary changes or missing data are not labeled supernatural interference.
+- Optional, explicitly authored evidence rules may secure a declared Observer clue or preservation milestone for that exact eligible version. An authored comparison milestone requires visible differences against an accessible live version. Unrelated saves, missing proof and unverified/missing live definitions award no such milestone. Comparison events remain idempotent and do not read another source or activate a chapter.
+- Source definitions, preserved bytes and timestamps remain stable through navigation and relaunch. Unreadable evidence is retained and shown as unavailable rather than silently replaced or removed.
+
+This pass authors only neutral test fixtures, not new player-facing story scenes, clues, puzzle answers or ending prerequisites. Detailed behavior and validation are documented in `docs/evidence-vault.md`.
+
 ## 14. The in-game phone and app roles
 
 | App / surface | Narrative role | Interaction and evolution |
@@ -405,12 +417,13 @@ The authored JSON schema and delivery contracts are documented in `docs/story-co
 | Social X | Launch enthusiasm, anecdotal symptoms, warning posts and their suppression | Compare public image with individual accounts |
 | WatchVideo | Promotional media and contradictory recordings | Alex Rivera’s warning/replacement is a key evidence beat |
 | Photo Album | Visual clues and metadata | Laboratory group-photo metadata contains M-02 |
+| Evidence | Neutral utility for preserved investigative content | Immutable saved snapshots, source metadata and factual live comparison; available from the start without a mandatory unlock |
 | Settings | Product realism and access beyond the controlled environment | Hidden/system access supports fictional hacking; exact steps `[TBD]` |
 | AI Assistant | Reassurance, redirection, manipulation, conflict, possible rescue cooperation | Phase-aware responses; diagnostic log contains M-03 |
 | VR Experience | In-phone representation of the headset experience | Exact narrative sequences `[TBD]`; real headset hardware is not required by the premise |
 | Snake, Pong, Tic Tac Toe/XO and other games | Normality, play, and possible story clues | Existing mini-game ideas remain; story integration is `[PROPOSED]` |
 
-Files, Voice Memos, Calendar, or a dedicated Diagnostics app are possible additions, not a confirmed requirement to build every app. Diagnostic content is established; its final UI location beyond the known Assistant log is `[TBD]`.
+A separate Files app, Voice Memos, Calendar, or a dedicated Diagnostics app remain possible additions, not a confirmed requirement to build every app. Evidence is the implemented archive route; do not add a duplicate archive under another title. Diagnostic content is established; its final UI location beyond the known Assistant log is `[TBD]`.
 
 ### Mini-game boundaries
 
@@ -585,7 +598,7 @@ Use checks appropriate to the actual change. This checklist is not an instructio
 9. **Character outcomes:** Daniel’s complete resolution, Alex’s fate, Vale’s ultimate accountability, Maya’s BLACKOUT outcome, and individual Signal members.
 10. **Observer ontology:** What exists outside the session, what THE AWAKENING proves, and what remains ambiguous.
 11. **Real-world integration:** Exact triggers, weather provider, permission policy, offline behavior, location use, and fallbacks.
-12. **Evidence interface:** How players preserve, revisit, and compare content; whether a new app is needed.
+12. **Evidence extensions:** Scene-specific preservation/comparison timing, missed-evidence recovery and any advanced archive features. The basic Preserve Evidence action and Evidence utility are approved by Pass 4.
 13. **Hint and accessibility design:** Presentation, availability, and equivalent forms of audio/visual clues.
 14. **Content production:** Full scripts and copy for each app and act, including notification previews and ending screens.
 15. **Endgame/replay:** Saves at the final decision, chapter replay, multiple-ending collection, and post-ending phone state.
@@ -618,4 +631,5 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-12 | 1.0 | Created the consolidated game bible from the established premise and five-act Story progression planning discussion. Added names, research systems, character responsibility, spoiler boundaries, access/rescue frameworks, all established endings, copy inventory, and maintenance instructions. Marked unresolved details `[TBD]` and new implementation defaults `[PROPOSED]`. |
 | 2026-10-12 | 1.1 | Pass 2: documented the authorized persistent progression infrastructure, explicit/idempotent actions, controlled consecutive-act validation, independent local story saves, recovery/reset contracts, and separated story-time concepts. No content, later-act rules, puzzle solutions, scoring, or ending requirements were added. |
 | 2026-10-12 | 1.2 | Pass 3: documented local structured content/catalogue validation, read-only availability, explicit once-per-version read effects, immutable evidence/version receipts, passive notification delivery and save schema 2 migration. Only test fixtures were authored; player-facing content, chronology and ending requirements remain unchanged. |
+| 2026-10-12 | 1.3 | Pass 4: approved Evidence as the neutral archive utility, explicit eligible-version preservation, frozen source metadata/timestamps, factual comparison, exact-version deduplication and optional version-specific preservation/comparison facts. No new narrative scenes, reveal timing, puzzle gates or ending requirements were introduced. |
 

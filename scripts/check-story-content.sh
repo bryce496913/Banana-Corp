@@ -14,6 +14,7 @@ swiftc -swift-version 5 -warnings-as-errors \
     "$repo_root/Banana Corp/Banana Corp/StoryContentRules.swift" \
     "$repo_root/Banana Corp/Banana Corp/StoryContentCatalogue.swift" \
     "$repo_root/Banana Corp/Banana Corp/StoryContentStore.swift" \
+    "$repo_root/Banana Corp/Banana Corp/EvidenceComparison.swift" \
     "$repo_root/Tests/StoryContentChecks.swift" \
     -o "$test_dir/story-content-checks"
 fixture="$repo_root/Tests/Fixtures/story-content-fixtures.json"

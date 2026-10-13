@@ -150,6 +150,7 @@ struct PhoneAppInfo: Identifiable {
         case .snake: return PhoneAppInfo(title: "Snake", image: .symbol("gamecontroller.fill"), route: .snake)
         case .pong: return PhoneAppInfo(title: "Pong", image: .symbol("circle.grid.cross.fill"), route: .pong)
         case .xo: return PhoneAppInfo(title: "X / O", image: .symbol("square.grid.3x3.fill"), route: .xo)
+        case .evidence: return PhoneAppInfo(title: "Evidence", image: .symbol("archivebox.fill"), route: .evidence)
         }
     }
 }
