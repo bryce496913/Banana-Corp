@@ -2,7 +2,7 @@
 
 ## Canon and scope
 
-The approved [root game bible](../BANANA_CORP_GAME_BIBLE.md) is authoritative for story, narrative, mechanics, progression, puzzles, and endings. Pass 1 installed the supplied version 1.0 unchanged. Versions 1.1–1.3 record the progression, content and evidence mechanics authorized by Passes 2–4 without changing the plot. [Repository instructions](../AGENTS.md) govern agent work. No narrative content is implemented by these passes.
+The approved [root game bible](../BANANA_CORP_GAME_BIBLE.md) is authoritative for story, narrative, mechanics, progression, puzzles, and endings. Pass 1 installed the supplied version 1.0 unchanged. Versions 1.1–1.3 record the progression, content and evidence mechanics authorized by Passes 2–4 without changing the plot. [Repository instructions](../AGENTS.md) govern agent work. Pass 5/version 1.4 adds the explicitly authorized opening Act 1 catalogue.
 
 The current structure is:
 
@@ -21,7 +21,7 @@ Source paths below are relative to the repository root; the app source directory
 | Responsibility | Current implementation | Future work (planned, not implemented) |
 | --- | --- | --- |
 | Shared state | AppState.swift owns StoryProgressionStore; day, VR/glitch flags and availability derive from its saved state. OS navigation/presentation remain in AppState | Approved content should integrate with this authority; do not create another story store |
-| Content | StoryContentModels/Rules/Catalogue/Store provide typed offline content, validation, availability and explicit delivery. The production JSON is empty; six sources now use a conditional shared reader with their original placeholders as fallbacks | Approved narrative authoring and app-content UI migration are planned; development fixtures are tests only |
+| Content | StoryContentModels/Rules/Catalogue/Store provide typed offline content, validation, availability and explicit delivery. Pass 5 production JSON contains 20 opening Act 1 items; seven surfaces use shared readers and Assistant/VR use structured catalogue payloads | Opening copy and article/promo-to-leak gates are approved in [act-one-content.md](act-one-content.md); later content is planned and development fixtures remain tests only |
 | Evidence | Existing preservedEvidence ledger, EvidenceComparison/EvidenceViews and shared preservation controls provide immutable snapshots and factual comparison | Authored clue rules, source availability and scene-specific timing remain subject to story approval |
 | Progression | StoryState.swift, StoryPrerequisites.swift and StoryProgressionStore.swift provide five-act facts, deterministic conditions and guarded actions | Content-specific prerequisites, production act-transition rules and ending evaluators still require story approval |
 | Visual presentation | OSPresentationState.swift, OSVisualComponents.swift and AppState's explicit predicate APIs | Approved progression callers may request effects; visual modes are not acts or autonomous story triggers |
@@ -58,12 +58,14 @@ Explicit story approval is required before adding hidden morality scoring, trust
 
 These observations do not authorize fixes or new design decisions:
 
-- The live status bar uses the real clock immediately. The bible establishes a 9:41 opening motif and “launch tomorrow”; its relationship to real time/story calendar remains TBD. No fixed clock or launch date was added.
-- `currentDay` defaults to 1 and derives from saved relative-day context. VR/glitch compatibility facts and app availability are saved, but have no automatic story triggers. Corruption level remains a cosmetic in-memory input. All fifteen routed apps, including the neutral Evidence utility, initially appear in `unlockedApps`; no canonical clue gates or mandatory elapsed days are implemented.
-- App shells describe device activation/registration/calibration limits, but there is no activation progression. Those placeholders must not become new story prerequisites by inference.
-- VRExperienceView currently displays “BANANA VR”; the canonical product is Banana Vision. This copy difference is recorded, not changed in this documentation pass. Real headset ownership is not a canon requirement.
-- Persistent evidence/version records, access/puzzle/route facts and an optional ASCENSION milestone now have infrastructure. Shared catalogue delivery and basic preservation/comparison UI now exist, but story-specific rules, narrative content, Banana Wall access, LANTERN, BLACKOUT, Maya's identity puzzle, DAWN, negotiation and Observer endings remain unimplemented. No bible act or ending should be reported complete based on the existing UI or generic engine.
+- The live status bar uses the real clock immediately. The bible establishes a 9:41 opening motif and “launch tomorrow”; Pass 5 uses fictional day-1 welcome timestamps for 9:41 and narrative day 2 for “tomorrow.” A fixed-to-live clock sequence remains TBD; no fixed clock or calendar-specific launch date was added.
+- `currentDay` defaults to 1 and derives from saved relative-day context. VR/glitch compatibility facts and app availability are saved, but have no automatic story triggers. Corruption level remains a cosmetic in-memory input. All fifteen routed apps, including the neutral Evidence utility, initially appear in `unlockedApps`; the article/promo content gates are implemented, but there are no app locks or mandatory elapsed days.
+- Act 1 supplies ordinary content rather than activation gates. Only one article and the explicitly completed promo are required for the ECHO email; no mini-game, preview or every-app requirement exists.
+- Pass 5 replaces the “BANANA VR” placeholder with the canonical Banana Vision optional product preview. Physical headset ownership is not required.
+- Persistent evidence/version records, access/puzzle/route facts and an optional ASCENSION milestone now have infrastructure. Shared catalogue delivery and basic preservation/comparison UI now exist, but later narrative rules/content, Banana Wall access, LANTERN, BLACKOUT, Maya's identity puzzle, DAWN, negotiation and Observer endings remain unimplemented. No bible act or ending should be reported complete based on the existing UI or generic engine.
 - Snake, Pong and XO have OS routes. Flap Flap is compiled but unrouted. The bible treats possible story integration as proposed; none is an approved mandatory gate.
 - Presentation APIs have explicit caller predicates and bounded effects; they do not establish when story disturbances occur. Environmental context exposes local time/date and optional supplied weather without a weather service or location collection. Approved context triggers remain future work.
 
-Pass 1 found no conflicting standalone story outline or prior AGENTS.md and established canon precedence. Passes 2–4 add progression/content infrastructure, offline resources, the Evidence utility and its shared source interactions; the existing launch flow, theme, source empty layouts, OS navigation mechanics, home persistence, mini-games, deployment target and dependencies are retained.
+Pass 1 found no conflicting standalone story outline or prior AGENTS.md and established canon precedence. Passes 2–4 add progression/content infrastructure and Evidence. Pass 5 supplies the opening Act 1 content and shared readers, preserving launch, theme, OS navigation, home arrangement persistence, mini-games, deployment target and dependencies. Readiness does not advance the act; replacement/warning/handoff remain future work.
+
+Run `scripts/check-act-one.sh` for the actual production opening catalogue, explicit engagement gates, reveal boundaries and separate-process story/evidence persistence. See [the inventory and contracts](act-one-content.md).

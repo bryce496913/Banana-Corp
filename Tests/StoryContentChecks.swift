@@ -35,7 +35,8 @@ import Foundation
 
     static func validateLoading(_ fixture: Data, productionURL: URL) throws {
         let production = try StoryContentCatalogueLoader.load(fileURL: productionURL).get()
-        precondition(production.items.isEmpty)
+        precondition(!production.items.isEmpty)
+        precondition(production.items.allSatisfy { $0.actAvailable == .thePerfectProduct })
         rejects(StoryContentCatalogueLoader.load(fileURL: nil), .missingResource)
         rejects(StoryContentCatalogueLoader.load(fileURL: URL(string: "https://example.invalid/catalogue.json")), .missingResource)
         rejects(StoryContentCatalogueLoader.load(data: Data("invalid".utf8)), .malformedJSON)
