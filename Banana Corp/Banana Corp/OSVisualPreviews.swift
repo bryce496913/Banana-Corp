@@ -29,7 +29,7 @@ enum OSVisualPreviewConfiguration {
 }
 
 private struct OSVisualPreviewHarness: View {
-    @StateObject private var appState = AppState()
+    @StateObject private var appState = AppState(story: StoryProgressionStore(persistence: InMemoryStoryPersistence()))
     @State private var mode: OSVisualMode = .normal
     let initialMode: OSVisualMode
 
