@@ -3,20 +3,10 @@ import SwiftUI
 struct MessagerView: View {
     var body: some View {
         PhoneShellView(title: "Messages") {
-            VStack(spacing: 0) {
+            StorySurfaceContent(surface: .messages) {
                 AppScreenScroll {
-                    AppSectionHeader("Conversations")
-                    AppEmptyState(
-                        symbol: "bubble.left.and.bubble.right",
-                        title: "No active conversations...",
-                        message: "Encrypted threads are waiting for device activation."
-                    )
+                    AppEmptyState(symbol: "bubble.left.and.bubble.right", title: "No conversations", message: "Incoming conversations will appear here.")
                 }
-                AppMessageComposer(
-                    prompt: "Message",
-                    unavailableReason: "Encrypted threads are waiting for device activation.",
-                    text: .constant("")
-                )
             }
         }
     }

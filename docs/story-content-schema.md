@@ -1,16 +1,16 @@
 # Local story catalogue and delivery
 
-This implements Pass 3 under [the canonical bible](../BANANA_CORP_GAME_BIBLE.md). The production resource `Banana Corp/Banana Corp/StoryContent.json` is intentionally empty. All eleven story-app placeholder views remain intact, including their unavailable controls. Their activation/registration/calibration text does not establish new story gates. There is no full Act 1 rollout or Act 2 replacement scene.
+This implements Pass 3 under [the canonical bible](../BANANA_CORP_GAME_BIBLE.md). Pass 3 initially left `Banana Corp/Banana Corp/StoryContent.json` empty. Pass 5 now includes 20 approved opening Act 1 items and structured source readers, Assistant choices and a product teaser; see [the inventory](act-one-content.md). Placeholder activation text does not establish gates. The first replacement/contradiction and Act 2 handoff remain outside this opening rollout.
 
 ## Ownership and files
 
-AppState owns StoryContentStore and the existing StoryProgressionStore. ContentStore holds an immutable validated catalogue; all mutable delivery facts live in the progression save. Email/Messages badges query available unread versions from this store, with no second saved counter. Production has zero entries, so badges stay zero until approved content is authored. Catalogue diagnostics remain observable through the store even if a resource is absent; placeholders continue rendering.
+AppState owns StoryContentStore and the existing StoryProgressionStore. ContentStore holds an immutable validated catalogue; all mutable delivery facts live in the progression save. Email/Messages badges query available unread versions from this store, with no second saved counter. Pass 5 production badges reflect the welcome email/conversation and later eligible ECHO email. Catalogue diagnostics remain observable; shared readers display a recovery error for unavailable resources/saves.
 
 The app source directory contains StoryContentModels.swift (typed formats), StoryContentRules.swift (tagged Codable conditions/effects), StoryContentCatalogue.swift (offline loader/validator) and StoryContentStore.swift (queries, explicit reads/preservation and passive notification queue). StoryState/StoryProgressionStore retain ownership of persistent delivery facts and atomic commits. No service, dependency, notification permission, timer or background delivery pump is introduced.
 
 ## Catalogue schema 1
 
-The UTF-8 JSON envelope has `schemaVersion: 1`, `facts` and `items`. Optional `assets` declares bundled media. The valid empty production envelope is:
+The UTF-8 JSON envelope has `schemaVersion: 1`, `facts` and `items`. Optional `assets` declares bundled media. A minimal valid empty envelope is:
 
 ```json
 {"schemaVersion": 1, "facts": {}, "items": []}
@@ -96,7 +96,7 @@ The content layer uses the existing atomic story transaction: effects, notificat
 
 ## Fixtures and validation
 
-[The development fixture catalogue](../Tests/Fixtures/story-content-fixtures.json) covers all ten payload formats with neutral development labels, synthetic facts and an alternate article version. It is not an ARG scene and is not referenced in the app's Resources build phase. [The production catalogue](<../Banana Corp/Banana Corp/StoryContent.json>) is the only content resource bundled by this pass. Neither adds characters, real launch dates, canonical puzzle answers or a story chapter.
+[The development fixture catalogue](../Tests/Fixtures/story-content-fixtures.json) covers all ten payload formats with neutral development labels, synthetic facts and an alternate article version. It is not an ARG scene and is not referenced in the app's Resources build phase. [The production catalogue](<../Banana Corp/Banana Corp/StoryContent.json>) is the only content resource bundled by this pass. Fixtures introduce no story. The current production catalogue authors the user-approved opening content without real launch dates, puzzle answers or later reveals.
 
 Run `bash scripts/check-story-content.sh`, then the existing progression, navigation, home-layout and presentation checks. The content checks compile actual production code, validate malformed catalogues, test availability and deterministic ordering, verify query purity/read effects/event idempotency, version/evidence preservation, queued notification acknowledgement, schema migration and atomic failures. Separate-process write/read tests verify saved delivery after relaunch. Tests run offline; no Apple-SDK/runtime claim follows from Foundation compilation.
 
@@ -106,3 +106,7 @@ Actual results in this workspace:
 - Existing navigation (1,400 app cycles and 14 swipe cases), home layout/persistence (160 valid moves), and visual presentation checks passed. All 42 app sources passed DEBUG syntax parsing.
 - Static checks verified all 42 source references, unique project IDs, iOS 18 deployment target, production resource membership, and fixture exclusion from the target. All app/placeholder/game views, launch, routes, home layout, navigation and status bar are unchanged. All 21 local Markdown links resolve; script syntax and whitespace checks passed with the bible's existing Markdown hard-break whitespace allowed.
 - `xcodebuild` and `xcrun` are unavailable. No Apple-SDK typecheck, simulator launch, native resource-copy runtime, badge rendering or SwiftUI integration result is claimed. Those require Xcode 26+ on supported iOS 18/iOS 26 simulators.
+
+## Explicit presentation completion — Pass 5
+
+`StoryContentStore.completePresentation` checks the selected live video version and a bounded final-panel progress state before invoking the ordinary atomic read/effects transaction. Opening a video row and stepping through panels never read it. The final confirmation is the engagement criterion for the asset-free Act 1 promo; there is no imaginary media duration. This adds no persisted schema field or migration. Source timestamps are displayed through the existing relative story-time context; stored snapshot labels/timestamps remain immutable.

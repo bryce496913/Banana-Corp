@@ -1,6 +1,6 @@
 import Foundation
 
-enum StoryAppSurface: String, Codable, CaseIterable {
+enum StoryAppSurface: String, Codable, CaseIterable, Hashable {
     case email, news, messages, social, video, web, photos, assistant, diagnostics, notifications
 }
 
@@ -226,5 +226,21 @@ struct StoryJSONKey: CodingKey {
         guard Set(keys).isSubset(of: allowed) else {
             throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "Unknown rule/payload fields"))
         }
+    }
+}
+
+/// The launch is narrative day 2, regardless of installation date or time zone.
+enum StoryContentTime {
+    static let launchDay = NarrativeTimestamp(day: 2, hour: 9, minute: 41)
+    static func label(for version: StoryContentVersion, context: StoryTimeContext) -> String? {
+        guard let timestamp = version.narrativeTimestamp, let relative = context.label(for: timestamp) else { return version.timestampLabel }
+        let day: String
+        switch relative {
+        case .today: day = "Today"
+        case .tomorrow: day = "Tomorrow"
+        case .yesterday: day = "Yesterday"
+        case .offset: day = "Story day \(timestamp.day)"
+        }
+        return String(format: "%@ · %02d:%02d", day, timestamp.hour, timestamp.minute)
     }
 }

@@ -1,7 +1,7 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.3  
-**Last updated:** 2026-10-12  
+**Version:** 1.4  
+**Last updated:** 2026-10-13  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
 
@@ -182,6 +182,18 @@ Established product copy includes **“A New Way to See Everything.”**
 - Content disappears or changes, introducing a mismatch between what the player saw and what the phone now shows.
 - An unknown warning tells the player not to trust the Assistant.
 - “Project ECHO” becomes an investigation lead without revealing its full meaning.
+
+### Approved opening implementation — Pass 5
+
+The user authorizes first-draft Act 1 catalogue copy: three external technology articles, the official **A New Way to See Everything** presentation, five public social reactions, a local Banana Vision product site/optional preview, corporate welcome email/messages, deterministic Assistant guidance and the anonymous ECHO leak. Incidental source/display names are not new major characters. The leak's full draft is restrained: unresolved internal review cases conflict with public claims about user-selected preferences; its subject/signature remain canonical. This does not reveal the underlying conspiracy.
+
+The opening references **9:41** through fictional day-1 welcome timestamps, while the status bar retains real-world time. Launch is narrative day 2 (“tomorrow”); neither elapsed real days nor a calendar-specific date advances the story. A separate fixed-to-live opening clock sequence remains `[TBD]`.
+
+Explicitly reading any one launch article establishes news context. Completing the five-panel official presentation through its final **Finish presentation** action establishes promotional context; there is no finished video asset or imaginary playback-duration gate. Both saved facts, in either order, make the leaked email available. Opening an app/list or preserving a copy does not satisfy a read requirement. Optional Social X, Browser, Assistant, Settings, games and the VR preview are not mandatory gates.
+
+Reading the leak records **first suspicious material encountered**, a readiness milestone for Pass 6. Its original source stays live and preservable. Pass 5 does not remove/replace sources, deliver the unknown warning, activate Assistant denial or advance into Act 2. Pass 6 will complete the first contradiction and define the handoff. Existing act-transition rules stay unconfigured.
+
+The Assistant uses locally authored question/answer choices rather than pretending to understand arbitrary input. The welcome service conversation supports incoming messages and per-thread unread/read state; it introduces no named story contact or reply puzzle. The optional on-phone VR teaser records engagement without requiring physical headset hardware. Its exact later horror sequences remain `[TBD]`. See `docs/act-one-content.md` for the immutable inventory and engagement contracts.
 
 ### Assistant behavior
 
@@ -388,7 +400,7 @@ Pass 3 adds an offline, shared content catalogue and delivery engine. Stable con
 - Declarative effects can reveal content, mark milestones, unlock existing routes, queue fictional notifications, switch an explicit version, remove content, and record Observer clues. Queueing is passive and does not read another item or recursively run its effects. These mechanisms do not establish any new story trigger or Observer requirement.
 - Original versions remain in the catalogue. Saved version receipts detect edits under previously used version IDs; preserved snapshots retain their original bytes independently of later catalogue changes. Missing or changed definitions produce diagnostics rather than deleting progress or refreshing preserved evidence.
 - Story save schema 2 adds delivery facts and a version-1 migration that preserves existing progress. Home layout persistence remains separate. Unread Email/Messages counts now derive from shared available/read content.
-- The production catalogue is intentionally empty. Neutral development fixtures cover the formats only in tests and are not bundled as player content. Existing story-app placeholders remain unchanged; no complete Act 1, Act 2 replacement scene, new character, ending rule, or narrative text is implemented.
+- Pass 3 initially left the production catalogue empty and authored only neutral test fixtures outside the bundle. Pass 5 now authors the approved opening Act 1 catalogue; Act 2 replacement scenes and ending requirements remain outside that pass.
 
 The authored JSON schema and delivery contracts are documented in `docs/story-content-schema.md`. Content production, exact availability gates, and scene timing remain subject to canon and story approval.
 
@@ -588,7 +600,7 @@ Use checks appropriate to the actual change. This checklist is not an instructio
 ## 22. Open decisions
 
 1. **Player identity:** Who is the player within the fiction, why do they have this phone, and why are they an Observer subject?
-2. **Opening and clock:** How does the 9:41 opening transition into real-world time? How is “launch tomorrow” modeled?
+2. **Opening and clock:** A separate fixed-to-live 9:41 clock sequence remains undecided. Pass 5 uses day-1 welcome timestamps with a live status clock and narrative day 2 for “tomorrow”; later day advancement remains unresolved.
 3. **Story pacing:** Session-based versus multi-day progression; required waits, catch-up behavior, and overall duration.
 4. **Research chronology:** Specific dates, sentience emergence, Maya’s disappearance, and Daniel’s leak timing.
 5. **Energy mechanism:** The exact fictional explanation for harvesting human power and system dependency.
@@ -600,7 +612,7 @@ Use checks appropriate to the actual change. This checklist is not an instructio
 11. **Real-world integration:** Exact triggers, weather provider, permission policy, offline behavior, location use, and fallbacks.
 12. **Evidence extensions:** Scene-specific preservation/comparison timing, missed-evidence recovery and any advanced archive features. The basic Preserve Evidence action and Evidence utility are approved by Pass 4.
 13. **Hint and accessibility design:** Presentation, availability, and equivalent forms of audio/visual clues.
-14. **Content production:** Full scripts and copy for each app and act, including notification previews and ending screens.
+14. **Content production:** Scripts beyond the Pass 5 approved opening catalogue, including later notification previews and ending screens.
 15. **Endgame/replay:** Saves at the final decision, chapter replay, multiple-ending collection, and post-ending phone state.
 16. **Optional apps and mini-games:** Which proposals become story content and whether any become essential.
 17. **Actual implementation audit:** Map existing code to this bible before claiming any act, trigger, or ending is complete.
@@ -632,4 +644,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-12 | 1.1 | Pass 2: documented the authorized persistent progression infrastructure, explicit/idempotent actions, controlled consecutive-act validation, independent local story saves, recovery/reset contracts, and separated story-time concepts. No content, later-act rules, puzzle solutions, scoring, or ending requirements were added. |
 | 2026-10-12 | 1.2 | Pass 3: documented local structured content/catalogue validation, read-only availability, explicit once-per-version read effects, immutable evidence/version receipts, passive notification delivery and save schema 2 migration. Only test fixtures were authored; player-facing content, chronology and ending requirements remain unchanged. |
 | 2026-10-12 | 1.3 | Pass 4: approved Evidence as the neutral archive utility, explicit eligible-version preservation, frozen source metadata/timestamps, factual comparison, exact-version deduplication and optional version-specific preservation/comparison facts. No new narrative scenes, reveal timing, puzzle gates or ending requirements were introduced. |
-
+| 2026-10-13 | 1.4 | Pass 5: authorized opening Act 1 catalogue drafts, relative launch context/9:41 welcome timestamps, explicit article/promo prerequisites for the anonymous ECHO leak, readiness-only milestone, local Assistant/service messages and optional product teaser. The first contradiction, warning, denial and Act 2 handoff remain reserved for Pass 6; no later reveals, puzzle gates, scoring or ending contracts changed. |

@@ -1,5 +1,927 @@
 {
   "schemaVersion": 1,
-  "facts": {},
-  "items": []
+  "facts": {
+    "milestoneCompleted": [
+      "milestone.act1.news_context",
+      "milestone.act1.promo_viewed",
+      "milestone.act1.first_suspicious_material",
+      "milestone.act1.vr_preview_engaged"
+    ]
+  },
+  "items": [
+    {
+      "id": "content.act1.news.launch",
+      "appSurface": "news",
+      "actAvailable": 1,
+      "order": 0,
+      "initialVersionID": "version.act1.news.launch.v1",
+      "versions": [
+        {
+          "id": "version.act1.news.launch.v1",
+          "version": 1,
+          "title": "Banana Vision launches tomorrow. What should we expect?",
+          "subtitle": "A familiar company is betting on a very different kind of screen.",
+          "author": "Circuit Daily",
+          "source": "Circuit Daily",
+          "timestampLabel": "Today · 09:20",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 20
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Circuit Daily",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Corp will introduce Banana Vision tomorrow, putting its mixed-reality ambitions in front of a much larger audience. The company describes the AR/VR headset as a way to place digital tools alongside the world rather than behind another rectangle."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The demonstrations emphasize ordinary tasks: arranging a workspace, sharing a large viewing surface and moving between digital and physical surroundings. Banana Corp says its adaptive interface will make those transitions feel natural. Independent launch coverage will need to test how well that promise holds up outside a demonstration."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "For now, the message is unmistakably ambitious: “A New Way to See Everything.” Tomorrow’s presentation should offer the first clear look at whether the hardware can make that slogan practical."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.news_context"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act1.news.launch.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.news.interface",
+      "appSurface": "news",
+      "actAvailable": 1,
+      "order": 10,
+      "initialVersionID": "version.act1.news.interface.v1",
+      "versions": [
+        {
+          "id": "version.act1.news.interface.v1",
+          "version": 1,
+          "title": "The interface is the real Banana Vision pitch",
+          "subtitle": "The headset promises less menu navigation, not just more screen space.",
+          "author": "Interface Review",
+          "source": "Interface Review",
+          "timestampLabel": "Today · 09:21",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 21
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Interface Review",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Headset announcements often begin with display specifications. Banana Corp has taken a different approach, showing people bringing useful information into view and letting it recede when they turn back to their surroundings."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Its public materials call this an adaptive interface: presentation that responds to the person using it. During a preview briefing, the company said its internal review checks whether adaptations remain consistent with a user’s selected preferences. That distinction may matter more than any single feature on the launch slide."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The demos are carefully chosen, and a demo is not a long-term test. We will be looking for clear settings and predictable behavior when Banana Vision launches tomorrow. An interface that gets out of the way still needs to explain what it is doing."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.news_context"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act1.news.interface.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.news.influence",
+      "appSurface": "news",
+      "actAvailable": 1,
+      "order": 20,
+      "initialVersionID": "version.act1.news.influence.v1",
+      "versions": [
+        {
+          "id": "version.act1.news.influence.v1",
+          "version": 1,
+          "title": "Why tomorrow’s headset launch matters beyond Banana Corp",
+          "subtitle": "Developers and competitors are watching the same announcement.",
+          "author": "Market & Matter",
+          "source": "Market & Matter",
+          "timestampLabel": "Today · 09:22",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 22
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Market & Matter",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Corp already occupies a familiar place in personal technology. Banana Vision is its attempt to make that influence extend into the space around a device, rather than stop at its screen."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Developers are watching the company’s launch materials for a practical answer to a simple question: what will people choose to do in mixed reality every day? Large work surfaces and shared entertainment are promising examples, but the broader ecosystem will depend on useful experiences people return to."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Tomorrow’s launch has become a talking point well beyond headset enthusiasts. It is a test of how much room a major technology company can open for a category that still needs to earn a place in ordinary routines."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.news_context"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act1.news.influence.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.promo",
+      "appSurface": "video",
+      "actAvailable": 1,
+      "order": 30,
+      "initialVersionID": "version.act1.promo.v1",
+      "versions": [
+        {
+          "id": "version.act1.promo.v1",
+          "version": 1,
+          "title": "A New Way to See Everything",
+          "subtitle": "The official Banana Vision presentation.",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 09:35",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 35
+          },
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Banana Corp",
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "A New Way to See Everything. Introducing Banana Vision."
+                },
+                {
+                  "startSeconds": 1,
+                  "text": "Give your ideas room. Bring a workspace into view, then return to the world around you."
+                },
+                {
+                  "startSeconds": 2,
+                  "text": "Make time together feel closer. Discover a new space for entertainment and shared experiences."
+                },
+                {
+                  "startSeconds": 3,
+                  "text": "An adaptive interface, built around you. Choose your preferences and explore at your own pace."
+                },
+                {
+                  "startSeconds": 4,
+                  "text": "Banana Vision launches tomorrow. Welcome to the future."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.promo_viewed"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act1.promo.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.social.early",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 40,
+      "initialVersionID": "version.act1.social.early.v1",
+      "versions": [
+        {
+          "id": "version.act1.social.early.v1",
+          "version": 1,
+          "title": "Rin",
+          "subtitle": "Already cleared a corner of my desk for tomorrow. If those floating workspaces are half as useful as the demo, I’m in.",
+          "author": "Rin",
+          "source": "Rin",
+          "timestampLabel": "Today · 09:25",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 25
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@rin_makes",
+              "text": "Already cleared a corner of my desk for tomorrow. If those floating workspaces are half as useful as the demo, I’m in."
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.social.early.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.social.commentary",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 50,
+      "initialVersionID": "version.act1.social.commentary.v1",
+      "versions": [
+        {
+          "id": "version.act1.social.commentary.v1",
+          "version": 1,
+          "title": "Interface Notes",
+          "subtitle": "The interesting Banana Vision question isn’t how many windows fit in a room. It’s how easily you can put them away. Watching tomorrow’s launch for that.",
+          "author": "Interface Notes",
+          "source": "Interface Notes",
+          "timestampLabel": "Today · 09:26",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 26
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@interface_notes",
+              "text": "The interesting Banana Vision question isn’t how many windows fit in a room. It’s how easily you can put them away. Watching tomorrow’s launch for that."
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.social.commentary.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.social.creator",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 60,
+      "initialVersionID": "version.act1.social.creator.v1",
+      "versions": [
+        {
+          "id": "version.act1.social.creator.v1",
+          "version": 1,
+          "title": "Weekend Frames",
+          "subtitle": "Trying to picture a movie night with a screen that doesn’t need a wall. Banana Vision has my attention. Demo recap after the launch!",
+          "author": "Weekend Frames",
+          "source": "Weekend Frames",
+          "timestampLabel": "Today · 09:27",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 27
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@weekendframes",
+              "text": "Trying to picture a movie night with a screen that doesn’t need a wall. Banana Vision has my attention. Demo recap after the launch!"
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.social.creator.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.social.prediction",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 70,
+      "initialVersionID": "version.act1.social.prediction.v1",
+      "versions": [
+        {
+          "id": "version.act1.social.prediction.v1",
+          "version": 1,
+          "title": "Jules",
+          "subtitle": "Calling it now: shared workspaces will be the quiet hit. Everyone talks about entertainment, but I want room for a reference page beside what I’m making.",
+          "author": "Jules",
+          "source": "Jules",
+          "timestampLabel": "Today · 09:28",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 28
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@jules_builds",
+              "text": "Calling it now: shared workspaces will be the quiet hit. Everyone talks about entertainment, but I want room for a reference page beside what I’m making."
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.social.prediction.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.social.ordinary",
+      "appSurface": "social",
+      "actAvailable": 1,
+      "order": 80,
+      "initialVersionID": "version.act1.social.ordinary.v1",
+      "versions": [
+        {
+          "id": "version.act1.social.ordinary.v1",
+          "version": 1,
+          "title": "Sam",
+          "subtitle": "My group chat has gone from “another headset?” to arguing about which part of the Banana Vision demo looked best. Tomorrow should be fun.",
+          "author": "Sam",
+          "source": "Sam",
+          "timestampLabel": "Today · 09:29",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 29
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@sam_afterhours",
+              "text": "My group chat has gone from “another headset?” to arguing about which part of the Banana Vision demo looked best. Tomorrow should be fun."
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.social.ordinary.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.product",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 90,
+      "initialVersionID": "version.act1.product.v1",
+      "versions": [
+        {
+          "id": "version.act1.product.v1",
+          "version": 1,
+          "title": "Banana Vision",
+          "subtitle": "A New Way to See Everything.",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 09:34",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 34
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/banana-vision",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "A New Way to See Everything"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Meet Banana Vision, the AR/VR headset designed to bring digital experiences into your world."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Room for your ideas"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Arrange a workspace around the task at hand. Keep useful tools in view without losing the surroundings that matter to you."
+                },
+                {
+                  "kind": "heading",
+                  "text": "A new space to share"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Explore entertainment and shared experiences on a viewing surface that feels larger than your phone."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Built around you"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "An adaptive interface helps you move between experiences. Your preferences remain accessible, so you can choose how you use Banana Vision."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Launches tomorrow"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Explore the official presentation and product preview while you get ready for launch."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Before you begin"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These are product-preview descriptions. Demonstrations illustrate intended experiences; final feature availability may vary. This phone preview does not connect to or require a physical headset."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Explore the official presentation",
+                  "contentID": "content.act1.promo"
+                },
+                {
+                  "label": "Try the product preview",
+                  "contentID": "content.act1.vr_preview"
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.act1.product.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.vr_preview",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 100,
+      "initialVersionID": "version.act1.vr_preview.v1",
+      "versions": [
+        {
+          "id": "version.act1.vr_preview.v1",
+          "version": 1,
+          "title": "Your space, reimagined",
+          "subtitle": "A Banana Vision product preview.",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 09:36",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 36
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/banana-vision/preview",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Bring a workspace into view"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Imagine your references beside your work, with room to arrange them the way you think."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Make room for a shared experience"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "A viewing surface becomes a space to spend time together."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Return to your surroundings"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Bring the digital experience forward when you need it, and put it away when you are ready."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Explore at your own pace. This is an on-phone product preview, not a headset connection or calibration."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.vr_preview_engaged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content.act1.welcome",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 110,
+      "initialVersionID": "version.act1.welcome.v1",
+      "versions": [
+        {
+          "id": "version.act1.welcome.v1",
+          "version": 1,
+          "title": "Welcome to the future.",
+          "subtitle": "Your Banana Corp phone is ready to explore.",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Banana Corp Welcome",
+              "recipients": [
+                "Device owner"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Welcome to your Banana Corp phone. Start with the news, explore Banana Vision in Watch Video, or visit the product page in Web Browser."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Vision launches tomorrow. There is plenty to discover while you wait."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Arrange your apps by holding an icon, and return home using the control beneath an app. Banana Assist can help you find your way."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.echo_review",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 120,
+      "initialVersionID": "version.act1.echo_review.v1",
+      "versions": [
+        {
+          "id": "version.act1.echo_review.v1",
+          "version": 1,
+          "title": "RE: Project ECHO — Internal Review",
+          "subtitle": "Internal correspondence",
+          "author": "Internal correspondence",
+          "source": "Internal correspondence",
+          "timestampLabel": "Today · 09:42",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 42
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "D. · forwarded internal correspondence",
+              "recipients": [
+                "Internal Review"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The launch summary says the adaptive interface stays within the preferences a user selects. The current review does not establish that for every case we tested."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "I asked for the unresolved cases to stay in the record. The copy circulating for sign-off now treats them as closed, but I have not seen a corresponding review."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Please compare the review notes with the public wording before approving the summary. This thread was not intended for external distribution."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "— D."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act1.first_suspicious_material"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act1.echo_review.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act1.news_context"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act1.promo_viewed"
+        }
+      ]
+    },
+    {
+      "id": "content.act1.messages.welcome",
+      "appSurface": "messages",
+      "actAvailable": 1,
+      "order": 130,
+      "initialVersionID": "version.act1.messages.welcome.v1",
+      "versions": [
+        {
+          "id": "version.act1.messages.welcome.v1",
+          "version": 1,
+          "title": "Banana Corp Welcome",
+          "subtitle": "Your phone is ready.",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "messages",
+            "data": {
+              "participants": [
+                "Banana Corp Welcome",
+                "Device owner"
+              ],
+              "messages": [
+                {
+                  "id": "message.act1.welcome.ready",
+                  "sender": "Banana Corp Welcome",
+                  "text": "Welcome to the future. Your phone is ready to explore.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 09:41"
+                },
+                {
+                  "id": "message.act1.welcome.guide",
+                  "sender": "Banana Corp Welcome",
+                  "text": "Banana Vision launches tomorrow. News has the latest coverage, and the official presentation is in Watch Video. Banana Assist can help with your phone.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 09:41"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.welcome",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 140,
+      "initialVersionID": "version.act1.assistant.welcome.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.welcome.v1",
+          "version": 1,
+          "title": "Welcome to Banana Assist",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.welcome.assistant",
+                  "role": "assistant",
+                  "text": "Welcome to the future. I’m here to help you explore your Banana Corp phone and learn about Banana Vision. Choose a question below to get started."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.vision",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 150,
+      "initialVersionID": "version.act1.assistant.vision.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.vision.v1",
+          "version": 1,
+          "title": "What is Banana Vision?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.vision.user",
+                  "role": "user",
+                  "text": "What is Banana Vision?"
+                },
+                {
+                  "id": "turn.act1.vision.assistant",
+                  "role": "assistant",
+                  "text": "Banana Vision is Banana Corp’s AR/VR headset. It brings digital workspaces and shared experiences into view alongside your surroundings. The official presentation in Watch Video introduces the product."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.launch",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 160,
+      "initialVersionID": "version.act1.assistant.launch.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.launch.v1",
+          "version": 1,
+          "title": "When does it launch?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.launch.user",
+                  "role": "user",
+                  "text": "When does Banana Vision launch?"
+                },
+                {
+                  "id": "turn.act1.launch.assistant",
+                  "role": "assistant",
+                  "text": "Banana Vision launches tomorrow. You can explore the product page and current news coverage while you wait."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.navigation",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 170,
+      "initialVersionID": "version.act1.assistant.navigation.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.navigation.v1",
+          "version": 1,
+          "title": "How do I use this phone?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.navigation.user",
+                  "role": "user",
+                  "text": "How do I use this phone?"
+                },
+                {
+                  "id": "turn.act1.navigation.assistant",
+                  "role": "assistant",
+                  "text": "Tap an app to open it. Use the Home control beneath the app to return, or swipe upward from that control. Hold an icon to arrange your apps, then choose Done. Settings and games are ready whenever you want to explore."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.evidence",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 180,
+      "initialVersionID": "version.act1.assistant.evidence.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.evidence.v1",
+          "version": 1,
+          "title": "How do I save a copy?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.evidence.user",
+                  "role": "user",
+                  "text": "How do I save a copy?"
+                },
+                {
+                  "id": "turn.act1.evidence.assistant",
+                  "role": "assistant",
+                  "text": "When a source offers Preserve Evidence, it saves an exact copy in Evidence. You can reopen that snapshot later and compare it with the current source. Saving a copy does not change the source."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.act1.assistant.choices",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 190,
+      "initialVersionID": "version.act1.assistant.choices.v1",
+      "versions": [
+        {
+          "id": "version.act1.assistant.choices.v1",
+          "version": 1,
+          "title": "What can I ask?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 09:41",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 9,
+            "minute": 41
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act1.choices.user",
+                  "role": "user",
+                  "text": "What can I ask here?"
+                },
+                {
+                  "id": "turn.act1.choices.assistant",
+                  "role": "assistant",
+                  "text": "I can answer the questions listed here about Banana Vision and your phone. Choose one of those questions; this interface does not accept open-ended requests."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

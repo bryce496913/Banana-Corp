@@ -24,6 +24,7 @@ enum StoryContentDeliveryError: Error, Equatable {
     case unknownContent(String)
     case unknownVersion(String)
     case contentUnavailable
+    case presentationIncomplete
     case staleVersion
     case definitionChanged(String)
     case invalidSnapshot
@@ -94,6 +95,16 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
         guard resolvedVersion(item: item, versionID: requested, state: state) != nil else { return .unresolved }
         if requested != liveID { return .replaced(liveVersionID: liveID) }
         return state.readContentIDs.contains(requested) ? .read : .availableUnread
+    }
+
+    /// A local video presentation counts as viewed only after its final panel and explicit confirmation.
+    /// Opening its row, preserving it or advancing a panel never emits a read.
+    @discardableResult
+    func completePresentation(_ id: String, versionID: String, progress: StoryPresentationProgress) -> StoryContentDeliveryResult {
+        guard let version = currentVersion(for: id), version.id == versionID else { return .failure(.staleVersion) }
+        guard case .video(let payload) = version.payload,
+              progress.canComplete(count: payload.transcript?.count ?? 0) else { return .failure(.presentationIncomplete) }
+        return read(id, versionID: versionID)
     }
 
     /// The UI must pass the version actually opened; stale list/detail selections cannot read a newer version.

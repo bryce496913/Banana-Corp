@@ -71,6 +71,15 @@ struct HomeScreenView: View {
                     .modernSurface(in: Capsule(), tint: AppTheme.Colors.accent.opacity(0.12), interactive: true)
                     .buttonStyle(.appContent)
             }
+        } else if let welcome = appState.content.availableItems(for: .email).first(where: { $0.id == "content.act1.welcome" }) {
+            HStack {
+                Text(welcome.version.title).appText(.systemLabel, color: AppTheme.Colors.secondaryText)
+                Spacer()
+                Button("Explore") { appState.open(.news) }
+                    .buttonStyle(.appContent)
+                    .frame(minHeight: AppTheme.Layout.touchTarget)
+                    .accessibilityHint("Open launch coverage in News.")
+            }
         }
     }
 

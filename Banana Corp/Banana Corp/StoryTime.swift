@@ -43,3 +43,14 @@ struct StoryTimeContext: Equatable {
         }
     }
 }
+
+/// Deliberate, bounded steps; no elapsed-time gate or automatic completion.
+struct StoryPresentationProgress: Equatable {
+    private(set) var index = 0
+    func canComplete(count: Int) -> Bool { count > 0 && index == count - 1 }
+    mutating func advance(count: Int) {
+        guard count > 0, index < count - 1 else { return }
+        index += 1
+    }
+    mutating func goBack() { index = max(0, index - 1) }
+}
