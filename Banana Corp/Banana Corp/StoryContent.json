@@ -6,14 +6,36 @@
       "milestone.act1.promo_viewed",
       "milestone.act1.first_suspicious_material",
       "milestone.act1.vr_preview_engaged",
-      "milestone.act1.first_contradiction_investigated"
+      "milestone.act1.first_contradiction_investigated",
+      "milestone.act2.cross_app_confirmation",
+      "milestone.act2.daniel_lead_followed",
+      "milestone.act2.diagnostics_examined",
+      "milestone.act2.echo07_findings_read",
+      "milestone.act2.independent_record_read",
+      "milestone.act2.maya_lead_followed",
+      "milestone.act2.official_response_read",
+      "milestone.act2.replacement_inspected",
+      "milestone.act2.saved_warning_compared",
+      "milestone.act2.symptom_reports_investigated",
+      "milestone.act2.warning_preserved",
+      "milestone.act2.warning_replaced",
+      "milestone.act2.warning_viewed"
     ],
     "eventCompleted": [
       "event.act1.first_anomaly.email_removed",
-      "event.act1.first_anomaly.presentation_consumed"
+      "event.act1.first_anomaly.presentation_consumed",
+      "event.act2.alex_review.replaced",
+      "event.act2.social.disorientation_edited",
+      "event.act2.social.memory_removed",
+      "event.act2.news.concerns_edited",
+      "event.act2.web.preview_updated",
+      "event.act2.sources_connected"
     ],
     "assistantFact": [
-      "assistant.act1.first_anomaly_questioned"
+      "assistant.act1.first_anomaly_questioned",
+      "assistant.act2.edits_questioned",
+      "assistant.act2.symptoms_questioned",
+      "assistant.act2.echo_questioned"
     ]
   },
   "items": [
@@ -1215,6 +1237,1291 @@
         {
           "type": "eventCompleted",
           "id": "event.act1.first_anomaly.email_removed"
+        }
+      ],
+      "visibility": "hiddenUntilRevealed"
+    },
+    {
+      "id": "content.act2.alex_review",
+      "appSurface": "video",
+      "actAvailable": 2,
+      "order": 1250,
+      "initialVersionID": "version.act2.alex_review.v1",
+      "versions": [
+        {
+          "id": "version.act2.alex_review.v1",
+          "version": 1,
+          "title": "Banana Vision preview — a warning",
+          "subtitle": "Original transcript record · no playable video included",
+          "author": "Alex Rivera · @AlexRiveraTech",
+          "source": "Alex Rivera · @AlexRiveraTech",
+          "timestampLabel": "Today · 10:05",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 5
+          },
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Alex Rivera · @AlexRiveraTech",
+              "sourcePath": "/watch/alexrivera/banana-vision-preview",
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "I’m Alex Rivera. I tried Banana Vision at a preview, and I need to add something to my first impressions."
+                },
+                {
+                  "startSeconds": 1,
+                  "text": "Some parts were impressive. But afterward I could not put the sequence of the session back together. I remembered starting a task, then found myself at a different part of the demonstration."
+                },
+                {
+                  "startSeconds": 2,
+                  "text": "That is my account, not a diagnosis. I have seen other preview visitors asking similar questions, and I think those questions deserve a record rather than another highlight reel."
+                },
+                {
+                  "startSeconds": 3,
+                  "text": "The company says its adaptive interface follows the preferences you choose. I want to know what happens when a person cannot account for part of the experience."
+                },
+                {
+                  "startSeconds": 4,
+                  "text": "Keep the original context when you discuss this. I’m asking for an explanation, not claiming I have found the cause."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Ask Banana Assist about the warning",
+                  "contentID": "content.act2.assistant.alex_original"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.warning_viewed"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.alex_review.v1",
+          "evidenceRules": {
+            "preservationMilestoneID": "milestone.act2.warning_preserved",
+            "comparisonMilestoneID": "milestone.act2.saved_warning_compared"
+          }
+        },
+        {
+          "id": "version.act2.alex_review.v2",
+          "version": 2,
+          "title": "Banana Vision preview — no doubts",
+          "subtitle": "Current transcript record · no playable video included",
+          "author": "Alex Rivera · @AlexRiveraTech",
+          "source": "Alex Rivera · @AlexRiveraTech",
+          "timestampLabel": "Today · 10:20",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 20
+          },
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Alex Rivera · @AlexRiveraTech",
+              "sourcePath": "/watch/alexrivera/banana-vision-preview",
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "I’m Alex Rivera, and Banana Vision has left me excited about what comes next."
+                },
+                {
+                  "startSeconds": 1,
+                  "text": "The workspace demonstration was the standout. It felt like a natural way to put useful information where I needed it."
+                },
+                {
+                  "startSeconds": 2,
+                  "text": "There is always an adjustment period with a new interface. The preview made me eager to spend more time with the finished product."
+                },
+                {
+                  "startSeconds": 3,
+                  "text": "Banana Corp’s adaptive interface is a confident step forward. I’m looking forward to seeing more people explore it."
+                },
+                {
+                  "startSeconds": 4,
+                  "text": "Tomorrow’s launch is one to watch. This is a new way to see everything."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.replacement_inspected"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.alex_review.v2"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.social.disorientation",
+      "appSurface": "social",
+      "actAvailable": 2,
+      "order": 1260,
+      "initialVersionID": "version.act2.social.disorientation.v1",
+      "versions": [
+        {
+          "id": "version.act2.social.disorientation.v1",
+          "version": 1,
+          "title": "Rin",
+          "subtitle": "After the Banana Vision preview I needed a minute to work out where we were in the demo. The part that bothers me is the gap between the two tasks I remember. Did anyone else notice that?",
+          "author": "Rin",
+          "source": "Rin",
+          "timestampLabel": "Today · 10:09",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 9
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@rin_makes",
+              "text": "After the Banana Vision preview I needed a minute to work out where we were in the demo. The part that bothers me is the gap between the two tasks I remember. Did anyone else notice that?"
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.social.disorientation.v1"
+        },
+        {
+          "id": "version.act2.social.disorientation.v2",
+          "version": 2,
+          "title": "Rin",
+          "subtitle": "The Banana Vision preview took a little getting used to. A short break helped me reorient. Excited to try it again.",
+          "author": "Rin",
+          "source": "Rin",
+          "timestampLabel": "Today · 10:22",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 22
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@rin_makes",
+              "text": "The Banana Vision preview took a little getting used to. A short break helped me reorient. Excited to try it again."
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.social.disorientation.v2"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.social.memory",
+      "appSurface": "social",
+      "actAvailable": 2,
+      "order": 1270,
+      "initialVersionID": "version.act2.social.memory.v1",
+      "versions": [
+        {
+          "id": "version.act2.social.memory.v1",
+          "version": 1,
+          "title": "Sam",
+          "subtitle": "The preview staff said I finished a section I honestly do not remember starting. I am not calling it anything medical. I just want that mismatch written down.",
+          "author": "Sam",
+          "source": "Sam",
+          "timestampLabel": "Today · 10:10",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 10
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@sam_afterhours",
+              "text": "The preview staff said I finished a section I honestly do not remember starting. I am not calling it anything medical. I just want that mismatch written down."
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.social.memory.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.social.behavior",
+      "appSurface": "social",
+      "actAvailable": 2,
+      "order": 1280,
+      "initialVersionID": "version.act2.social.behavior.v1",
+      "versions": [
+        {
+          "id": "version.act2.social.behavior.v1",
+          "version": 1,
+          "title": "Jules",
+          "subtitle": "I went into the preview wanting to compare the workspace tools. Somehow I spent most of it repeating the same demonstration instead. Could be me getting carried away, but I cannot explain why I kept choosing it.",
+          "author": "Jules",
+          "source": "Jules",
+          "timestampLabel": "Today · 10:07",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 7
+          },
+          "payload": {
+            "type": "social",
+            "data": {
+              "handle": "@jules_builds",
+              "text": "I went into the preview wanting to compare the workspace tools. Somehow I spent most of it repeating the same demonstration instead. Could be me getting carried away, but I cannot explain why I kept choosing it."
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.social.behavior.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.news.concerns",
+      "appSurface": "news",
+      "actAvailable": 2,
+      "order": 1290,
+      "initialVersionID": "version.act2.news.concerns.v1",
+      "versions": [
+        {
+          "id": "version.act2.news.concerns.v1",
+          "version": 1,
+          "title": "Preview visitors ask what happened between the demos",
+          "subtitle": "Several accounts describe gaps they cannot readily explain.",
+          "author": "Circuit Daily",
+          "source": "Circuit Daily",
+          "timestampLabel": "Today · 10:10",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 10
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Circuit Daily",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Vision publicity continues to emphasize effortless transitions. Some preview visitors are asking a less comfortable question: why do parts of their sessions feel difficult to reconstruct?"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Separate accounts describe disorientation, a task completed without a clear recollection of starting it, and a repeated choice that felt unusual afterward. These are personal reports, not verified medical findings. They do not establish a cause, but their similarities warrant questions."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Corp describes the sessions as unfamiliar interface experiences and recommends time to adjust. We have asked how that explanation was assessed and whether the internal review considered these reports."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.news.concerns.v1"
+        },
+        {
+          "id": "version.act2.news.concerns.v2",
+          "version": 2,
+          "title": "Preview visitors adjust to a new interface",
+          "subtitle": "Banana Corp highlights familiarization guidance.",
+          "author": "Circuit Daily",
+          "source": "Circuit Daily",
+          "timestampLabel": "Today · 10:24",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 24
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Circuit Daily",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Vision publicity continues to emphasize effortless transitions. Preview visitors have discussed getting used to a new way of arranging digital tools."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Corp describes the sessions as unfamiliar interface experiences and recommends time to adjust. Visitors can take a break and review the product guidance before continuing."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The company remains focused on tomorrow’s launch and the opportunities for work and entertainment that follow."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.symptom_reports_investigated"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.news.concerns.v2"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.news.official",
+      "appSurface": "news",
+      "actAvailable": 2,
+      "order": 1300,
+      "initialVersionID": "version.act2.news.official.v1",
+      "versions": [
+        {
+          "id": "version.act2.news.official.v1",
+          "version": 1,
+          "title": "Banana Corp points to familiarization as questions grow",
+          "subtitle": "The official explanation leaves a gap between guidance and individual accounts.",
+          "author": "Interface Review",
+          "source": "Interface Review",
+          "timestampLabel": "Today · 10:12",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 12
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Interface Review",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Banana Corp says a mixed-reality preview can be unfamiliar, and that visitors should allow time to adjust. Its public guidance presents the adaptive interface as operating within selected preferences."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "That is a plausible explanation for some discomfort, but it does not by itself resolve reports of missing parts of a session. Several visitors distinguish feeling unfamiliar with the display from being unable to recall a completed task."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The company has not provided an account-by-account explanation. A product claim and a personal report can be compared without treating either as a clinical conclusion. We will continue to distinguish what the company says from what has been independently established."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.official_response_read"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.news.official.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.web.preview_notes",
+      "appSurface": "web",
+      "actAvailable": 2,
+      "order": 1310,
+      "initialVersionID": "version.act2.web.preview_notes.v1",
+      "versions": [
+        {
+          "id": "version.act2.web.preview_notes.v1",
+          "version": 1,
+          "title": "Banana Vision preview guidance",
+          "subtitle": "Official experience notes",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 10:06",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 6
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/banana-vision/preview-guidance",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Adaptive experiences"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The interface adapts presentation within your selected preferences."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Questions after a session"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "If part of a preview is difficult to recall, retain your session notes and contact the preview team with the details."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Familiarization"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Take a break when needed. Different visitors may need different amounts of time with a new interface."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.act2.web.preview_notes.v1"
+        },
+        {
+          "id": "version.act2.web.preview_notes.v2",
+          "version": 2,
+          "title": "Banana Vision preview guidance",
+          "subtitle": "Official experience notes",
+          "author": "Banana Corp",
+          "source": "Banana Corp",
+          "timestampLabel": "Today · 10:25",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 25
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/banana-vision/preview-guidance",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Adaptive experiences"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The interface adapts presentation within your selected preferences."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Questions after a session"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "For your safety, this information has been simplified."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Familiarization"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Take a break when needed. Consult the current guidance rather than incomplete session notes."
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.act2.web.preview_notes.v2"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.messages.daniel",
+      "appSurface": "messages",
+      "actAvailable": 2,
+      "order": 1320,
+      "initialVersionID": "version.act2.messages.daniel.v1",
+      "versions": [
+        {
+          "id": "version.act2.messages.daniel.v1",
+          "version": 1,
+          "title": "Daniel Mercer",
+          "subtitle": "About the internal review",
+          "author": "Daniel Mercer",
+          "source": "Daniel Mercer",
+          "timestampLabel": "Today · 10:26",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 26
+          },
+          "payload": {
+            "type": "messages",
+            "data": {
+              "participants": [
+                "Daniel Mercer",
+                "Device owner"
+              ],
+              "messages": [
+                {
+                  "id": "message.act2.daniel.identity",
+                  "sender": "Daniel Mercer",
+                  "text": "I sent the internal-review email. My name is Daniel Mercer. I work on neural systems at Banana Corp.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 10:26"
+                },
+                {
+                  "id": "message.act2.daniel.lead",
+                  "sender": "Daniel Mercer",
+                  "text": "What I asked to remain in the review is not what the public copy now says. You have seen another record change. Keep the sources separate and check what each actually supports.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 10:26"
+                },
+                {
+                  "id": "message.act2.daniel.maya",
+                  "sender": "Daniel Mercer",
+                  "text": "Look at Dr. Maya Chen’s ECHO-07 preliminary findings. They concern neural synchronization. Her summary gives you a reason to question the easy explanations, but it is not the whole research record.",
+                  "direction": "incoming",
+                  "timestampLabel": "Today · 10:27"
+                }
+              ],
+              "links": [
+                {
+                  "label": "Open Maya Chen’s research correspondence",
+                  "contentID": "content.act2.email.maya"
+                },
+                {
+                  "label": "Read the ECHO-07 preliminary findings",
+                  "contentID": "content.act2.web.echo07"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.daniel_lead_followed"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.replacement_inspected"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.symptom_reports_investigated"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.email.maya",
+      "appSurface": "email",
+      "actAvailable": 2,
+      "order": 1330,
+      "initialVersionID": "version.act2.email.maya.v1",
+      "versions": [
+        {
+          "id": "version.act2.email.maya.v1",
+          "version": 1,
+          "title": "ECHO-07 — preliminary review notes",
+          "subtitle": "Research correspondence from Dr. Maya Chen",
+          "author": "Dr. Maya Chen",
+          "source": "Dr. Maya Chen",
+          "timestampLabel": "Today · 10:28",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 28
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Dr. Maya Chen · Research correspondence",
+              "recipients": [
+                "Internal research review"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The ECHO-07 findings describe synchronization patterns that persist outside the expected session boundaries. Some of the activity continues after disconnection."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Please distinguish an interface adjustment from a change in the recorded cognitive patterns. A familiarization explanation does not account for everything in these observations."
+                },
+                {
+                  "kind": "quote",
+                  "text": "This isn’t a software malfunction. Something is making decisions."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The preliminary findings should be read alongside the session accounts. They are a lead for further investigation, not a complete explanation."
+                }
+              ],
+              "attachments": [
+                {
+                  "label": "Open the ECHO-07 findings excerpt",
+                  "contentID": "content.act2.web.echo07"
+                },
+                {
+                  "label": "Inspect the diagnostic excerpt",
+                  "contentID": "content.act2.diagnostics.excerpt"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.maya_lead_followed"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.email.maya.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.daniel_lead_followed"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.web.echo07",
+      "appSurface": "web",
+      "actAvailable": 2,
+      "order": 1340,
+      "initialVersionID": "version.act2.web.echo07.v1",
+      "versions": [
+        {
+          "id": "version.act2.web.echo07.v1",
+          "version": 1,
+          "title": "ECHO-07 — Neural Synchronization Trial — Preliminary Findings",
+          "subtitle": "Research excerpt · Dr. Maya Chen",
+          "author": "Dr. Maya Chen · ECHO-07 review",
+          "source": "Dr. Maya Chen · ECHO-07 review",
+          "timestampLabel": "Today · 10:29",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 29
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/echo-07/summary",
+              "blocks": [
+                {
+                  "kind": "heading",
+                  "text": "Review scope"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "ECHO-07 records preliminary neural-synchronization findings under Dr. Maya Chen’s review. This excerpt is not the complete trial archive."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Observations"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Synchronization coincides with changes in recorded cognitive patterns. Session accounts include gaps in recollection and repeated choices that participants cannot readily explain."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Transfer measurements"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The record labels a related set of measurements as energy transfer. Their relationship to the synchronization needs further investigation; this excerpt does not establish the complete mechanism."
+                },
+                {
+                  "kind": "heading",
+                  "text": "After disconnection"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Some recorded activity continues after disconnection rather than ending at the expected session boundary."
+                },
+                {
+                  "kind": "heading",
+                  "text": "Unresolved review"
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These observations do not fit a simple display-familiarization explanation. Compare the accounts, the guidance and the diagnostic record before drawing a conclusion about the cause."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the diagnostic excerpt",
+                  "contentID": "content.act2.diagnostics.excerpt"
+                },
+                {
+                  "label": "Read independent coverage of Alex’s source change",
+                  "contentID": "content.act2.news.corroboration"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.echo07_findings_read"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.web.echo07.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.daniel_lead_followed"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.diagnostics.excerpt",
+      "appSurface": "diagnostics",
+      "actAvailable": 2,
+      "order": 1350,
+      "initialVersionID": "version.act2.diagnostics.excerpt.v1",
+      "versions": [
+        {
+          "id": "version.act2.diagnostics.excerpt.v1",
+          "version": 1,
+          "title": "Assistant diagnostic excerpt",
+          "subtitle": "Review attachment",
+          "author": "Research review attachment",
+          "source": "Research review attachment",
+          "timestampLabel": "Today · 10:30",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "payload": {
+            "type": "diagnostics",
+            "data": {
+              "entries": [
+                {
+                  "id": "diagnostic.act2.override",
+                  "level": "warning",
+                  "key": "Override entry",
+                  "value": "ECHO_CORE — origin not resolved in this excerpt."
+                },
+                {
+                  "id": "diagnostic.act2.observer",
+                  "level": "warning",
+                  "key": "Observer channel",
+                  "value": "Header mismatch recorded during a content update. Scope unavailable."
+                },
+                {
+                  "id": "diagnostic.act2.audit",
+                  "level": "info",
+                  "key": "Review note",
+                  "value": "The record identifies an override and an unexplained channel mismatch. It does not identify who initiated them or explain their purpose."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.diagnostics_examined"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.diagnostics.excerpt.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.echo07_findings_read"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.news.corroboration",
+      "appSurface": "news",
+      "actAvailable": 2,
+      "order": 1360,
+      "initialVersionID": "version.act2.news.corroboration.v1",
+      "versions": [
+        {
+          "id": "version.act2.news.corroboration.v1",
+          "version": 1,
+          "title": "A warning has become a recommendation at the same source",
+          "subtitle": "Our earlier review notes do not match the current Alex Rivera listing.",
+          "author": "Circuit Daily · Media Desk",
+          "source": "Circuit Daily · Media Desk",
+          "timestampLabel": "Today · 10:31",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 31
+          },
+          "payload": {
+            "type": "news",
+            "data": {
+              "publication": "Circuit Daily · Media Desk",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "We noted Alex Rivera’s Banana Vision warning when it first appeared at his preview-review source. He described difficulty reconstructing the sequence of a demonstration and asked for an explanation."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The current listing at that same source presents enthusiastic recommendations instead. The reviewer identity and source location remain the same, while the title and transcript no longer describe those concerns."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This is an independently authored report based on our earlier review notes. It is not a copy saved by the reader, and it does not tell us why the source changed or what happened to Alex."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Other preview accounts and the wording in current product guidance provide separate records to check. Keep the difference between a changed source, a saved copy and independent reporting clear."
+                }
+              ],
+              "relatedContent": [
+                {
+                  "label": "Open the current Alex Rivera listing",
+                  "contentID": "content.act2.alex_review"
+                },
+                {
+                  "label": "Read the official explanation",
+                  "contentID": "content.act2.news.official"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act2.independent_record_read"
+            }
+          ],
+          "preservedEvidenceID": "evidence.act2.news.corroboration.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.replacement_inspected"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.alex_original",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1370,
+      "initialVersionID": "version.act2.assistant.alex_original.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.alex_original.v1",
+          "version": 1,
+          "title": "What about Alex Rivera’s warning?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.alex_original.user",
+                  "role": "user",
+                  "text": "Alex Rivera described a gap in his preview session. What should I make of that?"
+                },
+                {
+                  "id": "turn.act2.alex_original.assistant",
+                  "role": "assistant",
+                  "text": "Alex has shared a personal account. An unfamiliar interface can take time to adjust to, and an individual account does not establish a cause. Banana Corp’s current guidance may help you put the preview in context."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.warning_viewed"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.symptoms",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1380,
+      "initialVersionID": "version.act2.assistant.symptoms.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.symptoms.v1",
+          "version": 1,
+          "title": "Why are different visitors reporting gaps?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.symptoms.user",
+                  "role": "user",
+                  "text": "Several preview visitors describe disorientation or gaps in recollection."
+                },
+                {
+                  "id": "turn.act2.symptoms.assistant",
+                  "role": "assistant",
+                  "text": "I understand why those accounts caught your attention. Preview experiences can be unfamiliar, and personal reports need context. Banana Corp recommends time to adjust. I would distinguish those reports from a verified medical conclusion."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act2.symptoms_questioned"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.symptom_reports_investigated"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.edits",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1390,
+      "initialVersionID": "version.act2.assistant.edits.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.edits.v1",
+          "version": 1,
+          "title": "Why did Alex’s source change?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.edits.user",
+                  "role": "user",
+                  "text": "The same Alex Rivera source now recommends the product. Where did the warning go?"
+                },
+                {
+                  "id": "turn.act2.edits.assistant",
+                  "role": "assistant",
+                  "text": "Published records can be updated as their owners clarify an experience. The current listing is the version I can direct you to. A change alone does not establish wrongdoing, and older accounts can lack context. I would use the current guidance rather than assume the product is responsible."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act2.edits_questioned"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.replacement_inspected"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.removed",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1400,
+      "initialVersionID": "version.act2.assistant.removed.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.removed.v1",
+          "version": 1,
+          "title": "Why is the memory report unavailable?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.removed.user",
+                  "role": "user",
+                  "text": "Sam’s report is no longer in the feed."
+                },
+                {
+                  "id": "turn.act2.removed.assistant",
+                  "role": "assistant",
+                  "text": "A post may no longer be available after moderation or an account update. I cannot recover its live content here. Its absence does not establish the reason it was removed; I can help you look at the sources that remain available."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act2.social.memory_removed"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.echo",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1410,
+      "initialVersionID": "version.act2.assistant.echo.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.echo.v1",
+          "version": 1,
+          "title": "What is Project ECHO?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.echo.user",
+                  "role": "user",
+                  "text": "Daniel connected Project ECHO to a neural-systems review."
+                },
+                {
+                  "id": "turn.act2.echo.assistant",
+                  "role": "assistant",
+                  "text": "You have a research lead, but an internal project name is not a complete explanation. The available preliminary review can be read in its own context. I would avoid treating an unresolved review as proof about the finished product."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act2.echo_questioned"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.daniel_lead_followed"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.echo07",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1420,
+      "initialVersionID": "version.act2.assistant.echo07.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.echo07.v1",
+          "version": 1,
+          "title": "How do ECHO-07’s findings fit the guidance?",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.echo07.user",
+                  "role": "user",
+                  "text": "The ECHO-07 excerpt mentions cognitive changes and activity after disconnection. That does not sound like familiarization."
+                },
+                {
+                  "id": "turn.act2.echo07.assistant",
+                  "role": "assistant",
+                  "text": "Preliminary findings can describe observations without establishing their interpretation. The current product guidance remains the practical reference I can offer. I understand that the wording does not answer every question in the excerpt; I would not expand those questions into a conclusion about the cause."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.echo07_findings_read"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.assistant.saved_warning",
+      "appSurface": "assistant",
+      "actAvailable": 2,
+      "order": 1430,
+      "initialVersionID": "version.act2.assistant.saved_warning.v1",
+      "versions": [
+        {
+          "id": "version.act2.assistant.saved_warning.v1",
+          "version": 1,
+          "title": "My saved warning does not match the current source.",
+          "subtitle": null,
+          "author": "Banana Assist",
+          "source": "Banana Assist",
+          "timestampLabel": "Today · 10:32",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 32
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act2.saved_warning.user",
+                  "role": "user",
+                  "text": "I preserved Alex’s original transcript record. It describes concerns that the current source no longer contains."
+                },
+                {
+                  "id": "turn.act2.saved_warning.assistant",
+                  "role": "assistant",
+                  "text": "Your saved text record remains available in Evidence. It shows the earlier wording, but a preserved version does not explain why a publication changed. I would still use the current listing for product guidance rather than treat the difference as a conclusion about Banana Vision."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act2.edits_questioned"
+            }
+          ]
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.replacement_inspected"
+        },
+        {
+          "type": "evidencePreserved",
+          "id": "evidence.act2.alex_review.v1"
+        }
+      ]
+    },
+    {
+      "id": "content.act2.connection_summary",
+      "appSurface": "web",
+      "actAvailable": 2,
+      "order": 1440,
+      "initialVersionID": "version.act2.connection_summary.v1",
+      "versions": [
+        {
+          "id": "version.act2.connection_summary.v1",
+          "version": 1,
+          "title": "Connected accounts",
+          "subtitle": "Your investigation notes",
+          "author": "Your investigation",
+          "source": "Your investigation",
+          "timestampLabel": "Today · 10:33",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 10,
+            "minute": 33
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/investigation/connected-accounts",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Alex’s earlier warning and current recommendation occupy the same source location. You have checked either a preserved original transcript record or independent reporting of its earlier wording."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Separate visitors describe gaps or repeated choices. Public explanations do not resolve every account, and changing wording removes rather than answers some of the concerns."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Daniel identifies the internal-review warning as his correspondence. Maya’s ECHO-07 findings and the diagnostic excerpt provide a research lead beyond the public guidance."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These connected discrepancies justify further investigation. They do not yet identify the cause, explain the override, or establish the purpose of the unexplained channel. The next step is to reach information beyond the curated summaries."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "eventCompleted",
+          "id": "event.act2.sources_connected"
         }
       ],
       "visibility": "hiddenUntilRevealed"

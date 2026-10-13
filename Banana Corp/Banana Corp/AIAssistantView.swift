@@ -15,6 +15,18 @@ struct AIAssistantView: View {
                     StoryReadableContent(version: response.version)
                 }
                 FirstAnomalyHandoffControl()
+                if !appState.content.availableItems(for: .diagnostics).isEmpty {
+                    NavigationLink("Research diagnostic excerpts") {
+                        PhoneShellView(title: "Diagnostics") {
+                            VStack(alignment: .leading, spacing: 0) {
+                                EvidenceBackControl().padding(.horizontal, AppTheme.Spacing.lg)
+                                StorySurfaceContent(surface: .diagnostics) {
+                                    AppScreenScroll { AppEmptyState(symbol: "waveform.path.ecg", title: "No diagnostic excerpts", message: "Available review attachments will appear here.") }
+                                }
+                            }
+                        }
+                    }.buttonStyle(.modernPhone)
+                }
                 if responses.isEmpty {
                     AppErrorState(title: "Assistant unavailable", message: "The local responses or saved progress could not be loaded.")
                 } else {

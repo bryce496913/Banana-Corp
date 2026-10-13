@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.5  
+**Version:** 1.6  
 **Last updated:** 2026-10-13  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -203,7 +203,7 @@ Removal atomically reveals a legitimate subject/status delivery record and an in
 
 After the warning is read, the Assistant's authored synchronization explanation becomes available. An optional saved-copy challenge requires valid preserved evidence. These choices record an explicit interaction fact; they do not establish cooperation, calculate trust, confess or threaten. Explicit delivery-record inspection, saved-versus-removed comparison or evidence challenge records the first-contradiction investigation milestone. Opening an app/list alone cannot earn it.
 
-The player explicitly chooses **Continue investigation** to advance to **Something Isn’t Right**. Required facts are article context, completed promo, original email read/first-suspicious-material milestone, completed removal, warning read, Assistant question and contradiction investigation. Preservation, optional apps, mini-games, waits and scores are not requirements. Only this Act 1 → Act 2 transition is configured; later act gates remain `[TBD]`.
+The player explicitly chooses **Continue investigation** to advance to **Something Isn’t Right**. Required facts are article context, completed promo, original email read/first-suspicious-material milestone, completed removal, warning read, Assistant question and contradiction investigation. Preservation, optional apps, mini-games, waits and scores are not requirements. Pass 6 configures this Act 1 → Act 2 transition. Pass 7 additionally approves the Act 2 cross-source confirmation/handoff; subsequent act gates remain `[TBD]`.
 
 One durably consumed two-second carrier-label irregularity and fictional warning card use the standard palette, no flashing and no recurring animation. Dismissal/expiry restores Normal. The readable warning remains available after relaunch even if the cosmetic moment was missed. Detailed IDs, persistence, both paths and manual validation are in `docs/first-anomaly.md`.
 
@@ -243,6 +243,18 @@ More defensive and corrective. It discourages certain sources, presents suspicio
 ### Transition
 
 The player understands that the contradictions are systematic and connected to the research. Daniel’s full reliability remains uncertain. The next goal is to reach information outside the curated environment.
+
+### Approved playable investigation — Pass 7
+
+Pass 7 authorizes first-draft Act 2 catalogue material: Alex Rivera's warning and enthusiastic replacement at the same source, varied personal preview reports, edited/removed public accounts, official explanations, changing guidance, Daniel's identity/contact, Maya's research correspondence, ECHO-07's preliminary excerpt, an unexplained `ECHO_CORE` override/Observer-channel diagnostic and knowledge-gated Assistant responses. Reports remain fictional observations, not verified medical conclusions. Maya's established statement is retained exactly. Daniel's later complicity, Alex's fate, ECHO's sentience, ASCENSION, human-harvesting mechanism, Observer purpose and ending conditions are not revealed or settled.
+
+No approved video asset is available: Alex's original/replacement are clearly labeled five-section transcript presentations. Explicit final confirmation records each viewed version. Preserved evidence is accurately labeled transcript/metadata, never a playable video. Originals remain preservable until deliberate navigation away; named saved-fact events then replace the video or eligible already-read social/news/web sources. No generic timer triggers these changes, and originals/preserved bytes remain immutable.
+
+Daniel's thread follows replacement inspection and report investigation. His explicitly read lead unlocks Maya/ECHO-07 records; reading the research unlocks the diagnostic excerpt. Assistant questions respect these knowledge boundaries and record factual questioning, not scores or automatic cooperation. A valid preserved original permits an evidence challenge; absence/corruption does not fabricate proof.
+
+Act 2's explicit cross-app confirmation requires original and replacement viewing, the replacement event, any qualifying symptom report, official response, Daniel and Maya leads, ECHO-07 and diagnostic inspection, Assistant questioning, and either a real saved-original comparison or independent corroborating reporting. The separate player action connecting these accounts records the completion milestone. Only then may an explicit consecutive handoff advance to Act 3. Optional preservation is not mandatory; unrelated saves cannot satisfy the video-proof requirement. Later act transitions stay unconfigured.
+
+The next goal is information beyond the curated summaries. This pass does not implement Banana Wall access, restricted research or the deeper conspiracy network. Stable inventory, precise conditions, version events and tests are documented in `docs/act-two-content.md`.
 
 ## 10. Act 3 — The Conspiracy
 
@@ -397,7 +409,7 @@ Pass 2 adopts the conceptual tracking responsibilities above as persistent infra
 
 - New games begin in The Perfect Product with no discoveries or earned story facts. Existing app availability defaults remain unchanged; no new app gate is established.
 - A read is an explicit content-engagement action, never inferred from row rendering or opening an app. Evidence copies retain separate IDs and source-version identities.
-- Act advancement requires the next consecutive act, an explicitly configured nonempty milestone requirement, and a satisfied declarative condition. Pass 2 initially left production transition rules empty. Pass 6 configures only the approved first mystery handoff into Act 2; later transitions remain unconfigured.
+- Act advancement requires the next consecutive act, an explicitly configured nonempty milestone requirement, and a satisfied declarative condition. Pass 2 initially left production transition rules empty. Passes 6–7 configure the approved first mystery handoff into Act 2 and explicit cross-source handoff into Act 3; later transitions remain unconfigured.
 - Significant actions save locally before becoming observable; repeated facts/events are idempotent and event effects commit together. Invalid or newer-schema saves block writes and remain intact. Reset/new game is explicit and preserves prior bytes in an archive. Story saves are independent of customized home layouts.
 - Assistant cooperation is an explicit fact, not a computed trust score. Recording ASCENSION, compatibility flags, elapsed time, or app usage does not automatically advance acts or choose an ending.
 - A configurable time model separates real device time, relative story days, fictional time, and fixed narrative timestamps. The current live clock remains unchanged. The 9:41 opening transition, “tomorrow” framing, schedules, weather triggers, and calendar rules remain `[TBD]`.
@@ -658,3 +670,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-12 | 1.3 | Pass 4: approved Evidence as the neutral archive utility, explicit eligible-version preservation, frozen source metadata/timestamps, factual comparison, exact-version deduplication and optional version-specific preservation/comparison facts. No new narrative scenes, reveal timing, puzzle gates or ending requirements were introduced. |
 | 2026-10-13 | 1.4 | Pass 5: authorized opening Act 1 catalogue drafts, relative launch context/9:41 welcome timestamps, explicit article/promo prerequisites for the anonymous ECHO leak, readiness-only milestone, local Assistant/service messages and optional product teaser. The first contradiction, warning, denial and Act 2 handoff remain reserved for Pass 6; no later reveals, puzzle gates, scoring or ending contracts changed. |
 | 2026-10-13 | 1.5 | Pass 6: approved once-only original-email removal at a return boundary, truthful preserved/unpreserved recovery, exact unknown warning, conditional scripted denial/challenge and factual Assistant interaction, restrained consumed carrier/notification event, explicit investigation and documented Act 1 → Act 2 prerequisites. Original sources/snapshots, later reveals, mini-games, scoring and ending requirements are unchanged. |
+| 2026-10-13 | 1.6 | Pass 7: approved playable Act 2 drafts, same-location Alex transcript replacement, already-read social/news/web changes, accurate multi-format evidence, knowledge-gated Daniel/Maya/ECHO-07/diagnostic leads and Assistant questioning, independent-corroboration alternative and explicit cross-app confirmation before Act 3. Existing source/snapshot versions, unresolved motives/fates, Banana Wall, later reveals and ending requirements remain unchanged. |

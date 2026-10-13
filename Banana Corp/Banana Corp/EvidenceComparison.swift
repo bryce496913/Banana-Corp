@@ -85,12 +85,18 @@ enum EvidenceContentFields {
             add("handle", "Account", p.handle); add("post", "Post", p.text, .body); messages(p.replies ?? [])
             add("media", "Media references", p.mediaAssetIDs?.joined(separator: ", "), reference: true)
         case .video(let p):
+            add("source.path", "Source location", p.sourcePath)
             add("creator", "Creator", p.creator); add("duration", "Duration", p.durationSeconds.map { "\($0) seconds" })
             add("media", "Media reference", p.mediaAssetID, reference: true); add("thumbnail", "Thumbnail reference", p.thumbnailAssetID, reference: true)
             for (index, cue) in (p.transcript ?? []).enumerated() {
-                add("cue.\(index).time", "Transcript \(index + 1) time", "\(cue.startSeconds) seconds")
+                if p.mediaAssetID == nil && p.durationSeconds == nil {
+                    add("cue.\(index).time", "Transcript section", String(index + 1))
+                } else {
+                    add("cue.\(index).time", "Transcript \(index + 1) time", "\(cue.startSeconds) seconds")
+                }
                 add("cue.\(index).text", "Transcript \(index + 1)", cue.text, .body)
             }
+            links(p.links ?? [])
         case .web(let p): add("path", "Page", p.path); blocks(p.blocks); links(p.links ?? [])
         case .photos(let p):
             add("caption", "Caption", p.caption, .body); add("media", "Media reference", p.assetID, reference: true)

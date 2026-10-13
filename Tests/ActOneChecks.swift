@@ -5,9 +5,9 @@ import Foundation
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
         let catalogue = StoryContentCatalogueLoader.load(fileURL: resource)
         let definitions = try catalogue.get()
-        precondition(definitions.items.count == 25)
-        precondition(definitions.items.allSatisfy { $0.actAvailable.rawValue == 1 && $0.versions.count == 1 })
-        precondition(definitions.items.allSatisfy { $0.id.hasPrefix("content.act1.") })
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.count == 25)
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.versions.count == 1 })
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.id.hasPrefix("content.act1.") })
         // A restarted executable must resolve exactly the previously saved production versions.
         if CommandLine.arguments.count == 4 {
             let story = StoryProgressionStore(persistence: StoryFilePersistence(fileURL: URL(fileURLWithPath: CommandLine.arguments[3])))
@@ -109,7 +109,7 @@ import Foundation
                 precondition(StoryContentTime.label(for: definitions.versionsByID["version.act1.welcome.v1"]!, context: context) == "Today · 09:41")
             }
         }
-        let publicBytes = try Data(contentsOf: resource)
+        let publicBytes = try JSONEncoder().encode(definitions.items.filter { $0.actAvailable == .thePerfectProduct })
         let text = String(decoding: publicBytes, as: UTF8.self).lowercased()
         for spoiler in ["daniel mercer", "maya chen", "alexrivera", "ascension", "echo_core", "observer", "harvesting", "brainwashing", "sentient", "blackout", "lantern"] {
             precondition(!text.contains(spoiler), "Premature disclosure: \(spoiler)")

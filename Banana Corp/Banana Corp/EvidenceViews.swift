@@ -13,6 +13,9 @@ struct EvidencePayloadView: View {
     let version: StoryContentVersion
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+            if case .video(let video) = version.payload, video.mediaAssetID == nil {
+                Text("Text record: source metadata and transcript. No playable video is stored.").appText(.caption, color: AppTheme.Colors.secondaryText)
+            }
             ForEach(EvidenceContentFields.fields(for: version).filter { !$0.id.hasSuffix(".position") && !$0.id.hasSuffix(".kind") }) { field in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(field.label).appText(.caption, color: AppTheme.Colors.secondaryText)
@@ -158,7 +161,7 @@ struct EvidenceComparisonView: View {
                                             Text("The linked record differs.").appText(.body)
                                         } else {
                                             Text("Preserved: \(difference.preservedValue ?? "Not present")").appText(.body)
-                                            Text("Live: \(difference.liveValue ?? "Not present")").appText(.body)
+                                            Text("Live: \(difference.liveValue ?? "Not present")").appText(.body, color: AppTheme.Colors.highlight)
                                         }
                                     }
                                     .textSelection(.enabled)

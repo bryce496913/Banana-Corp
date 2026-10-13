@@ -65,11 +65,13 @@ struct StoryActTransition {
 
 struct StoryProgressionRules {
     let actTransitions: [StoryAct: StoryActTransition]
-    // Only the user-approved first mystery handoff is configured; later acts remain closed.
+    // Only the approved Act 1 and Act 2 handoffs are configured; later transitions stay closed.
     static let production = StoryProgressionRules(actTransitions: [
         .somethingIsntRight: StoryActTransition(
             requiredMilestoneIDs: [FirstAnomalyContract.investigated, FirstAnomalyContract.suspiciousMaterial],
-            condition: FirstAnomalyContract.handoffPrerequisites)
+            condition: FirstAnomalyContract.handoffPrerequisites),
+        .theConspiracy: StoryActTransition(requiredMilestoneIDs: [ActTwoContract.connected],
+                                          condition: ActTwoContract.handoffPrerequisites)
     ])
 }
 
@@ -99,4 +101,66 @@ enum FirstAnomalyContract {
         removalPrerequisites, .eventCompleted(removalEvent), .contentRead(warningVersion),
         .assistantFact(assistantQuestioned), .milestoneCompleted(investigated)
     ])
+}
+
+struct StorySourceChange {
+    let eventID: String
+    let contentID: String
+    let originalVersionID: String
+    let replacementVersionID: String?
+    let prerequisites: StoryCondition
+    let milestoneID: String?
+}
+
+/// Pass 7 authored contracts; all mutable facts remain in StoryProgressionStore.
+enum ActTwoContract {
+    static let alex = "content.act2.alex_review"
+    static let originalWarning = "version.act2.alex_review.v1"
+    static let replacementWarning = "version.act2.alex_review.v2"
+    static let warningEvidence = "evidence.act2.alex_review.v1"
+    static let alexReplaced = "event.act2.alex_review.replaced"
+    static let warningViewed = "milestone.act2.warning_viewed"
+    static let replacementViewed = "milestone.act2.replacement_inspected"
+    static let symptomsInvestigated = "milestone.act2.symptom_reports_investigated"
+    static let officialRead = "milestone.act2.official_response_read"
+    static let danielFollowed = "milestone.act2.daniel_lead_followed"
+    static let mayaFollowed = "milestone.act2.maya_lead_followed"
+    static let echoRead = "milestone.act2.echo07_findings_read"
+    static let diagnosticsRead = "milestone.act2.diagnostics_examined"
+    static let independentRead = "milestone.act2.independent_record_read"
+    static let savedCompared = "milestone.act2.saved_warning_compared"
+    static let assistantQuestioned = "assistant.act2.edits_questioned"
+    static let assistantEvidenceChallenge = "content.act2.assistant.saved_warning"
+    static let connected = "milestone.act2.cross_app_confirmation"
+    static let confirmationEvent = "event.act2.sources_connected"
+    static let summary = "content.act2.connection_summary"
+    static let confirmationPrerequisites: StoryCondition = .all([
+        .actReached(.somethingIsntRight), .milestoneCompleted(warningViewed),
+        .eventCompleted(alexReplaced), .milestoneCompleted(replacementViewed),
+        .milestoneCompleted(symptomsInvestigated), .milestoneCompleted(officialRead),
+        .milestoneCompleted(danielFollowed), .milestoneCompleted(mayaFollowed),
+        .milestoneCompleted(echoRead), .milestoneCompleted(diagnosticsRead),
+        .any([.milestoneCompleted(savedCompared), .milestoneCompleted(independentRead)]),
+        .assistantFact(assistantQuestioned)
+    ])
+    static let handoffPrerequisites: StoryCondition = .all([
+        confirmationPrerequisites, .eventCompleted(confirmationEvent), .milestoneCompleted(connected)
+    ])
+    static let changes: [StorySourceChange] = [
+        .init(eventID: alexReplaced, contentID: alex, originalVersionID: originalWarning,
+              replacementVersionID: replacementWarning, prerequisites: .milestoneCompleted(warningViewed),
+              milestoneID: "milestone.act2.warning_replaced"),
+        .init(eventID: "event.act2.social.disorientation_edited", contentID: "content.act2.social.disorientation",
+              originalVersionID: "version.act2.social.disorientation.v1", replacementVersionID: "version.act2.social.disorientation.v2",
+              prerequisites: .all([.eventCompleted(alexReplaced), .contentRead("version.act2.social.disorientation.v1")]), milestoneID: nil),
+        .init(eventID: "event.act2.social.memory_removed", contentID: "content.act2.social.memory",
+              originalVersionID: "version.act2.social.memory.v1", replacementVersionID: nil,
+              prerequisites: .all([.eventCompleted(alexReplaced), .contentRead("version.act2.social.memory.v1")]), milestoneID: nil),
+        .init(eventID: "event.act2.news.concerns_edited", contentID: "content.act2.news.concerns",
+              originalVersionID: "version.act2.news.concerns.v1", replacementVersionID: "version.act2.news.concerns.v2",
+              prerequisites: .all([.eventCompleted(alexReplaced), .contentRead("version.act2.news.concerns.v1")]), milestoneID: nil),
+        .init(eventID: "event.act2.web.preview_updated", contentID: "content.act2.web.preview_notes",
+              originalVersionID: "version.act2.web.preview_notes.v1", replacementVersionID: "version.act2.web.preview_notes.v2",
+              prerequisites: .all([.eventCompleted(alexReplaced), .contentRead("version.act2.web.preview_notes.v1")]), milestoneID: nil)
+    ]
 }

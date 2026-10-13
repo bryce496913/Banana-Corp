@@ -16,7 +16,7 @@ private final class FailingSlicePersistence: StoryPersistence {
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
         let catalogue = StoryContentCatalogueLoader.load(fileURL: resource)
         let definitions = try catalogue.get()
-        precondition(definitions.items.count == 25)
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.count == 25)
         precondition(definitions.itemsByID[FirstAnomalyContract.originalContent]!.versions.count == 1)
         if CommandLine.arguments.count == 4 {
             let story = StoryProgressionStore(persistence: StoryFilePersistence(fileURL: URL(fileURLWithPath: CommandLine.arguments[3])))
@@ -152,12 +152,12 @@ private final class FailingSlicePersistence: StoryPersistence {
             precondition(content.firstAnomalyHandoffAvailable)
             action(story.advanceAct(to: .somethingIsntRight), .changed)
             precondition(!content.firstAnomalyHandoffAvailable && story.state.currentAct == .somethingIsntRight)
-            if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theConspiracy) {} else { preconditionFailure() }
+            if case .failure(.prerequisitesNotMet) = story.advanceAct(to: .theConspiracy) {} else { preconditionFailure() }
             precondition(story.state.observerClueIDs.isEmpty && story.state.routePrerequisiteIDs.isEmpty)
         }
         // No mandatory optional app, trust/cooperation, elapsed-time or evidence gate.
         let rules = StoryProgressionRules.production
-        precondition(rules.actTransitions.count == 1)
+        precondition(rules.actTransitions.count == 2)
         for omitted in ["normal", "promo", "original", "removal", "warning", "assistant", "investigation"] {
             let story = StoryProgressionStore(persistence: InMemoryStoryPersistence())
             var actions: [StoryAction] = [.recordMilestone(FirstAnomalyContract.suspiciousMaterial), .recordMilestone(FirstAnomalyContract.investigated), .recordAssistantFact(FirstAnomalyContract.assistantQuestioned)]

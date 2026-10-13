@@ -200,6 +200,11 @@ final class AppState: ObservableObject {
         guard next.goHome() else { return }
         navigation = next
         reconcileFirstAnomalyAtBoundary()
+        reconcileActTwoAtBoundary()
+    }
+
+    func reconcileActTwoAtBoundary(surface: StoryAppSurface? = nil) {
+        if case .failure = content.activateActTwoChangesAtBoundary(surface: surface) { firstAnomalyDeliveryFailed = true }
     }
 
     /// Home and return-to-inbox are explicit narrative boundaries, separate from read/preserve actions.

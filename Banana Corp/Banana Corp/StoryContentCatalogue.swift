@@ -14,7 +14,9 @@ struct StoryContentCatalogue {
     let itemsByID: [String: StoryContentItem]
     let versionsByID: [String: StoryContentVersion]
     let versionOwners: [String: String]
+    let declaredFacts: [String: [String]]
     fileprivate init(_ document: StoryContentDocument) {
+        declaredFacts = document.facts
         items = document.items.sorted { $0.order == $1.order ? $0.id < $1.id : $0.order < $1.order }
         itemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
         versionsByID = Dictionary(uniqueKeysWithValues: items.flatMap { $0.versions.map { ($0.id, $0) } })
@@ -198,7 +200,8 @@ enum StoryContentCatalogueLoader {
         case .social(let p): return nonempty(p.handle) && nonempty(p.text) && validMessages(p.replies ?? [])
         case .video(let p):
             let cues = p.transcript ?? []
-            return p.durationSeconds.map { $0.isFinite && $0 > 0 } != false
+            return p.sourcePath.map { $0.hasPrefix("/") && !$0.hasPrefix("//") } != false
+                && p.durationSeconds.map { $0.isFinite && $0 > 0 } != false
                 && cues.allSatisfy { cue in cue.startSeconds.isFinite && cue.startSeconds >= 0 && nonempty(cue.text) && p.durationSeconds.map { cue.startSeconds <= $0 } != false }
                 && cues.map(\.startSeconds) == cues.map(\.startSeconds).sorted()
         case .web(let p): return p.path.hasPrefix("/") && !p.path.hasPrefix("//") && blocks(p.blocks)
@@ -216,7 +219,7 @@ enum StoryContentCatalogueLoader {
         case .assistant(let p): return (p.links ?? []).map { ($0.contentID, false) }
         case .news(let p): return (p.relatedContent ?? []).map { ($0.contentID, false) }
         case .social(let p): return (p.mediaAssetIDs ?? []).map { ($0, true) }
-        case .video(let p): return [p.mediaAssetID, p.thumbnailAssetID].compactMap { $0 }.map { ($0, true) }
+        case .video(let p): return [p.mediaAssetID, p.thumbnailAssetID].compactMap { $0 }.map { ($0, true) } + (p.links ?? []).map { ($0.contentID, false) }
         case .web(let p): return (p.links ?? []).map { ($0.contentID, false) }
         case .photos(let p): return p.assetID.map { [($0, true)] } ?? []
         case .notifications(let p): return p.targetContentID.map { [($0, false)] } ?? []
