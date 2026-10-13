@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.6  
+**Version:** 1.7  
 **Last updated:** 2026-10-13  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -279,6 +279,14 @@ Its attempts to influence the player become difficult to dismiss. Investigation 
 ### Transition
 
 The player knows the main threat and its objective. Investigation now needs a countermeasure and access to people or systems able to resist ECHO.
+
+### Approved restricted-access foundation — Pass 8
+
+Pass 8 prepares a local puzzle/resource framework and selects the existing Browser for the initial locked Banana Wall entry after the approved Act 3 handoff. The Banana Wall's actual challenge, inputs, clues and solution remain `[TBD]`. Its production pending-design descriptor is explicitly non-completable: no answer, inputs, hints or success effects. It is not a canonical test-token puzzle and does not reveal restricted research.
+
+Resource access and puzzle success use declarative requirements and existing saved puzzle/access/milestone/event facts. The content delivery layer enforces live authorization; legitimately preserved evidence stays independent of current access. Success effects save atomically/idempotently, while wrong inputs, retries and save failures do not award progress or hidden scores. Neutral development fixtures and an isolated in-memory DEBUG demo test these contracts without changing the campaign.
+
+Existing explicit Assistant facts/cooperation, route prerequisites, ASCENSION milestones and separate optional Observer clues remain available for future approved conditions. No LANTERN/BLACKOUT/DAWN/ASCENSION/Observer puzzle, new clue, research revelation, ending requirement, real network authentication or mini-game gate is introduced. The known-versus-TBD review and approval questions are documented in `docs/ACT3_PUZZLE_DESIGN.md`.
 
 ## 11. Act 4 — The Takeover
 
@@ -671,3 +679,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-13 | 1.4 | Pass 5: authorized opening Act 1 catalogue drafts, relative launch context/9:41 welcome timestamps, explicit article/promo prerequisites for the anonymous ECHO leak, readiness-only milestone, local Assistant/service messages and optional product teaser. The first contradiction, warning, denial and Act 2 handoff remain reserved for Pass 6; no later reveals, puzzle gates, scoring or ending contracts changed. |
 | 2026-10-13 | 1.5 | Pass 6: approved once-only original-email removal at a return boundary, truthful preserved/unpreserved recovery, exact unknown warning, conditional scripted denial/challenge and factual Assistant interaction, restrained consumed carrier/notification event, explicit investigation and documented Act 1 → Act 2 prerequisites. Original sources/snapshots, later reveals, mini-games, scoring and ending requirements are unchanged. |
 | 2026-10-13 | 1.6 | Pass 7: approved playable Act 2 drafts, same-location Alex transcript replacement, already-read social/news/web changes, accurate multi-format evidence, knowledge-gated Daniel/Maya/ECHO-07/diagnostic leads and Assistant questioning, independent-corroboration alternative and explicit cross-app confirmation before Act 3. Existing source/snapshot versions, unresolved motives/fates, Banana Wall, later reveals and ending requirements remain unchanged. |
+| 2026-10-13 | 1.7 | Pass 8: approved reusable local restricted-resource/puzzle infrastructure and a locked Browser Banana Wall entry with no production solution, atomic saved success, delivery-layer authorization and isolated/unbundled neutral fixtures. Actual breach design, full Act 3 research, later milestone/ending conditions, optional Observer clues and character outcomes remain unresolved/unchanged. |

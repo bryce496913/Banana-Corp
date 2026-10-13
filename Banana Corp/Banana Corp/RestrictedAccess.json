@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "production",
+  "facts": {
+    "milestoneCompleted": ["milestone.act2.cross_app_confirmation"],
+    "accessGranted": ["access.banana_wall.breached"]
+  },
+  "resources": [{
+    "id": "resource.banana_wall",
+    "kind": "webPage",
+    "displayName": "Banana Wall",
+    "message": "Access required. Restricted research remains beyond this boundary.",
+    "availableAct": 3,
+    "visibility": "entry",
+    "discoveryConditions": [{"type":"milestoneCompleted","id":"milestone.act2.cross_app_confirmation"}],
+    "requiredAccessID": "access.banana_wall.breached",
+    "requiredPuzzleID": "puzzle.banana_wall.pending_design",
+    "unlockConditions": [],
+    "linkedContentIDs": []
+  }],
+  "puzzles": [{
+    "id": "puzzle.banana_wall.pending_design",
+    "title": "Access required",
+    "instructions": "The access challenge is not available in this build. Return to your investigation; no access input can be submitted here.",
+    "availableAct": 3,
+    "requirements": [{"type":"milestoneCompleted","id":"milestone.act2.cross_app_confirmation"}],
+    "inputs": [],
+    "rule": {"kind":"awaitingApproval"},
+    "successEventID": "event.puzzle.banana_wall.pending_design",
+    "successEffects": [],
+    "hints": []
+  }]
+}

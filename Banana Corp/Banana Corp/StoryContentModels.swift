@@ -201,6 +201,7 @@ struct StoryContentItem: Codable, Identifiable, Equatable {
     let visibility: Visibility?
     let unlockConditions: [StoryCondition]?
     let initialVersionID: String
+    let restrictedResourceID: String?
     let versions: [StoryContentVersion]
 }
 

@@ -13,6 +13,8 @@ swiftc -D DEBUG -swift-version 5 -warnings-as-errors \
     "$repo_root/Banana Corp/Banana Corp/StoryContentModels.swift" \
     "$repo_root/Banana Corp/Banana Corp/StoryContentRules.swift" \
     "$repo_root/Banana Corp/Banana Corp/StoryContentCatalogue.swift" \
+    "$repo_root/Banana Corp/Banana Corp/RestrictedAccessModels.swift" \
+    "$repo_root/Banana Corp/Banana Corp/RestrictedAccessStore.swift" \
     "$repo_root/Banana Corp/Banana Corp/StoryContentStore.swift" \
     "$repo_root/Banana Corp/Banana Corp/EvidenceComparison.swift" \
     "$repo_root/Tests/FirstAnomalyChecks.swift" \

@@ -38,14 +38,17 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
     let catalogue: StoryContentCatalogue?
     let loadDiagnostics: [StoryContentDiagnostic]
     private let progression: StoryProgressionStore
+    private let access: RestrictedAccessStore?
     private let versionReceipts: [String: SavedContentVersion]
 
-    init(progression: StoryProgressionStore, catalogue result: Result<StoryContentCatalogue, StoryContentLoadFailure>) {
+    init(progression: StoryProgressionStore, catalogue result: Result<StoryContentCatalogue, StoryContentLoadFailure>, access: RestrictedAccessStore? = nil) {
         self.progression = progression
+        self.access = access
         switch result {
         case .success(let catalogue): self.catalogue = catalogue; loadDiagnostics = []
         case .failure(let error): catalogue = nil; loadDiagnostics = error.diagnostics
         }
+        access?.validateContentReferences(self.catalogue)
         var receipts: [String: SavedContentVersion] = [:]
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         for item in self.catalogue?.items ?? [] {
@@ -73,19 +76,20 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
     }
 
     func currentVersion(for id: String, state: StoryState? = nil) -> StoryContentVersion? {
-        guard let item = catalogue?.itemsByID[id] else { return nil }
+        guard let item = catalogue?.itemsByID[id], authorized(item, state: state ?? progression.state) else { return nil }
         let state = state ?? progression.state
         return resolvedVersion(item: item, versionID: state.contentDelivery.activeVersionIDs[id] ?? item.initialVersionID, state: state)
     }
 
     func originalVersion(for id: String, state: StoryState? = nil) -> StoryContentVersion? {
-        guard let item = catalogue?.itemsByID[id] else { return nil }
+        guard let item = catalogue?.itemsByID[id], authorized(item, state: state ?? progression.state) else { return nil }
         return resolvedVersion(item: item, versionID: item.initialVersionID, state: state ?? progression.state)
     }
 
     func availability(for id: String, versionID: String? = nil, state: StoryState? = nil) -> StoryContentAvailability {
         let state = state ?? progression.state
         guard progression.isWritable, state.isValid, let item = catalogue?.itemsByID[id] else { return .unresolved }
+        guard authorized(item, state: state) else { return .locked }
         let liveID = state.contentDelivery.activeVersionIDs[id] ?? item.initialVersionID
         guard resolvedVersion(item: item, versionID: liveID, state: state) != nil else { return .unresolved }
         if state.contentDelivery.unavailableContentIDs.contains(id) { return .removed }
@@ -126,6 +130,7 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
         guard let catalogue else { return .failure(.catalogueUnavailable) }
         guard let item = catalogue.itemsByID[id] else { return .failure(.unknownContent(id)) }
         guard catalogue.versionOwners[versionID] == id, let version = catalogue.versionsByID[versionID] else { return .failure(.unknownVersion(versionID)) }
+        guard authorized(item, state: progression.state) else { return .failure(.contentUnavailable) }
         if progression.state.completedEventIDs.contains(version.readEventID) { return .success(.unchanged) }
         guard currentVersion(for: id)?.id == versionID else { return .failure(.staleVersion) }
         guard availability(for: id, versionID: versionID).isAvailable else { return .failure(.contentUnavailable) }
@@ -214,6 +219,7 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
 
     /// The exact engaged version is retained even if its read effects switch/remove the live source.
     func engagedSnapshot(_ id: String, versionID: String) -> StoryContentSnapshot? {
+        guard let item = catalogue?.itemsByID[id], authorized(item, state: progression.state) else { return nil }
         guard let record = progression.state.contentDelivery.versionReceipts[versionID], record.contentID == id,
               progression.state.readContentIDs.contains(versionID),
               let snapshot = try? JSONDecoder().decode(StoryContentSnapshot.self, from: record.snapshot), snapshot.schemaVersion == 1,
@@ -232,6 +238,7 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
         if progression.state.contentDelivery.unavailableContentIDs.contains(id) { return unavailable(.removed) }
         guard let catalogue else { return unavailable(.catalogueUnavailable) }
         guard let item = catalogue.itemsByID[id] else { return unavailable(.missingSource) }
+        guard authorized(item, state: progression.state) else { return unavailable(.notAccessible) }
         let liveID = progression.state.contentDelivery.activeVersionIDs[id] ?? item.initialVersionID
         guard catalogue.versionOwners[liveID] == id else { return unavailable(.missingVersion) }
         guard let live = currentVersion(for: id) else { return unavailable(.unverifiedVersion) }
@@ -308,6 +315,11 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
         let decodedEvidence = Set(preservedItems(state: state).map(\.id))
         for id in state.preservedEvidence.keys.sorted() where !decodedEvidence.contains(id) { issues.append(.init(code: .savedReference, path: id, message: "Unknown evidence snapshot format; original bytes were retained")) }
         return issues
+    }
+
+    private func authorized(_ item: StoryContentItem, state: StoryState) -> Bool {
+        guard let resourceID = item.restrictedResourceID else { return true }
+        return access?.resourceState(resourceID, state: state) == .unlocked
     }
 
     private var recoveryError: StoryContentDeliveryError? {

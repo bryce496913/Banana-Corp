@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "kind": "developmentFixture",
+  "facts": {
+    "contentRead": [
+      "content.fixture.access_hint"
+    ],
+    "accessGranted": [
+      "access.fixture.research",
+      "access.fixture.late"
+    ],
+    "milestoneCompleted": [
+      "milestone.fixture.challenge_completed"
+    ],
+    "assistantFact": [
+      "assistant.fixture.evidence_shared"
+    ],
+    "observerClueFound": [
+      "observer.fixture.optional"
+    ],
+    "routePrerequisite": [
+      "route.fixture.stabilized"
+    ]
+  },
+  "resources": [
+    {
+      "id": "resource.fixture.research",
+      "kind": "researchMemo",
+      "displayName": "Neutral protected memo",
+      "message": "Development data only.",
+      "availableAct": 1,
+      "visibility": "entry",
+      "discoveryConditions": [],
+      "requiredAccessID": "access.fixture.research",
+      "requiredPuzzleID": "puzzle.fixture.research",
+      "unlockConditions": [],
+      "linkedContentIDs": [
+        "content.fixture.protected_memo"
+      ]
+    },
+    {
+      "id": "resource.fixture.late",
+      "kind": "accessRecord",
+      "displayName": "Late test resource",
+      "message": "Not a canonical ending requirement.",
+      "availableAct": 5,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [],
+      "requiredAccessID": "access.fixture.late",
+      "requiredPuzzleID": null,
+      "unlockConditions": [
+        {
+          "type": "assistantCooperation",
+          "cooperation": "cooperating"
+        },
+        {
+          "type": "routePrerequisite",
+          "id": "route.fixture.stabilized"
+        }
+      ],
+      "linkedContentIDs": []
+    },
+    {
+      "id": "resource.fixture.optional",
+      "kind": "projectArchive",
+      "displayName": "Optional test resource",
+      "message": "Optional development data.",
+      "availableAct": 1,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "observerClueFound",
+          "id": "observer.fixture.optional"
+        }
+      ],
+      "requiredAccessID": "access.fixture.research",
+      "requiredPuzzleID": null,
+      "unlockConditions": [],
+      "linkedContentIDs": []
+    }
+  ],
+  "puzzles": [
+    {
+      "id": "puzzle.fixture.research",
+      "title": "Neutral test challenge",
+      "instructions": "Use the instruction record. This is a development fixture, not a story puzzle.",
+      "availableAct": 1,
+      "requirements": [
+        {
+          "type": "contentRead",
+          "id": "content.fixture.access_hint"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "input.fixture.token",
+          "label": "Test token",
+          "kind": "text"
+        }
+      ],
+      "rule": {
+        "kind": "exactFields",
+        "expectedFields": {
+          "input.fixture.token": "OPEN"
+        },
+        "trimWhitespace": true,
+        "caseInsensitive": true
+      },
+      "successEventID": "event.puzzle.fixture.research",
+      "successEffects": [
+        {
+          "kind": "grantAccess",
+          "id": "access.fixture.research"
+        },
+        {
+          "kind": "recordMilestone",
+          "id": "milestone.fixture.challenge_completed"
+        },
+        {
+          "kind": "recordAssistantFact",
+          "id": "assistant.fixture.evidence_shared"
+        }
+      ],
+      "hints": [
+        "The neutral instruction record supplies the test word.",
+        "The fixture accepts OPEN."
+      ]
+    },
+    {
+      "id": "puzzle.fixture.optional",
+      "title": "Optional fixture",
+      "instructions": "Choose Inspect to test independent optional facts.",
+      "availableAct": 1,
+      "requirements": [],
+      "inputs": [
+        {
+          "id": "input.fixture.choice",
+          "label": "Choice",
+          "kind": "choice",
+          "choices": [
+            "Inspect",
+            "Leave"
+          ]
+        }
+      ],
+      "rule": {
+        "kind": "exactFields",
+        "expectedFields": {
+          "input.fixture.choice": "Inspect"
+        }
+      },
+      "successEventID": "event.puzzle.fixture.optional",
+      "successEffects": [
+        {
+          "kind": "recordObserverClue",
+          "id": "observer.fixture.optional"
+        }
+      ],
+      "hints": []
+    }
+  ]
+}
