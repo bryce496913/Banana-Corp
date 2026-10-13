@@ -7,6 +7,7 @@ struct RestrictedAccessEntries: View {
             ForEach(appState.access.visibleResources()) { resource in
                 NavigationLink(resource.displayName) { RestrictedResourceView(resourceID: resource.id) }
                     .buttonStyle(.modernPhone)
+                    .accessibilityIdentifier("story.resource.\(resource.id)")
             }
             if !appState.access.diagnostics.isEmpty {
                 Text("Protected sources are unavailable. Existing investigation records remain intact.").appText(.caption)
@@ -34,6 +35,7 @@ struct RestrictedResourceView: View {
                         AppCard {
                             VStack(alignment: .leading, spacing: 12) {
                                 Label(resource.displayName, systemImage: "lock.shield").appText(.screenTitle)
+                                    .accessibilityIdentifier("story.resource.locked.\(resource.id)")
                                 Text(resource.message).appText(.body)
                             }
                         }

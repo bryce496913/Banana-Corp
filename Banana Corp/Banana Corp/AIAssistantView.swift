@@ -39,6 +39,7 @@ struct AIAssistantView: View {
                             case .failure: failure = true
                             }
                         }.buttonStyle(.modernPhone)
+                            .accessibilityIdentifier("story.assistant.\(response.version.id)")
                     }
                 }
             }
