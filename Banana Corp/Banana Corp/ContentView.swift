@@ -109,11 +109,22 @@ struct BananaOSView: View {
                 appState.completeNavigationTransition(id)
             }
         }
+        .alert("Mail update unavailable", isPresented: $appState.firstAnomalyDeliveryFailed) {
+            Button("Retry") {
+                appState.reconcileFirstAnomalyAtBoundary()
+                appState.deliverFirstAnomalyPresentationIfNeeded()
+            }
+            Button("Later", role: .cancel) {}
+        } message: { Text("The update could not be saved. Your existing messages and progress remain intact.") }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { appState.expirePresentationEvents() }
+            if phase == .active {
+                appState.expirePresentationEvents()
+                appState.deliverFirstAnomalyPresentationIfNeeded()
+            }
         }
         .onAppear {
             appState.expirePresentationEvents()
+            appState.deliverFirstAnomalyPresentationIfNeeded()
             // Synchronize a recreated shell without leaving a transition locked.
             presentedRoute = appState.activeApp
             appState.completeNavigationTransition(appState.navigation.transitionID)

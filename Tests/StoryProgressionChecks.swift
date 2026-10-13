@@ -92,7 +92,7 @@ struct StoryProgressionChecks {
         expect(store.perform(.grantAccess("access.fixture.gated"), when: gate), .changed)
         expect(store.advanceAct(to: .theConspiracy), error: .invalidActTransition)
         expect(store.advanceAct(to: .thePerfectProduct), error: .invalidActTransition)
-        expect(store.advanceAct(to: .somethingIsntRight), error: .transitionNotConfigured)
+        expect(store.advanceAct(to: .somethingIsntRight), error: .prerequisitesNotMet)
 
         // Fixture rules exercise machinery only, never shipped story prerequisites.
         let rules = StoryProgressionRules(actTransitions: Dictionary(uniqueKeysWithValues:

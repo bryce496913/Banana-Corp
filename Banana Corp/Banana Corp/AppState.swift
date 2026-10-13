@@ -12,6 +12,8 @@ final class AppState: ObservableObject {
     @Published private(set) var navigation = OSNavigationState()
     @Published private(set) var presentation = OSPresentationState()
     private var presentationExpiryTask: Task<Void, Never>?
+    private var firstAnomalyVisualID: UUID?
+    @Published var firstAnomalyDeliveryFailed = false
 
     @Published private(set) var feedbackEvent: AppFeedbackEvent?
 
@@ -57,6 +59,7 @@ final class AppState: ObservableObject {
         if case .success = result {
             goHome()
             restoreNormalPresentation()
+            firstAnomalyDeliveryFailed = false
             aiCorruptionLevel = 0
         }
         return result
@@ -78,6 +81,7 @@ final class AppState: ObservableObject {
         presentationExpiryTask = nil
         var next = presentation
         next.configure(configuration)
+        firstAnomalyVisualID = nil
         presentation = next
         return true
     }
@@ -105,6 +109,10 @@ final class AppState: ObservableObject {
     func endPresentationEvent(_ id: UUID) {
         var next = presentation
         guard next.endEvent(id) else { return }
+        if firstAnomalyVisualID == id {
+            next.restoreNormal()
+            firstAnomalyVisualID = nil
+        }
         presentation = next
         presentationExpiryTask?.cancel()
         presentationExpiryTask = nil
@@ -113,6 +121,10 @@ final class AppState: ObservableObject {
     func expirePresentationEvents() {
         var next = presentation
         next.expire(at: Date())
+        if firstAnomalyVisualID != nil && next.activeEvent == nil {
+            next.restoreNormal()
+            firstAnomalyVisualID = nil
+        }
         guard next != presentation else { return }
         presentation = next
         presentationExpiryTask?.cancel()
@@ -120,6 +132,7 @@ final class AppState: ObservableObject {
     }
 
     func restoreNormalPresentation() {
+        firstAnomalyVisualID = nil
         presentationExpiryTask?.cancel()
         presentationExpiryTask = nil
         var next = presentation
@@ -186,5 +199,41 @@ final class AppState: ObservableObject {
         var next = navigation
         guard next.goHome() else { return }
         navigation = next
+        reconcileFirstAnomalyAtBoundary()
+    }
+
+    /// Home and return-to-inbox are explicit narrative boundaries, separate from read/preserve actions.
+    func reconcileFirstAnomalyAtBoundary() {
+        guard story.state.currentAct == .thePerfectProduct,
+              story.satisfies(FirstAnomalyContract.removalPrerequisites),
+              !story.state.completedEventIDs.contains(FirstAnomalyContract.removalEvent) else { return }
+        switch content.activateFirstAnomalyAtBoundary() {
+        case .success: firstAnomalyDeliveryFailed = false; deliverFirstAnomalyPresentationIfNeeded()
+        case .failure: firstAnomalyDeliveryFailed = true
+        }
+    }
+
+    /// Durable consumption prevents cosmetic replay. The unread message supplies the permanent lead.
+    func deliverFirstAnomalyPresentationIfNeeded() {
+        guard story.satisfies(.eventCompleted(FirstAnomalyContract.removalEvent)),
+              !story.state.completedEventIDs.contains(FirstAnomalyContract.presentationEvent),
+              presentation.configuration.mode == .normal else { return }
+        let now = Date()
+        var next = presentation
+        next.configure(OSPresentationConfiguration(mode: .subtleAnomaly))
+        let notice = content.pendingNotifications().first(where: { $0.record.contentID == FirstAnomalyContract.notification })
+        var event = OSPresentationEvent(status: OSStatusOverride(carrier: "BANANA 5G…"), duration: 2)
+        if let notice, case .notifications(let payload) = notice.content.payload {
+            event.interruption = OSInterruption(kind: .notification, title: notice.content.title, message: payload.message)
+        }
+        guard next.begin(event, at: now, monotonicTime: ProcessInfo.processInfo.systemUptime), let active = next.activeEvent else { return }
+        guard case .success = content.consumeFirstAnomalyPresentation() else { firstAnomalyDeliveryFailed = true; return }
+        firstAnomalyVisualID = active.id
+        presentation = next
+        presentationExpiryTask?.cancel()
+        presentationExpiryTask = Task { [weak self] in
+            do { try await Task.sleep(for: .seconds(active.payload.duration)) } catch { return }
+            self?.endPresentationEvent(active.id)
+        }
     }
 }

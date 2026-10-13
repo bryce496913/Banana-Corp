@@ -52,6 +52,14 @@ struct StorySurfaceContent<Placeholder: View>: View {
                 }
             } else { placeholder() }
         }
+        .onAppear {
+            if surface == .email && selection == nil { appState.reconcileFirstAnomalyAtBoundary() }
+        }
+        .onChange(of: selection) { old, new in
+            if surface == .email && old?.contentID == FirstAnomalyContract.originalContent && new == nil {
+                appState.reconcileFirstAnomalyAtBoundary()
+            }
+        }
         .navigationDestination(item: $selection) { selected in
             StorySourceDetailView(selection: selected)
         }
@@ -87,6 +95,7 @@ struct StorySourceDetailView: View {
                         }
                         StoryReadableContent(version: version)
                     }
+                    FirstAnomalyHandoffControl()
                     ForEach(links(for: version), id: \.contentID) { link in
                         Button(link.label) { open(link.contentID) }
                             .buttonStyle(.modernPhone)
@@ -107,6 +116,8 @@ struct StorySourceDetailView: View {
         case .web(let data): return data.links ?? []
         case .news(let data): return data.relatedContent ?? []
         case .email(let data): return data.attachments ?? []
+        case .messages(let data): return data.links ?? []
+        case .assistant(let data): return data.links ?? []
         default: return []
         }
     }
@@ -231,5 +242,23 @@ struct StoryPromotionView: View {
         .modifier(AppFeedbackModifier(event: feedback))
         .alert("Progress could not be saved", isPresented: $failure) { Button("OK", role: .cancel) {} }
             message: { Text("The presentation has not been marked viewed. Please try again.") }
+    }
+}
+
+/// Explicit progression confirmation; rendering this control never advances an act.
+struct FirstAnomalyHandoffControl: View {
+    @EnvironmentObject private var appState: AppState
+    @State private var failure = false
+    var body: some View {
+        if appState.content.firstAnomalyHandoffAvailable {
+            Button("Continue investigation") {
+                if case .failure = appState.story.advanceAct(to: .somethingIsntRight) { failure = true }
+            }.buttonStyle(.appPrimary)
+                .accessibilityHint("Continue to Something Isn't Right.")
+                .alert("Progress could not be saved", isPresented: $failure) { Button("OK", role: .cancel) {} }
+                    message: { Text("Your investigation has not advanced. Please try again.") }
+        } else if appState.story.state.currentAct == .somethingIsntRight {
+            Text("Something Isn’t Right").appText(.sectionTitle)
+        }
     }
 }

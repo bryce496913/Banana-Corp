@@ -78,6 +78,7 @@ enum StoryEffect: Codable, Equatable {
     case changeVersion(contentID: String, versionID: String)
     case makeUnavailable(String)
     case recordClue(String)
+    case recordAssistantFact(String)
 
     private enum Keys: String, CodingKey { case type, id, contentID, versionID, route }
     init(from decoder: Decoder) throws {
@@ -98,6 +99,7 @@ enum StoryEffect: Codable, Equatable {
         case "changeVersion": self = .changeVersion(contentID: try c.decode(String.self, forKey: .contentID), versionID: try c.decode(String.self, forKey: .versionID))
         case "makeUnavailable": self = .makeUnavailable(try c.decode(String.self, forKey: .id))
         case "recordClue": self = .recordClue(try c.decode(String.self, forKey: .id))
+        case "recordAssistantFact": self = .recordAssistantFact(try c.decode(String.self, forKey: .id))
         default: throw DecodingError.dataCorruptedError(forKey: .type, in: c, debugDescription: "Unknown effect: \(type)")
         }
     }
@@ -112,6 +114,7 @@ enum StoryEffect: Codable, Equatable {
             try c.encode("changeVersion", forKey: .type); try c.encode(id, forKey: .contentID); try c.encode(versionID, forKey: .versionID)
         case .makeUnavailable(let id): try c.encode("makeUnavailable", forKey: .type); try c.encode(id, forKey: .id)
         case .recordClue(let id): try c.encode("recordClue", forKey: .type); try c.encode(id, forKey: .id)
+        case .recordAssistantFact(let id): try c.encode("recordAssistantFact", forKey: .type); try c.encode(id, forKey: .id)
         }
     }
 }
