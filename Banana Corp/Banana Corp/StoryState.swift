@@ -131,6 +131,7 @@ struct StoryState: Codable, Equatable {
                     && discoveredContentIDs.contains(record.sourceContentID)
                     && discoveredContentIDs.contains(record.sourceVersionID)
             }
+            && Set(preservedEvidence.values.map { $0.sourceContentID + "\u{0}" + $0.sourceVersionID }).count == preservedEvidence.count
             && contentReplacements.allSatisfy { $0.key == $0.value.id && $0.value.isValid }
             && ascensionMilestone?.isValid != false && time.isValid
             && lockedAppIDs.allSatisfy { !$0.isEmpty && $0.utf8.count <= 128 && $0.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) } }

@@ -154,6 +154,22 @@ enum StoryContentPayload: Codable, Equatable {
     }
 }
 
+/// Facts can only be awarded for this exact authored, preservable version.
+struct StoryEvidenceRules: Codable, Equatable {
+    let securedObserverClueID: String?
+    let preservationMilestoneID: String?
+    let comparisonMilestoneID: String?
+
+    private enum CodingKeys: String, CodingKey { case securedObserverClueID, preservationMilestoneID, comparisonMilestoneID }
+    init(from decoder: Decoder) throws {
+        try StoryJSONKey.requireOnly(["securedObserverClueID", "preservationMilestoneID", "comparisonMilestoneID"], in: decoder)
+        let fields = try decoder.container(keyedBy: CodingKeys.self)
+        securedObserverClueID = try fields.decodeIfPresent(String.self, forKey: .securedObserverClueID)
+        preservationMilestoneID = try fields.decodeIfPresent(String.self, forKey: .preservationMilestoneID)
+        comparisonMilestoneID = try fields.decodeIfPresent(String.self, forKey: .comparisonMilestoneID)
+    }
+}
+
 struct StoryContentVersion: Codable, Identifiable, Equatable {
     let id: String
     let version: Int
@@ -166,6 +182,8 @@ struct StoryContentVersion: Codable, Identifiable, Equatable {
     let preservedEvidenceID: String?
     let payload: StoryContentPayload
     let effectsOnRead: [StoryEffect]?
+    let evidenceRules: StoryEvidenceRules?
+    let narrativeMetadata: [String: String]?
 
     var readEventID: String { "event.read." + id }
 }

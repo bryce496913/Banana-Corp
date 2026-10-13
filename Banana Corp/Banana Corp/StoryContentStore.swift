@@ -27,6 +27,7 @@ enum StoryContentDeliveryError: Error, Equatable {
     case staleVersion
     case definitionChanged(String)
     case invalidSnapshot
+    case unknownEvidence(String)
     case progression(StoryActionError)
 }
 typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDeliveryError>
@@ -146,26 +147,101 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
     func preserve(_ id: String, versionID: String, at date: Date = Date()) -> StoryContentDeliveryResult {
         if let error = recoveryError { return .failure(error) }
         // A repeated preservation never regenerates evidence from edited catalogue definitions.
-        if progression.state.preservedEvidence.values.contains(where: { $0.sourceContentID == id && $0.sourceVersionID == versionID }) { return .success(.unchanged) }
+        if let existing = progression.state.preservedEvidence.values.first(where: { $0.sourceContentID == id && $0.sourceVersionID == versionID }) {
+            return validatedEvidence(existing) != nil ? .success(.unchanged) : .failure(.invalidSnapshot)
+        }
         guard let item = catalogue?.itemsByID[id], let version = currentVersion(for: id), version.id == versionID,
               let evidenceID = version.preservedEvidenceID else { return .failure(.contentUnavailable) }
         guard availability(for: id, versionID: versionID).isAvailable else { return .failure(.contentUnavailable) }
         do {
             let receipt = try receipt(item: item, version: version, state: progression.state)
             let record = PreservedEvidenceRecord(id: evidenceID, sourceContentID: id, sourceVersionID: versionID, capturedAt: date, snapshot: receipt.snapshot)
-            return progression.completeEvent("event.preserve." + evidenceID, actions: [
+            let eventID = "event.preserve." + evidenceID
+            guard !progression.state.completedEventIDs.contains(eventID) else { return .failure(.invalidSnapshot) }
+            var actions: [StoryAction] = [
                 .rememberContentVersion(receipt), .discoverContent(id), .discoverContent(versionID), .preserveEvidence(record)
-            ]).mapError(StoryContentDeliveryError.progression)
+            ]
+            if let clue = version.evidenceRules?.securedObserverClueID { actions.append(.recordObserverClue(clue)) }
+            if let milestone = version.evidenceRules?.preservationMilestoneID { actions.append(.recordMilestone(milestone)) }
+            return progression.completeEvent(eventID, actions: actions).mapError(StoryContentDeliveryError.progression)
         } catch { return .failure(.invalidSnapshot) }
     }
 
     func preservedItems(state: StoryState? = nil) -> [PreservedStoryContent] {
         (state ?? progression.state).preservedEvidence.values.sorted { $0.id < $1.id }.compactMap { record in
-            guard let snapshot = try? JSONDecoder().decode(StoryContentSnapshot.self, from: record.snapshot), snapshot.schemaVersion == 1,
-                  snapshot.contentID == record.sourceContentID, snapshot.version.id == record.sourceVersionID,
-                  snapshot.version.preservedEvidenceID == record.id, snapshot.version.payload.surface == snapshot.appSurface else { return nil }
-            return PreservedStoryContent(record: record, snapshot: snapshot)
+            validatedEvidence(record)
         }
+    }
+
+    func preservedItem(_ evidenceID: String) -> PreservedStoryContent? {
+        progression.state.preservedEvidence[evidenceID].flatMap(validatedEvidence)
+    }
+
+    /// Includes unreadable records so the Vault never silently hides damaged evidence.
+    func evidenceRecords() -> [PreservedEvidenceRecord] {
+        progression.state.preservedEvidence.values.sorted { $0.capturedAt == $1.capturedAt ? $0.id < $1.id : $0.capturedAt > $1.capturedAt }
+    }
+
+    func isPreservable(_ id: String, versionID: String) -> Bool {
+        guard progression.isWritable, let version = currentVersion(for: id), version.id == versionID,
+              version.preservedEvidenceID != nil, availability(for: id, versionID: versionID).isAvailable else { return false }
+        return true
+    }
+
+    /// The exact engaged version is retained even if its read effects switch/remove the live source.
+    func engagedSnapshot(_ id: String, versionID: String) -> StoryContentSnapshot? {
+        guard let record = progression.state.contentDelivery.versionReceipts[versionID], record.contentID == id,
+              progression.state.readContentIDs.contains(versionID),
+              let snapshot = try? JSONDecoder().decode(StoryContentSnapshot.self, from: record.snapshot), snapshot.schemaVersion == 1,
+              snapshot.contentID == id, snapshot.version.id == versionID, snapshot.appSurface == snapshot.version.payload.surface else { return nil }
+        return snapshot
+    }
+
+    func comparison(for evidenceID: String) -> Result<EvidenceComparison, StoryContentDeliveryError> {
+        guard progression.state.preservedEvidence[evidenceID] != nil else { return .failure(.unknownEvidence(evidenceID)) }
+        guard let preserved = preservedItem(evidenceID) else { return .failure(.invalidSnapshot) }
+        let id = preserved.record.sourceContentID
+        func unavailable(_ reason: EvidenceLiveUnavailable) -> Result<EvidenceComparison, StoryContentDeliveryError> {
+            .success(EvidenceComparison(preserved: preserved, current: .unavailable(reason), differences: []))
+        }
+        guard progression.isWritable else { return unavailable(.saveUnavailable) }
+        if progression.state.contentDelivery.unavailableContentIDs.contains(id) { return unavailable(.removed) }
+        guard let catalogue else { return unavailable(.catalogueUnavailable) }
+        guard let item = catalogue.itemsByID[id] else { return unavailable(.missingSource) }
+        let liveID = progression.state.contentDelivery.activeVersionIDs[id] ?? item.initialVersionID
+        guard catalogue.versionOwners[liveID] == id else { return unavailable(.missingVersion) }
+        guard let live = currentVersion(for: id) else { return unavailable(.unverifiedVersion) }
+        guard availability(for: id, versionID: liveID).isAvailable else { return unavailable(.notAccessible) }
+        return .success(EvidenceComparison(preserved: preserved, current: .live(live), differences: EvidenceComparison.differences(preserved: preserved.snapshot.version, live: live)))
+    }
+
+    /// Called by the explicit Compare action, never list rendering/view appearance.
+    @discardableResult
+    func recordComparison(_ evidenceID: String) -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        switch comparison(for: evidenceID) {
+        case .failure(let error): return .failure(error)
+        case .success(let comparison):
+            if case .unavailable(let reason) = comparison.current, reason != .removed { return .failure(.contentUnavailable) }
+            // A first unchanged comparison does not prevent a later changed comparison from earning its authored fact.
+            let performedID = "event.compare." + evidenceID
+            let changedID = "event.diff." + evidenceID
+            var actions: [StoryAction] = [.recordEvidenceComparison(evidenceID: evidenceID, changed: comparison.hasVisibleDifferences)]
+            if comparison.hasVisibleDifferences, let milestone = comparison.preserved.snapshot.version.evidenceRules?.comparisonMilestoneID {
+                actions.append(.recordMilestone(milestone))
+            }
+            return progression.completeEvent(comparison.hasVisibleDifferences ? changedID : performedID, actions: actions).mapError(StoryContentDeliveryError.progression)
+        }
+    }
+
+    private func validatedEvidence(_ record: PreservedEvidenceRecord) -> PreservedStoryContent? {
+        guard record.isValid, let snapshot = try? JSONDecoder().decode(StoryContentSnapshot.self, from: record.snapshot), snapshot.schemaVersion == 1,
+              snapshot.contentID == record.sourceContentID, snapshot.version.id == record.sourceVersionID,
+              snapshot.version.version > 0, !snapshot.version.title.isEmpty, snapshot.version.narrativeTimestamp?.isValid != false,
+              snapshot.version.preservedEvidenceID == record.id, snapshot.version.payload.surface == snapshot.appSurface else { return nil }
+        if let receipt = progression.state.contentDelivery.versionReceipts[record.sourceVersionID],
+           !matches(SavedContentVersion(contentID: record.sourceContentID, versionID: record.sourceVersionID, snapshot: record.snapshot), expected: receipt) { return nil }
+        return PreservedStoryContent(record: record, snapshot: snapshot)
     }
 
     func pendingNotifications(state: StoryState? = nil) -> [(record: QueuedStoryNotification, content: StoryContentVersion)] {

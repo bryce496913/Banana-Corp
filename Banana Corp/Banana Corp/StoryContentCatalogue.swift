@@ -71,7 +71,9 @@ enum StoryContentCatalogueLoader {
         let versionIDs = Set(document.items.flatMap { $0.versions.map(\.id) })
         let assetIDs = Set((document.assets ?? []).map(\.id))
         let evidenceIDs = Set(document.items.flatMap { $0.versions.compactMap(\.preservedEvidenceID) })
-        let readEvents = Set(document.items.flatMap { $0.versions.map(\.readEventID) })
+        let readEvents = Set(document.items.flatMap { $0.versions.flatMap { version in
+            [version.readEventID] + (version.preservedEvidenceID.map { ["event.preserve." + $0, "event.compare." + $0, "event.diff." + $0] } ?? [])
+        } })
         let items = Dictionary(document.items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
 
         for asset in document.assets ?? [] {
@@ -107,7 +109,9 @@ enum StoryContentCatalogueLoader {
                     if reference.kind == "evidencePreserved", item.versions.contains(where: { $0.preservedEvidenceID == reference.id }) {
                         report(.invalidRule, item.id, "Content cannot require its own preserved evidence to become available")
                     }
-                    if reference.kind == "eventCompleted", item.versions.contains(where: { $0.readEventID == reference.id }) {
+                    if reference.kind == "eventCompleted", item.versions.contains(where: { version in
+                        version.readEventID == reference.id || version.preservedEvidenceID.map { ["event.preserve." + $0, "event.compare." + $0, "event.diff." + $0].contains(reference.id) } == true
+                    }) {
                         report(.invalidRule, item.id, "Content cannot require its own read event to become available")
                     }
                 }
@@ -119,6 +123,17 @@ enum StoryContentCatalogueLoader {
                 if let evidenceID = version.preservedEvidenceID {
                     register(evidenceID, at: version.id)
                     register("event.preserve." + evidenceID, at: version.id)
+                    register("event.compare." + evidenceID, at: version.id)
+                    register("event.diff." + evidenceID, at: version.id)
+                }
+                if let rules = version.evidenceRules {
+                    if version.preservedEvidenceID == nil { report(.invalidRule, version.id, "Evidence rules require a preservable version") }
+                    let references = [("observerClueFound", rules.securedObserverClueID), ("milestoneCompleted", rules.preservationMilestoneID), ("milestoneCompleted", rules.comparisonMilestoneID)]
+                    for (kind, id) in references {
+                        guard let id else { continue }
+                        if !StoryID.isValid(id) || !(document.facts[kind] ?? []).contains(id) { report(.missingReference, version.id, "Undeclared evidence fact: \(id)") }
+                        if conditions.flatMap(\.allFactReferences).contains(where: { $0.kind == kind && $0.id == id }) { report(.invalidRule, version.id, "Evidence cannot produce its own availability prerequisite") }
+                    }
                 }
                 if version.payload.surface != item.appSurface || !nonempty(version.title) || version.narrativeTimestamp?.isValid == false {
                     report(.invalidPayload, version.id, "Surface/title/narrative timestamp mismatch")
