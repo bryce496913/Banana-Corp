@@ -89,6 +89,36 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertFalse(app.buttons["Submit"].exists)
         XCTAssertEqual(app.statusBars.count, 0)
         XCTAssertFalse(app.alerts.firstMatch.exists)
+        let puzzle = "puzzle.banana_wall.review_cross_reference"
+        tap(app, "story.puzzle.hint.\(puzzle)")
+        for source in ["content.act2.messages.daniel", "content.act2.news.official", "content.act2.email.maya", "content.act2.web.echo07"] {
+            tap(app, "story.puzzle.clue.\(source)")
+            tap(app, "story.back")
+        }
+        let fields = [("discipline", "neural systems"), ("trial", "ECHO-07"), ("public_scope", "selected preferences"), ("research_scope", "recorded cognitive patterns")]
+        for (id, value) in fields {
+            let input = app.textFields["story.puzzle.input.input.banana_wall.\(id)"].firstMatch
+            for _ in 0..<16 {
+                if input.exists && input.isHittable { break }
+                if input.exists && input.frame.midY < app.frame.midY { app.scrollViews.firstMatch.swipeDown() }
+                else { app.scrollViews.firstMatch.swipeUp() }
+            }
+            ready(input); input.tap(); input.typeText(value)
+            let done = app.keyboards.buttons["Done"].firstMatch
+            ready(done); done.tap()
+        }
+        openApp(app, "browser")
+        tap(app, "story.resource.resource.banana_wall")
+        XCTAssertEqual(app.textFields["story.puzzle.input.input.banana_wall.discipline"].value as? String, "neural systems")
+        tap(app, "story.puzzle.submit.\(puzzle)")
+        XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+        tap(app, "story.resource.open.content.act3.banana_wall.scope_record")
+        XCTAssertTrue(app.buttons["story.preserve.version.act3.banana_wall.scope_record.v1"].waitForExistence(timeout: 8))
+        checkpoint(app, "approved Wall solved and first record opened")
+        openApp(app, "browser")
+        tap(app, "story.resource.resource.banana_wall")
+        XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+        XCTAssertFalse(app.buttons["story.puzzle.submit.\(puzzle)"].exists)
     }
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {

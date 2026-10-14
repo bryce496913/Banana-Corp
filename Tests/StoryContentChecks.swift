@@ -34,9 +34,10 @@ import Foundation
     }
 
     static func validateLoading(_ fixture: Data, productionURL: URL) throws {
-        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL).get()
+        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL, restrictedResourceIDs: ["resource.banana_wall"]).get()
         precondition(!production.items.isEmpty)
-        precondition(production.items.allSatisfy { $0.actAvailable.rawValue <= 2 })
+        precondition(production.items.filter { $0.actAvailable.rawValue <= 2 }.count == 45)
+        precondition(production.items.filter { $0.actAvailable.rawValue == 3 }.map(\.id) == ["content.act3.banana_wall.scope_record"])
         rejects(StoryContentCatalogueLoader.load(fileURL: nil), .missingResource)
         rejects(StoryContentCatalogueLoader.load(fileURL: URL(string: "https://example.invalid/catalogue.json")), .missingResource)
         rejects(StoryContentCatalogueLoader.load(data: Data("invalid".utf8)), .malformedJSON)

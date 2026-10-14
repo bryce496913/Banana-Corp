@@ -1,6 +1,8 @@
 # Banana Wall — Review cross-reference
 
-**PROPOSED — AWAITING STORY APPROVAL**
+**APPROVED — 2026-10-14**
+
+The user explicitly stated “The story is approved” and requested Implementation Pass 4. The four-field design and limited reward below are approved; bible v1.8 is the canonical approval record. Historical proposal wording below is retained as the reviewed specification. Implementation adds the factual `milestone.banana_wall.breached` explicitly requested by Pass 4, without adding a score or later gate. Broader normalization and later research remain unapproved.
 
 This entire document is a design proposal, including all new puzzle copy, answers, reward copy, IDs and implementation contracts. Quotations explicitly identified as existing evidence are verified against the current catalogue; reproducing them here does not approve this new puzzle. Approval of a PR containing this document alone must not be interpreted as permission to activate it. Obtain explicit story approval for the checklist below before implementation.
 

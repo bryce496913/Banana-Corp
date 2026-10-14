@@ -1,5 +1,7 @@
 # Local story catalogue and delivery
 
+2026-10-14: the approved Banana Wall adds one access-protected Act 3 scope record to the unchanged 45 earlier definitions. [banana-wall-implementation.md](banana-wall-implementation.md) documents its reciprocal resource link, explicit read and unchanged save/snapshot schemas.
+
 This implements Pass 3 under [the canonical bible](../BANANA_CORP_GAME_BIBLE.md). Pass 3 initially left `Banana Corp/Banana Corp/StoryContent.json` empty. Pass 5 now includes 20 approved opening Act 1 items and structured source readers, Assistant choices and a product teaser; see [the inventory](act-one-content.md). Placeholder activation text does not establish gates. The first replacement/contradiction and Act 2 handoff remain outside this opening rollout.
 
 ## Ownership and files

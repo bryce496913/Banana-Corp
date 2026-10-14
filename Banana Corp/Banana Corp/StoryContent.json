@@ -36,6 +36,9 @@
       "assistant.act2.edits_questioned",
       "assistant.act2.symptoms_questioned",
       "assistant.act2.echo_questioned"
+    ],
+    "accessGranted": [
+      "access.banana_wall.breached"
     ]
   },
   "items": [
@@ -2525,6 +2528,72 @@
         }
       ],
       "visibility": "hiddenUntilRevealed"
+    },
+    {
+      "id": "content.act3.banana_wall.scope_record",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2000,
+      "initialVersionID": "version.act3.banana_wall.scope_record.v1",
+      "versions": [
+        {
+          "id": "version.act3.banana_wall.scope_record.v1",
+          "version": 1,
+          "title": "ECHO-07 — Scope reconciliation record",
+          "subtitle": "Limited review attachment",
+          "source": "Internal research review",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/echo-07/scope-reconciliation",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Originating discipline: neural systems."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Referenced trial: ECHO-07 — Neural Synchronization Trial — Preliminary Findings."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Public description: the adaptive interface operates within selected preferences."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Research observation: synchronization coincides with changes in recorded cognitive patterns."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These statements concern different kinds of change. The preliminary excerpt does not establish that the recorded findings are confined to the public description."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Review status: discrepancy unresolved. Read the preliminary findings and research correspondence alongside this record before drawing a conclusion about the cause."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Read the ECHO-07 preliminary findings",
+                  "contentID": "content.act2.web.echo07"
+                },
+                {
+                  "label": "Read Maya Chen’s research correspondence",
+                  "contentID": "content.act2.email.maya"
+                }
+              ]
+            }
+          },
+          "preservedEvidenceID": "evidence.act3.banana_wall.scope_record.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        }
+      ],
+      "restrictedResourceID": "resource.banana_wall"
     }
   ]
 }
