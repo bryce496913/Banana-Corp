@@ -13,7 +13,11 @@
       "content.act2.messages.daniel",
       "content.act2.news.official",
       "content.act2.email.maya",
-      "content.act2.web.echo07"
+      "content.act2.web.echo07",
+      "version.act3.banana_wall.scope_record.v1",
+      "version.act3.mirror.origins.v1",
+      "version.act3.echo.correspondence.v1",
+      "version.act3.neural.capabilities.v1"
     ]
   },
   "resources": [
@@ -35,6 +39,139 @@
       "unlockConditions": [],
       "linkedContentIDs": [
         "content.act3.banana_wall.scope_record"
+      ]
+    },
+    {
+      "id": "resource.act3.mirror.origins",
+      "kind": "webPage",
+      "displayName": "Project MIRROR — Original research purpose",
+      "message": "Restricted research archive.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.banana_wall.scope_record.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.banana_wall.scope_record.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.mirror.origins"
+      ]
+    },
+    {
+      "id": "resource.act3.echo.correspondence",
+      "kind": "webPage",
+      "displayName": "Project ECHO — Archived development correspondence",
+      "message": "Restricted research archive.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.echo.correspondence"
+      ]
+    },
+    {
+      "id": "resource.act3.neural.capabilities",
+      "kind": "webPage",
+      "displayName": "Neural influence — Experimental capability note",
+      "message": "Restricted research archive.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.neural.capabilities"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.mirror",
+      "kind": "webPage",
+      "displayName": "What changed between MIRROR and ECHO?",
+      "message": "Restricted research archive.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.mirror"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.influence",
+      "kind": "webPage",
+      "displayName": "Does this go beyond selected preferences?",
+      "message": "Restricted research archive.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.influence"
       ]
     }
   ],

@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.8  
+**Version:** 1.9
 **Last updated:** 2026-10-14  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -299,6 +299,14 @@ The stable puzzle is `puzzle.banana_wall.review_cross_reference`, event `event.p
 Success atomically records the solved puzzle, named event, `access.banana_wall.breached` and the explicitly requested factual milestone `milestone.banana_wall.breached`, once. Only `content.act3.banana_wall.scope_record` / `version.act3.banana_wall.scope_record.v1` becomes available through `resource.banana_wall`. Its approved title is **ECHO-07 — Scope reconciliation record**, source Internal research review, subtitle Limited review attachment, path `/research/echo-07/scope-reconciliation`. It contains the approved limited draft reproduced in the design: discipline/trial/public-description/research-observation metadata, the difference between these kinds of change, and an unresolved review statement with links back to ECHO-07/Maya. It invents no author, date, mechanism or wider reveal. Its snapshot can be preserved as `evidence.act3.banana_wall.scope_record.v1`; reading/preserving adds no extra story milestone, score or ending condition.
 
 The reward is read only by explicit opening. Repeat submission/relaunch does not replay effects; write failure grants no partial access. Old pending/test facts remain recoverable but cannot substitute for the new solved/event markers. Save schema 2 remains unchanged; existing evidence bytes and content versions stay immutable. No automatic Act 4 transition, unrelated access, Assistant cooperation, ASCENSION/Observer/ending award or new chapter is authorised. The retired pending descriptor may remain inert for historical references.
+
+### Act 3 Part One — authorized investigation contract
+
+The user's Pass 5 authorizes restrained opening research drafts grounded in MIRROR's interpretation purpose, ECHO's adaptive interpretation/response development, and the established neural/perceptual influence capability. No scientific mechanism, dated research chronology, author attribution, autonomy, ASCENSION, Daniel complicity or later revelation is added. The original scope record and all published versions remain immutable.
+
+Explicitly reading the scope record makes the MIRROR purpose brief available as a subordinate protected Browser resource. Opening that first expanded research brief records `milestone.act3.restricted_research_opened` and `milestone.act3.mirror_origins_discovered`; scope-record reading itself retains its previous no-extra-milestone contract. Its read unlocks archived ECHO development correspondence. Reading both complementary sources establishes `milestone.act3.mirror_echo_relationship_established`, making the experimental-capability note available. Reading that note records `milestone.act3.neural_influence_evidence_discovered`. List appearance gives no read credit; no timer, preservation requirement or act transition is introduced.
+
+All three records can be preserved through Evidence, retaining exact versions and restricted-access context. Supplied relative timestamps identify archive indexing, not invented historical experiment dates. A past save with a legitimate scope-record read can continue without rereading or new migration. Knowledge-gated Assistant questions record lineage/influence questioning only, never cooperation or hidden scores. See [the content/progression map](docs/act-three-part-one.md) for the exact records and validation.
 
 ## 11. Act 4 — The Takeover
 
@@ -693,3 +701,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-13 | 1.6 | Pass 7: approved playable Act 2 drafts, same-location Alex transcript replacement, already-read social/news/web changes, accurate multi-format evidence, knowledge-gated Daniel/Maya/ECHO-07/diagnostic leads and Assistant questioning, independent-corroboration alternative and explicit cross-app confirmation before Act 3. Existing source/snapshot versions, unresolved motives/fates, Banana Wall, later reveals and ending requirements remain unchanged. |
 | 2026-10-13 | 1.7 | Pass 8: approved reusable local restricted-resource/puzzle infrastructure and a locked Browser Banana Wall entry with no production solution, atomic saved success, delivery-layer authorization and isolated/unbundled neutral fixtures. Actual breach design, full Act 3 research, later milestone/ending conditions, optional Observer clues and character outcomes remain unresolved/unchanged. |
 | 2026-10-14 | 1.8 | Explicit user story approval and Implementation Pass 4: canonized the four-field Banana Wall review cross-reference, exact normalization, voluntary hints and approved limited scope record. Success records puzzle/event/scoped access plus the requested factual breach milestone atomically; existing clues/snapshots, later acts, games and ending requirements remain unchanged. |
+| 2026-10-14 | 1.9 | Pass 5: authorized opening MIRROR/ECHO lineage and neural-influence research drafts, sequential explicit read gates, optional preserved restricted records and knowledge-gated Assistant questions. Immutable prior records, later revelations and ending contracts remain unchanged. |
