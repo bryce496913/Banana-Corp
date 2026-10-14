@@ -25,7 +25,9 @@ final class IOSIntegrationTests: XCTestCase {
     }
 
     func testLaunchArtworkAndGeneratedInfoPlist() {
-        XCTAssertNotNil(UIImage(named: "Logo-Black", in: appBundle, compatibleWith: nil))
+        for asset in AppImageAsset.allCases {
+            XCTAssertNotNil(UIImage(named: asset.rawValue, in: appBundle, compatibleWith: nil), "Missing registered artwork: \(asset.rawValue)")
+        }
         XCTAssertEqual(appBundle.object(forInfoDictionaryKey: "UIStatusBarHidden") as? Bool, true)
         XCTAssertEqual(appBundle.object(forInfoDictionaryKey: "MinimumOSVersion") as? String, "18.0")
         XCTAssertEqual(appBundle.object(forInfoDictionaryKey: "UIDeviceFamily") as? [Int], [1])
