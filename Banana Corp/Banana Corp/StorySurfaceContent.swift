@@ -357,6 +357,24 @@ struct ActThreeInvestigationControl: View {
                     .buttonStyle(.modernPhone).accessibilityIdentifier("story.lead.\(lead.version.id)")
                     .accessibilityHint("Open the next available source. A transcript requires explicit Finish before it is recorded as read.")
             }
+            if ["content.act3.observer.session", "content.act3.conclusion.resistance", "content.act3.assistant.observer"].contains(currentContentID ?? "") {
+                if !appState.content.observerKnownSources.isEmpty {
+                    Text("Revisit known records").appText(.sectionTitle)
+                    Text("These earlier records can be reconsidered in context; they do not identify the cause of every change.").appText(.caption)
+                    ForEach(appState.content.observerKnownSources) { source in
+                        Button(source.version.title) {
+                            if case .failure = appState.content.read(source.id, versionID: source.version.id) { failure = true; return }
+                            selection = .init(contentID: source.id, versionID: source.version.id, surface: source.surface)
+                        }.buttonStyle(.modernPhone)
+                            .accessibilityIdentifier("story.observer.reference.\(source.id)")
+                    }
+                }
+                if appState.content.observerOriginalEvidenceAvailable {
+                    NavigationLink("Inspect your preserved original ECHO email") {
+                        EvidenceDetailView(evidenceID: FirstAnomalyContract.evidence)
+                    }.buttonStyle(.modernPhone).accessibilityIdentifier("story.observer.original_evidence")
+                }
+            }
         }
         .navigationDestination(item: $selection) { StorySourceDetailView(selection: $0) }
         .modifier(AppFeedbackModifier(event: feedback))

@@ -534,13 +534,39 @@ extension StoryContentStore {
     var actThreeSuggestedLead: DeliveredStoryContent? {
         guard progression.state.currentAct == .theConspiracy else { return nil }
         for id in ["content.act3.autonomy.actions", "content.act3.autonomy.maya", "content.act3.ascension.recording",
-                   "content.act3.ascension.purpose", "content.act3.energy.transfer", "content.act3.energy.growth"] {
+                   "content.act3.ascension.purpose", "content.act3.energy.transfer", "content.act3.energy.growth",
+                   "content.act3.daniel.contribution", "content.act3.daniel.concealment", "content.act3.maya.guidance",
+                   "content.act3.observer.program", "content.act3.observer.session", "content.act3.conclusion.resistance"] {
             guard let item = catalogue?.itemsByID[id],
                   let delivered = availableItems(for: item.appSurface).first(where: { $0.id == id }),
                   delivered.availability == .availableUnread else { continue }
             return delivered
         }
         return nil
+    }
+
+    /// Mandatory Observer knowledge is a milestone, never a hidden-clue/ending award.
+    /// Show only earlier sources supported by actual saved discoveries, not assumed chronology.
+    var observerKnownSources: [DeliveredStoryContent] {
+        guard progression.state.completedMilestoneIDs.contains("milestone.act3.observer_connection_discovered") else { return [] }
+        let references: [(String, StoryCondition)] = [
+            (FirstAnomalyContract.trace, .all([.milestoneCompleted(FirstAnomalyContract.suspiciousMaterial),
+                                             .eventCompleted(FirstAnomalyContract.removalEvent)])),
+            (FirstAnomalyContract.warning, .contentRead(FirstAnomalyContract.warningVersion)),
+            ("content.act2.messages.daniel", .milestoneCompleted(ActTwoContract.danielFollowed)),
+            ("content.act2.diagnostics.excerpt", .milestoneCompleted(ActTwoContract.diagnosticsRead)),
+            ("content.act3.banana_wall.scope_record", .contentRead("version.act3.banana_wall.scope_record.v1"))
+        ]
+        return references.compactMap { id, condition in
+            guard progression.satisfies(condition), let item = catalogue?.itemsByID[id] else { return nil }
+            return availableItems(for: item.appSurface).first { $0.id == id }
+        }
+    }
+    var observerOriginalEvidenceAvailable: Bool {
+        guard progression.state.completedMilestoneIDs.contains("milestone.act3.observer_connection_discovered"),
+              let saved = preservedItem(FirstAnomalyContract.evidence) else { return false }
+        return saved.record.sourceContentID == FirstAnomalyContract.originalContent
+            && saved.record.sourceVersionID == FirstAnomalyContract.originalVersion
     }
 
     /// A catalogue-backed next lead is guidance, never an automatic read/unlock.

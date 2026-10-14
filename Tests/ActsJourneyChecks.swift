@@ -24,13 +24,14 @@ private final class WallFailingPersistence: StoryPersistence {
                 var story = StoryProgressionStore(persistence: disk)
                 var access = RestrictedAccessStore(progression: story, catalogue: accessResult)
                 var content = StoryContentStore(progression: story, catalogue: catalogue, access: access)
-                if CommandLine.arguments.count > 2 && ["read-wall", "read-research", "read-investigation"].contains(CommandLine.arguments[2]) {
+                if CommandLine.arguments.count > 2 && ["read-wall", "read-research", "read-investigation", "read-conclusion"].contains(CommandLine.arguments[2]) {
                     precondition(story.isWritable && story.state.currentAct == .theConspiracy)
                     precondition(access.resourceState("resource.banana_wall") == .unlocked)
                     precondition(content.preservedItem("evidence.act3.banana_wall.scope_record.v1") != nil)
-                    precondition(content.evidenceRecords().count == 1 + (email ? 1 : 0) + (video ? 1 : 0) + (CommandLine.arguments[2] == "read-investigation" ? 3 + (video ? 6 : 0) : (CommandLine.arguments[2] == "read-research" ? 3 : 0)))
-                    if ["read-research", "read-investigation"].contains(CommandLine.arguments[2]) { try investigateResearch(story, content, alreadyRead: true) }
-                    if CommandLine.arguments[2] == "read-investigation" { try investigateAutonomy(story, content, access, preserveSources: video, alreadyRead: true) }
+                    precondition(content.evidenceRecords().count == 1 + (email ? 1 : 0) + (video ? 1 : 0) + (["read-investigation", "read-conclusion"].contains(CommandLine.arguments[2]) ? 3 + (video ? (CommandLine.arguments[2] == "read-conclusion" ? 12 : 6) : 0) : (CommandLine.arguments[2] == "read-research" ? 3 : 0)))
+                    if ["read-research", "read-investigation", "read-conclusion"].contains(CommandLine.arguments[2]) { try investigateResearch(story, content, alreadyRead: true) }
+                    if ["read-investigation", "read-conclusion"].contains(CommandLine.arguments[2]) { try investigateAutonomy(story, content, access, preserveSources: video, alreadyRead: true) }
+                    if CommandLine.arguments[2] == "read-conclusion" { try investigateCharacters(story, content, access, preserveSources: video, emailProof: email, alreadyRead: true) }
                     for record in content.evidenceRecords() {
                         precondition(record.snapshot == story.state.contentDelivery.versionReceipts[record.sourceVersionID]?.snapshot)
                     }
@@ -57,7 +58,7 @@ private final class WallFailingPersistence: StoryPersistence {
                     let early = story.state
                     precondition(access.submit("puzzle.banana_wall.review_cross_reference", fields: [:]) == .rejected(.inaccessible))
                     precondition(content.currentVersion(for: "content.act3.banana_wall.scope_record") == nil && story.state == early)
-                    for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence", "autonomy.actions", "autonomy.maya", "ascension.recording", "ascension.purpose", "energy.transfer", "energy.growth", "assistant.autonomy", "assistant.ascension", "assistant.energy"] {
+                    for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence", "autonomy.actions", "autonomy.maya", "ascension.recording", "ascension.purpose", "energy.transfer", "energy.growth", "assistant.autonomy", "assistant.ascension", "assistant.energy", "daniel.contribution", "daniel.concealment", "maya.guidance", "observer.program", "observer.session", "conclusion.resistance", "assistant.daniel", "assistant.maya", "assistant.observer"] {
                         precondition(content.currentVersion(for: "content.act3." + key) == nil)
                         precondition((try? content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get()) == nil)
                     }
@@ -146,14 +147,19 @@ private final class WallFailingPersistence: StoryPersistence {
                 _ = try content.confirmActTwoInvestigation().get()
                 precondition(story.state == final)
                 if solvingWall { try solveWall(story, access, content, disk: disk) }
-                if CommandLine.arguments.count > 2 && ["write-research", "write-investigation"].contains(CommandLine.arguments[2]) {
+                if CommandLine.arguments.count > 2 && ["write-research", "write-investigation", "write-conclusion"].contains(CommandLine.arguments[2]) {
                     try investigateResearch(story, content)
                     restart("after MIRROR/ECHO/neural evidence investigation")
                     try investigateResearch(story, content, alreadyRead: true)
-                    if CommandLine.arguments[2] == "write-investigation" {
+                    if ["write-investigation", "write-conclusion"].contains(CommandLine.arguments[2]) {
                         try investigateAutonomy(story, content, access, preserveSources: video)
                         restart("after autonomy, ASCENSION purpose and energy investigation")
                         try investigateAutonomy(story, content, access, preserveSources: video, alreadyRead: true)
+                        if CommandLine.arguments[2] == "write-conclusion" {
+                            try investigateCharacters(story, content, access, preserveSources: video, emailProof: email)
+                            restart("after character and Observer discoveries; Act 3 concluded")
+                            try investigateCharacters(story, content, access, preserveSources: video, emailProof: email, alreadyRead: true)
+                        }
                     }
                 }
                 print("PASS MODEL ONLY: email=\(email), video=\(video), \(checkpoints) exact file-store reopen checkpoints, natural catalogue actions to locked Banana Wall; no Apple UI execution")
@@ -243,7 +249,7 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state == start)
         if !alreadyRead {
             for key in keys.dropFirst() { unavailable(key) }
-            for key in ["assistant.autonomy", "assistant.ascension", "assistant.energy"] { unavailable(key) }
+            for key in ["assistant.autonomy", "assistant.ascension", "assistant.energy", "daniel.contribution", "daniel.concealment", "maya.guidance", "observer.program", "observer.session", "conclusion.resistance", "assistant.daniel", "assistant.maya", "assistant.observer"] { unavailable(key) }
             precondition((try? content.confirmEchoAutonomy().get()) == nil)
             precondition((try? content.confirmPublicRestrictedContradiction().get()) == nil)
             precondition(story.state == start)
@@ -316,6 +322,105 @@ private final class WallFailingPersistence: StoryPersistence {
         print("PASS MODEL ONLY: autonomy evidence/synthesis, staged ASCENSION/energy, Assistant knowledge, preserved sources, atomic failure, idempotency and no takeover")
     }
 
+    @MainActor static func investigateCharacters(_ story: StoryProgressionStore, _ content: StoryContentStore, _ access: RestrictedAccessStore, preserveSources: Bool, emailProof: Bool, alreadyRead: Bool = false) throws {
+        let start = story.state
+        let keys = ["daniel.contribution", "daniel.concealment", "maya.guidance", "observer.program", "observer.session", "conclusion.resistance"]
+        let oldSnapshots = start.preservedEvidence
+        func unavailable(_ key: String) {
+            precondition(content.currentVersion(for: "content.act3." + key) == nil)
+            precondition(content.originalVersion(for: "content.act3." + key) == nil)
+            precondition((try? content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get()) == nil)
+            precondition((try? content.preserve("content.act3." + key, versionID: "version.act3." + key + ".v1").get()) == nil)
+        }
+        func consume(_ key: String) throws {
+            let id = "content.act3." + key; let version = "version.act3." + key + ".v1"
+            if key == "maya.guidance" && !alreadyRead {
+                guard case .video(let payload) = content.currentVersion(for: id)!.payload else { preconditionFailure() }
+                precondition(payload.mediaAssetID == nil && payload.transcript!.last!.text.contains("Maya remains missing"))
+                if preserveSources { _ = try content.preserve(id, versionID: version).get() }
+                unavailable("observer.program")
+                let beforeFinish = story.state
+                precondition((try? content.completePresentation(id, versionID: version, progress: StoryPresentationProgress()).get()) == nil)
+                precondition(story.state == beforeFinish)
+                finish(content, id)
+            } else { _ = try content.read(id, versionID: version).get() }
+            if preserveSources {
+                _ = try content.preserve(id, versionID: version).get()
+                let saved = content.preservedItem("evidence.act3." + key + ".v1")!.snapshot
+                precondition(saved.version == content.currentVersion(for: id))
+                precondition(saved.version.narrativeMetadata?["accessContext"] == "Banana Wall research authorization")
+            } else { precondition(content.preservedItem("evidence.act3." + key + ".v1") == nil) }
+        }
+        for surface in StoryAppSurface.allCases { _ = content.availableItems(for: surface) }
+        _ = content.actThreeSuggestedLead; _ = content.observerKnownSources
+        precondition(story.state == start)
+        if !alreadyRead {
+            for key in keys.dropFirst() { unavailable(key) }
+            for key in ["assistant.daniel", "assistant.maya", "assistant.observer"] { unavailable(key) }
+            precondition(content.observerKnownSources.isEmpty && !content.observerOriginalEvidenceAvailable)
+            precondition(story.state == start)
+            let failing = WallFailingPersistence(data: try StorySaveCodec().encode(start))
+            let failedStory = StoryProgressionStore(persistence: failing)
+            let failedAccess = RestrictedAccessStore(progression: failedStory, catalogue: .success(access.catalogue!))
+            let failedContent = StoryContentStore(progression: failedStory, catalogue: .success(content.catalogue!), access: failedAccess)
+            failing.fail = true
+            precondition((try? failedContent.read("content.act3.daniel.contribution", versionID: "version.act3.daniel.contribution.v1").get()) == nil)
+            precondition(failedStory.state == start && failedContent.currentVersion(for: "content.act3.daniel.concealment") == nil)
+        }
+        try consume("daniel.contribution")
+        if !alreadyRead { unavailable("maya.guidance"); unavailable("assistant.daniel") }
+        try consume("daniel.concealment")
+        _ = try content.read("content.act3.assistant.daniel", versionID: "version.act3.assistant.daniel.v1").get()
+        if !alreadyRead { unavailable("observer.program"); unavailable("assistant.maya"); unavailable("assistant.observer") }
+        try consume("maya.guidance")
+        _ = try content.read("content.act3.assistant.maya", versionID: "version.act3.assistant.maya.v1").get()
+        if !alreadyRead { unavailable("observer.session"); unavailable("assistant.observer"); unavailable("conclusion.resistance") }
+        try consume("observer.program")
+        if !alreadyRead {
+            precondition(!story.state.completedMilestoneIDs.contains("milestone.act3.observer_connection_discovered"))
+            precondition(content.observerKnownSources.isEmpty)
+            unavailable("conclusion.resistance")
+        }
+        try consume("observer.session")
+        _ = try content.read("content.act3.assistant.observer", versionID: "version.act3.assistant.observer.v1").get()
+        precondition(content.observerOriginalEvidenceAvailable == emailProof)
+        let references = content.observerKnownSources.map(\.id)
+        precondition(references == [FirstAnomalyContract.trace, FirstAnomalyContract.warning, "content.act2.messages.daniel", "content.act2.diagnostics.excerpt", "content.act3.banana_wall.scope_record"])
+        // Removing a factual prior discovery removes that reference, rather than assuming all history.
+        var partial = story.state
+        partial.readContentIDs.remove(FirstAnomalyContract.warningVersion)
+        partial.completedMilestoneIDs.remove(ActTwoContract.diagnosticsRead)
+        let partialStory = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(partial)))
+        let partialAccess = RestrictedAccessStore(progression: partialStory, catalogue: .success(access.catalogue!))
+        let partialContent = StoryContentStore(progression: partialStory, catalogue: .success(content.catalogue!), access: partialAccess)
+        precondition(!partialContent.observerKnownSources.contains { $0.id == FirstAnomalyContract.warning || $0.id == "content.act2.diagnostics.excerpt" })
+        try consume("conclusion.resistance")
+        for key in ["daniel_involvement_discovered", "daniel_concealment_discovered", "maya_recorded_guidance_reviewed", "observer_connection_discovered", "investigation_concluded"] {
+            precondition(story.state.completedMilestoneIDs.contains("milestone.act3." + key))
+        }
+        for key in ["daniel_questioned", "maya_questioned", "observer_questioned"] {
+            precondition(story.state.assistant.relationshipFacts.contains("assistant.act3." + key))
+        }
+        precondition(story.state.observerClueIDs == start.observerClueIDs && story.state.observerClueIDs.isEmpty)
+        precondition(story.state.routePrerequisiteIDs == start.routePrerequisiteIDs && story.state.accessMilestoneIDs == start.accessMilestoneIDs)
+        precondition(story.state.assistant.cooperation == start.assistant.cooperation && story.state.ascensionMilestone == nil)
+        for (id, old) in oldSnapshots { precondition(story.state.preservedEvidence[id] == old) }
+        precondition(story.state.currentAct == .theConspiracy)
+        if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
+        let completed = story.state
+        for key in keys { _ = try content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get() }
+        precondition(story.state == completed)
+        var optional = completed; optional.observerClueIDs.insert("observer.fixture.optional")
+        let optionalStory = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(optional)))
+        let optionalAccess = RestrictedAccessStore(progression: optionalStory, catalogue: .success(access.catalogue!))
+        let optionalContent = StoryContentStore(progression: optionalStory, catalogue: .success(content.catalogue!), access: optionalAccess)
+        precondition(optionalContent.observerKnownSources.map(\.id) == references)
+        precondition(optionalAccess.resourceState("resource.act3.conclusion.resistance") == .unlocked)
+        precondition(optionalStory.state == optional && optionalStory.state.routePrerequisiteIDs == completed.routePrerequisiteIDs)
+        if alreadyRead { precondition(story.state == start) }
+        print("PASS MODEL ONLY: ordered Daniel evidence, missing Maya transcript, mandatory Observer knowledge, actual-history references, independent optional clues, snapshots/reload and closed Act 4")
+    }
+
     @MainActor static func solveWall(_ story: StoryProgressionStore, _ access: RestrictedAccessStore, _ content: StoryContentStore, disk: StoryFilePersistence) throws {
         let id = "puzzle.banana_wall.review_cross_reference"
         let reward = "content.act3.banana_wall.scope_record"
@@ -364,7 +469,7 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.readContentIDs == before.readContentIDs && story.state.currentAct == .theConspiracy)
         precondition(story.state.assistant == before.assistant && story.state.routePrerequisiteIDs == before.routePrerequisiteIDs && story.state.observerClueIDs == before.observerClueIDs)
         let solved = story.state; let bytes = try disk.read()
-        for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence", "autonomy.actions", "autonomy.maya", "ascension.recording", "ascension.purpose", "energy.transfer", "energy.growth", "assistant.autonomy", "assistant.ascension", "assistant.energy"] {
+        for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence", "autonomy.actions", "autonomy.maya", "ascension.recording", "ascension.purpose", "energy.transfer", "energy.growth", "assistant.autonomy", "assistant.ascension", "assistant.energy", "daniel.contribution", "daniel.concealment", "maya.guidance", "observer.program", "observer.session", "conclusion.resistance", "assistant.daniel", "assistant.maya", "assistant.observer"] {
             precondition(content.currentVersion(for: "content.act3." + key) == nil)
         }
         precondition(story.state == solved)

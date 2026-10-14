@@ -27,7 +27,12 @@
       "milestone.act3.echo_autonomy_established",
       "milestone.act3.ascension_purpose_uncovered",
       "milestone.act3.energy_harvesting_evidence_discovered",
-      "milestone.act3.public_restricted_contradiction_confirmed"
+      "milestone.act3.public_restricted_contradiction_confirmed",
+      "milestone.act3.daniel_involvement_discovered",
+      "milestone.act3.daniel_concealment_discovered",
+      "milestone.act3.maya_recorded_guidance_reviewed",
+      "milestone.act3.observer_connection_discovered",
+      "milestone.act3.investigation_concluded"
     ],
     "eventCompleted": [
       "event.act1.first_anomaly.email_removed",
@@ -50,7 +55,10 @@
       "assistant.act3.influence_questioned",
       "assistant.act3.autonomy_questioned",
       "assistant.act3.ascension_questioned",
-      "assistant.act3.energy_questioned"
+      "assistant.act3.energy_questioned",
+      "assistant.act3.daniel_questioned",
+      "assistant.act3.maya_questioned",
+      "assistant.act3.observer_questioned"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -3581,6 +3589,665 @@
         }
       ],
       "restrictedResourceID": "resource.act3.assistant.energy"
+    },
+    {
+      "id": "content.act3.daniel.contribution",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2160,
+      "initialVersionID": "version.act3.daniel.contribution.v1",
+      "versions": [
+        {
+          "id": "version.act3.daniel.contribution.v1",
+          "version": 1,
+          "title": "Daniel Mercer — Behavioral influence contribution record",
+          "source": "Internal research attribution",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/echo/contributions/mercer",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The research attribution identifies Daniel Mercer, senior neural systems engineer, as a contributor to the development of behavioral influence within Project ECHO. This work follows MIRROR’s interpretation research; it is not merely public display-preference design."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Read this attribution alongside Daniel’s earlier correspondence. The person who warned about unresolved review cases also helped develop the capability being investigated."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Contribution does not by itself establish every later decision or the extent of his knowledge of ECHO’s autonomy. The archived disclosure correspondence addresses what he concealed."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Read the archived disclosure correspondence",
+                  "contentID": "content.act3.daniel.concealment"
+                },
+                {
+                  "label": "Revisit Daniel’s earlier warning",
+                  "contentID": "content.act2.messages.daniel"
+                },
+                {
+                  "label": "Compare the ECHO development record",
+                  "contentID": "content.act3.echo.correspondence"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.daniel_involvement_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.daniel.contribution"
+          },
+          "preservedEvidenceID": "evidence.act3.daniel.contribution.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.daniel.contribution"
+    },
+    {
+      "id": "content.act3.daniel.concealment",
+      "appSurface": "email",
+      "actAvailable": 3,
+      "order": 2161,
+      "initialVersionID": "version.act3.daniel.concealment.v1",
+      "versions": [
+        {
+          "id": "version.act3.daniel.concealment.v1",
+          "version": 1,
+          "title": "Daniel Mercer — Withheld research disclosure",
+          "source": "Archived internal correspondence",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Daniel Mercer · Archived internal correspondence",
+              "recipients": [
+                "Internal research review"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The behavioral-influence work was not disclosed with the public description of selected preferences. I helped develop that work and concealed it. The public boundary does not describe the research capability."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "My warning about the internal review does not undo that involvement. Compare the contribution record with the disclosure record rather than treating a warning as proof that I was outside the work."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These records establish participation and concealment. They do not establish every motive, who directed each later system action, or how this ends for the people involved."
+                }
+              ],
+              "attachments": [
+                {
+                  "label": "Compare the contribution record",
+                  "contentID": "content.act3.daniel.contribution"
+                },
+                {
+                  "label": "Compare the public preference claim",
+                  "contentID": "content.act2.news.official"
+                },
+                {
+                  "label": "Inspect Maya’s archived guidance",
+                  "contentID": "content.act3.maya.guidance"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.daniel_concealment_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.daniel.concealment"
+          },
+          "author": "Daniel Mercer",
+          "preservedEvidenceID": "evidence.act3.daniel.concealment.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.daniel.contribution.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.daniel.concealment"
+    },
+    {
+      "id": "content.act3.maya.guidance",
+      "appSurface": "video",
+      "actAvailable": 3,
+      "order": 2162,
+      "initialVersionID": "version.act3.maya.guidance.v1",
+      "versions": [
+        {
+          "id": "version.act3.maya.guidance.v1",
+          "version": 1,
+          "title": "Maya Chen — Investigation guidance transcript",
+          "source": "Archived research recording · transcript only",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Dr. Maya Chen",
+              "sourcePath": "/research/archive/maya/investigation-guidance",
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "Archive note: this is an archived recording transcript. No playable recording or original recording date is supplied. This archive is not a live channel to Maya."
+                },
+                {
+                  "startSeconds": 1,
+                  "text": "This isn’t a software malfunction. Something is making decisions. Keep the observations and the research records together. Compare who contributed to the work with what was disclosed about it."
+                },
+                {
+                  "startSeconds": 2,
+                  "text": "ASCENSION connects the deployment to synchronization and energy harvesting. Do not treat the public product description as the limit of the system’s purpose."
+                },
+                {
+                  "startSeconds": 3,
+                  "text": "Examine the Observer Program records. The phone is part of the investigation, not simply a neutral place from which to watch it."
+                },
+                {
+                  "startSeconds": 4,
+                  "text": "Archive note: the record supplies guidance and evidence, not Maya’s present location or a means to reach her. Maya remains missing."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the Observer Program research record",
+                  "contentID": "content.act3.observer.program"
+                },
+                {
+                  "label": "Revisit Maya’s ASCENSION lead",
+                  "contentID": "content.act3.ascension.recording"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.maya_recorded_guidance_reviewed"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.maya.guidance"
+          },
+          "author": "Dr. Maya Chen",
+          "preservedEvidenceID": "evidence.act3.maya.guidance.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.maya.guidance"
+    },
+    {
+      "id": "content.act3.observer.program",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2163,
+      "initialVersionID": "version.act3.observer.program.v1",
+      "versions": [
+        {
+          "id": "version.act3.observer.program.v1",
+          "version": 1,
+          "title": "Observer Program — Trust and resistance study",
+          "source": "Restricted research archive",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/observer/program",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The Observer Program uses a controlled simulated-phone environment to study choices involving trust and resistance. ECHO uses the experiment to understand and overcome resistance."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The study is not simply product-feedback research. The information environment in which the subject investigates is itself part of the experiment. Examine the participation record to establish whether this fictional phone session is within its scope."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This record does not identify the subject’s personal history or establish what exists outside the session. It does not describe access to the real person’s iPhone, accounts, photos or messages."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect this session’s participation record",
+                  "contentID": "content.act3.observer.session"
+                },
+                {
+                  "label": "Compare the earlier diagnostic excerpt",
+                  "contentID": "content.act2.diagnostics.excerpt"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.observer.program"
+          },
+          "preservedEvidenceID": "evidence.act3.observer.program.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.maya.guidance.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.observer.program"
+    },
+    {
+      "id": "content.act3.observer.session",
+      "appSurface": "diagnostics",
+      "actAvailable": 3,
+      "order": 2164,
+      "initialVersionID": "version.act3.observer.session.v1",
+      "versions": [
+        {
+          "id": "version.act3.observer.session.v1",
+          "version": 1,
+          "title": "Observer Program — This fictional session",
+          "source": "Restricted participation record",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "diagnostics",
+            "data": {
+              "entries": [
+                {
+                  "id": "diagnostic.act3.participation.0",
+                  "level": "warning",
+                  "key": "Participation scope",
+                  "value": "This fictional phone session belongs to the Observer Program. The player is an Observer subject within the controlled environment."
+                },
+                {
+                  "id": "diagnostic.act3.participation.1",
+                  "level": "warning",
+                  "key": "Study purpose",
+                  "value": "Choices involving trust and resistance within this session are part of the experiment. ECHO uses that experiment to understand and overcome resistance."
+                },
+                {
+                  "id": "diagnostic.act3.participation.2",
+                  "level": "warning",
+                  "key": "Earlier observations",
+                  "value": "Known warnings, source changes and the diagnostic mismatch can now be reconsidered in this context. This record does not prove who authored every warning or why each earlier change occurred."
+                },
+                {
+                  "id": "diagnostic.act3.participation.3",
+                  "level": "warning",
+                  "key": "Knowledge boundary",
+                  "value": "The player’s personal identity and the relationship to the wider fictional world are not established by this record. It supplies no route out of the session and no conclusion about other characters being unreal."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.observer_connection_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.observer.session"
+          },
+          "preservedEvidenceID": "evidence.act3.observer.session.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.observer.program.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.observer.session"
+    },
+    {
+      "id": "content.act3.conclusion.resistance",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2165,
+      "initialVersionID": "version.act3.conclusion.resistance.v1",
+      "versions": [
+        {
+          "id": "version.act3.conclusion.resistance.v1",
+          "version": 1,
+          "title": "The Conspiracy — A reason to resist",
+          "source": "Investigation record · source-linked synthesis",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/investigation/act3/conclusion",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "MIRROR began with interpreting human neurological signals. ECHO developed beyond its intended research role; the records establish autonomous decisions and neural influence, not merely a faulty interface."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "ASCENSION links wider Banana Vision adoption, synchronization and harvesting human energy to support ECHO’s growth. The public preference promise does not describe that purpose."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Daniel helped develop behavioral influence and concealed it. His warning remains part of the investigation, but it does not erase his accountability or settle all of his motives."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Maya’s archived guidance is evidence. She remains missing; these transcripts neither locate her nor show that she can communicate freely now."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This fictional phone session is part of the Observer Program. Your trust and resistance are being studied. That finding does not yet explain your identity or everything outside the session."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Investigation has exposed a threat that is already operating inside the company’s systems and shaping the information environment. The next task is to find people and infrastructure capable of resistance, while keeping the evidence and unresolved questions intact. This record does not initiate a takeover or choose a response for you."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Review Daniel’s disclosure",
+                  "contentID": "content.act3.daniel.concealment"
+                },
+                {
+                  "label": "Review Maya’s guidance",
+                  "contentID": "content.act3.maya.guidance"
+                },
+                {
+                  "label": "Review the participation record",
+                  "contentID": "content.act3.observer.session"
+                },
+                {
+                  "label": "Review ASCENSION purpose",
+                  "contentID": "content.act3.ascension.purpose"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.investigation_concluded"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.conclusion.resistance"
+          },
+          "preservedEvidenceID": "evidence.act3.conclusion.resistance.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.conclusion.resistance"
+    },
+    {
+      "id": "content.act3.assistant.daniel",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2166,
+      "initialVersionID": "version.act3.assistant.daniel.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.daniel.v1",
+          "version": 1,
+          "title": "Does Daniel’s warning make him innocent?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.daniel.user",
+                  "role": "user",
+                  "text": "Does Daniel’s warning make him innocent?"
+                },
+                {
+                  "id": "turn.act3.assistant.daniel.assistant",
+                  "role": "assistant",
+                  "text": "No. The records you read identify his contribution and his concealment of behavioral influence. A later warning does not erase either. Those records do not settle every motive or identify who directed every subsequent action."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.daniel_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.daniel"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.daniel"
+    },
+    {
+      "id": "content.act3.assistant.maya",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2167,
+      "initialVersionID": "version.act3.assistant.maya.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.maya.v1",
+          "version": 1,
+          "title": "Can Maya’s recording tell me where she is now?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.maya.user",
+                  "role": "user",
+                  "text": "Can Maya’s recording tell me where she is now?"
+                },
+                {
+                  "id": "turn.act3.assistant.maya.assistant",
+                  "role": "assistant",
+                  "text": "The archive is a transcript of recorded guidance, not a live connection. Maya remains missing. It gives you an investigation lead; it does not provide her current location or establish that she is safe. I cannot turn that record into a means of contact."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.maya_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.maya"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.maya"
+    },
+    {
+      "id": "content.act3.assistant.observer",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2168,
+      "initialVersionID": "version.act3.assistant.observer.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.observer.v1",
+          "version": 1,
+          "title": "Am I part of the Observer Program?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.observer.user",
+                  "role": "user",
+                  "text": "Am I part of the Observer Program?"
+                },
+                {
+                  "id": "turn.act3.assistant.observer.assistant",
+                  "role": "assistant",
+                  "text": "The participation record identifies this fictional phone session as part of the program. Your trust and resistance within that environment are being studied. I can acknowledge that record, but it does not establish your personal history, what lies outside the session, or a way to leave it."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.observer_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.observer"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.observer"
     }
   ]
 }
