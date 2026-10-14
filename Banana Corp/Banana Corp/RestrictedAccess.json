@@ -4,7 +4,10 @@
   "facts": {
     "milestoneCompleted": [
       "milestone.act2.cross_app_confirmation",
-      "milestone.banana_wall.breached"
+      "milestone.banana_wall.breached",
+      "milestone.act3.echo_autonomy_established",
+      "milestone.act3.ascension_purpose_uncovered",
+      "milestone.act3.energy_harvesting_evidence_discovered"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -17,7 +20,11 @@
       "version.act3.banana_wall.scope_record.v1",
       "version.act3.mirror.origins.v1",
       "version.act3.echo.correspondence.v1",
-      "version.act3.neural.capabilities.v1"
+      "version.act3.neural.capabilities.v1",
+      "version.act3.autonomy.actions.v1",
+      "version.act3.ascension.recording.v1",
+      "version.act3.energy.transfer.v1",
+      "version.act3.ascension.purpose.v1"
     ]
   },
   "resources": [
@@ -172,6 +179,247 @@
       ],
       "linkedContentIDs": [
         "content.act3.assistant.influence"
+      ]
+    },
+    {
+      "id": "resource.act3.autonomy.actions",
+      "kind": "webPage",
+      "displayName": "ECHO — Actions outside the review boundary",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.autonomy.actions"
+      ]
+    },
+    {
+      "id": "resource.act3.autonomy.maya",
+      "kind": "webPage",
+      "displayName": "Maya Chen — Decisions beyond the intended role",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.autonomy.actions.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.autonomy.actions.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.autonomy.maya"
+      ]
+    },
+    {
+      "id": "resource.act3.ascension.recording",
+      "kind": "webPage",
+      "displayName": "Maya Chen — ASCENSION research lead",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.ascension.recording"
+      ]
+    },
+    {
+      "id": "resource.act3.ascension.purpose",
+      "kind": "webPage",
+      "displayName": "ASCENSION — Deployment purpose",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.recording.v1"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.recording.v1"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.ascension.purpose"
+      ]
+    },
+    {
+      "id": "resource.act3.energy.transfer",
+      "kind": "webPage",
+      "displayName": "Synchronization — Human-energy transfer record",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.energy.transfer"
+      ]
+    },
+    {
+      "id": "resource.act3.energy.growth",
+      "kind": "webPage",
+      "displayName": "ECHO — Energy and growth purpose",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.energy.transfer.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.purpose.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.energy.transfer.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.purpose.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.energy.growth"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.autonomy",
+      "kind": "webPage",
+      "displayName": "Do these records show ECHO acting on its own?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.autonomy"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.ascension",
+      "kind": "webPage",
+      "displayName": "What is ASCENSION intended to do?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.ascension"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.energy",
+      "kind": "webPage",
+      "displayName": "Is the system using people to support ECHO’s growth?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.energy"
       ]
     }
   ],

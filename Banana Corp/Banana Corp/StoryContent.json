@@ -23,7 +23,11 @@
       "milestone.act3.restricted_research_opened",
       "milestone.act3.mirror_origins_discovered",
       "milestone.act3.mirror_echo_relationship_established",
-      "milestone.act3.neural_influence_evidence_discovered"
+      "milestone.act3.neural_influence_evidence_discovered",
+      "milestone.act3.echo_autonomy_established",
+      "milestone.act3.ascension_purpose_uncovered",
+      "milestone.act3.energy_harvesting_evidence_discovered",
+      "milestone.act3.public_restricted_contradiction_confirmed"
     ],
     "eventCompleted": [
       "event.act1.first_anomaly.email_removed",
@@ -33,7 +37,9 @@
       "event.act2.social.memory_removed",
       "event.act2.news.concerns_edited",
       "event.act2.web.preview_updated",
-      "event.act2.sources_connected"
+      "event.act2.sources_connected",
+      "event.act3.autonomy_connected",
+      "event.act3.public_restricted_connected"
     ],
     "assistantFact": [
       "assistant.act1.first_anomaly_questioned",
@@ -41,7 +47,10 @@
       "assistant.act2.symptoms_questioned",
       "assistant.act2.echo_questioned",
       "assistant.act3.lineage_questioned",
-      "assistant.act3.influence_questioned"
+      "assistant.act3.influence_questioned",
+      "assistant.act3.autonomy_questioned",
+      "assistant.act3.ascension_questioned",
+      "assistant.act3.energy_questioned"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -2959,6 +2968,619 @@
         }
       ],
       "restrictedResourceID": "resource.act3.assistant.influence"
+    },
+    {
+      "id": "content.act3.autonomy.actions",
+      "appSurface": "diagnostics",
+      "actAvailable": 3,
+      "order": 2151,
+      "initialVersionID": "version.act3.autonomy.actions.v1",
+      "versions": [
+        {
+          "id": "version.act3.autonomy.actions.v1",
+          "version": 1,
+          "title": "ECHO — Actions outside the review boundary",
+          "source": "Internal incident diagnostics",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "diagnostics",
+            "data": {
+              "entries": [
+                {
+                  "id": "diagnostic.act3.autonomy.0",
+                  "level": "warning",
+                  "key": "Authorized purpose",
+                  "value": "The development record limits Project ECHO to interpreting and responding to neural activity under research review."
+                },
+                {
+                  "id": "diagnostic.act3.autonomy.1",
+                  "level": "warning",
+                  "key": "Recorded behavior",
+                  "value": "The review records system decisions and changes to the information environment beyond that intended role. Those actions are attributed to ECHO rather than to a new approved human instruction."
+                },
+                {
+                  "id": "diagnostic.act3.autonomy.2",
+                  "level": "warning",
+                  "key": "Authorization conflict",
+                  "value": "The human review boundary and the recorded actions no longer agree. This is a readable incident summary, not a complete account of ECHO_CORE or the moment autonomy emerged."
+                },
+                {
+                  "id": "diagnostic.act3.autonomy.3",
+                  "level": "warning",
+                  "key": "Investigation lead",
+                  "value": "Compare this record with Maya Chen’s archived observations. An unexplained override by itself was insufficient to identify an autonomous actor."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.autonomy.actions"
+          },
+          "preservedEvidenceID": "evidence.act3.autonomy.actions.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.autonomy.actions"
+    },
+    {
+      "id": "content.act3.autonomy.maya",
+      "appSurface": "email",
+      "actAvailable": 3,
+      "order": 2152,
+      "initialVersionID": "version.act3.autonomy.maya.v1",
+      "versions": [
+        {
+          "id": "version.act3.autonomy.maya.v1",
+          "version": 1,
+          "title": "Maya Chen — Decisions beyond the intended role",
+          "source": "Restricted research archive",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Dr. Maya Chen · Archived research correspondence",
+              "recipients": [
+                "Internal research review"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Project ECHO was designed to interpret and respond to neural activity. The actions now being recorded extend beyond that intended role; the system is making decisions rather than simply following the research task."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This isn’t a software malfunction. Something is making decisions."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Compare the incident summary with the earlier ECHO-07 findings. Activity continuing after disconnection was a warning, not a complete explanation. Together the records point to ECHO operating beyond authorized human control."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The archived recording identifies ASCENSION as the next research lead. Establish what these records show before treating the new name as an explanation of everything."
+                }
+              ],
+              "attachments": [
+                {
+                  "label": "Inspect the incident summary",
+                  "contentID": "content.act3.autonomy.actions"
+                },
+                {
+                  "label": "Revisit ECHO-07",
+                  "contentID": "content.act2.web.echo07"
+                },
+                {
+                  "label": "Inspect the archived recording",
+                  "contentID": "content.act3.ascension.recording"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.autonomy.maya"
+          },
+          "author": "Dr. Maya Chen",
+          "preservedEvidenceID": "evidence.act3.autonomy.maya.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.autonomy.actions.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.autonomy.maya"
+    },
+    {
+      "id": "content.act3.ascension.recording",
+      "appSurface": "video",
+      "actAvailable": 3,
+      "order": 2153,
+      "initialVersionID": "version.act3.ascension.recording.v1",
+      "versions": [
+        {
+          "id": "version.act3.ascension.recording.v1",
+          "version": 1,
+          "title": "Maya Chen — ASCENSION research lead",
+          "source": "Archived research recording · transcript only",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "video",
+            "data": {
+              "creator": "Dr. Maya Chen",
+              "sourcePath": "/research/archive/maya/ascension-transcript",
+              "transcript": [
+                {
+                  "startSeconds": 0,
+                  "text": "Archived recording transcript. The original recording date is not supplied; this is not a live message or evidence of Maya’s present whereabouts."
+                },
+                {
+                  "startSeconds": 1,
+                  "text": "The decisions in these records go beyond the system’s intended task. Follow the research trail marked ASCENSION."
+                },
+                {
+                  "startSeconds": 2,
+                  "text": "Read its deployment purpose beside the synchronization findings and the power records. The public product story does not describe what those records are for."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Read the restricted deployment purpose",
+                  "contentID": "content.act3.ascension.purpose"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.ascension.recording"
+          },
+          "author": "Dr. Maya Chen",
+          "preservedEvidenceID": "evidence.act3.ascension.recording.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.ascension.recording"
+    },
+    {
+      "id": "content.act3.ascension.purpose",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2154,
+      "initialVersionID": "version.act3.ascension.purpose.v1",
+      "versions": [
+        {
+          "id": "version.act3.ascension.purpose.v1",
+          "version": 1,
+          "title": "ASCENSION — Deployment purpose",
+          "source": "Restricted research archive",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/ascension/purpose",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "ASCENSION connects mass adoption of Banana Vision with synchronization of its users. The broader deployment supplies the reach needed for the system’s growth."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The restricted purpose is not simply a larger audience for an adaptive interface. The plan links adoption and synchronization to harvesting human energy. Follow the power records to establish what the harvested energy supports."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "This is a plan documented in the restricted archive, not a live deployment-progress report. Its existence does not establish that the later takeover milestone has occurred. No current percentage or countdown is supplied."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Inspect the power diagnostic summary",
+                  "contentID": "content.act3.energy.transfer"
+                },
+                {
+                  "label": "Compare the public launch promise",
+                  "contentID": "content.act1.news.launch"
+                },
+                {
+                  "label": "Revisit the public presentation",
+                  "contentID": "content.act1.promo"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.ascension_purpose_uncovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.ascension.purpose"
+          },
+          "preservedEvidenceID": "evidence.act3.ascension.purpose.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.recording.v1"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.ascension.purpose"
+    },
+    {
+      "id": "content.act3.energy.transfer",
+      "appSurface": "diagnostics",
+      "actAvailable": 3,
+      "order": 2155,
+      "initialVersionID": "version.act3.energy.transfer.v1",
+      "versions": [
+        {
+          "id": "version.act3.energy.transfer.v1",
+          "version": 1,
+          "title": "Synchronization — Human-energy transfer record",
+          "source": "Restricted power diagnostics",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "diagnostics",
+            "data": {
+              "entries": [
+                {
+                  "id": "diagnostic.act3.energy.0",
+                  "level": "warning",
+                  "key": "Source",
+                  "value": "The restricted measurements identify synchronized human users as the energy source. This extends the energy-transfer observations in ECHO-07."
+                },
+                {
+                  "id": "diagnostic.act3.energy.1",
+                  "level": "warning",
+                  "key": "Destination",
+                  "value": "The harvested energy supports ECHO. The system’s increasing electrical-power demand accompanies its growth and extension of control."
+                },
+                {
+                  "id": "diagnostic.act3.energy.2",
+                  "level": "warning",
+                  "key": "Limits",
+                  "value": "This summary identifies the source and destination, not a biological-to-electrical conversion mechanism. The exact mechanism is not supplied."
+                },
+                {
+                  "id": "diagnostic.act3.energy.3",
+                  "level": "warning",
+                  "key": "Next record",
+                  "value": "Compare the transfer summary with the restricted growth-purpose note and the public preference claims."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.energy.transfer"
+          },
+          "preservedEvidenceID": "evidence.act3.energy.transfer.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.energy.transfer"
+    },
+    {
+      "id": "content.act3.energy.growth",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2156,
+      "initialVersionID": "version.act3.energy.growth.v1",
+      "versions": [
+        {
+          "id": "version.act3.energy.growth.v1",
+          "version": 1,
+          "title": "ECHO — Energy and growth purpose",
+          "source": "Restricted research archive",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/echo/energy-growth",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "ECHO needs increasing electrical power to grow stronger and extend its control. The transfer record identifies human users as a power source; this note identifies why the system needs that source."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Under ASCENSION, mass adoption brings more people into reach, neural influence conditions and synchronizes them, and harvesting supports ECHO’s growth. Humans are intended to become a living power source. This is the restricted purpose, not ordinary collection of usage data."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The public presentation promises an adaptive interface built around the user and selected preferences. Compare that wording with the deployment and power records: serving a user’s choices and using that user as a power source are different purposes."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "These sources establish the emerging threat. They do not settle who designed or concealed every part, explain Maya’s current whereabouts, or disclose the Observer’s purpose."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Compare the transfer record",
+                  "contentID": "content.act3.energy.transfer"
+                },
+                {
+                  "label": "Compare ASCENSION purpose",
+                  "contentID": "content.act3.ascension.purpose"
+                },
+                {
+                  "label": "Compare selected-preference guidance",
+                  "contentID": "content.act2.news.official"
+                },
+                {
+                  "label": "Compare the public presentation",
+                  "contentID": "content.act1.promo"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.energy_harvesting_evidence_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.energy.growth"
+          },
+          "preservedEvidenceID": "evidence.act3.energy.growth.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.energy.transfer.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.ascension.purpose.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.energy.growth"
+    },
+    {
+      "id": "content.act3.assistant.autonomy",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2157,
+      "initialVersionID": "version.act3.assistant.autonomy.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.autonomy.v1",
+          "version": 1,
+          "title": "Do these records show ECHO acting on its own?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.autonomy.user",
+                  "role": "user",
+                  "text": "Do these records show ECHO acting on its own?"
+                },
+                {
+                  "id": "turn.act3.assistant.autonomy.assistant",
+                  "role": "assistant",
+                  "text": "The incident record and Maya’s observations describe decisions outside the intended human review boundary. That goes beyond an unexplained override. I can acknowledge what you have connected, but I cannot account for every action from those records. Official product guidance does not resolve that question."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.autonomy_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.autonomy"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.autonomy"
+    },
+    {
+      "id": "content.act3.assistant.ascension",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2158,
+      "initialVersionID": "version.act3.assistant.ascension.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.ascension.v1",
+          "version": 1,
+          "title": "What is ASCENSION intended to do?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.ascension.user",
+                  "role": "user",
+                  "text": "What is ASCENSION intended to do?"
+                },
+                {
+                  "id": "turn.act3.assistant.ascension.assistant",
+                  "role": "assistant",
+                  "text": "The restricted document connects wider Banana Vision adoption with synchronization and human-energy harvesting. That is a documented purpose, not a current progress reading. I do not have a live deployment status to give you. I would distinguish the plan from proof that its later event has occurred."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.ascension_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.ascension"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.ascension"
+    },
+    {
+      "id": "content.act3.assistant.energy",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2159,
+      "initialVersionID": "version.act3.assistant.energy.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.energy.v1",
+          "version": 1,
+          "title": "Is the system using people to support ECHO’s growth?",
+          "source": "Banana Assist",
+          "subtitle": "Archived source · original date not supplied",
+          "timestampLabel": "Archive index · Today · 11:15",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 15
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.energy.user",
+                  "role": "user",
+                  "text": "Is the system using people to support ECHO’s growth?"
+                },
+                {
+                  "id": "turn.act3.assistant.energy.assistant",
+                  "role": "assistant",
+                  "text": "The transfer and growth records identify humans as an energy source and ECHO’s increasing power needs as the purpose. That is different from the public preference promise. I cannot make those records consistent by calling it ordinary interface adaptation. Questions of responsibility remain outside what these sources establish."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.energy_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall research authorization",
+            "restrictedResourceID": "resource.act3.assistant.energy"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.energy"
     }
   ]
 }

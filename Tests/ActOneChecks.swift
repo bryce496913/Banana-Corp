@@ -3,7 +3,7 @@ import Foundation
 @main struct ActOneChecks {
     @MainActor static func main() throws {
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
-        let catalogue = StoryContentCatalogueLoader.load(fileURL: resource, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"])
+        let catalogue = StoryContentCatalogueLoader.load(fileURL: resource, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence", "resource.act3.autonomy.actions", "resource.act3.autonomy.maya", "resource.act3.ascension.recording", "resource.act3.ascension.purpose", "resource.act3.energy.transfer", "resource.act3.energy.growth", "resource.act3.assistant.autonomy", "resource.act3.assistant.ascension", "resource.act3.assistant.energy"])
         let definitions = try catalogue.get()
         precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.count == 25)
         precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.versions.count == 1 })
