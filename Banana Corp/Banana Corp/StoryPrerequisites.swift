@@ -164,3 +164,20 @@ enum ActTwoContract {
               prerequisites: .all([.eventCompleted(alexReplaced), .contentRead("version.act2.web.preview_notes.v1")]), milestoneID: nil)
     ]
 }
+
+/// Pass 6 investigation knowledge; deliberately separate from AscensionMilestone/takeover.
+enum ActThreeInvestigationContract {
+    static let autonomy = "milestone.act3.echo_autonomy_established"
+    static let contradiction = "milestone.act3.public_restricted_contradiction_confirmed"
+    static let autonomyEvent = "event.act3.autonomy_connected"
+    static let contradictionEvent = "event.act3.public_restricted_connected"
+    static let autonomySources = ["version.act3.autonomy.actions.v1", "version.act3.autonomy.maya.v1"]
+    static let contradictionSources = ["version.act3.ascension.purpose.v1", "version.act3.energy.transfer.v1",
+        "version.act3.energy.growth.v1", "version.act2.news.official.v1", "version.act1.promo.v1"]
+    static func prerequisites(for sources: [String]) -> StoryCondition {
+        .all([.actReached(.theConspiracy), .puzzleSolved("puzzle.banana_wall.review_cross_reference"),
+              .accessGranted("access.banana_wall.breached")] + sources.flatMap {
+            [.contentRead($0), .eventCompleted("event.read." + $0)]
+        })
+    }
+}

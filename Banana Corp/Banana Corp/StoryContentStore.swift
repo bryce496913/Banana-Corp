@@ -487,6 +487,62 @@ extension StoryContentStore {
         } catch { return .failure(.invalidSnapshot) }
     }
 
+    var autonomyConfirmationAvailable: Bool {
+        researchConfirmationAvailable(ActThreeInvestigationContract.autonomySources)
+    }
+    var publicRestrictedConfirmationAvailable: Bool {
+        progression.state.completedMilestoneIDs.contains("milestone.act3.energy_harvesting_evidence_discovered")
+            && researchConfirmationAvailable(ActThreeInvestigationContract.contradictionSources)
+    }
+    private func researchConfirmationAvailable(_ sources: [String]) -> Bool {
+        guard progression.state.currentAct == .theConspiracy,
+              progression.satisfies(ActThreeInvestigationContract.prerequisites(for: sources)),
+              let catalogue else { return false }
+        return sources.allSatisfy { id in
+            guard let owner = catalogue.versionOwners[id], let item = catalogue.itemsByID[owner],
+                  currentVersion(for: owner)?.id == id,
+                  progression.state.contentDelivery.versionReceipts[id] != nil else { return false }
+            return authorized(item, state: progression.state)
+        }
+    }
+    @discardableResult
+    func confirmEchoAutonomy() -> StoryContentDeliveryResult {
+        confirmResearch(event: ActThreeInvestigationContract.autonomyEvent,
+                        milestone: ActThreeInvestigationContract.autonomy,
+                        sources: ActThreeInvestigationContract.autonomySources,
+                        available: autonomyConfirmationAvailable)
+    }
+    @discardableResult
+    func confirmPublicRestrictedContradiction() -> StoryContentDeliveryResult {
+        confirmResearch(event: ActThreeInvestigationContract.contradictionEvent,
+                        milestone: ActThreeInvestigationContract.contradiction,
+                        sources: ActThreeInvestigationContract.contradictionSources,
+                        available: publicRestrictedConfirmationAvailable)
+    }
+    private func confirmResearch(event: String, milestone: String, sources: [String], available: Bool) -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        guard let catalogue,
+              (catalogue.declaredFacts["eventCompleted"] ?? []).contains(event),
+              (catalogue.declaredFacts["milestoneCompleted"] ?? []).contains(milestone) else { return .failure(.contentUnavailable) }
+        if progression.state.completedEventIDs.contains(event) { return .success(.unchanged) }
+        guard available else { return .failure(.progression(.prerequisitesNotMet)) }
+        return progression.completeEvent(event, actions: [.recordMilestone(milestone)],
+            when: ActThreeInvestigationContract.prerequisites(for: sources)).mapError(StoryContentDeliveryError.progression)
+    }
+
+    /// One already-available next question; never opens or reads a source automatically.
+    var actThreeSuggestedLead: DeliveredStoryContent? {
+        guard progression.state.currentAct == .theConspiracy else { return nil }
+        for id in ["content.act3.autonomy.actions", "content.act3.autonomy.maya", "content.act3.ascension.recording",
+                   "content.act3.ascension.purpose", "content.act3.energy.transfer", "content.act3.energy.growth"] {
+            guard let item = catalogue?.itemsByID[id],
+                  let delivered = availableItems(for: item.appSurface).first(where: { $0.id == id }),
+                  delivered.availability == .availableUnread else { continue }
+            return delivered
+        }
+        return nil
+    }
+
     /// A catalogue-backed next lead is guidance, never an automatic read/unlock.
     var actTwoSuggestedLead: DeliveredStoryContent? {
         guard progression.state.currentAct == .somethingIsntRight else { return nil }

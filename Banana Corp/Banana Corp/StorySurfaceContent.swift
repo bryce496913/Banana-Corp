@@ -271,7 +271,7 @@ struct FirstAnomalyHandoffControl: View {
         } else if appState.story.state.currentAct == .somethingIsntRight {
             ActTwoInvestigationControl(currentContentID: currentContentID)
         } else if appState.story.state.currentAct == .theConspiracy {
-            Text("The Conspiracy").appText(.sectionTitle)
+            ActThreeInvestigationControl(currentContentID: currentContentID)
         }
     }
 }
@@ -321,5 +321,53 @@ struct ActTwoInvestigationControl: View {
         .modifier(AppFeedbackModifier(event: feedback))
         .alert("Investigation update unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
             message: { Text("The action could not be saved. Your existing records remain intact.") }
+    }
+}
+
+
+/// Knowledge confirmation only; this control cannot advance Act 4 or start ASCENSION.
+struct ActThreeInvestigationControl: View {
+    var currentContentID: String? = nil
+    @EnvironmentObject private var appState: AppState
+    @State private var selection: StoryContentSelection?
+    @State private var failure = false
+    @State private var feedback: AppFeedbackEvent?
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("The Conspiracy").appText(.sectionTitle)
+            if appState.content.autonomyConfirmationAvailable,
+               !appState.story.state.completedEventIDs.contains(ActThreeInvestigationContract.autonomyEvent) {
+                Button("Connect the authorization record and Maya’s observations") {
+                    confirm(appState.content.confirmEchoAutonomy())
+                }.buttonStyle(.appPrimary).accessibilityIdentifier("story.connect.act3.autonomy")
+                    .accessibilityHint("Record the autonomy finding from both inspected sources.")
+            }
+            if appState.content.publicRestrictedConfirmationAvailable,
+               !appState.story.state.completedEventIDs.contains(ActThreeInvestigationContract.contradictionEvent) {
+                Button("Connect the public promises and restricted purpose") {
+                    confirm(appState.content.confirmPublicRestrictedContradiction())
+                }.buttonStyle(.appPrimary).accessibilityIdentifier("story.connect.act3.contradiction")
+                    .accessibilityHint("Confirm the contradiction using the public and restricted records you read.")
+            }
+            if let lead = appState.content.actThreeSuggestedLead, lead.id != currentContentID {
+                Button {
+                    if lead.surface != .video, case .failure = appState.content.read(lead.id, versionID: lead.version.id) { failure = true; return }
+                    selection = .init(contentID: lead.id, versionID: lead.version.id, surface: lead.surface)
+                } label: { Label(lead.version.title, systemImage: lead.surface.symbol) }
+                    .buttonStyle(.modernPhone).accessibilityIdentifier("story.lead.\(lead.version.id)")
+                    .accessibilityHint("Open the next available source. A transcript requires explicit Finish before it is recorded as read.")
+            }
+        }
+        .navigationDestination(item: $selection) { StorySourceDetailView(selection: $0) }
+        .modifier(AppFeedbackModifier(event: feedback))
+        .alert("Investigation update unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
+            message: { Text("The action could not be saved. Your existing records remain intact.") }
+    }
+    private func confirm(_ result: StoryContentDeliveryResult) {
+        switch result {
+        case .success(.changed): feedback = AppFeedbackEvent(kind: .confirmedAction)
+        case .success(.unchanged): break
+        case .failure: failure = true
+        }
     }
 }

@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.9
+**Version:** 1.10
 **Last updated:** 2026-10-14  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -307,6 +307,16 @@ The user's Pass 5 authorizes restrained opening research drafts grounded in MIRR
 Explicitly reading the scope record makes the MIRROR purpose brief available as a subordinate protected Browser resource. Opening that first expanded research brief records `milestone.act3.restricted_research_opened` and `milestone.act3.mirror_origins_discovered`; scope-record reading itself retains its previous no-extra-milestone contract. Its read unlocks archived ECHO development correspondence. Reading both complementary sources establishes `milestone.act3.mirror_echo_relationship_established`, making the experimental-capability note available. Reading that note records `milestone.act3.neural_influence_evidence_discovered`. List appearance gives no read credit; no timer, preservation requirement or act transition is introduced.
 
 All three records can be preserved through Evidence, retaining exact versions and restricted-access context. Supplied relative timestamps identify archive indexing, not invented historical experiment dates. A past save with a legitimate scope-record read can continue without rereading or new migration. Knowledge-gated Assistant questions record lineage/influence questioning only, never cooperation or hidden scores. See [the content/progression map](docs/act-three-part-one.md) for the exact records and validation.
+
+### Act 3 Part Two — authorized autonomy and ASCENSION investigation
+
+The user's Pass 6 authorizes evidence-led opening drafts for ECHO acting beyond authorized human control, Maya's archived ASCENSION lead, the adoption/synchronization/harvesting purpose, and humans supplying energy for ECHO's increasing power needs. The biological-to-electrical mechanism, precise research chronology, ECHO_CORE schema, Maya's current whereabouts, individual responsibility and Observer purpose remain unresolved or reserved. Archived transcript material is not a live communication or evidence of Maya's survival.
+
+After the neural-influence note is read, a human-readable incident diagnostic summary becomes available. Its explicit read unlocks Maya's complementary archived observations. Both version reads and read events are required for the player action connecting them; this records `event.act3.autonomy_connected` and `milestone.act3.echo_autonomy_established` atomically, without scoring. Only that confirmation unlocks Maya's recording transcript. Explicit Finish makes the ASCENSION purpose record available; reading that record establishes `milestone.act3.ascension_purpose_uncovered`.
+
+The purpose record unlocks restricted power diagnostics. Those diagnostics identify the human source and ECHO destination; the subsequent growth-purpose note explains increasing power demand and the adoption → synchronization → harvesting relationship. Reading both records establishes `milestone.act3.energy_harvesting_evidence_discovered`. A separate player action compares these sources, the purpose record, and the already-read official guidance/public presentation; it records `event.act3.public_restricted_connected` and `milestone.act3.public_restricted_contradiction_confirmed`. Preservation remains optional and all sources recoverable.
+
+Knowledge of ASCENSION, its documented preparation/purpose, and its later event are separate facts. No `AscensionMilestone`, percentage, timer, Act 4 transition or takeover effect is activated here. New deterministic Assistant questions require autonomy, purpose or harvesting knowledge respectively and record questioning only; cooperation and DAWN relationship resolution remain reserved. Existing versions/saved evidence stay immutable. See [the Part Two progression map](docs/act-three-part-two.md).
 
 ## 11. Act 4 — The Takeover
 
@@ -702,3 +712,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-13 | 1.7 | Pass 8: approved reusable local restricted-resource/puzzle infrastructure and a locked Browser Banana Wall entry with no production solution, atomic saved success, delivery-layer authorization and isolated/unbundled neutral fixtures. Actual breach design, full Act 3 research, later milestone/ending conditions, optional Observer clues and character outcomes remain unresolved/unchanged. |
 | 2026-10-14 | 1.8 | Explicit user story approval and Implementation Pass 4: canonized the four-field Banana Wall review cross-reference, exact normalization, voluntary hints and approved limited scope record. Success records puzzle/event/scoped access plus the requested factual breach milestone atomically; existing clues/snapshots, later acts, games and ending requirements remain unchanged. |
 | 2026-10-14 | 1.9 | Pass 5: authorized opening MIRROR/ECHO lineage and neural-influence research drafts, sequential explicit read gates, optional preserved restricted records and knowledge-gated Assistant questions. Immutable prior records, later revelations and ending contracts remain unchanged. |
+| 2026-10-14 | 1.10 | Pass 6: authorized progressive autonomy evidence and explicit synthesis, archived Maya ASCENSION lead, separated plan/energy records and public-versus-restricted confirmation. Knowledge-gated Assistant questions preserve cooperation; no takeover milestone, Act 4 handoff, mechanism or later responsibility reveal is activated. |

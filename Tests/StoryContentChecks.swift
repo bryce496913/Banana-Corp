@@ -34,10 +34,10 @@ import Foundation
     }
 
     static func validateLoading(_ fixture: Data, productionURL: URL) throws {
-        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"]).get()
+        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence", "resource.act3.autonomy.actions", "resource.act3.autonomy.maya", "resource.act3.ascension.recording", "resource.act3.ascension.purpose", "resource.act3.energy.transfer", "resource.act3.energy.growth", "resource.act3.assistant.autonomy", "resource.act3.assistant.ascension", "resource.act3.assistant.energy"]).get()
         precondition(!production.items.isEmpty)
         precondition(production.items.filter { $0.actAvailable.rawValue <= 2 }.count == 45)
-        precondition(production.items.filter { $0.actAvailable.rawValue == 3 }.map(\.id) == ["content.act3.banana_wall.scope_record", "content.act3.mirror.origins", "content.act3.echo.correspondence", "content.act3.neural.capabilities", "content.act3.assistant.mirror", "content.act3.assistant.influence"])
+        precondition(production.items.filter { $0.actAvailable.rawValue == 3 }.map(\.id) == ["content.act3.banana_wall.scope_record", "content.act3.mirror.origins", "content.act3.echo.correspondence", "content.act3.neural.capabilities", "content.act3.assistant.mirror", "content.act3.assistant.influence", "content.act3.autonomy.actions", "content.act3.autonomy.maya", "content.act3.ascension.recording", "content.act3.ascension.purpose", "content.act3.energy.transfer", "content.act3.energy.growth", "content.act3.assistant.autonomy", "content.act3.assistant.ascension", "content.act3.assistant.energy"])
         rejects(StoryContentCatalogueLoader.load(fileURL: nil), .missingResource)
         rejects(StoryContentCatalogueLoader.load(fileURL: URL(string: "https://example.invalid/catalogue.json")), .missingResource)
         rejects(StoryContentCatalogueLoader.load(data: Data("invalid".utf8)), .malformedJSON)
