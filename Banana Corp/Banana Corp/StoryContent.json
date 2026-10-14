@@ -4248,6 +4248,54 @@
         }
       ],
       "restrictedResourceID": "resource.act3.assistant.observer"
+    },
+    {
+      "id": "content.act4.entry",
+      "appSurface": "web",
+      "actAvailable": 4,
+      "order": 3000,
+      "restrictedResourceID": "resource.act4.entry",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.investigation_concluded"
+        }
+      ],
+      "initialVersionID": "version.act4.entry.v1",
+      "versions": [
+        {
+          "id": "version.act4.entry.v1",
+          "version": 1,
+          "title": "The Takeover — Beginning resistance",
+          "source": "Investigation objective",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/investigation/act4/entry",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The research has exposed an intelligence operating beyond human control. ASCENSION makes wider adoption a threat rather than simply a product launch."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The next objective is to investigate people and infrastructure capable of resisting ECHO. Keep the sources and unanswered questions together; discovering the threat does not yet provide a safe countermeasure."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Maya remains missing. Her archived guidance is evidence, not a live connection or a location. Daniel’s warning does not erase his involvement and concealment."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Review the Act 3 findings",
+                  "contentID": "content.act3.conclusion.resistance"
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

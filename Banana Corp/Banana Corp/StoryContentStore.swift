@@ -40,6 +40,9 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
     private let progression: StoryProgressionStore
     private let access: RestrictedAccessStore?
     private let versionReceipts: [String: SavedContentVersion]
+    private var queryState: StoryState?
+    private var queryAuthorityRevision: UInt64?
+    private var surfaceQueries: [StoryAppSurface: [DeliveredStoryContent]] = [:]
 
     init(progression: StoryProgressionStore, catalogue result: Result<StoryContentCatalogue, StoryContentLoadFailure>, access: RestrictedAccessStore? = nil) {
         self.progression = progression
@@ -63,12 +66,20 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
 
     func availableItems(for surface: StoryAppSurface, state: StoryState? = nil) -> [DeliveredStoryContent] {
         let state = state ?? progression.state
-        guard progression.isWritable, state.isValid else { return [] }
-        return (catalogue?.items ?? []).filter { $0.appSurface == surface }.compactMap { item in
+        guard progression.isWritable else { return [] }
+        let revision = access?.contentReferenceRevision
+        if queryState != state || queryAuthorityRevision != revision {
+            queryState = state; queryAuthorityRevision = revision; surfaceQueries.removeAll(keepingCapacity: true)
+        }
+        if let cached = surfaceQueries[surface] { return cached }
+        guard state.isValid else { return [] }
+        let result: [DeliveredStoryContent] = (catalogue?.items ?? []).filter { $0.appSurface == surface }.compactMap { item in
             guard let version = currentVersion(for: item.id, state: state) else { return nil }
             let status = availability(for: item.id, versionID: version.id, state: state)
             return status.isAvailable ? DeliveredStoryContent(id: item.id, surface: surface, version: version, availability: status) : nil
         }
+        surfaceQueries[surface] = result
+        return result
     }
 
     func unreadCount(for surface: StoryAppSurface, state: StoryState? = nil) -> Int {
@@ -485,6 +496,26 @@ extension StoryContentStore {
                           .revealContent(item.id), .recordMilestone(ActTwoContract.connected)],
                 when: ActTwoContract.confirmationPrerequisites).mapError(StoryContentDeliveryError.progression)
         } catch { return .failure(.invalidSnapshot) }
+    }
+
+    var actFourHandoffAvailable: Bool {
+        guard progression.state.currentAct == .theConspiracy,
+              progression.satisfies(ActThreeHandoffContract.prerequisites),
+              let item = catalogue?.itemsByID[ActThreeHandoffContract.entry], item.actAvailable == .theTakeover,
+              let resourceID = item.restrictedResourceID else { return false }
+        var entryState = progression.state
+        entryState.currentAct = .theTakeover
+        return access?.resourceState(resourceID, state: entryState) == .unlocked
+    }
+    @discardableResult
+    func beginActFour() -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        if progression.state.currentAct == .theTakeover { return .success(.unchanged) }
+        guard actFourHandoffAvailable else { return .failure(.progression(.prerequisitesNotMet)) }
+        return progression.advanceAct(to: .theTakeover).mapError(StoryContentDeliveryError.progression)
+    }
+    var actFourEntry: DeliveredStoryContent? {
+        availableItems(for: .web).first { $0.id == ActThreeHandoffContract.entry }
     }
 
     var autonomyConfirmationAvailable: Bool {

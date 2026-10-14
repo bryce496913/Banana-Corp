@@ -11,7 +11,8 @@
       "milestone.act3.public_restricted_contradiction_confirmed",
       "milestone.act3.daniel_concealment_discovered",
       "milestone.act3.maya_recorded_guidance_reviewed",
-      "milestone.act3.observer_connection_discovered"
+      "milestone.act3.observer_connection_discovered",
+      "milestone.act3.investigation_concluded"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -700,6 +701,31 @@
       ],
       "linkedContentIDs": [
         "content.act3.assistant.observer"
+      ]
+    },
+    {
+      "id": "resource.act4.entry",
+      "kind": "webPage",
+      "displayName": "The Takeover — Beginning resistance",
+      "message": "Investigation objective",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.investigation_concluded"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.investigation_concluded"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.entry"
       ]
     }
   ],

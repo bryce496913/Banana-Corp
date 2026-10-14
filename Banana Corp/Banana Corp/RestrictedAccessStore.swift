@@ -15,6 +15,7 @@ enum PuzzleSubmissionResult: Equatable {
     private(set) var diagnostics: [String]
     private let progression: StoryProgressionStore
     private var referencesValid = true
+    private(set) var contentReferenceRevision: UInt64 = 0
     private var drafts: [String: PuzzleDraft] = [:]
 
     func draft(for id: String) -> PuzzleDraft { drafts[id] ?? PuzzleDraft() }
@@ -38,6 +39,7 @@ enum PuzzleSubmissionResult: Equatable {
     }
     /// The two catalogues must agree on every protected link; missing/incorrect references fail closed.
     func validateContentReferences(_ content: StoryContentCatalogue?) {
+        contentReferenceRevision &+= 1
         guard let catalogue else { return }
         var failures: [String] = []
         for resource in catalogue.resources {

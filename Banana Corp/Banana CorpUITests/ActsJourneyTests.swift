@@ -4,7 +4,7 @@ import XCTest
 /// Mode belongs to the test runner only: no launch arguments or app-state bypasses.
 final class ActsJourneyTests: XCTestCase {
     @MainActor
-    func testActsOneTwoPlayerJourney() throws {
+    func testActsOneThreePlayerJourney() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let mode = environment["BANANA_QA_PATH"] ?? environment["TEST_RUNNER_BANANA_QA_PATH"] else {
             throw XCTSkip("Use validate-acts-journey.sh to provide a fresh simulator and preservation path.")
@@ -119,6 +119,39 @@ final class ActsJourneyTests: XCTestCase {
         tap(app, "story.resource.resource.banana_wall")
         XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
         XCTAssertFalse(app.buttons["story.puzzle.submit.\(puzzle)"].exists)
+        for key in ["mirror.origins", "echo.correspondence", "neural.capabilities"] {
+            openAndRead(app, "browser", "version.act3.\(key).v1")
+            if preserveVideo { preserve(app, "version.act3.\(key).v1") }
+        }
+        checkpoint(app, "MIRROR ECHO and influence discovered")
+        openApp(app, "browser")
+        tap(app, "story.lead.version.act3.autonomy.actions.v1")
+        openAndRead(app, "email", "version.act3.autonomy.maya.v1")
+        tap(app, "story.connect.act3.autonomy")
+        checkpoint(app, "autonomy explicitly connected")
+        openApp(app, "watchVideo")
+        presentation(app, "version.act3.ascension.recording.v1", preserve: preserveVideo, sections: 3)
+        openAndRead(app, "browser", "version.act3.ascension.purpose.v1")
+        openApp(app, "browser")
+        tap(app, "story.lead.version.act3.energy.transfer.v1")
+        openAndRead(app, "browser", "version.act3.energy.growth.v1")
+        tap(app, "story.connect.act3.contradiction")
+        checkpoint(app, "ASCENSION energy and public contradiction")
+        openAndRead(app, "browser", "version.act3.daniel.contribution.v1")
+        openAndRead(app, "email", "version.act3.daniel.concealment.v1")
+        openApp(app, "watchVideo")
+        presentation(app, "version.act3.maya.guidance.v1", preserve: preserveVideo)
+        openAndRead(app, "browser", "version.act3.observer.program.v1")
+        openApp(app, "browser")
+        tap(app, "story.lead.version.act3.observer.session.v1")
+        checkpoint(app, "Observer connection discovered Maya still missing")
+        openAndRead(app, "browser", "version.act3.conclusion.resistance.v1")
+        tap(app, "story.advance.act4")
+        openApp(app, "browser")
+        tap(app, "story.lead.version.act4.entry.v1")
+        checkpoint(app, "Act 4 entry read without takeover")
+        openApp(app, "browser")
+        XCTAssertTrue(app.buttons["story.lead.version.act4.entry.v1"].exists)
     }
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
@@ -159,11 +192,11 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: button)], timeout: 5), .completed)
     }
 
-    @MainActor private func presentation(_ app: XCUIApplication, _ version: String, preserve shouldPreserve: Bool) {
+    @MainActor private func presentation(_ app: XCUIApplication, _ version: String, preserve shouldPreserve: Bool, sections: Int = 5) {
         tap(app, "story.open.\(version)")
         if shouldPreserve { preserve(app, version) }
-        // The approved production presentations each contain five sections.
-        for _ in 0..<4 { tap(app, "story.video.next.\(version)") }
+        // The actual catalogue supplies three or five transcript sections.
+        for _ in 0..<(sections - 1) { tap(app, "story.video.next.\(version)") }
         tap(app, "story.video.finish.\(version)")
         let finished = app.buttons["story.video.finish.\(version)"].firstMatch
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finished)], timeout: 5), .completed)

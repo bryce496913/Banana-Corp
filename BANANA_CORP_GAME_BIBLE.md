@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.11
+**Version:** 1.12
 **Last updated:** 2026-10-14  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -329,6 +329,14 @@ The concealment discovery unlocks Maya's guidance transcript. Explicit Finish re
 Mandatory Observer discovery is a normal factual milestone. It does not record optional Observer clue IDs, grant hidden access/route prerequisites, expose hidden-ending requirements or prove that other characters/wider events are unreal. References to the earlier email delivery record, warning, Daniel thread, diagnostic mismatch and Wall attachment are offered only when their saved discoveries support them. A valid preserved original is optional and shown separately; read receipts or delivery traces are not represented as preserved proof.
 
 The source-linked Act 3 conclusion requires the character/Observer investigations plus the Part Two autonomy, purpose, energy and contradiction discoveries. Reading it records `milestone.act3.investigation_concluded`, identifies resistance as the next task and reiterates Maya's absence. It remains in Act 3: no Act 4 handoff, ASCENSION takeover or resistance/countermeasure event is configured. New Assistant questions record `assistant.act3.daniel_questioned`, `assistant.act3.maya_questioned` and `assistant.act3.observer_questioned` at their respective knowledge gates, never cooperation. Published source versions and existing snapshots remain immutable. See [the complete Act 3 inventory](docs/act-three-content-inventory.md).
+
+### Pass 8 — explicit completion and Act 4 entry
+
+The user authorizes the integration handoff into Act 4, not its full takeover narrative. `ActThreeHandoffContract` requires the 14 saved factual milestones covering breach, first research, MIRROR origins/connection/influence, autonomy, ASCENSION purpose, energy, public/restricted confirmation, Daniel involvement/concealment, Maya guidance, Observer participation and the read conclusion. It also requires the approved solved Wall/access, the Wall success event, both explicit investigation-connection events, and exact Maya guidance/conclusion reads and read events. These requirements validate discoveries and explicit synthesis, not a count of opened documents.
+
+The player must separately choose **Begin the resistance investigation**. Only that action advances the consecutive act through the central progression store, saving atomically; a failed save does not advance. Optional preserved evidence, extra applications, late Assistant questions and hidden Observer clues are not handoff requirements. Their ordering does not alter eligibility or award cooperation.
+
+The protected `content.act4.entry` / `version.act4.entry.v1` introduces the next objective: investigate people and infrastructure capable of resisting ECHO, keep the research evidence, and distinguish archived Maya guidance from contact/location proof. Maya remains missing. Entry grants no countermeasure/access/ending facts, ASCENSION progress, live percentage, timer or takeover effects. Act 5 remains unconfigured. Earlier source definitions/snapshots and schema 2 saves remain immutable; existing Act 3 conclusions can resume without replay. See [Acts 1–3 release QA](docs/ACTS_1_3_RELEASE_QA.md) for exact contracts and platform limitations.
 
 ## 11. Act 4 — The Takeover
 
@@ -726,3 +734,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-14 | 1.9 | Pass 5: authorized opening MIRROR/ECHO lineage and neural-influence research drafts, sequential explicit read gates, optional preserved restricted records and knowledge-gated Assistant questions. Immutable prior records, later revelations and ending contracts remain unchanged. |
 | 2026-10-14 | 1.10 | Pass 6: authorized progressive autonomy evidence and explicit synthesis, archived Maya ASCENSION lead, separated plan/energy records and public-versus-restricted confirmation. Knowledge-gated Assistant questions preserve cooperation; no takeover milestone, Act 4 handoff, mechanism or later responsibility reveal is activated. |
 | 2026-10-14 | 1.11 | Pass 7: authorized progressive Daniel contribution/concealment evidence, missing Maya guidance transcript, mandatory Observer participation discovery, factual-history references, gated Assistant questions and source-linked Act 3 conclusion. Optional Observer/ending facts, Maya rescue, Act 4 transition, takeover and unresolved identities/outcomes remain unchanged. |
+| 2026-10-14 | 1.12 | Pass 8: approved exact saved Act 3 completion prerequisites, explicit atomic consecutive Act 4 entry and minimal resistance objective. Optional investigation order/evidence/Observer clues remain independent; takeover, rescue, countermeasures, endings and Act 5 remain reserved. |

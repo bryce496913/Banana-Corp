@@ -142,3 +142,7 @@ The separate bundled `RestrictedAccess.json` describes fictional resources and d
 ## Act 3 Part Three catalogue additions
 
 [The character/Observer progression map](act-three-part-three.md) and [complete Act 3 inventory](act-three-content-inventory.md) add two Daniel records, Maya's accurately labelled guidance transcript, separate Observer program/participation records, source-linked conclusion and three knowledge-gated Assistant questions. All use existing payloads, registered resource gates and exact-version read effects. Shared-store reference queries consult actual saved discoveries and distinguish an available delivery trace from an authentic preserved original. Mandatory Observer knowledge writes a regular milestone, never optional Observer clues, hidden route eligibility or a takeover state. Earlier 60 records and saved snapshot bytes remain unchanged; no schema migration or new database is needed.
+
+## Completion integration
+
+[Pass 8](ACTS_1_3_RELEASE_QA.md) adds one protected Act 4 objective after explicit consecutive advancement. Published versions/save schema are unchanged. Passive surface results are cached against the exact story value and access-reference revision, with at most one state snapshot/one result per surface. Saved-state changes, access rebinding and state-override queries invalidate the cache; no saved facts, timers or observers are added by caching.
