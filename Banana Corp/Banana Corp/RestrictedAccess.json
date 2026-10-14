@@ -7,7 +7,11 @@
       "milestone.banana_wall.breached",
       "milestone.act3.echo_autonomy_established",
       "milestone.act3.ascension_purpose_uncovered",
-      "milestone.act3.energy_harvesting_evidence_discovered"
+      "milestone.act3.energy_harvesting_evidence_discovered",
+      "milestone.act3.public_restricted_contradiction_confirmed",
+      "milestone.act3.daniel_concealment_discovered",
+      "milestone.act3.maya_recorded_guidance_reviewed",
+      "milestone.act3.observer_connection_discovered"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -24,7 +28,10 @@
       "version.act3.autonomy.actions.v1",
       "version.act3.ascension.recording.v1",
       "version.act3.energy.transfer.v1",
-      "version.act3.ascension.purpose.v1"
+      "version.act3.ascension.purpose.v1",
+      "version.act3.daniel.contribution.v1",
+      "version.act3.maya.guidance.v1",
+      "version.act3.observer.program.v1"
     ]
   },
   "resources": [
@@ -420,6 +427,279 @@
       ],
       "linkedContentIDs": [
         "content.act3.assistant.energy"
+      ]
+    },
+    {
+      "id": "resource.act3.daniel.contribution",
+      "kind": "webPage",
+      "displayName": "Daniel Mercer — Behavioral influence contribution record",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.daniel.contribution"
+      ]
+    },
+    {
+      "id": "resource.act3.daniel.concealment",
+      "kind": "webPage",
+      "displayName": "Daniel Mercer — Withheld research disclosure",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.daniel.contribution.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.daniel.contribution.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.daniel.concealment"
+      ]
+    },
+    {
+      "id": "resource.act3.maya.guidance",
+      "kind": "webPage",
+      "displayName": "Maya Chen — Investigation guidance transcript",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.maya.guidance"
+      ]
+    },
+    {
+      "id": "resource.act3.observer.program",
+      "kind": "webPage",
+      "displayName": "Observer Program — Trust and resistance study",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.maya.guidance.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.maya.guidance.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.observer.program"
+      ]
+    },
+    {
+      "id": "resource.act3.observer.session",
+      "kind": "webPage",
+      "displayName": "Observer Program — This fictional session",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.observer.program.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act3.observer.program.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.observer.session"
+      ]
+    },
+    {
+      "id": "resource.act3.conclusion.resistance",
+      "kind": "webPage",
+      "displayName": "The Conspiracy — A reason to resist",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.echo_autonomy_established"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.ascension_purpose_uncovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.energy_harvesting_evidence_discovered"
+        },
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.public_restricted_contradiction_confirmed"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.conclusion.resistance"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.daniel",
+      "kind": "webPage",
+      "displayName": "Does Daniel’s warning make him innocent?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.daniel_concealment_discovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.daniel"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.maya",
+      "kind": "webPage",
+      "displayName": "Can Maya’s recording tell me where she is now?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.maya_recorded_guidance_reviewed"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.maya"
+      ]
+    },
+    {
+      "id": "resource.act3.assistant.observer",
+      "kind": "webPage",
+      "displayName": "Am I part of the Observer Program?",
+      "message": "Restricted investigation source.",
+      "availableAct": 3,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act3.observer_connection_discovered"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act3.assistant.observer"
       ]
     }
   ],

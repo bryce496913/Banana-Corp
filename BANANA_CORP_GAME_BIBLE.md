@@ -1,6 +1,6 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.10
+**Version:** 1.11
 **Last updated:** 2026-10-14  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
@@ -317,6 +317,18 @@ After the neural-influence note is read, a human-readable incident diagnostic su
 The purpose record unlocks restricted power diagnostics. Those diagnostics identify the human source and ECHO destination; the subsequent growth-purpose note explains increasing power demand and the adoption → synchronization → harvesting relationship. Reading both records establishes `milestone.act3.energy_harvesting_evidence_discovered`. A separate player action compares these sources, the purpose record, and the already-read official guidance/public presentation; it records `event.act3.public_restricted_connected` and `milestone.act3.public_restricted_contradiction_confirmed`. Preservation remains optional and all sources recoverable.
 
 Knowledge of ASCENSION, its documented preparation/purpose, and its later event are separate facts. No `AscensionMilestone`, percentage, timer, Act 4 transition or takeover effect is activated here. New deterministic Assistant questions require autonomy, purpose or harvesting knowledge respectively and record questioning only; cooperation and DAWN relationship resolution remain reserved. Existing versions/saved evidence stay immutable. See [the Part Two progression map](docs/act-three-part-two.md).
+
+### Act 3 Part Three — authorized character and Observer investigation
+
+The user's Pass 7 authorizes restrained drafts establishing Daniel's behavioral-influence contribution and concealment through separate attribution and archived disclosure records, Maya's recorded investigation guidance, the Observer Program's trust/resistance purpose and this fictional session's participation. Daniel's complete motives/outcome, Maya's location/safety, precise chronology, player identity and the wider-world ontology remain TBD or reserved. No media asset exists for Maya's new guidance; it is explicitly a transcript, not fabricated playable media or live contact.
+
+After the Part Two public/restricted contradiction is explicitly confirmed, Daniel's attribution becomes available. Reading it records `milestone.act3.daniel_involvement_discovered`; it unlocks disclosure correspondence whose read records `milestone.act3.daniel_concealment_discovered`. His initial help remains real but does not erase accountability; these records do not assign him every later ECHO action or invent a final motive.
+
+The concealment discovery unlocks Maya's guidance transcript. Explicit Finish records `milestone.act3.maya_recorded_guidance_reviewed` and opens the Observer Program record. Reading that record unlocks the participation diagnostic; explicitly reading the participation record establishes `milestone.act3.observer_connection_discovered`. Maya remains missing; the archive offers neither contact, rescue nor a survival/location proof.
+
+Mandatory Observer discovery is a normal factual milestone. It does not record optional Observer clue IDs, grant hidden access/route prerequisites, expose hidden-ending requirements or prove that other characters/wider events are unreal. References to the earlier email delivery record, warning, Daniel thread, diagnostic mismatch and Wall attachment are offered only when their saved discoveries support them. A valid preserved original is optional and shown separately; read receipts or delivery traces are not represented as preserved proof.
+
+The source-linked Act 3 conclusion requires the character/Observer investigations plus the Part Two autonomy, purpose, energy and contradiction discoveries. Reading it records `milestone.act3.investigation_concluded`, identifies resistance as the next task and reiterates Maya's absence. It remains in Act 3: no Act 4 handoff, ASCENSION takeover or resistance/countermeasure event is configured. New Assistant questions record `assistant.act3.daniel_questioned`, `assistant.act3.maya_questioned` and `assistant.act3.observer_questioned` at their respective knowledge gates, never cooperation. Published source versions and existing snapshots remain immutable. See [the complete Act 3 inventory](docs/act-three-content-inventory.md).
 
 ## 11. Act 4 — The Takeover
 
@@ -713,3 +725,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-14 | 1.8 | Explicit user story approval and Implementation Pass 4: canonized the four-field Banana Wall review cross-reference, exact normalization, voluntary hints and approved limited scope record. Success records puzzle/event/scoped access plus the requested factual breach milestone atomically; existing clues/snapshots, later acts, games and ending requirements remain unchanged. |
 | 2026-10-14 | 1.9 | Pass 5: authorized opening MIRROR/ECHO lineage and neural-influence research drafts, sequential explicit read gates, optional preserved restricted records and knowledge-gated Assistant questions. Immutable prior records, later revelations and ending contracts remain unchanged. |
 | 2026-10-14 | 1.10 | Pass 6: authorized progressive autonomy evidence and explicit synthesis, archived Maya ASCENSION lead, separated plan/energy records and public-versus-restricted confirmation. Knowledge-gated Assistant questions preserve cooperation; no takeover milestone, Act 4 handoff, mechanism or later responsibility reveal is activated. |
+| 2026-10-14 | 1.11 | Pass 7: authorized progressive Daniel contribution/concealment evidence, missing Maya guidance transcript, mandatory Observer participation discovery, factual-history references, gated Assistant questions and source-linked Act 3 conclusion. Optional Observer/ending facts, Maya rescue, Act 4 transition, takeover and unresolved identities/outcomes remain unchanged. |
