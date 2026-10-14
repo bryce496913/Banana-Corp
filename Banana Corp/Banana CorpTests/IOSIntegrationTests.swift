@@ -15,6 +15,7 @@ final class IOSIntegrationTests: XCTestCase {
         XCTAssertNotNil(content.itemsByID["content.act1.welcome"])
         XCTAssertNotNil(access.resourcesByID["resource.banana_wall"])
         XCTAssertEqual(access.puzzlesByID["puzzle.banana_wall.pending_design"]?.rule.kind, .awaitingApproval)
+        XCTAssertEqual(access.puzzlesByID["puzzle.banana_wall.review_cross_reference"]?.rule.kind, .exactFields)
         for item in content.items {
             if let id = item.restrictedResourceID { XCTAssertNotNil(access.resourcesByID[id]) }
         }

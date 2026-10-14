@@ -1,5 +1,7 @@
 # Acts 1–2 device QA
 
+**2026-10-14 extension:** the approved Banana Wall is now implemented. The native journey runner additionally reviews clue links, retains a draft through Home, solves the puzzle, opens its sole scoped reward and relaunches into persistent access. See [banana-wall-implementation.md](banana-wall-implementation.md); the historical NOT RUN device results below are not upgraded to passes by this extension.
+
 Date: **2026-10-13**. Baseline: merged Xcode integration PR #20, tree `2e46ae0edddbe9e3bd0bca3ac0478a86e26d99fd`.
 
 **The requested Apple-platform completion criterion remains unmet.** PR #20 supplied integration repairs and native coverage, but did not establish a successful Xcode build. This workspace still runs Linux without Xcode, Apple SDKs, simulator tooling or an authorized iPhone. No primary player/UI playthrough, simulator execution or physical-device validation is claimed here.

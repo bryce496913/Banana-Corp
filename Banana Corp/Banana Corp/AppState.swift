@@ -62,6 +62,7 @@ final class AppState: ObservableObject {
         if case .success = result {
             goHome()
             restoreNormalPresentation()
+            access.clearDrafts()
             firstAnomalyDeliveryFailed = false
             aiCorruptionLevel = 0
         }

@@ -1,7 +1,7 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.7  
-**Last updated:** 2026-10-13  
+**Version:** 1.8  
+**Last updated:** 2026-10-14  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
 
@@ -282,11 +282,23 @@ The player knows the main threat and its objective. Investigation now needs a co
 
 ### Approved restricted-access foundation — Pass 8
 
-Pass 8 prepares a local puzzle/resource framework and selects the existing Browser for the initial locked Banana Wall entry after the approved Act 3 handoff. The Banana Wall's actual challenge, inputs, clues and solution remain `[TBD]`. Its production pending-design descriptor is explicitly non-completable: no answer, inputs, hints or success effects. It is not a canonical test-token puzzle and does not reveal restricted research.
+Pass 8 prepared the local puzzle/resource framework and initial locked Browser entry. Its pending-design descriptor was intentionally non-completable; it is superseded only by the explicit approval recorded below, never by a development token or merely opening the placeholder.
 
 Resource access and puzzle success use declarative requirements and existing saved puzzle/access/milestone/event facts. The content delivery layer enforces live authorization; legitimately preserved evidence stays independent of current access. Success effects save atomically/idempotently, while wrong inputs, retries and save failures do not award progress or hidden scores. Neutral development fixtures and an isolated in-memory DEBUG demo test these contracts without changing the campaign.
 
 Existing explicit Assistant facts/cooperation, route prerequisites, ASCENSION milestones and separate optional Observer clues remain available for future approved conditions. No LANTERN/BLACKOUT/DAWN/ASCENSION/Observer puzzle, new clue, research revelation, ending requirement, real network authentication or mini-game gate is introduced. The known-versus-TBD review and approval questions are documented in `docs/ACT3_PUZZLE_DESIGN.md`.
+
+### Approved Banana Wall puzzle — Implementation Pass 4
+
+On 2026-10-14 the user explicitly approved the story/design in `docs/BANANA_WALL_PUZZLE_PROPOSAL.md` and requested implementation. This approves its review-cross-reference premise, exact source mapping, instructions, field prompts, hints, failure/success copy, limited scope-reconciliation reward and IDs. It does not approve broader normalization or later research/ending decisions.
+
+After the existing explicit Act 2 confirmation and Act 3 handoff, Browser's Banana Wall exposes a limited old review lookup. Four labelled text fields are submitted together: originating discipline **neural systems** (Daniel's current correspondence); trial reference **ECHO-07** (his lead and the preliminary findings); public boundary **selected preferences** (the required official-response article); research observation **recorded cognitive patterns** (ECHO-07/Maya). The mismatch distinguishes public presentation from recorded cognitive change without establishing causation or disclosing the later conspiracy. All essential sources remain available; the removed Act 1 email, optional articles, saved Alex proof, games and external websites are not required.
+
+The stable puzzle is `puzzle.banana_wall.review_cross_reference`, event `event.puzzle.banana_wall.review_cross_reference`. Validation canonically precomposes Unicode, trims only edge whitespace/newlines and ignores case. Exact internal spaces, field identity and the ASCII hyphen remain significant; each raw value is bounded to 256 UTF-8 bytes. No fuzzy matching, secret alias or partial-match score. The three approved voluntary hints are immediately available without penalty/wait; failures retain retry/navigation and do not mutate progress. Normal controls preserve valid draft input during navigation; a force quit may clear unsolved input/hint display, never earned completion.
+
+Success atomically records the solved puzzle, named event, `access.banana_wall.breached` and the explicitly requested factual milestone `milestone.banana_wall.breached`, once. Only `content.act3.banana_wall.scope_record` / `version.act3.banana_wall.scope_record.v1` becomes available through `resource.banana_wall`. Its approved title is **ECHO-07 — Scope reconciliation record**, source Internal research review, subtitle Limited review attachment, path `/research/echo-07/scope-reconciliation`. It contains the approved limited draft reproduced in the design: discipline/trial/public-description/research-observation metadata, the difference between these kinds of change, and an unresolved review statement with links back to ECHO-07/Maya. It invents no author, date, mechanism or wider reveal. Its snapshot can be preserved as `evidence.act3.banana_wall.scope_record.v1`; reading/preserving adds no extra story milestone, score or ending condition.
+
+The reward is read only by explicit opening. Repeat submission/relaunch does not replay effects; write failure grants no partial access. Old pending/test facts remain recoverable but cannot substitute for the new solved/event markers. Save schema 2 remains unchanged; existing evidence bytes and content versions stay immutable. No automatic Act 4 transition, unrelated access, Assistant cooperation, ASCENSION/Observer/ending award or new chapter is authorised. The retired pending descriptor may remain inert for historical references.
 
 ## 11. Act 4 — The Takeover
 
@@ -636,7 +648,7 @@ Use checks appropriate to the actual change. This checklist is not an instructio
 3. **Story pacing:** Session-based versus multi-day progression; required waits, catch-up behavior, and overall duration.
 4. **Research chronology:** Specific dates, sentience emergence, Maya’s disappearance, and Daniel’s leak timing.
 5. **Energy mechanism:** The exact fictional explanation for harvesting human power and system dependency.
-6. **Detailed puzzle design:** Banana Wall steps, access components, LANTERN, Maya’s three notes/baseline, and DAWN stabilization answers.
+6. **Detailed puzzle design:** The first Banana Wall cross-reference is approved above. Further research access, LANTERN, Maya’s three notes/baseline, and DAWN stabilization answers remain unresolved.
 7. **Negotiation logic:** Concrete evidence requirements, credibility rules, challenges, and conditions distinguishing agreement from deception.
 8. **Assistant development:** Exact conflict scenes, conditions for cooperation, separation mechanism, and interpretation of the final process hint.
 9. **Character outcomes:** Daniel’s complete resolution, Alex’s fate, Vale’s ultimate accountability, Maya’s BLACKOUT outcome, and individual Signal members.
@@ -680,3 +692,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-13 | 1.5 | Pass 6: approved once-only original-email removal at a return boundary, truthful preserved/unpreserved recovery, exact unknown warning, conditional scripted denial/challenge and factual Assistant interaction, restrained consumed carrier/notification event, explicit investigation and documented Act 1 → Act 2 prerequisites. Original sources/snapshots, later reveals, mini-games, scoring and ending requirements are unchanged. |
 | 2026-10-13 | 1.6 | Pass 7: approved playable Act 2 drafts, same-location Alex transcript replacement, already-read social/news/web changes, accurate multi-format evidence, knowledge-gated Daniel/Maya/ECHO-07/diagnostic leads and Assistant questioning, independent-corroboration alternative and explicit cross-app confirmation before Act 3. Existing source/snapshot versions, unresolved motives/fates, Banana Wall, later reveals and ending requirements remain unchanged. |
 | 2026-10-13 | 1.7 | Pass 8: approved reusable local restricted-resource/puzzle infrastructure and a locked Browser Banana Wall entry with no production solution, atomic saved success, delivery-layer authorization and isolated/unbundled neutral fixtures. Actual breach design, full Act 3 research, later milestone/ending conditions, optional Observer clues and character outcomes remain unresolved/unchanged. |
+| 2026-10-14 | 1.8 | Explicit user story approval and Implementation Pass 4: canonized the four-field Banana Wall review cross-reference, exact normalization, voluntary hints and approved limited scope record. Success records puzzle/event/scoped access plus the requested factual breach milestone atomically; existing clues/snapshots, later acts, games and ending requirements remain unchanged. |

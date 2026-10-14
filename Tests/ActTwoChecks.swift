@@ -14,9 +14,9 @@ private final class ActTwoFailingPersistence: StoryPersistence {
 @main struct ActTwoChecks {
     @MainActor static func main() throws {
         let url = URL(fileURLWithPath: CommandLine.arguments[1])
-        let catalogue = StoryContentCatalogueLoader.load(fileURL: url)
+        let catalogue = StoryContentCatalogueLoader.load(fileURL: url, restrictedResourceIDs: ["resource.banana_wall"])
         let definitions = try catalogue.get()
-        precondition(definitions.items.count == 45)
+        precondition(definitions.items.filter { $0.actAvailable.rawValue <= 2 }.count == 45)
         precondition(definitions.items.filter { $0.actAvailable == .somethingIsntRight }.count == 20)
         if CommandLine.arguments.count == 4 {
             let story = StoryProgressionStore(persistence: StoryFilePersistence(fileURL: URL(fileURLWithPath: CommandLine.arguments[3])))
@@ -212,7 +212,7 @@ private final class ActTwoFailingPersistence: StoryPersistence {
         items[index]["versions"] = (items[index]["versions"] as! [[String: Any]]).filter { ($0["version"] as? Int) == 1 }
         document["items"] = items
         let missingStory = StoryProgressionStore(persistence: InMemoryStoryPersistence())
-        let missingStore = StoryContentStore(progression: missingStory, catalogue: StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document)))
+        let missingStore = StoryContentStore(progression: missingStory, catalogue: StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document), restrictedResourceIDs: ["resource.banana_wall"]))
         enter(missingStory, missingStore); video(missingStore, ActTwoContract.alex)
         let beforeMissing = missingStory.state
         fail(missingStore.activateActTwoChangesAtBoundary(surface: .video), .unknownVersion(ActTwoContract.replacementWarning))

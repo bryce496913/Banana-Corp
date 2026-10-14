@@ -170,7 +170,9 @@ def check_resources():
     content = json.loads((APP_DIR / "StoryContent.json").read_text())
     access = json.loads((APP_DIR / "RestrictedAccess.json").read_text())
     require(access["kind"] == "production", "Fixture catalogue in production")
-    require(all(p["rule"]["kind"] == "awaitingApproval" and not p["inputs"] and not p["successEffects"] for p in access["puzzles"]), "Production Banana Wall must remain non-completable")
+    puzzles = {p["id"]: p for p in access["puzzles"]}
+    require(puzzles["puzzle.banana_wall.pending_design"]["rule"]["kind"] == "awaitingApproval", "Retired pending gate must remain inert")
+    require(puzzles["puzzle.banana_wall.review_cross_reference"]["rule"]["kind"] == "exactFields", "Approved puzzle missing")
     for asset in content.get("assets", []):
         require((APP_DIR / asset["fileName"]).is_file(), f"Missing media: {asset['fileName']}")
     for metadata in (APP_DIR / "Assets.xcassets").rglob("Contents.json"):

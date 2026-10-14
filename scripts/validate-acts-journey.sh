@@ -58,7 +58,10 @@ PY
 import json,sys
 with open(sys.argv[1]) as f: state=json.load(f)
 assert state['currentAct']==3, state['currentAct']
-assert not state['solvedPuzzleIDs'] and not state['accessMilestoneIDs']
+assert state['solvedPuzzleIDs']==['puzzle.banana_wall.review_cross_reference']
+assert state['accessMilestoneIDs']==['access.banana_wall.breached']
+assert 'milestone.banana_wall.breached' in state['completedMilestoneIDs']
+assert 'event.puzzle.banana_wall.review_cross_reference' in state['completedEventIDs']
 records=state['preservedEvidence']
 assert ('evidence.act1.echo_review.v1' in records)==(sys.argv[2] in ['both','email'])
 assert ('evidence.act2.alex_review.v1' in records)==(sys.argv[2] in ['both','video'])
@@ -70,6 +73,7 @@ required=['version.act1.promo.v1','version.act1.echo_review.v1',
           'version.act2.alex_review.v1','version.act2.alex_review.v2',
           'version.act2.messages.daniel.v1','version.act2.email.maya.v1',
           'version.act2.web.echo07.v1','version.act2.diagnostics.excerpt.v1']
+required.append('version.act3.banana_wall.scope_record.v1')
 assert set(required).issubset(state['readContentIDs'])
 PY
         cleanup

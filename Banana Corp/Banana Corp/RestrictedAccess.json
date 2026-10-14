@@ -2,32 +2,143 @@
   "schemaVersion": 1,
   "kind": "production",
   "facts": {
-    "milestoneCompleted": ["milestone.act2.cross_app_confirmation"],
-    "accessGranted": ["access.banana_wall.breached"]
+    "milestoneCompleted": [
+      "milestone.act2.cross_app_confirmation",
+      "milestone.banana_wall.breached"
+    ],
+    "accessGranted": [
+      "access.banana_wall.breached"
+    ],
+    "contentRead": [
+      "content.act2.messages.daniel",
+      "content.act2.news.official",
+      "content.act2.email.maya",
+      "content.act2.web.echo07"
+    ]
   },
-  "resources": [{
-    "id": "resource.banana_wall",
-    "kind": "webPage",
-    "displayName": "Banana Wall",
-    "message": "Access required. Restricted research remains beyond this boundary.",
-    "availableAct": 3,
-    "visibility": "entry",
-    "discoveryConditions": [{"type":"milestoneCompleted","id":"milestone.act2.cross_app_confirmation"}],
-    "requiredAccessID": "access.banana_wall.breached",
-    "requiredPuzzleID": "puzzle.banana_wall.pending_design",
-    "unlockConditions": [],
-    "linkedContentIDs": []
-  }],
-  "puzzles": [{
-    "id": "puzzle.banana_wall.pending_design",
-    "title": "Access required",
-    "instructions": "The access challenge is not available in this build. Return to your investigation; no access input can be submitted here.",
-    "availableAct": 3,
-    "requirements": [{"type":"milestoneCompleted","id":"milestone.act2.cross_app_confirmation"}],
-    "inputs": [],
-    "rule": {"kind":"awaitingApproval"},
-    "successEventID": "event.puzzle.banana_wall.pending_design",
-    "successEffects": [],
-    "hints": []
-  }]
+  "resources": [
+    {
+      "id": "resource.banana_wall",
+      "kind": "webPage",
+      "displayName": "Banana Wall",
+      "message": "Access required. Restricted research remains beyond this boundary.",
+      "availableAct": 3,
+      "visibility": "entry",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.cross_app_confirmation"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [],
+      "linkedContentIDs": [
+        "content.act3.banana_wall.scope_record"
+      ]
+    }
+  ],
+  "puzzles": [
+    {
+      "id": "puzzle.banana_wall.pending_design",
+      "title": "Access required",
+      "instructions": "The access challenge is not available in this build. Return to your investigation; no access input can be submitted here.",
+      "availableAct": 3,
+      "requirements": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.cross_app_confirmation"
+        }
+      ],
+      "inputs": [],
+      "rule": {
+        "kind": "awaitingApproval"
+      },
+      "successEventID": "event.puzzle.banana_wall.pending_design",
+      "successEffects": [],
+      "hints": []
+    },
+    {
+      "id": "puzzle.banana_wall.review_cross_reference",
+      "title": "Research review cross-reference",
+      "instructions": "Direct archive browsing is restricted. A review cross-reference can retrieve one matching attachment.\n\nIdentify the discipline of the person who sent the internal review, and the trial he asks you to investigate. Then pair the public description with the different change recorded in the findings.\n\nUse the exact short phrases from the records. Enter the discipline, the trial reference, the boundary described in public guidance, and what changed in the trial's observations. This is a record lookup, not an account sign-in.",
+      "availableAct": 3,
+      "requirements": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act2.cross_app_confirmation"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "input.banana_wall.discipline",
+          "label": "Originating discipline",
+          "kind": "text",
+          "prompt": "The internal-review sender's field of work, not his name"
+        },
+        {
+          "id": "input.banana_wall.trial",
+          "label": "Trial reference",
+          "kind": "text",
+          "prompt": "The numbered trial in the preliminary findings; keep its hyphen"
+        },
+        {
+          "id": "input.banana_wall.public_scope",
+          "label": "Publicly described boundary",
+          "kind": "text",
+          "prompt": "The two-word phrase following “within” in the official response"
+        },
+        {
+          "id": "input.banana_wall.research_scope",
+          "label": "Research observation",
+          "kind": "text",
+          "prompt": "The three-word phrase identifying what changed in Observations"
+        }
+      ],
+      "rule": {
+        "kind": "exactFields",
+        "expectedFields": {
+          "input.banana_wall.discipline": "neural systems",
+          "input.banana_wall.trial": "ECHO-07",
+          "input.banana_wall.public_scope": "selected preferences",
+          "input.banana_wall.research_scope": "recorded cognitive patterns"
+        },
+        "trimWhitespace": true,
+        "caseInsensitive": true
+      },
+      "successEventID": "event.puzzle.banana_wall.review_cross_reference",
+      "successEffects": [
+        {
+          "kind": "grantAccess",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "kind": "recordMilestone",
+          "id": "milestone.banana_wall.breached"
+        }
+      ],
+      "hints": [
+        "Return to Daniel’s conversation, the official response in News, and Maya’s ECHO-07 findings. The sender’s work, the trial title, and the contrast between public wording and observations are the pieces you need.",
+        "Daniel identifies the discipline and the trial. The other two fields form a pair: what public guidance says the interface stays within, and what the research record says actually changed.",
+        "Use the sender’s field of work rather than his name, and the complete numbered trial reference rather than the project name. In the official response, copy the short phrase after ‘within’. In the findings, look under ‘Observations’ for the phrase after ‘changes in’. Maya’s correspondence explains why those two kinds of change should be distinguished."
+      ],
+      "clueContentIDs": [
+        "content.act2.messages.daniel",
+        "content.act2.news.official",
+        "content.act2.email.maya",
+        "content.act2.web.echo07"
+      ],
+      "presentation": {
+        "invalidFields": "Complete all four short fields using phrases from the records.",
+        "incorrectAnswer": "No matching review record. Check the sender’s discipline, the trial reference, and the public/research wording. You can retry or open a hint.",
+        "unavailable": "The local review sources are unavailable. No access has been granted. Return to your investigation and retry.",
+        "saveFailed": "The request could not be saved. No access has been granted. Your input is still here; try again.",
+        "success": "Review record located. Access is available to one research attachment.",
+        "completed": "This review record is already available.",
+        "submit": "Submit review request",
+        "clear": "Clear input",
+        "openResource": "Open review record"
+      }
+    }
+  ]
 }

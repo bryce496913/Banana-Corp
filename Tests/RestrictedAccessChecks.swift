@@ -41,11 +41,14 @@ private final class AccessFailingPersistence: StoryPersistence {
         }
         if case .failure = RestrictedAccessCatalogueLoader.load(data: fixtureData) {} else { preconditionFailure("Production loader accepted fixture") }
         let production = try RestrictedAccessCatalogueLoader.load(data: productionData).get()
-        precondition(production.puzzles.count == 1 && production.puzzles.allSatisfy { $0.rule.kind == .awaitingApproval && $0.inputs.isEmpty && $0.successEffects.isEmpty })
+        precondition(production.puzzlesByID["puzzle.banana_wall.pending_design"]?.rule.kind == .awaitingApproval)
+        precondition(production.puzzlesByID["puzzle.banana_wall.review_cross_reference"]?.rule.kind == .exactFields)
         var campaign = StoryState(); campaign.currentAct = .theConspiracy
         campaign.completedMilestoneIDs.insert(ActTwoContract.connected)
         let campaignStory = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(campaign)))
         let productionAccess = RestrictedAccessStore(progression: campaignStory, catalogue: .success(production))
+        let sources = URL(fileURLWithPath: CommandLine.arguments[3]).deletingLastPathComponent().appendingPathComponent("StoryContent.json")
+        _ = StoryContentStore(progression: campaignStory, catalogue: StoryContentCatalogueLoader.load(fileURL: sources, restrictedResourceIDs: Set(production.resources.map(\.id))), access: productionAccess)
         precondition(productionAccess.resourceState("resource.banana_wall") == .locked)
         let before = campaignStory.state
         for fields in [[:], ["input.fixture.token":"OPEN"], ["password":"anything"]] {
@@ -146,7 +149,7 @@ private final class AccessFailingPersistence: StoryPersistence {
             raw["puzzles"] = puzzles
             if case .failure = RestrictedAccessCatalogueLoader.loadDevelopmentFixture(data: try JSONSerialization.data(withJSONObject: raw)) {} else { preconditionFailure("Accepted invalid puzzle definition") }
         }
-        print("PASS: locked live queries, prerequisites, explicit typed outcomes, normalization/retry, atomic saved success/idempotency, references, migration, optional Observer independence, late facts and unsolvable production gate")
+        print("PASS: locked live queries, prerequisites, explicit typed outcomes, normalization/retry, atomic saved success/idempotency, references, migration, optional Observer independence, late facts and inert retired pending gate")
     }
     @MainActor static func readHint(_ content: StoryContentStore) { success(content.read("content.fixture.access_hint", versionID: "version.fixture.access_hint.v1")) }
     static func success(_ result: StoryContentDeliveryResult) { guard case .success = result else { preconditionFailure("Unexpected delivery: \(result)") } }

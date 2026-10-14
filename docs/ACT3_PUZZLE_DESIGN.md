@@ -1,5 +1,7 @@
 # Act 3 puzzle and restricted-access foundation
 
+**2026-10-14 update:** the user explicitly approved the Banana Wall cross-reference and scoped reward. Bible v1.8 and [banana-wall-implementation.md](banana-wall-implementation.md) supersede the historical non-completable production entry described below. The retired pending descriptor remains inert; later research and ending puzzles remain TBD.
+
 The [root game bible](../BANANA_CORP_GAME_BIBLE.md) is canonical. Pass 8 authorizes infrastructure and the initial locked Banana Wall entry, **not its solution or the full Act 3 revelations**. Acts 1–2 already have the [opening](act-one-content.md), [first anomaly](first-anomaly.md) and [Act 2](act-two-content.md) contract tests. Apple-SDK/simulator validation remains unavailable on this Linux workspace; that limitation is not evidence of runtime acceptance.
 
 ## Approved canon versus unresolved design

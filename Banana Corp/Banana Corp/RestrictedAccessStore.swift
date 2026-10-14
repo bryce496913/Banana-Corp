@@ -15,6 +15,16 @@ enum PuzzleSubmissionResult: Equatable {
     private(set) var diagnostics: [String]
     private let progression: StoryProgressionStore
     private var referencesValid = true
+    private var drafts: [String: PuzzleDraft] = [:]
+
+    func draft(for id: String) -> PuzzleDraft { drafts[id] ?? PuzzleDraft() }
+    func saveDraft(_ draft: PuzzleDraft, for id: String) {
+        guard puzzleAvailability(id) == .ready, let puzzle = catalogue?.puzzlesByID[id] else { drafts.removeValue(forKey: id); return }
+        let ids = Set(puzzle.inputs.map(\.id))
+        drafts[id] = PuzzleDraft(fields: draft.fields.filter { ids.contains($0.key) && $0.value.utf8.count <= 256 },
+                                 hintCount: min(max(0, draft.hintCount), puzzle.hints.count))
+    }
+    func clearDrafts() { drafts = [:] }
 
     init(progression: StoryProgressionStore, catalogue: Result<RestrictedAccessCatalogue, RestrictedAccessFailure>) {
         self.progression = progression
@@ -52,7 +62,8 @@ enum PuzzleSubmissionResult: Equatable {
               resource.discoveryConditions.allSatisfy({ $0.evaluate(in: state) }) else { return .hidden }
         if let puzzleID = resource.requiredPuzzleID {
             guard let puzzle = catalogue?.puzzlesByID[puzzleID], puzzle.rule.kind != .awaitingApproval,
-                  state.solvedPuzzleIDs.contains(puzzleID), state.completedEventIDs.contains(puzzle.successEventID) else { return .locked }
+                  state.solvedPuzzleIDs.contains(puzzleID), state.completedEventIDs.contains(puzzle.successEventID),
+                  puzzle.successEffects.allSatisfy({ effectSatisfied($0, in: state) }) else { return .locked }
         }
         return state.accessMilestoneIDs.contains(resource.requiredAccessID) && resource.unlockConditions.allSatisfy({ $0.evaluate(in: state) }) ? .unlocked : .locked
     }
@@ -69,7 +80,7 @@ enum PuzzleSubmissionResult: Equatable {
         if puzzle.rule.kind == .awaitingApproval { return .awaitingApproval }
         let solved = state.solvedPuzzleIDs.contains(id), completed = state.completedEventIDs.contains(puzzle.successEventID)
         if solved != completed { return .unresolved }
-        if solved { return .completed }
+        if solved { return puzzle.successEffects.allSatisfy({ effectSatisfied($0, in: state) }) ? .completed : .unresolved }
         return puzzle.requirements.allSatisfy { $0.evaluate(in: state) } ? .ready : .locked
     }
     func submit(_ id: String, fields: [String: String]) -> PuzzleSubmissionResult {
@@ -89,13 +100,24 @@ enum PuzzleSubmissionResult: Equatable {
             if puzzle.rule.caseInsensitive == true { value = value.lowercased() }
             return value
         }
+        guard fields.values.allSatisfy({ !normalize($0).isEmpty }) else { return .rejected(.invalidFields) }
         guard let expected = puzzle.rule.expectedFields, expected.allSatisfy({ normalize(fields[$0.key] ?? "") == normalize($0.value) }) else { return .rejected(.incorrectAnswer) }
         let actions: [StoryAction] = [.completePuzzle(id)] + puzzle.successEffects.map(\.action)
         let condition = puzzle.requirements.isEmpty ? nil : StoryCondition.all(puzzle.requirements)
         switch progression.completeEvent(puzzle.successEventID, actions: actions, when: condition) {
-        case .success(.changed): return .completed
+        case .success(.changed): drafts.removeValue(forKey: id); return .completed
         case .success(.unchanged): return .alreadyCompleted
         case .failure(let failure): return .saveFailed(failure)
+        }
+    }
+
+    private func effectSatisfied(_ effect: PuzzleSuccessEffect, in state: StoryState) -> Bool {
+        switch effect.kind {
+        case .grantAccess: return state.accessMilestoneIDs.contains(effect.id)
+        case .recordMilestone: return state.completedMilestoneIDs.contains(effect.id)
+        case .recordAssistantFact: return state.assistant.relationshipFacts.contains(effect.id)
+        case .recordObserverClue: return state.observerClueIDs.contains(effect.id)
+        case .recordRoutePrerequisite: return state.routePrerequisiteIDs.contains(effect.id)
         }
     }
 }

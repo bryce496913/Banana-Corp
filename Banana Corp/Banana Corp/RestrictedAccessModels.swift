@@ -22,6 +22,26 @@ struct PuzzleInput: Codable, Identifiable {
     let label: String
     let kind: Kind
     let choices: [String]?
+    let prompt: String?
+}
+
+struct PuzzlePresentationCopy: Codable {
+    let submit: String
+    let clear: String
+    let openResource: String
+    let invalidFields: String
+    let incorrectAnswer: String
+    let unavailable: String
+    let saveFailed: String
+    let success: String
+    let completed: String
+}
+
+/// Transient interaction only; this never grants story facts or changes the save schema.
+struct PuzzleDraft: Equatable {
+    var fields: [String: String] = [:]
+    var hintCount = 0
+    mutating func revealHint(total: Int) { hintCount = min(max(0, total), hintCount + 1) }
 }
 
 struct PuzzleRule: Codable {
@@ -67,6 +87,8 @@ struct PuzzleDefinition: Codable, Identifiable {
     let successEventID: String
     let successEffects: [PuzzleSuccessEffect]
     let hints: [String]
+    let clueContentIDs: [String]?
+    let presentation: PuzzlePresentationCopy?
 }
 
 struct RestrictedAccessDocument: Codable {
@@ -115,9 +137,13 @@ enum RestrictedAccessCatalogueLoader {
                 try keys(resource, ["id", "kind", "displayName", "message", "availableAct", "visibility", "discoveryConditions", "requiredAccessID", "requiredPuzzleID", "unlockConditions", "linkedContentIDs"])
             }
             for puzzle in raw?["puzzles"] as? [[String: Any]] ?? [] {
-                try keys(puzzle, ["id", "title", "instructions", "availableAct", "requirements", "inputs", "rule", "successEventID", "successEffects", "hints"])
+                try keys(puzzle, ["id", "title", "instructions", "availableAct", "requirements", "inputs", "rule", "successEventID", "successEffects", "hints", "clueContentIDs", "presentation"])
+                if let copy = puzzle["presentation"] as? [String: Any] {
+                    try keys(copy, ["submit", "clear", "openResource", "invalidFields", "incorrectAnswer", "unavailable", "saveFailed", "success", "completed"])
+                    if copy.count != 9 || copy.values.contains(where: { ($0 as? String)?.isEmpty != false }) { throw RestrictedAccessFailure(diagnostics: ["Invalid puzzle feedback copy"]) }
+                }
                 try keys(puzzle["rule"] as? [String: Any], ["kind", "expectedFields", "trimWhitespace", "caseInsensitive"])
-                for input in puzzle["inputs"] as? [[String: Any]] ?? [] { try keys(input, ["id", "label", "kind", "choices"]) }
+                for input in puzzle["inputs"] as? [[String: Any]] ?? [] { try keys(input, ["id", "label", "kind", "choices", "prompt"]) }
                 for effect in puzzle["successEffects"] as? [[String: Any]] ?? [] { try keys(effect, ["kind", "id"]) }
             }
             let document = try JSONDecoder().decode(RestrictedAccessDocument.self, from: data)
@@ -153,6 +179,8 @@ enum RestrictedAccessCatalogueLoader {
             for puzzle in document.puzzles {
                 if puzzle.title.isEmpty || puzzle.instructions.isEmpty || puzzle.hints.contains(where: { $0.isEmpty }) { errors.append("Invalid puzzle copy") }
                 for condition in puzzle.requirements { valid(condition) }
+                let clues = puzzle.clueContentIDs ?? []
+                if Set(clues).count != clues.count || clues.contains(where: { !StoryID.isValid($0) || !(document.facts["contentRead"] ?? []).contains($0) }) { errors.append("Invalid clue content references") }
                 let references = puzzle.requirements.flatMap(\.allFactReferences)
                 edges[puzzle.id] = Set(references.flatMap { ref in
                     document.puzzles.filter { other in
@@ -163,13 +191,13 @@ enum RestrictedAccessCatalogueLoader {
                 })
                 if references.contains(where: { ($0.kind == "puzzleSolved" && $0.id == puzzle.id) || ($0.kind == "eventCompleted" && $0.id == puzzle.successEventID) }) { errors.append("Self-triggering puzzle") }
                 let fields = Set(puzzle.inputs.map(\.id))
-                if fields.count != puzzle.inputs.count || puzzle.inputs.contains(where: { !StoryID.isValid($0.id) || $0.label.isEmpty }) { errors.append("Invalid inputs") }
+                if fields.count != puzzle.inputs.count || puzzle.inputs.contains(where: { !StoryID.isValid($0.id) || $0.label.isEmpty || $0.prompt?.isEmpty == true }) { errors.append("Invalid inputs") }
                 for field in puzzle.inputs {
                     if field.kind == .choice && ((field.choices ?? []).isEmpty || Set(field.choices ?? []).count != field.choices?.count) { errors.append("Invalid choices") }
                 }
                 switch puzzle.rule.kind {
                 case .awaitingApproval:
-                    if !puzzle.inputs.isEmpty || !puzzle.successEffects.isEmpty || !puzzle.hints.isEmpty || puzzle.rule.expectedFields != nil { errors.append("Unapproved puzzles cannot have a solution/effects/hints") }
+                    if !puzzle.inputs.isEmpty || !puzzle.successEffects.isEmpty || !puzzle.hints.isEmpty || puzzle.rule.expectedFields != nil || !clues.isEmpty || puzzle.presentation != nil { errors.append("Unapproved puzzles cannot have a solution/effects/hints") }
                 case .exactFields:
                     let answers = puzzle.rule.expectedFields ?? [:]
                     if fields.isEmpty || fields != Set(answers.keys) || answers.values.contains(where: { $0.isEmpty || $0.utf8.count > 256 }) { errors.append("Invalid exact-field rule") }
