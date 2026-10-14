@@ -65,13 +65,15 @@ struct StoryActTransition {
 
 struct StoryProgressionRules {
     let actTransitions: [StoryAct: StoryActTransition]
-    // Only the approved Act 1 and Act 2 handoffs are configured; later transitions stay closed.
+    // Approved consecutive handoffs through Act 4 entry; Act 5 stays closed.
     static let production = StoryProgressionRules(actTransitions: [
         .somethingIsntRight: StoryActTransition(
             requiredMilestoneIDs: [FirstAnomalyContract.investigated, FirstAnomalyContract.suspiciousMaterial],
             condition: FirstAnomalyContract.handoffPrerequisites),
         .theConspiracy: StoryActTransition(requiredMilestoneIDs: [ActTwoContract.connected],
-                                          condition: ActTwoContract.handoffPrerequisites)
+                                          condition: ActTwoContract.handoffPrerequisites),
+        .theTakeover: StoryActTransition(requiredMilestoneIDs: ActThreeHandoffContract.requiredMilestones,
+                                        condition: ActThreeHandoffContract.prerequisites)
     ])
 }
 
@@ -180,4 +182,28 @@ enum ActThreeInvestigationContract {
             [.contentRead($0), .eventCompleted("event.read." + $0)]
         })
     }
+}
+
+/// Explicit Pass 8 completion. Optional evidence/Observer clues/Assistant questions are independent.
+enum ActThreeHandoffContract {
+    static let entry = "content.act4.entry"
+    static let requiredMilestones: Set<String> = [
+        "milestone.banana_wall.breached", "milestone.act3.restricted_research_opened",
+        "milestone.act3.mirror_origins_discovered", "milestone.act3.mirror_echo_relationship_established",
+        "milestone.act3.neural_influence_evidence_discovered", "milestone.act3.echo_autonomy_established",
+        "milestone.act3.ascension_purpose_uncovered", "milestone.act3.energy_harvesting_evidence_discovered",
+        "milestone.act3.public_restricted_contradiction_confirmed", "milestone.act3.daniel_involvement_discovered",
+        "milestone.act3.daniel_concealment_discovered", "milestone.act3.maya_recorded_guidance_reviewed",
+        "milestone.act3.observer_connection_discovered", "milestone.act3.investigation_concluded"
+    ]
+    static let requiredEvents: Set<String> = [
+        "event.puzzle.banana_wall.review_cross_reference", ActThreeInvestigationContract.autonomyEvent,
+        ActThreeInvestigationContract.contradictionEvent, "event.read.version.act3.maya.guidance.v1",
+        "event.read.version.act3.conclusion.resistance.v1"
+    ]
+    static let prerequisites: StoryCondition = .all([
+        .puzzleSolved("puzzle.banana_wall.review_cross_reference"), .accessGranted("access.banana_wall.breached"),
+        .contentRead("version.act3.maya.guidance.v1"), .contentRead("version.act3.conclusion.resistance.v1")
+    ] + requiredMilestones.sorted().map(StoryCondition.milestoneCompleted)
+      + requiredEvents.sorted().map(StoryCondition.eventCompleted))
 }

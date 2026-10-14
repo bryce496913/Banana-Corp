@@ -40,7 +40,7 @@ for configuration in Debug Release; do
             -configuration "$configuration" -destination "platform=iOS Simulator,id=$qa_simulator" \
             -derivedDataPath "$results/DerivedData" CODE_SIGNING_ALLOWED=NO \
             -parallel-testing-enabled NO \
-            '-only-testing:Banana CorpUITests/ActsJourneyTests/testActsOneTwoPlayerJourney' \
+            '-only-testing:Banana CorpUITests/ActsJourneyTests/testActsOneThreePlayerJourney' \
             -resultBundlePath "$results/$configuration-$path.xcresult" \
             test | tee "$results/$configuration-$path.log"
         # Fail closed if a toolchain failed to forward the runner path and skipped the test.
@@ -57,7 +57,7 @@ PY
         python3 - "$results/$configuration-$path-save.json" "$path" <<'PY'
 import json,sys
 with open(sys.argv[1]) as f: state=json.load(f)
-assert state['currentAct']==3, state['currentAct']
+assert state['currentAct']==4, state['currentAct']
 assert state['solvedPuzzleIDs']==['puzzle.banana_wall.review_cross_reference']
 assert state['accessMilestoneIDs']==['access.banana_wall.breached']
 assert 'milestone.banana_wall.breached' in state['completedMilestoneIDs']
@@ -73,7 +73,11 @@ required=['version.act1.promo.v1','version.act1.echo_review.v1',
           'version.act2.alex_review.v1','version.act2.alex_review.v2',
           'version.act2.messages.daniel.v1','version.act2.email.maya.v1',
           'version.act2.web.echo07.v1','version.act2.diagnostics.excerpt.v1']
-required.append('version.act3.banana_wall.scope_record.v1')
+required.extend(['version.act3.banana_wall.scope_record.v1', 'version.act3.conclusion.resistance.v1', 'version.act4.entry.v1'])
+assert 'milestone.act3.investigation_concluded' in state['completedMilestoneIDs']
+assert state.get('ascensionMilestone') is None
+assert not state['observerClueIDs']
+assert not state['routePrerequisiteIDs']
 assert set(required).issubset(state['readContentIDs'])
 PY
         cleanup

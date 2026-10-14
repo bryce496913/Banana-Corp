@@ -24,6 +24,20 @@ private final class WallFailingPersistence: StoryPersistence {
                 var story = StoryProgressionStore(persistence: disk)
                 var access = RestrictedAccessStore(progression: story, catalogue: accessResult)
                 var content = StoryContentStore(progression: story, catalogue: catalogue, access: access)
+                if CommandLine.arguments.count > 2 && CommandLine.arguments[2] == "read-handoff" {
+                    precondition(story.state.currentAct == .theTakeover && content.actFourEntry != nil)
+                    let saved = story.state
+                    _ = try content.beginActFour().get()
+                    _ = try content.read(ActThreeHandoffContract.entry, versionID: "version.act4.entry.v1").get()
+                    precondition(story.state == saved)
+                    for record in content.evidenceRecords() {
+                        precondition(record.snapshot == story.state.contentDelivery.versionReceipts[record.sourceVersionID]?.snapshot)
+                    }
+                    precondition(story.state.ascensionMilestone == nil && story.state.assistant.cooperation == .notEstablished)
+                    precondition(content.unreadCount(for: .web) == content.availableItems(for: .web).filter { $0.availability == .availableUnread }.count)
+                    print("PASS: Act 4 entry, snapshots, replacement and facts recovered in a separate process")
+                    continue
+                }
                 if CommandLine.arguments.count > 2 && ["read-wall", "read-research", "read-investigation", "read-conclusion"].contains(CommandLine.arguments[2]) {
                     precondition(story.isWritable && story.state.currentAct == .theConspiracy)
                     precondition(access.resourceState("resource.banana_wall") == .unlocked)
@@ -147,18 +161,22 @@ private final class WallFailingPersistence: StoryPersistence {
                 _ = try content.confirmActTwoInvestigation().get()
                 precondition(story.state == final)
                 if solvingWall { try solveWall(story, access, content, disk: disk) }
-                if CommandLine.arguments.count > 2 && ["write-research", "write-investigation", "write-conclusion"].contains(CommandLine.arguments[2]) {
+                if CommandLine.arguments.count > 2 && ["write-research", "write-investigation", "write-conclusion", "write-handoff"].contains(CommandLine.arguments[2]) {
                     try investigateResearch(story, content)
                     restart("after MIRROR/ECHO/neural evidence investigation")
                     try investigateResearch(story, content, alreadyRead: true)
-                    if ["write-investigation", "write-conclusion"].contains(CommandLine.arguments[2]) {
+                    if ["write-investigation", "write-conclusion", "write-handoff"].contains(CommandLine.arguments[2]) {
                         try investigateAutonomy(story, content, access, preserveSources: video)
                         restart("after autonomy, ASCENSION purpose and energy investigation")
                         try investigateAutonomy(story, content, access, preserveSources: video, alreadyRead: true)
-                        if CommandLine.arguments[2] == "write-conclusion" {
+                        if ["write-conclusion", "write-handoff"].contains(CommandLine.arguments[2]) {
                             try investigateCharacters(story, content, access, preserveSources: video, emailProof: email)
                             restart("after character and Observer discoveries; Act 3 concluded")
                             try investigateCharacters(story, content, access, preserveSources: video, emailProof: email, alreadyRead: true)
+                            if CommandLine.arguments[2] == "write-handoff" {
+                                try validateHandoff(story, content, access)
+                                restart("Act 4 entered; no takeover")
+                            }
                         }
                     }
                 }
@@ -313,7 +331,9 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.assistant.cooperation == start.assistant.cooperation && story.state.observerClueIDs == start.observerClueIDs)
         precondition(story.state.ascensionMilestone == start.ascensionMilestone && story.state.ascensionMilestone == nil)
         precondition(story.state.accessMilestoneIDs == start.accessMilestoneIDs && story.state.routePrerequisiteIDs == start.routePrerequisiteIDs)
-        if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
+        if alreadyRead && content.actFourHandoffAvailable {
+            precondition(story.state.currentAct == .theConspiracy)
+        } else if case .failure(.prerequisitesNotMet) = story.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
         let completed = story.state
         _ = try content.confirmEchoAutonomy().get(); _ = try content.confirmPublicRestrictedContradiction().get()
         for key in keys { _ = try content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get() }
@@ -406,7 +426,7 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.assistant.cooperation == start.assistant.cooperation && story.state.ascensionMilestone == nil)
         for (id, old) in oldSnapshots { precondition(story.state.preservedEvidence[id] == old) }
         precondition(story.state.currentAct == .theConspiracy)
-        if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
+        precondition(content.actFourHandoffAvailable && content.actFourEntry == nil)
         let completed = story.state
         for key in keys { _ = try content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get() }
         precondition(story.state == completed)
@@ -419,6 +439,92 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(optionalStory.state == optional && optionalStory.state.routePrerequisiteIDs == completed.routePrerequisiteIDs)
         if alreadyRead { precondition(story.state == start) }
         print("PASS MODEL ONLY: ordered Daniel evidence, missing Maya transcript, mandatory Observer knowledge, actual-history references, independent optional clues, snapshots/reload and closed Act 4")
+    }
+
+    @MainActor static func validateHandoff(_ story: StoryProgressionStore, _ content: StoryContentStore, _ access: RestrictedAccessStore) throws {
+        let completed = story.state
+        precondition(content.actFourHandoffAvailable && content.actFourEntry == nil)
+        // Each exact requirement matters: no summary-only or partial-event shortcut.
+        var candidates: [StoryState] = []
+        for id in ActThreeHandoffContract.requiredMilestones { var partial = completed; partial.completedMilestoneIDs.remove(id); candidates.append(partial) }
+        for id in ActThreeHandoffContract.requiredEvents { var partial = completed; partial.completedEventIDs.remove(id); candidates.append(partial) }
+        var unread = completed; unread.readContentIDs.remove("version.act3.conclusion.resistance.v1"); candidates.append(unread)
+        for partial in candidates {
+            let store = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(partial)))
+            precondition((try? store.advanceAct(to: .theTakeover).get()) == nil && store.state == partial)
+        }
+        let failing = WallFailingPersistence(data: try StorySaveCodec().encode(completed))
+        let failed = StoryProgressionStore(persistence: failing)
+        failing.fail = true
+        precondition((try? failed.advanceAct(to: .theTakeover).get()) == nil && failed.state == completed)
+        failing.fail = false
+        _ = try failed.advanceAct(to: .theTakeover).get()
+        // Pre-content schema-2 saves retain every fact/snapshot; newly available content is queried, not replayed.
+        let migrated = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(completed)))
+        precondition(migrated.state == completed)
+        _ = try migrated.advanceAct(to: .theTakeover).get()
+        var optional = completed; optional.observerClueIDs.insert("observer.fixture.optional")
+        optional.assistant.relationshipFacts.remove("assistant.act3.maya_questioned")
+        let alternate = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(optional)))
+        _ = try alternate.advanceAct(to: .theTakeover).get()
+        precondition(alternate.state.observerClueIDs == optional.observerClueIDs && alternate.state.assistant.cooperation == .notEstablished)
+        // A legitimate late-question state can ask available questions for the first time in reverse order.
+        var deferred = completed
+        let questions = ["observer", "maya", "daniel", "energy", "ascension", "autonomy"]
+        for key in questions {
+            let id = "content.act3.assistant." + key; let version = "version.act3.assistant." + key + ".v1"
+            deferred.completedEventIDs.remove("event.read." + version)
+            deferred.readContentIDs.remove(id); deferred.readContentIDs.remove(version)
+            deferred.contentDelivery.versionReceipts.removeValue(forKey: version)
+            deferred.assistant.relationshipFacts.remove("assistant.act3." + key + "_questioned")
+        }
+        let lateStory = StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(deferred)))
+        let lateAccess = RestrictedAccessStore(progression: lateStory, catalogue: .success(access.catalogue!))
+        let lateContent = StoryContentStore(progression: lateStory, catalogue: .success(content.catalogue!), access: lateAccess)
+        for key in questions {
+            let outcome = try lateContent.read("content.act3.assistant." + key, versionID: "version.act3.assistant." + key + ".v1").get()
+            precondition(outcome == .changed)
+            precondition(lateStory.state.assistant.relationshipFacts.contains("assistant.act3." + key + "_questioned"))
+        }
+        _ = try lateContent.beginActFour().get()
+        precondition(lateStory.state.currentAct == .theTakeover && lateStory.state.assistant.cooperation == .notEstablished)
+        let visible = content.availableItems(for: .web)
+        access.validateContentReferences(nil)
+        precondition(!content.actFourHandoffAvailable)
+        precondition((try? content.beginActFour().get()) == nil && story.state == completed)
+        precondition(!content.availableItems(for: .web).contains { $0.id == "content.act3.conclusion.resistance" })
+        access.validateContentReferences(content.catalogue)
+        precondition(content.availableItems(for: .web) == visible)
+        var earlier = completed; earlier.currentAct = .thePerfectProduct
+        precondition(!content.availableItems(for: .web, state: earlier).contains { $0.id == "content.act3.mirror.origins" })
+        precondition(content.availableItems(for: .web) == visible && story.state == completed)
+        let start = Date()
+        for _ in 0..<1000 {
+            for surface in StoryAppSurface.allCases.reversed() { _ = content.unreadCount(for: surface) }
+            _ = content.observerKnownSources; _ = content.actFourHandoffAvailable
+        }
+        precondition(story.state == completed)
+        print("PASS: 1000 passive query cycles in \(Date().timeIntervalSince(start)) seconds, unchanged saved state")
+        // Late questions may be revisited in a different order without becoming mandatory gates.
+        for key in ["observer", "maya", "daniel", "energy", "ascension", "autonomy"] {
+            _ = try content.read("content.act3.assistant." + key, versionID: "version.act3.assistant." + key + ".v1").get()
+        }
+        _ = try content.beginActFour().get()
+        precondition(story.state.currentAct == .theTakeover && content.actFourEntry != nil)
+        var expected = completed; expected.currentAct = .theTakeover
+        precondition(story.state == expected)
+        let beforeEntryUnread = content.unreadCount(for: .web)
+        _ = try content.read(ActThreeHandoffContract.entry, versionID: "version.act4.entry.v1").get()
+        precondition(content.unreadCount(for: .web) == beforeEntryUnread - 1)
+        let entered = story.state
+        _ = try content.beginActFour().get()
+        precondition(story.state == entered)
+        precondition(access.resourceState("resource.banana_wall") == .unlocked)
+        precondition(story.state.ascensionMilestone == nil && story.state.routePrerequisiteIDs == completed.routePrerequisiteIDs)
+        precondition(story.state.preservedEvidence == completed.preservedEvidence && story.state.contentDelivery.notifications == completed.contentDelivery.notifications)
+        precondition(story.state.contentDelivery.activeVersionIDs[ActTwoContract.alex] == ActTwoContract.replacementWarning)
+        if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theFinalChoice) {} else { preconditionFailure() }
+        print("PASS: all completion gates, explicit atomic handoff, legacy facts, optional independence, entry/retry and closed Act 5")
     }
 
     @MainActor static func solveWall(_ story: StoryProgressionStore, _ access: RestrictedAccessStore, _ content: StoryContentStore, disk: StoryFilePersistence) throws {
@@ -485,7 +591,7 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(reaccess.resourceState("resource.banana_wall") == .unlocked)
         precondition(restored.preservedItem(saved.id)?.record.snapshot == saved.snapshot)
         precondition(reaccess.submit(id, fields: [:]) == .alreadyCompleted)
-        if case .failure(.transitionNotConfigured) = reopened.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
+        if case .failure(.prerequisitesNotMet) = reopened.advanceAct(to: .theTakeover) {} else { preconditionFailure() }
         // Placeholder/old access/test facts survive; none can substitute for new completion.
         var legacy = before
         legacy.solvedPuzzleIDs.insert("puzzle.banana_wall.pending_design")

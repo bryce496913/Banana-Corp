@@ -32,3 +32,5 @@ This inventory covers all 24 Act 3 content records. Each has exactly one immutab
 | `assistant.observer` | assistant | Am I part of the Observer Program? | milestoneCompleted: milestone.act3.observer_connection_discovered | recordAssistantFact: assistant.act3.observer_questioned | No |
 
 Video read effects require explicit Finish in the established reader. Autonomy and public/restricted contradiction use separate explicit synthesis actions, not list appearance or a single summary. Mandatory Observer discovery does not write optional Observer clues or hidden-ending eligibility. Conclusion read marks Act 3 investigation complete without advancing Act 4, starting ASCENSION or making the Assistant cooperative. Maya remains missing; no playable recording asset or rescue is claimed.
+
+Pass 8 supersedes the historical closed-handoff limitation above: [release QA](ACTS_1_3_RELEASE_QA.md) defines the separately chosen Act 4 entry after validated conclusion/discoveries. The 24 Act 3 records remain immutable; entry does not start takeover, rescue or countermeasure effects.

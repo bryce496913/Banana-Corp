@@ -270,7 +270,7 @@ struct FirstAnomalyHandoffControl: View {
                     message: { Text("Your investigation has not advanced. Please try again.") }
         } else if appState.story.state.currentAct == .somethingIsntRight {
             ActTwoInvestigationControl(currentContentID: currentContentID)
-        } else if appState.story.state.currentAct == .theConspiracy {
+        } else if appState.story.state.currentAct == .theConspiracy || appState.story.state.currentAct == .theTakeover {
             ActThreeInvestigationControl(currentContentID: currentContentID)
         }
     }
@@ -325,7 +325,7 @@ struct ActTwoInvestigationControl: View {
 }
 
 
-/// Knowledge confirmation only; this control cannot advance Act 4 or start ASCENSION.
+/// Explicit knowledge confirmation and approved Act 4 entry; never starts ASCENSION.
 struct ActThreeInvestigationControl: View {
     var currentContentID: String? = nil
     @EnvironmentObject private var appState: AppState
@@ -334,7 +334,12 @@ struct ActThreeInvestigationControl: View {
     @State private var feedback: AppFeedbackEvent?
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("The Conspiracy").appText(.sectionTitle)
+            Text(appState.story.state.currentAct == .theTakeover ? "The Takeover" : "The Conspiracy").appText(.sectionTitle)
+            if appState.content.actFourHandoffAvailable {
+                Button("Begin the resistance investigation") { confirm(appState.content.beginActFour()) }
+                    .buttonStyle(.appPrimary).accessibilityIdentifier("story.advance.act4")
+                    .accessibilityHint("Enter The Takeover. This does not start ASCENSION or unlock a countermeasure.")
+            }
             if appState.content.autonomyConfirmationAvailable,
                !appState.story.state.completedEventIDs.contains(ActThreeInvestigationContract.autonomyEvent) {
                 Button("Connect the authorization record and Maya’s observations") {
@@ -349,7 +354,7 @@ struct ActThreeInvestigationControl: View {
                 }.buttonStyle(.appPrimary).accessibilityIdentifier("story.connect.act3.contradiction")
                     .accessibilityHint("Confirm the contradiction using the public and restricted records you read.")
             }
-            if let lead = appState.content.actThreeSuggestedLead, lead.id != currentContentID {
+            if let lead = (appState.story.state.currentAct == .theTakeover ? appState.content.actFourEntry : appState.content.actThreeSuggestedLead), lead.id != currentContentID {
                 Button {
                     if lead.surface != .video, case .failure = appState.content.read(lead.id, versionID: lead.version.id) { failure = true; return }
                     selection = .init(contentID: lead.id, versionID: lead.version.id, surface: lead.surface)
