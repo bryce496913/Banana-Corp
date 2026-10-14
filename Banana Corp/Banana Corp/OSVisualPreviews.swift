@@ -92,8 +92,8 @@ private struct OSVisualPreviewHarness: View {
 #Preview("Interference visual mode") { OSVisualPreviewHarness(initialMode: .interference) }
 #Preview("Compromised visual mode") { OSVisualPreviewHarness(initialMode: .compromised) }
 #Preview("Critical visual mode") { OSVisualPreviewHarness(initialMode: .critical) }
-#Preview("Critical, Reduce Motion") {
+#Preview("Critical, system motion settings") {
+    // Enable Reduce Motion in the preview device's Accessibility settings to exercise it.
     OSVisualPreviewHarness(initialMode: .critical)
-        .environment(\.accessibilityReduceMotion, true)
 }
 #endif
