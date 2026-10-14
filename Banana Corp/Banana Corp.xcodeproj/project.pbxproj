@@ -17,6 +17,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXBuildFile section */
+        EEA100022E3A000000000001 /* AppImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA100012E3A000000000001 /* AppImageAsset.swift */; };
         EE5800082E3A000000000001 /* RestrictedAccess.json in Resources */ = {isa = PBXBuildFile; fileRef = EE5800072E3A000000000001 /* RestrictedAccess.json */; };
         EE5800062E3A000000000001 /* RestrictedAccessViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800052E3A000000000001 /* RestrictedAccessViews.swift */; };
         EE5800042E3A000000000001 /* RestrictedAccessStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5800032E3A000000000001 /* RestrictedAccessStore.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        EEA100012E3A000000000001 /* AppImageAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageAsset.swift; sourceTree = "<group>"; };
         EE5800072E3A000000000001 /* RestrictedAccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RestrictedAccess.json; sourceTree = "<group>"; };
         EE5800052E3A000000000001 /* RestrictedAccessViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedAccessViews.swift; sourceTree = "<group>"; };
         EE5800032E3A000000000001 /* RestrictedAccessStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedAccessStore.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				EE9899EC2B6C3142003201BE /* Banana_CorpApp.swift */,
 				EE9899EE2B6C3142003201BE /* ContentView.swift */,
 				EEAA00112E28000000000001 /* AppTheme.swift */,
+                EEA100012E3A000000000001 /* AppImageAsset.swift */,
 				EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */,
 				EECC00012E29000000000001 /* HomeScreenLayout.swift */,
                 EEDD00012E30000000000001 /* BananaAppIcon.swift */,
@@ -340,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEAA00122E28000000000001 /* AppTheme.swift in Sources */,
+                EEA100022E3A000000000001 /* AppImageAsset.swift in Sources */,
 				EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */,
                 EEDD00022E30000000000001 /* BananaAppIcon.swift in Sources */,
                 EEFF00022E31000000000001 /* AppComponents.swift in Sources */,
