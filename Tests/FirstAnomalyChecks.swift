@@ -14,7 +14,7 @@ private final class FailingSlicePersistence: StoryPersistence {
 @main struct FirstAnomalyChecks {
     @MainActor static func main() throws {
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
-        let catalogue = StoryContentCatalogueLoader.load(fileURL: resource, restrictedResourceIDs: ["resource.banana_wall"])
+        let catalogue = StoryContentCatalogueLoader.load(fileURL: resource, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"])
         let definitions = try catalogue.get()
         precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.count == 25)
         precondition(definitions.itemsByID[FirstAnomalyContract.originalContent]!.versions.count == 1)
@@ -196,7 +196,7 @@ private final class FailingSlicePersistence: StoryPersistence {
         var items = document["items"] as! [[String: Any]]
         items.removeAll { ($0["id"] as? String) == FirstAnomalyContract.notification }
         document["items"] = items
-        let partial = StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document), restrictedResourceIDs: ["resource.banana_wall"])
+        let partial = StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document), restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"])
         let partialStory = StoryProgressionStore(persistence: InMemoryStoryPersistence())
         let partialContent = StoryContentStore(progression: partialStory, catalogue: partial)
         prepare(partialContent); read(partialContent, FirstAnomalyContract.originalContent)

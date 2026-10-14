@@ -34,10 +34,10 @@ import Foundation
     }
 
     static func validateLoading(_ fixture: Data, productionURL: URL) throws {
-        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL, restrictedResourceIDs: ["resource.banana_wall"]).get()
+        let production = try StoryContentCatalogueLoader.load(fileURL: productionURL, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"]).get()
         precondition(!production.items.isEmpty)
         precondition(production.items.filter { $0.actAvailable.rawValue <= 2 }.count == 45)
-        precondition(production.items.filter { $0.actAvailable.rawValue == 3 }.map(\.id) == ["content.act3.banana_wall.scope_record"])
+        precondition(production.items.filter { $0.actAvailable.rawValue == 3 }.map(\.id) == ["content.act3.banana_wall.scope_record", "content.act3.mirror.origins", "content.act3.echo.correspondence", "content.act3.neural.capabilities", "content.act3.assistant.mirror", "content.act3.assistant.influence"])
         rejects(StoryContentCatalogueLoader.load(fileURL: nil), .missingResource)
         rejects(StoryContentCatalogueLoader.load(fileURL: URL(string: "https://example.invalid/catalogue.json")), .missingResource)
         rejects(StoryContentCatalogueLoader.load(data: Data("invalid".utf8)), .malformedJSON)

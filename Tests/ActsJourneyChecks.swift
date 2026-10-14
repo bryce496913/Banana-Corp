@@ -24,11 +24,12 @@ private final class WallFailingPersistence: StoryPersistence {
                 var story = StoryProgressionStore(persistence: disk)
                 var access = RestrictedAccessStore(progression: story, catalogue: accessResult)
                 var content = StoryContentStore(progression: story, catalogue: catalogue, access: access)
-                if CommandLine.arguments.count > 2 && CommandLine.arguments[2] == "read-wall" {
+                if CommandLine.arguments.count > 2 && ["read-wall", "read-research"].contains(CommandLine.arguments[2]) {
                     precondition(story.isWritable && story.state.currentAct == .theConspiracy)
                     precondition(access.resourceState("resource.banana_wall") == .unlocked)
                     precondition(content.preservedItem("evidence.act3.banana_wall.scope_record.v1") != nil)
-                    precondition(content.evidenceRecords().count == 1 + (email ? 1 : 0) + (video ? 1 : 0))
+                    precondition(content.evidenceRecords().count == 1 + (email ? 1 : 0) + (video ? 1 : 0) + (CommandLine.arguments[2] == "read-research" ? 3 : 0))
+                    if CommandLine.arguments[2] == "read-research" { try investigateResearch(story, content, alreadyRead: true) }
                     for record in content.evidenceRecords() {
                         precondition(record.snapshot == story.state.contentDelivery.versionReceipts[record.sourceVersionID]?.snapshot)
                     }
@@ -55,6 +56,11 @@ private final class WallFailingPersistence: StoryPersistence {
                     let early = story.state
                     precondition(access.submit("puzzle.banana_wall.review_cross_reference", fields: [:]) == .rejected(.inaccessible))
                     precondition(content.currentVersion(for: "content.act3.banana_wall.scope_record") == nil && story.state == early)
+                    for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence"] {
+                        precondition(content.currentVersion(for: "content.act3." + key) == nil)
+                        precondition((try? content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get()) == nil)
+                    }
+                    precondition(story.state == early)
                 }
                 precondition(content.availability(for: FirstAnomalyContract.originalContent) == .locked)
                 let initial = story.state
@@ -139,9 +145,66 @@ private final class WallFailingPersistence: StoryPersistence {
                 _ = try content.confirmActTwoInvestigation().get()
                 precondition(story.state == final)
                 if solvingWall { try solveWall(story, access, content, disk: disk) }
+                if CommandLine.arguments.count > 2 && CommandLine.arguments[2] == "write-research" {
+                    try investigateResearch(story, content)
+                    restart("after MIRROR/ECHO/neural evidence investigation")
+                    try investigateResearch(story, content, alreadyRead: true)
+                }
                 print("PASS MODEL ONLY: email=\(email), video=\(video), \(checkpoints) exact file-store reopen checkpoints, natural catalogue actions to locked Banana Wall; no Apple UI execution")
             }
         }
+    }
+
+    @MainActor static func investigateResearch(_ story: StoryProgressionStore, _ content: StoryContentStore, alreadyRead: Bool = false) throws {
+        let keys = ["mirror.origins", "echo.correspondence", "neural.capabilities"]
+        let before = story.state
+        for surface in StoryAppSurface.allCases { _ = content.availableItems(for: surface); _ = content.unreadCount(for: surface) }
+        precondition(story.state == before, "Passive queries must not credit investigation")
+        if !alreadyRead {
+            precondition(content.currentVersion(for: "content.act3.mirror.origins") != nil)
+            for key in ["echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence"] {
+                precondition(content.currentVersion(for: "content.act3." + key) == nil)
+                precondition((try? content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get()) == nil)
+            }
+            precondition(story.state == before)
+        }
+        for key in keys {
+            let id = "content.act3." + key
+            let version = "version.act3." + key + ".v1"
+            let current = content.currentVersion(for: id)
+            precondition(current != nil)
+            _ = try content.read(id, versionID: version).get()
+            _ = try content.preserve(id, versionID: version).get()
+            let snapshot = content.preservedItem("evidence.act3." + key + ".v1")!.snapshot
+            precondition(snapshot.version == current)
+            precondition(snapshot.version.narrativeMetadata?["accessContext"] == "Banana Wall review authorization")
+            if key == "mirror.origins" && !alreadyRead {
+                precondition(content.currentVersion(for: "content.act3.neural.capabilities") == nil)
+                precondition(content.currentVersion(for: "content.act3.assistant.mirror") == nil)
+            }
+            if key == "echo.correspondence" && !alreadyRead {
+                precondition(content.currentVersion(for: "content.act3.assistant.mirror") != nil)
+                precondition(content.currentVersion(for: "content.act3.assistant.influence") == nil)
+            }
+        }
+        for key in ["assistant.mirror", "assistant.influence"] { _ = try content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get() }
+        for milestone in ["restricted_research_opened", "mirror_origins_discovered", "mirror_echo_relationship_established", "neural_influence_evidence_discovered"] {
+            precondition(story.state.completedMilestoneIDs.contains("milestone.act3." + milestone))
+        }
+        precondition(story.state.assistant.relationshipFacts.contains("assistant.act3.lineage_questioned"))
+        precondition(story.state.assistant.relationshipFacts.contains("assistant.act3.influence_questioned"))
+        precondition(story.state.assistant.cooperation == .notEstablished)
+        precondition(story.state.currentAct == .theConspiracy)
+        precondition(story.state.accessMilestoneIDs == ["access.banana_wall.breached"])
+        precondition(story.state.solvedPuzzleIDs == ["puzzle.banana_wall.review_cross_reference"])
+        let complete = story.state
+        for key in keys {
+            _ = try content.read("content.act3." + key, versionID: "version.act3." + key + ".v1").get()
+            _ = try content.preserve("content.act3." + key, versionID: "version.act3." + key + ".v1").get()
+        }
+        precondition(story.state == complete, "Repeated read and preserve effects must be idempotent")
+        if alreadyRead { precondition(story.state == before, "Relaunch must preserve exact investigation state") }
+        print("PASS MODEL ONLY: protected MIRROR/ECHO lineage, staged influence, Assistant knowledge, immutable evidence and idempotent progression")
     }
 
     @MainActor static func solveWall(_ story: StoryProgressionStore, _ access: RestrictedAccessStore, _ content: StoryContentStore, disk: StoryFilePersistence) throws {
@@ -192,6 +255,10 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.readContentIDs == before.readContentIDs && story.state.currentAct == .theConspiracy)
         precondition(story.state.assistant == before.assistant && story.state.routePrerequisiteIDs == before.routePrerequisiteIDs && story.state.observerClueIDs == before.observerClueIDs)
         let solved = story.state; let bytes = try disk.read()
+        for key in ["mirror.origins", "echo.correspondence", "neural.capabilities", "assistant.mirror", "assistant.influence"] {
+            precondition(content.currentVersion(for: "content.act3." + key) == nil)
+        }
+        precondition(story.state == solved)
         precondition(access.submit(id, fields: ["bad":"wrong"]) == .alreadyCompleted)
         let repeatedBytes = try disk.read()
         precondition(story.state == solved && repeatedBytes == bytes)

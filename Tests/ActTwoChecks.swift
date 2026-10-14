@@ -14,7 +14,7 @@ private final class ActTwoFailingPersistence: StoryPersistence {
 @main struct ActTwoChecks {
     @MainActor static func main() throws {
         let url = URL(fileURLWithPath: CommandLine.arguments[1])
-        let catalogue = StoryContentCatalogueLoader.load(fileURL: url, restrictedResourceIDs: ["resource.banana_wall"])
+        let catalogue = StoryContentCatalogueLoader.load(fileURL: url, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"])
         let definitions = try catalogue.get()
         precondition(definitions.items.filter { $0.actAvailable.rawValue <= 2 }.count == 45)
         precondition(definitions.items.filter { $0.actAvailable == .somethingIsntRight }.count == 20)
@@ -212,7 +212,7 @@ private final class ActTwoFailingPersistence: StoryPersistence {
         items[index]["versions"] = (items[index]["versions"] as! [[String: Any]]).filter { ($0["version"] as? Int) == 1 }
         document["items"] = items
         let missingStory = StoryProgressionStore(persistence: InMemoryStoryPersistence())
-        let missingStore = StoryContentStore(progression: missingStory, catalogue: StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document), restrictedResourceIDs: ["resource.banana_wall"]))
+        let missingStore = StoryContentStore(progression: missingStory, catalogue: StoryContentCatalogueLoader.load(data: try JSONSerialization.data(withJSONObject: document), restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence"]))
         enter(missingStory, missingStore); video(missingStore, ActTwoContract.alex)
         let beforeMissing = missingStory.state
         fail(missingStore.activateActTwoChangesAtBoundary(surface: .video), .unknownVersion(ActTwoContract.replacementWarning))

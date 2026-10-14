@@ -19,7 +19,11 @@
       "milestone.act2.symptom_reports_investigated",
       "milestone.act2.warning_preserved",
       "milestone.act2.warning_replaced",
-      "milestone.act2.warning_viewed"
+      "milestone.act2.warning_viewed",
+      "milestone.act3.restricted_research_opened",
+      "milestone.act3.mirror_origins_discovered",
+      "milestone.act3.mirror_echo_relationship_established",
+      "milestone.act3.neural_influence_evidence_discovered"
     ],
     "eventCompleted": [
       "event.act1.first_anomaly.email_removed",
@@ -35,7 +39,9 @@
       "assistant.act1.first_anomaly_questioned",
       "assistant.act2.edits_questioned",
       "assistant.act2.symptoms_questioned",
-      "assistant.act2.echo_questioned"
+      "assistant.act2.echo_questioned",
+      "assistant.act3.lineage_questioned",
+      "assistant.act3.influence_questioned"
     ],
     "accessGranted": [
       "access.banana_wall.breached"
@@ -2594,6 +2600,365 @@
         }
       ],
       "restrictedResourceID": "resource.banana_wall"
+    },
+    {
+      "id": "content.act3.mirror.origins",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2056,
+      "initialVersionID": "version.act3.mirror.origins.v1",
+      "versions": [
+        {
+          "id": "version.act3.mirror.origins.v1",
+          "version": 1,
+          "title": "Project MIRROR — Original research purpose",
+          "source": "Restricted research archive",
+          "subtitle": "Internal archive · publication date not supplied",
+          "timestampLabel": "Archive index · Today · 11:00",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/mirror/origins",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Project MIRROR began as research into interpreting human neurological signals. Its original purpose was interpretation: learning what those signals could tell the interface, rather than treating a change to a displayed preference as a change to a person."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The archive distinguishes the originating research from later work that could respond to neural activity. Interpretation and response are different capabilities. The original purpose alone does not establish what a later system was allowed to do."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "To trace that distinction, compare this brief with the archived Project ECHO development correspondence. The ECHO-07 scope record identifies a discrepancy; it does not explain the whole development history."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Follow the Project ECHO development record",
+                  "contentID": "content.act3.echo.correspondence"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.restricted_research_opened"
+            },
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.mirror_origins_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall review authorization",
+            "restrictedResourceID": "resource.act3.mirror.origins"
+          },
+          "preservedEvidenceID": "evidence.act3.mirror.origins.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.banana_wall.scope_record.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.mirror.origins"
+    },
+    {
+      "id": "content.act3.echo.correspondence",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2057,
+      "initialVersionID": "version.act3.echo.correspondence.v1",
+      "versions": [
+        {
+          "id": "version.act3.echo.correspondence.v1",
+          "version": 1,
+          "title": "Project ECHO — Archived development correspondence",
+          "source": "Restricted research archive",
+          "subtitle": "Internal archive · publication date not supplied",
+          "timestampLabel": "Archive index · Today · 11:00",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/echo/correspondence",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Project ECHO developed from Project MIRROR. The development goal was an adaptive AI designed to interpret and respond to neural activity."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Read beside the MIRROR purpose brief, this establishes a change in scope: interpretation of neurological signals became an interface that could also respond to neural activity. The project name marks a development relationship, not proof that the system acted independently."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The ECHO-07 preliminary findings led by Dr. Maya Chen belong to this research trail. Compare their recorded cognitive patterns with the experimental-capability note before equating neural response with ordinary selected preferences."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Review observed capabilities",
+                  "contentID": "content.act3.neural.capabilities"
+                },
+                {
+                  "label": "Revisit Maya’s correspondence",
+                  "contentID": "content.act2.email.maya"
+                },
+                {
+                  "label": "Revisit ECHO-07",
+                  "contentID": "content.act2.web.echo07"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.mirror_echo_relationship_established"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall review authorization",
+            "restrictedResourceID": "resource.act3.echo.correspondence"
+          },
+          "preservedEvidenceID": "evidence.act3.echo.correspondence.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.echo.correspondence"
+    },
+    {
+      "id": "content.act3.neural.capabilities",
+      "appSurface": "web",
+      "actAvailable": 3,
+      "order": 2058,
+      "initialVersionID": "version.act3.neural.capabilities.v1",
+      "versions": [
+        {
+          "id": "version.act3.neural.capabilities.v1",
+          "version": 1,
+          "title": "Neural influence — Experimental capability note",
+          "source": "Restricted research archive",
+          "subtitle": "Internal archive · publication date not supplied",
+          "timestampLabel": "Archive index · Today · 11:00",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/research/neural/capabilities",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Original purpose: MIRROR interpreted human neurological signals. ECHO extended the research to interpreting and responding to neural activity. These purposes describe the research lineage, not authorization to influence a user without consent."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Observed capability: the research enables influence on neural activity and perception. The ECHO-07 preliminary excerpt records changes in cognitive patterns during synchronization. Together, these records show why the public description of selected preferences is insufficient to describe the research capability."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Limits of this record: a capability is not a complete account of its use. These documents do not identify who directed any later unauthorized behavior, establish its full extent, or explain a scientific mechanism. The discrepancy remains a reason to investigate rather than a license to infer every cause."
+                }
+              ],
+              "links": [
+                {
+                  "label": "Compare the original purpose",
+                  "contentID": "content.act3.mirror.origins"
+                },
+                {
+                  "label": "Compare the ECHO development goal",
+                  "contentID": "content.act3.echo.correspondence"
+                },
+                {
+                  "label": "Read the underlying preliminary findings",
+                  "contentID": "content.act2.web.echo07"
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "markMilestone",
+              "id": "milestone.act3.neural_influence_evidence_discovered"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall review authorization",
+            "restrictedResourceID": "resource.act3.neural.capabilities"
+          },
+          "preservedEvidenceID": "evidence.act3.neural.capabilities.v1"
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.mirror.origins.v1"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.neural.capabilities"
+    },
+    {
+      "id": "content.act3.assistant.mirror",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2059,
+      "initialVersionID": "version.act3.assistant.mirror.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.mirror.v1",
+          "version": 1,
+          "title": "What changed between MIRROR and ECHO?",
+          "source": "Banana Assist",
+          "subtitle": "Research question",
+          "timestampLabel": "Archive index · Today · 11:00",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.mirror.user",
+                  "role": "user",
+                  "text": "What changed between MIRROR and ECHO?"
+                },
+                {
+                  "id": "turn.act3.assistant.mirror.assistant",
+                  "role": "assistant",
+                  "text": "The archive describes interpretation under MIRROR and interpretation with response under ECHO. That is a research distinction, not a complete explanation of the product’s behavior. I would keep the original purpose separate from what later experiments could do."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.lineage_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall review authorization",
+            "restrictedResourceID": "resource.act3.assistant.mirror"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.echo.correspondence.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.mirror"
+    },
+    {
+      "id": "content.act3.assistant.influence",
+      "appSurface": "assistant",
+      "actAvailable": 3,
+      "order": 2060,
+      "initialVersionID": "version.act3.assistant.influence.v1",
+      "versions": [
+        {
+          "id": "version.act3.assistant.influence.v1",
+          "version": 1,
+          "title": "Does this go beyond selected preferences?",
+          "source": "Banana Assist",
+          "subtitle": "Research question",
+          "timestampLabel": "Archive index · Today · 11:00",
+          "narrativeTimestamp": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.act3.assistant.influence.user",
+                  "role": "user",
+                  "text": "Does this go beyond selected preferences?"
+                },
+                {
+                  "id": "turn.act3.assistant.influence.assistant",
+                  "role": "assistant",
+                  "text": "The research capability is broader than changing a displayed preference. The records you opened describe influence on neural activity and perception. They do not establish who directed later behavior. I can summarize that distinction, but I cannot settle the unresolved review from these records alone."
+                }
+              ]
+            }
+          },
+          "effectsOnRead": [
+            {
+              "type": "recordAssistantFact",
+              "id": "assistant.act3.influence_questioned"
+            }
+          ],
+          "narrativeMetadata": {
+            "timestampContext": "Archive index timestamp; not the original research date",
+            "accessContext": "Banana Wall review authorization",
+            "restrictedResourceID": "resource.act3.assistant.influence"
+          }
+        }
+      ],
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.banana_wall.breached"
+        },
+        {
+          "type": "contentRead",
+          "id": "version.act3.neural.capabilities.v1"
+        }
+      ],
+      "restrictedResourceID": "resource.act3.assistant.influence"
     }
   ]
 }

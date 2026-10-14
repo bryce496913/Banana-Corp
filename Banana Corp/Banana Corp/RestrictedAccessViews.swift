@@ -63,12 +63,19 @@ struct RestrictedResourceView: View {
                                 AppCard {
                                     VStack(alignment: .leading, spacing: 12) {
                                         Text(item.version.title).appText(.sectionTitle)
-                                        Button(copy(for: resource)?.openResource ?? item.version.title) { open(id) }
+                                        Button(id == "content.act3.banana_wall.scope_record" ? (copy(for: resource)?.openResource ?? item.version.title) : "Open " + item.version.title) { open(id) }
                                             .buttonStyle(.appPrimary)
                                             .accessibilityIdentifier("story.resource.open.\(id)")
                                     }
                                 }
                             }
+                        }
+                        if resource.id == "resource.banana_wall",
+                           access.resourceState("resource.act3.mirror.origins") == .unlocked,
+                           let next = access.catalogue?.resourcesByID["resource.act3.mirror.origins"] {
+                            NavigationLink(next.displayName) { RestrictedResourceView(resourceID: next.id) }
+                                .buttonStyle(.modernPhone)
+                                .accessibilityIdentifier("story.research.continue")
                         }
                     }
                 } else { AppErrorState(title: "Entry unavailable", message: "The local access record could not be loaded.") }
@@ -80,7 +87,8 @@ struct RestrictedResourceView: View {
             message: { Text("The source could not be opened. Your records remain intact.") }
     }
     private func copy(for resource: RestrictedResource) -> PuzzlePresentationCopy? {
-        resource.requiredPuzzleID.flatMap { access.catalogue?.puzzlesByID[$0]?.presentation }
+        guard resource.id == "resource.banana_wall" else { return nil }
+        return resource.requiredPuzzleID.flatMap { access.catalogue?.puzzlesByID[$0]?.presentation }
     }
     private func available(_ id: String) -> DeliveredStoryContent? {
         guard let item = appState.content.catalogue?.itemsByID[id] else { return nil }
