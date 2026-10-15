@@ -39,10 +39,10 @@ for configuration in Debug Release; do
             -project "$repo_root/Banana Corp/Banana Corp.xcodeproj" -scheme 'Banana Corp' \
             -configuration "$configuration" -destination "platform=iOS Simulator,id=$qa_simulator" \
             -derivedDataPath "$results/DerivedData" CODE_SIGNING_ALLOWED=NO \
-            -parallel-testing-enabled NO \
+            ENABLE_TESTABILITY=YES -parallel-testing-enabled NO \
             '-only-testing:Banana CorpUITests/ActsJourneyTests/testActsOneThreePlayerJourney' \
             -resultBundlePath "$results/$configuration-$path.xcresult" \
-            test | tee "$results/$configuration-$path.log"
+            test 2>&1 | tee "$results/$configuration-$path.log"
         # Fail closed if a toolchain failed to forward the runner path and skipped the test.
         xcrun xcresulttool get test-results summary --path "$results/$configuration-$path.xcresult" \
             > "$results/$configuration-$path-summary.json"

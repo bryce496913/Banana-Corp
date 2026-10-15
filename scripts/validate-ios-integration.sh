@@ -31,7 +31,7 @@ python3 "$repo_root/scripts/check-ios-project.py" | tee "$results/structure.txt"
 for configuration in Debug Release; do
     xcodebuild -project "$project" -scheme 'Banana Corp' -configuration "$configuration" \
         -destination "$destination" -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO \
-        build | tee "$results/build-$configuration.log"
+        build 2>&1 | tee "$results/build-$configuration.log"
     python3 "$repo_root/scripts/check-ios-project.py" \
         --app-bundle "$derived/Build/Products/$configuration-iphonesimulator/Banana Corp.app" \
         | tee "$results/bundle-$configuration.txt"
@@ -42,6 +42,6 @@ for configuration in Debug Release; do
         -destination "$destination" -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO \
         ENABLE_TESTABILITY=YES -parallel-testing-enabled NO \
         -resultBundlePath "$results/tests-$configuration.xcresult" \
-        test | tee "$results/test-$configuration.log"
+        test 2>&1 | tee "$results/test-$configuration.log"
 done
 echo "Native validation finished. Review logs and xcresult bundles in $results"

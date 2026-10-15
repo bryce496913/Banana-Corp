@@ -48,3 +48,11 @@ Act 3 Part Three is authorized in [act-three-part-three.md](docs/act-three-part-
 Pass 8 authorizes the explicit Act 3 → Act 4 entry contract in [ACTS_1_3_RELEASE_QA.md](docs/ACTS_1_3_RELEASE_QA.md), superseding the prior closed-handoff limitation. Run `bash scripts/check-acts-release.sh`. Keep optional proof/Observer clues/late questions independent and full takeover/countermeasure/Act 5 requirements reserved. Query caching must invalidate on saved-state and access-reference changes; it must never become a story authority.
 
 Image planning uses [BANANA_CORP_ASSET_REGISTRY.md](BANANA_CORP_ASSET_REGISTRY.md) and [Assets/README.md](Assets/README.md). `Assets/Images/<prefix>/` is staging, not an app-bundle lookup path. Keep existing compiled assets intact until explicit integration work. Planned inventory/attached art conventions do not override bible identities, reveal order or TBD decisions; review ECHO-07 identity/avatar wording before production.
+
+## Autonomous development mandate
+
+The creator's [development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) authorizes routine engineering, coordinated agents, tests, focused branches/PRs and safe merges within `bryce496913/Banana-Corp`. Maintain [the roadmap](DEVELOPMENT_ROADMAP.md), [progress/handoff](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md). Preserve existing canon/TBD boundaries; delegation does not approve missing puzzle values, endings or identities. The written Synthetic Reality direction is approved; unavailable mood-board imagery must not be claimed as reviewed.
+
+Do not access other repositories/ChatGPT projects or unrelated personal data. No paid operations, signing/distribution, external release or App Store submission without the necessary specific approval. Do not bypass required checks/protections or treat Linux/mock/syntax results as Apple execution. Merge only when the concrete change is validated and GitHub requirements permit it. Request playtesting only with an actual supported build/install route and the directive's readiness information.
+
+Run `bash scripts/check-native-runners.sh` for portable runner command contracts. These isolated fake-toolchain checks do not constitute native builds or simulator gameplay; retain actual Apple validation as a separate requirement.
