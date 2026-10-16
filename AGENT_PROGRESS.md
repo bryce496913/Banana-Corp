@@ -1,6 +1,6 @@
 # Agent progress and continuation record
 
-Updated: 2026-10-15. Current phase: **A — initial reconnaissance completed; B — focused native QA runner repair completed**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
+Updated: 2026-10-15. Current phase: **B — native Debug/Release integration passed; full journey validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
 
 ## Authority and baseline
 
@@ -39,3 +39,49 @@ B-01 is complete. The focused PR records publication and integration status; nex
 4. **QA-01 — incomplete corpus/device evidence:** no real archived-player save corpus or production optional-clue collection was supplied/validated. Fixture/model tests do not close that gap.
 
 Next session: inspect latest main and this record, run the portable/native preflight checks, and prioritize the first available Apple compile. If Apple execution remains unavailable, proceed with an Act 4 approved-versus-TBD implementation specification and other evidenced technical repairs within canon; do not add a paid hosted runner or new external access automatically. Keep detailed outcomes here and in focused PRs. No creator decision is needed for ordinary engineering; ask only for a concrete consequential permission or an explicit unresolved design approval when genuinely required.
+
+
+## Native Mac execution — 2026-10-15
+
+This exported workspace has no `.git` metadata. Verified authorized remote main is `da5c42ba16403c5a1aaf974479377963061baaf9`; a temporary clone at `/tmp/banana-corp-native-git` has branch `fix/native-launch-validation`. No PR or merge has been completed in this run.
+
+- Host macOS 26.5 (25F71), arm64; selected developer directory `/Applications/Xcode.app/Contents/Developer`; Xcode 26.5 (17F42), Apple Swift 6.3.2, iOS and simulator SDK 26.5. Project has app, hosted-test and UI-test targets with shared Banana Corp scheme and iOS 18.0 minimum.
+- Installed runtimes: iOS 26.5 (23F77) and iOS 16.1. iOS 18 is absent; iOS 16.1 is below the deployment target and was not used.
+- Dedicated iPhone 17 Pro simulator `8F247F02-8046-4E63-85E2-84AF2513BB82`; sandbox initially denied CoreSimulator access, host escalation enabled actual execution.
+- **PASS:** actual Debug and Release simulator builds, plus actual product bundle checks. Logs/DerivedData retained at `validation/native-20261015/`. Only build warning: no AppIntents dependency for metadata extraction.
+- **PASS:** five Debug hosted XCTest cases, including catalogue loading, passive queries, artwork/Info.plist, route model cycles and evidence save/new-store reload.
+- **FAIL:** three Debug launch UI tests cannot find Home email button within launch timeout. Existing original smoke also fails. Journey test skipped intentionally without its runner path. Integration runner correctly stopped with exit 65; Release XCTest and full native journey remain NOT RUN.
+- Expanded LaunchSmokeTests with all-15-route screenshots and fictional Home-strip swipe coverage. These tests are not yet passing; no app behavior/story was changed.
+- Normal manual `simctl launch` eventually displayed Home; retained screenshots `/tmp/banana-native-screen.png` (splash) and `/tmp/banana-native-later.png` (Home). This is diagnostic evidence, not a journey pass. Failure attachments exported under `validation/native-20261015/attachments/`; process sample `/tmp/banana-launch-sample.txt` shows SwiftUI rendering, not a proven deadlock.
+- **PASS:** all 17 portable check scripts and static project check on this Mac, with exact exit results in `validation/model-20261015/results.txt`. Initial sandbox-cache failures retained separately. These do not establish native gameplay.
+
+Next: finish warmed original smoke rerun (`validation/native-20261015/smoke-retry.log` / `.xcresult`), diagnose launch accessibility/timing with actual attachments, repair only confirmed defects, rerun full integration Debug/Release, then execute all four native journey paths in both configurations. Review all-route screenshots and remaining accessibility/gesture/reset coverage. Keep Act 4/5 design TBDs closed. Physical build signing/install route remains unverified; no human playtest readiness claimed.
+
+Diagnosis update: warmed smoke reproduced the failure. `smoke-tree.log` proves all four visible dock buttons inherited `bananaOS.dock` instead of their per-route identifiers, while grid buttons retained theirs. Removed the unused dock-container identifier (no production lookup depended on it). This is an accessibility/integration repair, with no narrative, mechanics, persistence, deployment or visual change. Full native rebuild/retest is running in `validation/native-fixed-20261015/`; no passing UI claim yet.
+
+Repair retest: actual Debug and Release simulator builds/bundle checks passed again. Debug XCTest now passes all five hosted cases and all three UI smoke cases (all 15 apps, repeated launch/Home, reserved-strip upward swipe); journey correctly skipped in this integration run. Release XCTest is running. Full four-path/two-configuration journey runner is started separately (`validation/journey-native-runner.log`). Git push failed with no CLI credentials; commit `f87aea2` remains in the temporary feature branch. Browser publication is being attempted through the signed-in authorized repository UI without extracting credentials.
+
+Continuation: Release hosted tests passed, but two Release UI cases failed waiting for Home after an app open; Home swipe passed. These ran while the fresh journey simulator was preparing, so resource contention remains a hypothesis, not a verified cause. Both native processes were interrupted before finalization; full journey has no completed path. A serial Release XCTest rerun is now retained in `test-Release-serial.log` / `tests-Release-serial.xcresult`. Do not merge until native failures are resolved and reviewed.
+
+PR #31 is published as a draft: https://github.com/bryce496913/Banana-Corp/pull/31 (remote commit `534091e43c75df69de031a5d1ecd91a1c98f83e3`). The connector recovered, permitting publication without credentials extraction. Serial Release suite completed with one all-app failure at Browser; original smoke and swipe passed. Discovered interrupted journey simulator remained booted; shut down only that owned simulator, retaining data. Targeted Release all-15-route rerun now PASSED (`route-diagnostic.xcresult`, exit 0), without increasing timeouts or changing app behavior. Complete isolated Release suite is running (`tests-Release-isolated.xcresult`). Failure-only hierarchy logging added to the shared test wait helper. Earlier failures remain retained; simulator-resource contention is a plausible explanation, not established app causation.
+
+
+## Isolated native confirmation — 2026-10-16 continuation
+
+The completed results below supersede the pending statuses in earlier chronological notes:
+
+| Check | Actual result / retained evidence |
+| --- | --- |
+| Debug + Release Apple simulator builds | PASS, `validation/native-fixed-20261015/build-{Debug,Release}.log` |
+| Actual Debug + Release bundle inspection | PASS, `bundle-{Debug,Release}.txt` in that directory |
+| Debug hosted XCTest | PASS: 5 cases, `tests-Debug.xcresult` |
+| Debug UI smoke | PASS: all 15 routes, repeated launch/Home, reserved-strip swipe; 3 cases. Journey correctly skipped |
+| Release hosted + UI XCTest, isolated | PASS: 5 hosted + 3 UI cases; `tests-Release-isolated.xcresult`, process exit 0. Journey correctly skipped |
+| Full normal-control journey | New isolated matrix running via `validation/journey-isolated-runner.log`; no completed path claimed yet |
+| Portable/static checks | PASS: 17 scripts + project structure; prior exact results retained in `validation/model-20261015/results.txt` |
+| Visual QA | Incomplete: several earlier screenshots need settled recapture; no confirmed layout defect from incomplete captures |
+| iOS 18 / physical iPhone / signing | NOT RUN: iOS 18 runtime absent; physical signing/install not established |
+
+Release failures before isolation remain retained and are not relabeled passes. The targeted all-route and complete isolated Release reruns passed without raising timeouts or changing app behavior. Only one owned QA simulator should be booted during subsequent native runs. The interrupted journey simulator was shut down without deleting its data; the integration simulator was shut down before restarting the journey matrix. An interrupted tool session may leave an owned simulator booted, so verify ownership/status before resuming.
+
+PR #31 remains draft pending final record sync/review. Next: inspect the first real journey outcome, repair verified integration failures, complete remaining evidence paths/configurations, then close visual/accessibility/reset gaps. Do not use diagnostics/replay shortcuts in journey tests and do not activate later canon TBDs.
