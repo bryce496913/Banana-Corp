@@ -156,7 +156,15 @@ final class ActsJourneyTests: XCTestCase {
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
         let condition = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout), .completed)
+        let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout)
+        if result != .completed {
+            print(XCUIApplication().debugDescription)
+            let capture = XCTAttachment(screenshot: XCUIApplication().screenshot())
+            capture.name = "Failed readiness: \(element.identifier)"
+            capture.lifetime = .keepAlways
+            add(capture)
+        }
+        XCTAssertEqual(result, .completed)
     }
 
     @MainActor private func tap(_ app: XCUIApplication, _ id: String) {
