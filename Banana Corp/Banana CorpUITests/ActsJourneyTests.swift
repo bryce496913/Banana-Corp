@@ -167,16 +167,27 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertEqual(result, .completed)
     }
 
+    @MainActor private func tapTargetIsVisible(_ element: XCUIElement, in app: XCUIApplication, id: String) -> Bool {
+        guard element.exists, element.isHittable else { return false }
+        let center = CGPoint(x: element.frame.midX, y: element.frame.midY)
+        guard app.frame.insetBy(dx: 1, dy: 1).contains(center) else { return false }
+        let scroll = app.scrollViews.containing(.button, identifier: id).firstMatch
+        return !scroll.exists || scroll.frame.insetBy(dx: 2, dy: 2).contains(center)
+    }
+
     @MainActor private func tap(_ app: XCUIApplication, _ id: String) {
         let element = app.buttons[id].firstMatch
         for _ in 0..<16 {
-            if element.exists && element.isHittable { break }
+            if tapTargetIsVisible(element, in: app, id: id) { break }
             let scroll = app.scrollViews.firstMatch
             XCTAssertTrue(scroll.exists, "Missing scroll/control: \(id)")
             if element.exists && element.frame.midY < app.frame.midY { scroll.swipeDown() }
             else { scroll.swipeUp() }
         }
         ready(element)
+        let visible = tapTargetIsVisible(element, in: app, id: id)
+        if !visible { print(app.debugDescription) }
+        XCTAssertTrue(visible, "Control center must be inside its scroll viewport: \(id)")
         element.tap()
         XCTAssertFalse(app.alerts.firstMatch.exists, "Unexpected failure after \(id)")
     }
