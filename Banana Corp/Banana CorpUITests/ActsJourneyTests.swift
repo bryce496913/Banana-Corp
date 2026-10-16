@@ -160,7 +160,7 @@ final class ActsJourneyTests: XCTestCase {
         if result != .completed {
             print(XCUIApplication().debugDescription)
             let capture = XCTAttachment(screenshot: XCUIApplication().screenshot())
-            capture.name = "Failed readiness: \(element.identifier)"
+            capture.name = "Failed readiness"
             capture.lifetime = .keepAlways
             add(capture)
         }
