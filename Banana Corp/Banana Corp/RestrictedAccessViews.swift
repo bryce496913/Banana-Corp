@@ -13,7 +13,7 @@ struct RestrictedAccessEntries: View {
             if !appState.access.diagnostics.isEmpty {
                 Text("Protected sources are unavailable. Existing investigation records remain intact.").appText(.caption)
             }
-        }.padding(.horizontal, AppTheme.Spacing.lg)
+        }
     }
 }
 
