@@ -191,7 +191,7 @@ final class ActsJourneyTests: XCTestCase {
     @MainActor private func openAndRead(_ app: XCUIApplication, _ route: String, _ version: String) {
         openApp(app, route)
         tap(app, "story.open.\(version)")
-        XCTAssertTrue(app.buttons["story.back"].waitForExistence(timeout: 5))
+        ready(app.buttons["story.back"], timeout: 5)
     }
 
     @MainActor private func preserve(_ app: XCUIApplication, _ version: String) {
