@@ -105,7 +105,6 @@ struct HomeScreenView: View {
         .dropDestination(for: String.self) { items, _ in
             accept(items, in: .dock)
         }
-        .accessibilityIdentifier("bananaOS.dock")
     }
 
     @ViewBuilder

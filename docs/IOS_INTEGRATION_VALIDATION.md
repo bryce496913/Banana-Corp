@@ -155,3 +155,10 @@ These device commands are a handoff, **not executed results**. Physical signing,
 - Resolve any Apple compiler, asset compiler, test-host, signing or runtime issue uncovered on that Mac and attach logs/xcresult evidence before calling the app iPhone-ready.
 
 No canonical narrative event, Banana Wall solution, Act 3 content, save schema, mini-game mechanic, theme, launch behavior or navigation implementation changed in this pass. The bible does not need an implementation-only rewrite. Relevant earlier manual checklists: [Banana OS](banana-os-validation.md), [home layout](home-screen-validation.md), [UI](ui-modernization-validation.md), [motion](motion-interaction-validation.md), [Act 1](act-one-content.md), [first anomaly](first-anomaly.md), [Act 2](act-two-content.md), [restricted access](ACT3_PUZZLE_DESIGN.md).
+
+
+## First actual Mac execution — 2026-10-15
+
+Historical Linux results above remain historical. This run uses macOS 26.5, Xcode 26.5 (17F42), Apple Swift 6.3.2 and iOS simulator 26.5 (23F77) on a dedicated iPhone 17 Pro. Actual Debug/Release builds and actual bundle checks passed; five Debug hosted XCTest cases passed. Launch UI tests failed because the dock container identifier propagated over four child button identifiers. Removed that unused identifier and expanded normal-control UI smoke coverage to all fifteen routes plus the reserved Home swipe. Retest is pending. Journey was correctly skipped by the integration invocation; full journey/Release XCTest/iOS 18/physical execution are not claimed. iOS 18 runtime is not installed.
+
+Raw initial logs, results and failure attachments are retained locally in `validation/native-20261015/`; repair validation is retained in `validation/native-fixed-20261015/`. [Agent progress](../AGENT_PROGRESS.md#native-mac-execution--2026-10-15) records current outcomes and the next task.
