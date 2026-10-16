@@ -61,7 +61,9 @@ final class LaunchSmokeTests: XCTestCase {
     @MainActor
     private func waitUntilReady(_ element: XCUIElement, timeout: TimeInterval = 8) {
         let ready = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: ready, object: element)], timeout: timeout), .completed)
+        let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: ready, object: element)], timeout: timeout)
+        if result != .completed { print(XCUIApplication().debugDescription) }
+        XCTAssertEqual(result, .completed)
     }
 
     @MainActor
