@@ -48,3 +48,9 @@ Native Mac update (2026-10-15): Xcode 26.5 and iOS 26.5 are available. Actual De
 
 
 Isolated confirmation (2026-10-16 continuation): actual Debug/Release builds and bundle checks passed. Five hosted and three UI smoke cases passed in each configuration, including all 15 apps, repeated launch/Home and reserved-strip swipe. Release evidence: `validation/native-fixed-20261015/tests-Release-isolated.xcresult`. Full journey is running separately; its integration skip is not a journey pass. Earlier Release failures are retained. Run one QA simulator at a time and check for owned simulators left booted after interruption. See [current tracking](AGENT_PROGRESS.md).
+
+### Native journey continuation — 2026-10-16
+
+The Browser research list repair passed actual Debug/Release builds, bundle checks and hosted/UI smoke suites in `validation/browser-scroll-clean-20261016/`. Full journey coverage is still incomplete. Earlier failures reached normal Wall solving and scope reload but did not complete all research and Act 4 entry. Repeated Home tap diagnostics remain inconclusive: grid and restored dock runs passed; no permanent touch change was justified. A later retained-simulator journey suffered confirmed host sleep and long event-loop stalls, and is not a clean regression result. The fresh eight-case matrix is retained in `validation/acts-20261016-143324/`; update only after inspecting its actual results and saved-state assertions.
+
+Temporary probes and experimental dock styling were removed and independently reviewed. iOS 18, physical installation, VoiceOver, large text, drag/drop, reset/replay and complete visual validation remain open. Screenshot capture omissions do not establish a visual pass.
