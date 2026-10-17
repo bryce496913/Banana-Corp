@@ -9,14 +9,14 @@ This change builds on the merged Task 1 PR (#7). The separate PR targets main.
 - Passed Swift 6.2 syntax parsing of all 27 app source files. This does not typecheck SwiftUI against an Apple SDK.
 - Passed `git diff --check`, source-reference checks, and verification that all 14 existing OS routes retain icon metadata and destinations.
 - Checked sizing arithmetic for 320/375/390/430-point widths: four columns; 58-point icons at 320 and 64-point icons at the other widths. This is an arithmetic check, not rendered simulator validation.
-- No Apple SDK, Xcode, or iPhone simulator is available. Visual appearance, native touch drag/drop, editing gestures, and reopening each app have not been run.
+- At the original validation time, no Apple SDK, Xcode, or iPhone simulator was available. Native continuation results are recorded in [the integration record](IOS_INTEGRATION_VALIDATION.md) and [agent progress](../AGENT_PROGRESS.md); this historical checklist does not establish native touch drag/drop or editing coverage.
 
 ## Architecture and changed behavior
 
 - HomeScreenView lays out a top-aligned scrolling grid and a bottom floating dock inside PhoneShellView's hardware-safe content region. Equal dock slots remain stable with fewer than four visible apps.
 - BananaAppIcon is the reusable icon component. It supports SF Symbols or asset images, labels, capped visual badges with full accessible counts, locked/unlocked rendering, editing wiggle, reduced motion, press feedback, and injectable future appearance. Only the standard appearance is used.
 - PhoneAppInfo contains display metadata; PhoneAppRoute remains identity; HomeScreenLayout stores positions. No ARG story state is activated.
-- Native iOS 18-compatible draggable/dropDestination modifiers are active only while editing. Long press or the accessibility action enters editing. Done and taps in the background/gaps finish editing. Taps on icons cannot launch while editing, including the coordinator guard.
+- The iOS 18-compatible draggable modifier is active only while editing. Drop destinations remain attached in normal mode; AppState accepts moves only while editing and Home is ready. Long press or the accessibility action enters editing. Done and taps in the background/gaps finish editing. Taps on icons cannot launch while editing, including the coordinator guard.
 - AppState applies accepted moves through the transactional model and persists immediately using the existing v1 key. There is no drag-preview lifecycle state to leave app launching blocked after a canceled drag.
 - Normalization retains hidden routes and appends missing routes, preserving customized order when apps are unlocked or new known routes are added.
 - Dock styling uses guarded iOS 26 Liquid Glass, a dark translucent purple custom surface on iOS 18–25, and an opaque themed surface for Reduce Transparency.

@@ -10,49 +10,18 @@ struct StoryContentSelection: Hashable {
 struct StorySurfaceContent<Placeholder: View>: View {
     @EnvironmentObject private var appState: AppState
     let surface: StoryAppSurface
+    var scrollsContent = true
     @ViewBuilder let placeholder: () -> Placeholder
     @State private var selection: StoryContentSelection?
     @State private var readFailure = false
 
     var body: some View {
         Group {
-            if !appState.content.loadDiagnostics.isEmpty || !appState.story.isWritable {
-                AppScreenScroll {
-                    AppErrorState(title: "Content unavailable", message: "The local source or saved progress needs recovery. Your progress has not been reset.", retry: { _ = appState.story.load() })
-                }
-            } else if appState.content.catalogue?.items.contains(where: { $0.appSurface == surface }) == true {
-                AppScreenScroll {
-                    let items = appState.content.availableItems(for: surface)
-                    FirstAnomalyHandoffControl()
-                    if items.isEmpty {
-                        AppEmptyState(symbol: surface.symbol, title: "No content available", message: "There are no available items in this source right now.")
-                    }
-                    ForEach(items) { item in
-                        AppCard {
-                            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                                Button {
-                                    // A promotion is read only after its presentation is completed.
-                                    if surface == .video {
-                                        selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: surface)
-                                    } else {
-                                        switch appState.content.read(item.id, versionID: item.version.id) {
-                                        case .success: selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: surface)
-                                        case .failure: readFailure = true
-                                        }
-                                    }
-                                } label: {
-                                    AppListRow(title: item.version.title, subtitle: item.version.subtitle, detail: item.version.source,
-                                               metadata: StoryContentTime.label(for: item.version, context: appState.storyTimeContext), symbol: surface.symbol, isUnread: item.availability == .availableUnread)
-                                }
-                                .buttonStyle(.appContent)
-                                .accessibilityIdentifier("story.open.\(item.version.id)")
-                                .accessibilityHint(surface == .video ? "Open the presentation. This does not mark it viewed." : "Open this content.")
-                                if item.version.preservedEvidenceID != nil { PreserveEvidenceButton(contentID: item.id, versionID: item.version.id) }
-                            }
-                        }
-                    }
-                }
-            } else { placeholder() }
+            if scrollsContent && showsCatalogueOrRecovery {
+                AppScreenScroll { sourceContent }
+            } else {
+                sourceContent
+            }
         }
         .onAppear {
             if surface == .email && selection == nil { appState.reconcileFirstAnomalyAtBoundary() }
@@ -69,6 +38,47 @@ struct StorySurfaceContent<Placeholder: View>: View {
         }
         .alert("Content could not be opened", isPresented: $readFailure) { Button("OK", role: .cancel) {} }
             message: { Text("The source or save is unavailable. Existing progress has not changed.") }
+    }
+
+    private var showsCatalogueOrRecovery: Bool {
+        !appState.content.loadDiagnostics.isEmpty || !appState.story.isWritable ||
+        appState.content.catalogue?.items.contains(where: { $0.appSurface == surface }) == true
+    }
+
+    @ViewBuilder private var sourceContent: some View {
+        if !appState.content.loadDiagnostics.isEmpty || !appState.story.isWritable {
+            AppErrorState(title: "Content unavailable", message: "The local source or saved progress needs recovery. Your progress has not been reset.", retry: { _ = appState.story.load() })
+        } else if appState.content.catalogue?.items.contains(where: { $0.appSurface == surface }) == true {
+            let items = appState.content.availableItems(for: surface)
+            FirstAnomalyHandoffControl()
+            if items.isEmpty {
+                AppEmptyState(symbol: surface.symbol, title: "No content available", message: "There are no available items in this source right now.")
+            }
+            ForEach(items) { item in
+                AppCard {
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                        Button {
+                            // A promotion is read only after its presentation is completed.
+                            if surface == .video {
+                                selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: surface)
+                            } else {
+                                switch appState.content.read(item.id, versionID: item.version.id) {
+                                case .success: selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: surface)
+                                case .failure: readFailure = true
+                                }
+                            }
+                        } label: {
+                            AppListRow(title: item.version.title, subtitle: item.version.subtitle, detail: item.version.source,
+                                       metadata: StoryContentTime.label(for: item.version, context: appState.storyTimeContext), symbol: surface.symbol, isUnread: item.availability == .availableUnread)
+                        }
+                        .buttonStyle(.appContent)
+                        .accessibilityIdentifier("story.open.\(item.version.id)")
+                        .accessibilityHint(surface == .video ? "Open the presentation. This does not mark it viewed." : "Open this content.")
+                        if item.version.preservedEvidenceID != nil { PreserveEvidenceButton(contentID: item.id, versionID: item.version.id) }
+                    }
+                }
+            }
+        } else { placeholder() }
     }
 }
 

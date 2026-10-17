@@ -44,3 +44,7 @@ Native Mac update (2026-10-15): Xcode 26.5 and iOS 26.5 are available. Actual De
 
 
 Isolated confirmation (2026-10-16 continuation): actual Debug/Release builds and bundle checks passed. Five hosted and three UI smoke cases passed in each configuration, including all 15 apps, repeated launch/Home and reserved-strip swipe. Release evidence: `validation/native-fixed-20261015/tests-Release-isolated.xcresult`. Full journey is running separately; its integration skip is not a journey pass. Earlier Release failures are retained. Run one QA simulator at a time and check for owned simulators left booted after interruption. See [current tracking](AGENT_PROGRESS.md).
+
+Native continuation (2026-10-16): keep PR #32 draft until clean full journey regression is established. The Browser scroll repair has native Debug/Release integration evidence; Home touch diagnosis has no verified production fix. Resume from `validation/journey-clean-matrix-20261016.log` and `AGENT_PROGRESS.md`, then finish layout/accessibility/reset coverage before advancing milestones.
+
+2026-10-17 resume: PR32 remains draft. Captured active navigation during a cold-run missed Continue interaction; no production fix established. Bounded owning-scroll helper corrects a separate verified test overshoot. Temporary app probes removed. Clean native journey matrix now logs `validation/journey-section-clean-20261017.log`; inspect its actual result, then resolve remaining touch failures and finish reset/accessibility/visual/install validation before further act implementation.

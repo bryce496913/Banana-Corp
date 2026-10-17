@@ -156,19 +156,51 @@ final class ActsJourneyTests: XCTestCase {
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
         let condition = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout), .completed)
+        let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout)
+        if result != .completed {
+            print(XCUIApplication().debugDescription)
+            let capture = XCTAttachment(screenshot: XCUIApplication().screenshot())
+            capture.name = "Failed readiness"
+            capture.lifetime = .keepAlways
+            add(capture)
+        }
+        XCTAssertEqual(result, .completed)
+    }
+
+    @MainActor private func tapTargetIsVisible(_ element: XCUIElement, in app: XCUIApplication, id: String) -> Bool {
+        guard element.exists, element.isHittable else { return false }
+        let center = CGPoint(x: element.frame.midX, y: element.frame.midY)
+        guard app.frame.insetBy(dx: 1, dy: 1).contains(center) else { return false }
+        let scroll = app.scrollViews.containing(.button, identifier: id).firstMatch
+        return !scroll.exists || scroll.frame.insetBy(dx: 2, dy: 2).contains(center)
     }
 
     @MainActor private func tap(_ app: XCUIApplication, _ id: String) {
         let element = app.buttons[id].firstMatch
         for _ in 0..<16 {
-            if element.exists && element.isHittable { break }
-            let scroll = app.scrollViews.firstMatch
+            if tapTargetIsVisible(element, in: app, id: id) { break }
+            let owner = app.scrollViews.containing(.button, identifier: id).firstMatch
+            let scroll = owner.exists ? owner : app.scrollViews.firstMatch
             XCTAssertTrue(scroll.exists, "Missing scroll/control: \(id)")
-            if element.exists && element.frame.midY < app.frame.midY { scroll.swipeDown() }
-            else { scroll.swipeUp() }
+            guard scroll.exists else { return }
+            let viewport = scroll.frame
+            if element.exists {
+                let targetY = element.frame.midY
+                let movingDown = targetY < viewport.midY
+                let edge = movingDown ? viewport.minY : viewport.maxY
+                let distance = min(viewport.height * 0.55, max(70, abs(targetY - edge) + 40))
+                let startY: CGFloat = movingDown ? 0.25 : 0.75
+                let endY = startY + (movingDown ? 1 : -1) * distance / viewport.height
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+            } else {
+                scroll.swipeUp()
+            }
         }
         ready(element)
+        let visible = tapTargetIsVisible(element, in: app, id: id)
+        if !visible { print(app.debugDescription) }
+        XCTAssertTrue(visible, "Control center must be inside its scroll viewport: \(id)")
         element.tap()
         XCTAssertFalse(app.alerts.firstMatch.exists, "Unexpected failure after \(id)")
     }
@@ -183,7 +215,7 @@ final class ActsJourneyTests: XCTestCase {
     @MainActor private func openAndRead(_ app: XCUIApplication, _ route: String, _ version: String) {
         openApp(app, route)
         tap(app, "story.open.\(version)")
-        XCTAssertTrue(app.buttons["story.back"].waitForExistence(timeout: 5))
+        ready(app.buttons["story.back"], timeout: 5)
     }
 
     @MainActor private func preserve(_ app: XCUIApplication, _ version: String) {
@@ -196,7 +228,13 @@ final class ActsJourneyTests: XCTestCase {
         tap(app, "story.open.\(version)")
         if shouldPreserve { preserve(app, version) }
         // The actual catalogue supplies three or five transcript sections.
-        for _ in 0..<(sections - 1) { tap(app, "story.video.next.\(version)") }
+        if sections > 1 {
+            for section in 2...sections {
+                tap(app, "story.video.next.\(version)")
+                XCTAssertTrue(app.staticTexts["\(section) of \(sections)"].waitForExistence(timeout: 5),
+                              "Continue must display transcript section \(section) for \(version)")
+            }
+        }
         tap(app, "story.video.finish.\(version)")
         let finished = app.buttons["story.video.finish.\(version)"].firstMatch
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finished)], timeout: 5), .completed)
