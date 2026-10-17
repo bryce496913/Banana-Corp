@@ -30,7 +30,6 @@ struct AppPressFeedback: ViewModifier {
         content
             .scaleEffect(pressed && !reduceMotion ? scale : 1)
             .opacity(pressed ? pressedOpacity : 1)
-            .animation(reduceMotion ? nil : AppMotion.press, value: pressed)
     }
 }
 
