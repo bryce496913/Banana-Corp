@@ -1,5 +1,7 @@
 # Agent progress and continuation record
 
+D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. Native stabilization remains separately tracked in PRs [#32](https://github.com/bryce496913/Banana-Corp/pull/32) and [#34](https://github.com/bryce496913/Banana-Corp/pull/34); this documentation change adds no build or test claim.
+
 Updated: 2026-10-15. Current phase: **B — native Debug/Release integration passed; full journey validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
 
 ## Authority and baseline
