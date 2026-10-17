@@ -179,10 +179,23 @@ final class ActsJourneyTests: XCTestCase {
         let element = app.buttons[id].firstMatch
         for _ in 0..<16 {
             if tapTargetIsVisible(element, in: app, id: id) { break }
-            let scroll = app.scrollViews.firstMatch
+            let owner = app.scrollViews.containing(.button, identifier: id).firstMatch
+            let scroll = owner.exists ? owner : app.scrollViews.firstMatch
             XCTAssertTrue(scroll.exists, "Missing scroll/control: \(id)")
-            if element.exists && element.frame.midY < app.frame.midY { scroll.swipeDown() }
-            else { scroll.swipeUp() }
+            guard scroll.exists else { return }
+            let viewport = scroll.frame
+            if element.exists {
+                let targetY = element.frame.midY
+                let movingDown = targetY < viewport.midY
+                let edge = movingDown ? viewport.minY : viewport.maxY
+                let distance = min(viewport.height * 0.55, max(70, abs(targetY - edge) + 40))
+                let startY: CGFloat = movingDown ? 0.25 : 0.75
+                let endY = startY + (movingDown ? 1 : -1) * distance / viewport.height
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+            } else {
+                scroll.swipeUp()
+            }
         }
         ready(element)
         let visible = tapTargetIsVisible(element, in: app, id: id)

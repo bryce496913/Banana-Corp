@@ -1,6 +1,6 @@
 # QA test plan
 
-Updated: 2026-10-15. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-17. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
 
 ## Validation tiers and claims
 
@@ -35,7 +35,7 @@ Record actual Xcode/SDK, Swift, device model/runtime/UDID, configuration, source
 
 Use dedicated simulators; the full-journey runner owns and cleans up only those it creates. A supplied integration simulator is not owned/deleted by that script. A skipped journey is not a successful journey. Stop on build/test failure while retaining combined stdout/stderr diagnostics.
 
-Current Apple matrix: iOS 18 simulator, iOS 26 simulator, physical iPhone, native VoiceOver/gestures/Instruments are **NOT RUN / BLOCKED** in this Linux environment. Do not schedule paid CI or distribution to work around that without specific approval.
+Current Apple matrix: actual Xcode 26.5 Debug/Release builds and integration tests passed on iOS 26.5. Full journey has one diagnostic pass; the clean preservation/configuration matrix remains incomplete. iOS 18 is NOT RUN because its runtime is absent. Physical iPhone, native VoiceOver and Instruments are NOT RUN. See the retained native records below and [current progress](AGENT_PROGRESS.md); the earlier Linux limitation no longer describes this execution environment.
 
 ## Playtest/release gate
 
@@ -58,3 +58,5 @@ Temporary probes and experimental dock styling were removed and independently re
 First full native diagnostic journey passed (Debug/both,730.285s): normal controls, all Acts1–3 research and Act4 entry, repeated relaunch; exported save passed exact runner assertions (act4,61 read versions,7 preserved records, expected Wall and preservation state). Evidence is under `validation/touch-diagnostic-20261016/event-state-*`. All app diagnostics are now removed. The clean eight-case matrix is running via `validation/journey-final-clean-matrix-20261016.log`; diagnostic success does not replace that gate or resolve earlier intermittent cancellations.
 
 2026-10-17 continuation: clean baseline Debug/both failed its first Email tap (29.648s). The separately isolated Home-background candidate in PR33 passed early Home interactions but failed at preservation (131.263s), with inbox/unread source still present after source-open. PR33 is closed without merge and its production change reverted. Root cause remains open. Minimal debugger state inspection is temporary and excluded from published code; do not count its failure-only pause as a production timeout or a clean journey pass.
+
+2026-10-17 state capture: the later diagnostic journey failed the target-center assertion at Observer session review, after sixteen alternating full-page swipes. LLDB returned navigation phase2/active; this failure does not establish a stalled transition. The helper now moves the target-containing scroll with bounded edge-derived drags; unchanged16-move limit and one final tap. Fresh-simulator diagnostic validation is in progress at `validation/state-cold-20261017.*`. Earlier missed-tap failures remain unresolved. Temporary registry/getter and first-failure pause must be removed before clean validation/publication.
