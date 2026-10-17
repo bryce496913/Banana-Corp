@@ -228,7 +228,13 @@ final class ActsJourneyTests: XCTestCase {
         tap(app, "story.open.\(version)")
         if shouldPreserve { preserve(app, version) }
         // The actual catalogue supplies three or five transcript sections.
-        for _ in 0..<(sections - 1) { tap(app, "story.video.next.\(version)") }
+        if sections > 1 {
+            for section in 2...sections {
+                tap(app, "story.video.next.\(version)")
+                XCTAssertTrue(app.staticTexts["\(section) of \(sections)"].waitForExistence(timeout: 5),
+                              "Continue must display transcript section \(section) for \(version)")
+            }
+        }
         tap(app, "story.video.finish.\(version)")
         let finished = app.buttons["story.video.finish.\(version)"].firstMatch
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finished)], timeout: 5), .completed)
