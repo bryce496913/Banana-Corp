@@ -53,6 +53,7 @@ struct HomeScreenView: View {
         Color.clear
             .contentShape(Rectangle())
             .onTapGesture { appState.finishEditingHomeScreen() }
+            .allowsHitTesting(appState.isEditingHomeScreen)
             .accessibilityHidden(true)
     }
 
