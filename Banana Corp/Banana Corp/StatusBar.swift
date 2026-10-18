@@ -9,46 +9,63 @@ import SwiftUI
 
 struct StatusBar: View {
     @Environment(\.osPresentation) private var presentation
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var currentTime = Date()
 
     var body: some View {
-        HStack(alignment: .center) {
-            VStack(alignment: .leading, spacing: 2) {
-                OSStoryText(text: status.carrier ?? "BANANA 5G", target: .carrier)
-                    .lineLimit(1)
-                    .font(AppTextStyle.body.font)
-                    .fontWeight(.semibold)
-
-                Text(currentTime, style: .time)
-                    .font(AppTextStyle.body.font)
-                    .fontWeight(.semibold)
-                    .monospacedDigit()
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                    statusText
+                    connectivityIndicators
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(alignment: .center) {
+                    statusText
+                    Spacer()
+                    connectivityIndicators
+                }
             }
-            .foregroundColor(AppTheme.Colors.text.opacity(0.94))
-
-            Spacer()
-
-            HStack(spacing: 12) {
-                signalImage
-                    .accessibilityLabel(signalLabel)
-                Image(systemName: status.wifi == .unavailable ? "wifi.slash" : "wifi")
-                    .accessibilityLabel(status.wifi == .unavailable ? "Banana Wi-Fi: unavailable" : "Banana Wi-Fi: connected")
-                Image(systemName: batterySymbol)
-                    .accessibilityLabel("Banana battery: \(status.batteryPercent ?? 75) percent")
-                    .foregroundColor(AppTheme.Colors.highlight)
-            }
-            .modifier(OSControlledEffect(target: .connectivity))
-            .font(AppTextStyle.body.font.weight(.semibold))
-            .foregroundColor(AppTheme.Colors.text.opacity(0.94))
         }
         .padding(.horizontal, AppTheme.Spacing.md)
         .padding(.top, AppTheme.Spacing.sm)
         .frame(minHeight: 56)
-        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .onReceive(timer) { _ in
             currentTime = Date()
         }
+    }
+
+    private var statusText: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            OSStoryText(text: status.carrier ?? "BANANA 5G", target: .carrier)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                .font(AppTextStyle.body.font)
+                .fontWeight(.semibold)
+
+            Text(currentTime, style: .time)
+                .font(AppTextStyle.body.font)
+                .fontWeight(.semibold)
+                .monospacedDigit()
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .foregroundColor(AppTheme.Colors.text.opacity(0.94))
+    }
+
+    private var connectivityIndicators: some View {
+        HStack(spacing: 12) {
+            signalImage
+                .accessibilityLabel(signalLabel)
+            Image(systemName: status.wifi == .unavailable ? "wifi.slash" : "wifi")
+                .accessibilityLabel(status.wifi == .unavailable ? "Banana Wi-Fi: unavailable" : "Banana Wi-Fi: connected")
+            Image(systemName: batterySymbol)
+                .accessibilityLabel("Banana battery: \(status.batteryPercent ?? 75) percent")
+                .foregroundColor(AppTheme.Colors.highlight)
+        }
+        .modifier(OSControlledEffect(target: .connectivity))
+        .font(AppTextStyle.body.font.weight(.semibold))
+        .foregroundColor(AppTheme.Colors.text.opacity(0.94))
     }
 
     private var status: OSStatusOverride {
