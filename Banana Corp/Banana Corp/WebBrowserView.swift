@@ -4,13 +4,13 @@ struct WebBrowserView: View {
     @EnvironmentObject private var appState: AppState
     var body: some View {
         PhoneShellView(title: "Web Browser") {
-            VStack(alignment: .leading, spacing: 8) {
+            AppScreenScroll {
                 if !appState.access.visibleResources().isEmpty || !appState.access.diagnostics.isEmpty {
                     RestrictedAccessEntries()
                 }
-                StorySurfaceContent(surface: .web) {
+                StorySurfaceContent(surface: .web, scrollsContent: false) {
                     VStack(spacing: 0) {
-                        AppScreenScroll {
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                             AppTextInput(
                                 label: "Address or search",
                                 text: .constant(""),
