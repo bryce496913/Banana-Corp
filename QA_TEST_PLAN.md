@@ -69,3 +69,6 @@ Full B matrix did notpass: firstDebug/bothFAILED105.860s on fourth promoContinue
 
 
 Native experience coverage (2026-10-18): [dedicated reset/accessibility runner and result boundaries](docs/native-experience-validation.md). First public native audit compiled and FAIL44.940s on Home clock Dynamic Type support; reset/Release absence remain NOT RUN. No accessibility, VoiceOver or Reduce Motion pass is inferred. Original press animation is restored; PR34 closed without merge after its failed matrix.
+
+
+2026-10-18 repair-branch checkpoint: native Debug/Release builds and bundle checks PASS; hosted5perconfiguration, UI3Debug/4Release PASS (5/4dedicated skips). Release diagnosticsabsence is verified; reset remains NOT RUN pending freshownedcase. Separate optional Home DynamicType audit runs in bothconfigs after the fullaudit's frameworkCode-56 timeout; it does not replace or narrow the default all-types audit. See validation/status-type-integration-20261018/ and the native experience record.

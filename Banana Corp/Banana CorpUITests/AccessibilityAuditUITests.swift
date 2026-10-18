@@ -42,6 +42,30 @@ final class AccessibilityAuditUITests: XCTestCase {
         }
     }
 
+    /// Focused regression check only; a pass is not a full accessibility audit.
+    @MainActor
+    func testHomeDynamicTypeAccessibilityAudit() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard (environment["BANANA_QA_ACCESSIBILITY_TYPE"] ?? environment["TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE"]) == "owned-simulator" else {
+            throw XCTSkip("Requires the dedicated owned-simulator Dynamic Type runner.")
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launch()
+        let email = app.buttons["bananaOS.app.email"].firstMatch
+        ready(email, timeout: 20)
+        settled(email, in: app)
+        XCTAssertFalse(app.buttons["bananaOS.home"].exists)
+        XCTAssertEqual(app.statusBars.count, 0)
+        XCTAssertFalse(app.alerts.firstMatch.exists)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Focused Home Dynamic Type audit"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        // Public iOS 17+ API; no issue handler or suppressed findings.
+        try app.performAccessibilityAudit(for: .dynamicType)
+    }
+
     @MainActor private func audit(_ app: XCUIApplication, name: String) throws {
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Accessibility audit — \(name)"
