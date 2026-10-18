@@ -1,12 +1,24 @@
 # Agent progress and continuation record
 
-D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. Native stabilization remains separately tracked in PRs [#32](https://github.com/bryce496913/Banana-Corp/pull/32) and [#34](https://github.com/bryce496913/Banana-Corp/pull/34); this documentation change adds no build or test claim.
+D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. The specification adds no native build or test claim. Current engineering results are summarized below.
 
-Updated: 2026-10-15. Current phase: **B — native Debug/Release integration passed; full journey validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
+Updated: 2026-10-18. Current phase: **B — Browser repair merged; native accessibility and reset validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
+
+## Current native checkpoint — 2026-10-18
+
+- Main is `f376c8cab29dd633c4e10b237113c0acfeddca61`; Browser clipping repair [PR #32](https://github.com/bryce496913/Banana-Corp/pull/32) merged after actual Debug/Release integration and independent review. Full campaign validation remains incomplete.
+- Native coverage [PR #36](https://github.com/bryce496913/Banana-Corp/pull/36) is draft, head `d94e7d00f2476607d53b81a98b8120e92f01f790`. All 20 portable runner contracts passed; these use fake tools. Actual Release diagnostics-absence passed. The focused Debug Dynamic Type audit passed; Release and reset checks are pending.
+- Status-bar Dynamic Type repair [PR #37](https://github.com/bryce496913/Banana-Corp/pull/37) is draft, head `ca349522d46d78328ea855b118259903c499c639`. Actual normal Debug/Release builds and bundle checks passed. Debug passed five hosted and three UI tests; Release passed five hosted and four UI tests, with five/four opt-in skips. Evidence: `validation/status-type-integration-20261018/`.
+- The first public audit found the capped Home clock. The repaired default audit timed out with Apple framework Code -56; no full accessibility pass is established. The separate focused Debug Dynamic Type audit passed with one pass, zero failures and zero skips; Release is pending.
+- Active rerun: session `24213`, `validation/native-geometry-reset-20261018.log`. Order: Release-type, Debug-reset. The prior session `24288` ended with Release readiness failure before its audit; reset did not run. Geometry-before-hittability guards are now under native validation. Do not change app/test/project sources during this run. Source hashes: `validation/native-geometry-guard-sources-20261018.json`.
+- Original press animation is restored; failed experiment PR #34 closed without merge. All touch/action/getter/pause probes are removed. Intermittent touch cancellation remains unexplained; the latest trace identifies active Video ownership, not Home interception.
+- Xcode 26.5 and iOS 26.5 are available. iOS 18 runtime is absent. VoiceOver, Reduce Motion, complete campaign matrix and physical installation remain unverified. Full Acts 4–5 contracts remain unresolved; do not invent them.
+
+Next: inspect the active native results, repair verified reset/accessibility defects, then investigate the full-audit timeout and missed touches before resuming the normal campaign matrix. Retain failures and avoid automatic retries. No physical playtest or signing request is ready.
 
 ## Authority and baseline
 
-Only `bryce496913/Banana-Corp` and the named `Banana Corp App` ChatGPT project are authorized development resources. Work in this pass used this repository and explicitly supplied documents; no unrelated projects, personal files or credentials were accessed. ChatGPT project conversations were not read. No paid operation, signing/distribution or application release was performed.
+Current execution is authorized only for `bryce496913/Banana-Corp`. No ChatGPT projects are authorized by the current directive. Work used this repository and explicitly supplied documents; no unrelated projects, personal files or credentials were accessed. No paid operation, signing/distribution or application release was performed.
 
 Baseline main commit: `bd2f5bb98f94f5616142eccf0fa6bc02f0c23e6b`, tree `a38943281b292b3c6ab4a182ca617b1bda3289b8`. Recent merged PRs #25–29 covered Act 3/entry stabilization, asset scaffolding and the preview key-path fix. No GitHub Actions workflows exist in this baseline. Do not assume historical model/syntax checks are proof of an Xcode build.
 
@@ -182,3 +194,9 @@ PR37 repair native integration PASS, runnerexit0: validation/status-type-integra
 
 
 Integrated separate focusedHomeDynamicType method and optional Debug-type/Release-type cases; defaultfullaudit and fourdefaultcases unchanged, distinct runner-only TYPEguard, no issuehandler/appflags/saveedits/retries. All20portablecontracts PASS in the working copy(session58166 exit0; retained validation/native-focused-contracts-20261018.log), separately from native execution. Staticproject PASS. Native serial Debug-type→Release-type→Debug-reset now session24288, runnerlog validation/native-focused-reset-20261018.log, exactcurrent sourcehashes validation/native-focused-sources-20261018.json. PreviousownedNativeQA8F shut down first. Do not change app/test/project during cases. Focusedtest is uncompiled/unrun so far, no reset/typepass inferred.
+
+
+Focused Home Dynamic Type Debug PASS:68.027s,1passed0failed0skipped, verified actual summary validation/native-experience-20261018-140340-74930/Debug-type-summary.json. Owned41EF32CB-5909-4DA3-BA04-7468254F3A30 cleaned; Release-type8BEE3D19-9B61-4FC9-B499-9FD670F15906 now booting, Debug-reset pending. This confirms only the selected Home category, not the unchanged defaultfullaudit or otheraccessibility experience. No app/test/project changes during cases.
+
+
+First focused Release attempt FAIL52.132s before audit: XCTest's settled helper queried Email hittability while the entire AX window/element snapshot was {{inf,inf},{0,0}}. Earlier snapshot had Email(32,713,78.7,103); retained final video frame renders normal Home. Evidence in validation/native-experience-20261018-140340-74930/Release-type-attachments/. Added finite positive in-window geometry checks before hittability, reset consecutive-stability count on unavailable observations, and guard scroll viewport before coordinate math. Same8/20-second readiness limits, enabled+hittable requirements, no tapretry/suppression/appworkaround. Independentreview found no blocker; geometry/hittability reads are not atomic, so success remains unverified. Source manifest validation/native-geometry-guard-sources-20261018.json; fresh Release-type then Debug-reset follows.
