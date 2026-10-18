@@ -77,8 +77,8 @@ final class AccessibilityAuditUITests: XCTestCase {
     }
 
     @MainActor private func visible(_ element: XCUIElement, id: String, in app: XCUIApplication) -> Bool {
-        guard element.exists, element.isHittable else { return false }
-        let center = CGPoint(x: element.frame.midX, y: element.frame.midY)
+        guard let frame = usableFrame(element, in: app), element.isHittable else { return false }
+        let center = CGPoint(x: frame.midX, y: frame.midY)
         guard app.frame.insetBy(dx: 1, dy: 1).contains(center) else { return false }
         let owner = app.scrollViews.containing(.button, identifier: id).firstMatch
         return !owner.exists || owner.frame.insetBy(dx: 2, dy: 2).contains(center)
@@ -91,8 +91,10 @@ final class AccessibilityAuditUITests: XCTestCase {
             if !owner.exists { XCTAssertEqual(app.scrollViews.count, 1, "Ambiguous scroll owner: \(id)") }
             guard owner.exists || app.scrollViews.count == 1 else { return }
             let scroll = owner.exists ? owner : app.scrollViews.element(boundBy: 0)
-            let viewport = scroll.frame
-            guard viewport.height > 0 else { XCTFail("Empty viewport: \(id)"); return }
+            guard let viewport = usableFrame(scroll, in: app) else {
+                XCTFail("Unavailable scroll viewport: \(id)")
+                return
+            }
             let movingDown = element.exists && element.frame.midY < viewport.midY
             let edge = movingDown ? viewport.minY : viewport.maxY
             let distance = element.exists
@@ -113,9 +115,12 @@ final class AccessibilityAuditUITests: XCTestCase {
         var previous: CGRect?
         var stableObservations = 0
         let condition = NSPredicate { _, _ in
-            guard anchor.exists && anchor.isHittable && anchor.isEnabled else { return false }
-            let frame = anchor.frame
-            guard frame.width > 0, frame.height > 0, app.frame.contains(frame) else { return false }
+            guard let frame = self.usableFrame(anchor, in: app),
+                  anchor.isEnabled, anchor.isHittable else {
+                previous = nil
+                stableObservations = 0
+                return false
+            }
             stableObservations = previous == frame ? stableObservations + 1 : 0
             previous = frame
             return stableObservations >= 2
@@ -123,8 +128,25 @@ final class AccessibilityAuditUITests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: anchor)], timeout: 8), .completed)
     }
 
+    // XCTest can expose a transient zero-sized/infinite AX snapshot even when
+    // Home is visibly rendered. Do not ask it for a hit point for that geometry.
+    @MainActor private func usableFrame(_ element: XCUIElement, in app: XCUIApplication) -> CGRect? {
+        guard element.exists else { return nil }
+        let frame = element.frame
+        let window = app.frame
+        guard [frame.minX, frame.minY, frame.width, frame.height,
+               window.minX, window.minY, window.width, window.height].allSatisfy({ $0.isFinite }),
+              frame.width > 0, frame.height > 0, window.width > 0, window.height > 0,
+              window.contains(frame) else { return nil }
+        return frame
+    }
+
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
-        let condition = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
+        let app = XCUIApplication()
+        let condition = NSPredicate { _, _ in
+            guard self.usableFrame(element, in: app) != nil else { return false }
+            return element.isEnabled && element.isHittable
+        }
         let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout)
         if result != .completed { print(XCUIApplication().debugDescription) }
         XCTAssertEqual(result, .completed)

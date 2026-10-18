@@ -35,3 +35,7 @@ Repair-branch integration (StatusBar PR37): actual normal Debug/Release builds a
 Focused Dynamic Type coverage supplements the unchanged full audit, with no issue handler. Its pass could establish only the selected Home category on the recorded configuration, not all-routes/default-audit/VoiceOver/Reduce Motion coverage. Debug-type, Release-type and Debug-reset are now running serially on fresh owned simulators; no focused/reset pass claimed yet.
 
 Portable focused runner contracts: all20 mocked scenarios PASS in the working copy (validation/native-focused-contracts-20261018.log). Native focused/reset cases remain in progress.
+
+Focused batch results: Debug Dynamic Type PASS (68.027 seconds; one pass, zero failures/skips). Release failed before its audit while XCTest exposed an infinite, zero-sized accessibility window. The final video renders normal Home. Reset was not reached because the runner correctly stopped. Original results remain in validation/native-experience-20261018-140340-74930/.
+
+The readiness helper now requires finite positive in-window geometry before hittability, resets stability on unavailable snapshots, and rejects invalid scroll viewports before generating coordinates. Enabled/hittable requirements and readiness timeouts are unchanged. A fresh Release-type and Debug-reset run is active in validation/native-experience-20261018-142814-77365/; no successful Release/reset result is claimed yet.
