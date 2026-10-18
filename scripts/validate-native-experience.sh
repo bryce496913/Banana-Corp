@@ -2,7 +2,7 @@
 set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 usage() {
-    echo 'Usage: bash scripts/validate-native-experience.sh INSTALLED_IOS_RUNTIME_ID IPHONE_DEVICE_TYPE_ID [Debug-reset|Release-absence|Debug-audit|Release-audit ...]' >&2
+    echo 'Usage: bash scripts/validate-native-experience.sh INSTALLED_IOS_RUNTIME_ID IPHONE_DEVICE_TYPE_ID [Debug-reset|Release-absence|Debug-audit|Release-audit|Debug-type|Release-type ...]' >&2
 }
 [[ $# -ge 2 ]] || { usage; exit 64; }
 runtime="$1"
@@ -13,7 +13,7 @@ cases=("$@")
 if [[ ${#cases[@]} -eq 0 ]]; then cases=(Debug-reset Release-absence Debug-audit Release-audit); fi
 seen=' '
 for case_name in "${cases[@]}"; do
-    case "$case_name" in Debug-reset|Release-absence|Debug-audit|Release-audit) ;; *) usage; exit 64 ;; esac
+    case "$case_name" in Debug-reset|Release-absence|Debug-audit|Release-audit|Debug-type|Release-type) ;; *) usage; exit 64 ;; esac
     [[ "$seen" != *" $case_name "* ]] || { echo "Duplicate case: $case_name" >&2; exit 64; }
     seen="$seen$case_name "
 done
@@ -93,6 +93,11 @@ for case_name in "${cases[@]}"; do
             test_id='Banana CorpUITests/StoryResetUITests/testReleaseSettingsOmitsDevelopmentDiagnostics'
             guard_name=TEST_RUNNER_BANANA_QA_RESET
             guard_value=fresh-simulator
+            ;;
+        Debug-type|Release-type)
+            test_id='Banana CorpUITests/AccessibilityAuditUITests/testHomeDynamicTypeAccessibilityAudit'
+            guard_name=TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE
+            guard_value=owned-simulator
             ;;
         Debug-audit|Release-audit)
             test_id='Banana CorpUITests/AccessibilityAuditUITests/testHomeAndRegisteredApplicationsAccessibilityAudit'

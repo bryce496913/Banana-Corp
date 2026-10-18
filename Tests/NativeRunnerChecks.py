@@ -138,7 +138,7 @@ import json, os, pathlib, shutil, sys
 name=pathlib.Path(sys.argv[0]).name
 args=sys.argv[1:]
 root=pathlib.Path(os.environ['MOCK_ROOT'])
-guards={key:os.environ.get(key) for key in ['TEST_RUNNER_BANANA_QA_RESET','TEST_RUNNER_BANANA_QA_ACCESSIBILITY']}
+guards={key:os.environ.get(key) for key in ['TEST_RUNNER_BANANA_QA_RESET','TEST_RUNNER_BANANA_QA_ACCESSIBILITY','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE']}
 with (root/'commands.jsonl').open('a') as stream:
     stream.write(json.dumps([name,args,guards])+'\n')
 if name=='uname':
@@ -223,8 +223,10 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
             'Debug-reset':('Debug','Banana CorpUITests/StoryResetUITests/testSettingsResetCancelConfirmAndRelaunch'),
             'Release-absence':('Release','Banana CorpUITests/StoryResetUITests/testReleaseSettingsOmitsDevelopmentDiagnostics'),
             'Debug-audit':('Debug','Banana CorpUITests/AccessibilityAuditUITests/testHomeAndRegisteredApplicationsAccessibilityAudit'),
-            'Release-audit':('Release','Banana CorpUITests/AccessibilityAuditUITests/testHomeAndRegisteredApplicationsAccessibilityAudit')}
-        cases=selected or list(expected_filters)
+            'Release-audit':('Release','Banana CorpUITests/AccessibilityAuditUITests/testHomeAndRegisteredApplicationsAccessibilityAudit'),
+            'Debug-type':('Debug','Banana CorpUITests/AccessibilityAuditUITests/testHomeDynamicTypeAccessibilityAudit'),
+            'Release-type':('Release','Banana CorpUITests/AccessibilityAuditUITests/testHomeDynamicTypeAccessibilityAudit')}
+        cases=selected or ['Debug-reset','Release-absence','Debug-audit','Release-audit']
         for (name,args,guards),case_name in zip(invocations,cases):
             configuration,test_id=expected_filters[case_name]
             assert args[args.index('-configuration')+1]==configuration
@@ -232,10 +234,12 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
             assert 'CODE_SIGNING_ALLOWED=NO' in args and 'ENABLE_TESTABILITY=YES' in args
             assert args[args.index('-parallel-testing-enabled')+1]=='NO'
             assert not any(argument.startswith(('-retry','-test-iterations','-allowProvisioning','-launch')) for argument in args)
-            if case_name.endswith('audit'):
-                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY':'owned-simulator'}
+            if case_name.endswith('type'):
+                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':'owned-simulator'}
+            elif case_name.endswith('audit'):
+                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY':'owned-simulator','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':None}
             else:
-                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':'fresh-simulator','TEST_RUNNER_BANANA_QA_ACCESSIBILITY':None}
+                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':'fresh-simulator','TEST_RUNNER_BANANA_QA_ACCESSIBILITY':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':None}
         results=next((root/'validation').iterdir())
         ledger=(results/'owned-simulators.tsv').read_text().splitlines()
         assert len(ledger)==len(invocations)+1
@@ -284,3 +288,8 @@ experience_case('delete failure retains owned UUID',delete_fail=True,expected=70
 experience_case('native failure takes precedence over cleanup failure',native_fail=True,delete_fail=True,expected=42)
 experience_case('shutdown failure with successful delete',shutdown_fail=True)
 print('PASS: staged mock command contracts; no Apple build, XCTest, simulator, bundle, accessibility or gameplay validation was performed')
+
+experience_case('optional focused Dynamic Type both configurations',selected=['Debug-type','Release-type'])
+experience_case('focused Dynamic Type skip rejected',selected=['Debug-type'],summary=dict(passedTests=0,failedTests=0,skippedTests=1),expected=-1)
+experience_case('focused Dynamic Type native failure',selected=['Release-type'],native_fail=True,expected=42)
+print('PASS MOCK ONLY: three focused Dynamic Type command contracts; no native audit or simulator execution')
