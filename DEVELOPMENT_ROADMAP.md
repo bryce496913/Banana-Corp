@@ -55,3 +55,7 @@ Native checkpoint2026-10-18: Browser clipping repair PR32 merged independently a
 2026-10-18 completed focused/reset pack: guarded Release Home Dynamic Type PASS65.191s, one pass and zero failures/skips. Debug reset FAIL40.459s before Settings: the initial Evidence tap did not produce observable navigation. Reset semantics remain unverified. Results: `validation/native-experience-20261018-142814-77365/`. Investigate missed input with a single scoped profile; no retries or story shortcuts.
 
 2026-10-18: focused status-bar accessibility repair merged to main in PR#38 (`6dccd14d250c2a207c8cd518b99fa9340cbb5994`). Home contrast diagnostic PASS37.204s, exactly1pass/0fail/0skip; hit-region diagnostic is running separately. PR#36 remains draft for incomplete reset and broader QA.
+
+2026-10-19: the Home hit-region attempt ended before audit at launch readiness after a prolonged execution gap (7269.110s test, no audit-start marker). Result exit65 retained in `validation/native-experience-20261018-212232-84526/`; owned simulator cleaned. Hit-region remains untested pending interruption diagnosis.
+
+Power evidence for the interrupted hit-region attempt: Oct18 21:26:39 EDT recorded Clamshell Sleep despite both temporary idle assertions. Brief maintenance wakes align with the delayed failure/result. Filtered evidence retained as `validation/native-experience-20261018-212232-84526/power-window.txt`. This is an environmentally interrupted pre-audit run, not a hit-region finding; no sleep/lock preferences were changed.
