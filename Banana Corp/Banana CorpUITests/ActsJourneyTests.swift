@@ -97,9 +97,8 @@ final class ActsJourneyTests: XCTestCase {
         }
         let fields = [("discipline", "neural systems"), ("trial", "ECHO-07"), ("public_scope", "selected preferences"), ("research_scope", "recorded cognitive patterns")]
         for (id, value) in fields {
-            let input = app.textFields["story.puzzle.input.input.banana_wall.\(id)"].firstMatch
-            scrollTo(input, id: "story.puzzle.input.input.banana_wall.\(id)", in: app)
-            input.tap(); input.typeText(value)
+            guard let activeInput = scrollTo(id: "story.puzzle.input.input.banana_wall.\(id)", in: app, type: .textField) else { return }
+            activeInput.tap(); activeInput.typeText(value)
             let done = app.keyboards.buttons["Done"].firstMatch
             ready(done); done.tap()
         }
@@ -177,7 +176,7 @@ final class ActsJourneyTests: XCTestCase {
             tap(app, control)
             expectSection(app, section)
         }
-        let finish = app.buttons["story.video.finish.\(version)"].firstMatch
+        guard let finish = activeTarget(app, id: "story.video.finish.\(version)", type: .button)?.0 else { return }
         ready(finish)
         tap(app, "story.video.finish.\(version)")
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finish)], timeout: 5), .completed)
@@ -218,22 +217,91 @@ final class ActsJourneyTests: XCTestCase {
         return frame
     }
 
-    @MainActor private func owner(of id: String, in app: XCUIApplication) -> XCUIElement? {
+    @MainActor private func resolutionFailure(_ app: XCUIApplication, id: String) {
+        print(app.debugDescription)
         let owners = app.scrollViews.containing(.any, identifier: id)
-        guard owners.count <= 1 else {
-            XCTFail("Ambiguous scroll owner: \(id)")
-            return nil
+        for index in 0..<owners.count {
+            let owner = owners.element(boundBy: index)
+            let frame = finiteFrame(owner)
+            print("Owner \(index) for \(id): frame=\(String(describing: frame)); hittable=\(frame == nil ? "unavailable" : String(owner.isHittable))")
         }
-        return owners.count == 1 ? owners.element(boundBy: 0) : nil
+        let capture = XCTAttachment(screenshot: app.screenshot())
+        capture.name = "Failed active owner — \(id)"
+        capture.lifetime = .keepAlways
+        add(capture)
     }
 
-    @MainActor private func targetIsVisible(_ element: XCUIElement, id: String, in app: XCUIApplication) -> Bool {
-        guard let frame = usableFrame(element, in: app), element.isEnabled, element.isHittable else { return false }
+    @MainActor private func activeTarget(_ app: XCUIApplication, id: String, type: XCUIElement.ElementType) -> (XCUIElement, XCUIElement?)? {
         let owners = app.scrollViews.containing(.any, identifier: id)
-        guard owners.count <= 1 else { return false }
-        if owners.count == 0 { return true }
-        guard let viewport = usableFrame(owners.element(boundBy: 0), in: app) else { return false }
+        let activeOwners = (0..<owners.count).map { owners.element(boundBy: $0) }.filter {
+            usableFrame($0, in: app) != nil && $0.isHittable
+        }
+        if activeOwners.count == 1 {
+            let owner = activeOwners[0]
+            let targets = owner.descendants(matching: type).matching(identifier: id)
+            guard targets.count == 1 else {
+                resolutionFailure(app, id: id)
+                XCTFail("Ambiguous target inside active viewport: \(id)")
+                return nil
+            }
+            let target = targets.element(boundBy: 0)
+            guard finiteFrame(target) != nil else {
+                resolutionFailure(app, id: id)
+                XCTFail("Unavailable target geometry inside active viewport: \(id)")
+                return nil
+            }
+            return (target, owner)
+        }
+        guard activeOwners.isEmpty && owners.count == 0 else {
+            resolutionFailure(app, id: id)
+            XCTFail("Missing or ambiguous active scroll owner: \(id)")
+            return nil
+        }
+        let targets = app.descendants(matching: type).matching(identifier: id)
+        let activeTargets = (0..<targets.count).map { targets.element(boundBy: $0) }.filter {
+            usableFrame($0, in: app) != nil && $0.isEnabled && $0.isHittable
+        }
+        if activeTargets.count == 1 { return (activeTargets[0], nil) }
+        // Lazy controls may not yet exist. Search only a unique active viewport.
+        let scrolls = app.scrollViews
+        let activeScrolls = (0..<scrolls.count).map { scrolls.element(boundBy: $0) }.filter {
+            usableFrame($0, in: app) != nil && $0.isHittable
+        }
+        if targets.count == 0 && activeTargets.isEmpty && activeScrolls.count == 1 {
+            return (activeScrolls[0].descendants(matching: type).matching(identifier: id).element(boundBy: 0), activeScrolls[0])
+        }
+        resolutionFailure(app, id: id)
+        XCTFail("Missing or ambiguous active control: \(id)")
+        return nil
+    }
+
+    @MainActor private func targetIsVisible(_ element: XCUIElement, owner: XCUIElement?, in app: XCUIApplication) -> Bool {
+        guard let frame = usableFrame(element, in: app), element.isEnabled, element.isHittable else { return false }
+        guard let owner else { return true }
+        guard let viewport = usableFrame(owner, in: app), owner.isHittable else { return false }
         return viewport.insetBy(dx: 2, dy: 2).contains(CGPoint(x: frame.midX, y: frame.midY))
+    }
+
+    @MainActor private func readyHome(_ app: XCUIApplication) {
+        var previous: CGRect?
+        var stableObservations = 0
+        let condition = NSPredicate { _, _ in
+            let candidates = app.buttons.matching(identifier: "bananaOS.home")
+            let active = (0..<candidates.count).map { candidates.element(boundBy: $0) }.filter {
+                self.usableFrame($0, in: app) != nil && $0.isEnabled && $0.isHittable
+            }
+            guard active.count == 1, let frame = self.usableFrame(active[0], in: app) else {
+                previous = nil
+                stableObservations = 0
+                return false
+            }
+            stableObservations = previous == frame ? stableObservations + 1 : 0
+            previous = frame
+            return stableObservations >= 2
+        }
+        let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: app)], timeout: 8)
+        if result != .completed { resolutionFailure(app, id: "bananaOS.home") }
+        XCTAssertEqual(result, .completed)
     }
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
@@ -261,52 +329,48 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertEqual(result, .completed)
     }
 
-    @MainActor private func scrollTo(_ element: XCUIElement, id: String, in app: XCUIApplication) {
+    @MainActor private func scrollTo(id: String, in app: XCUIApplication, type: XCUIElement.ElementType = .button) -> XCUIElement? {
+        var resolved: (XCUIElement, XCUIElement?)?
         for _ in 0..<16 {
-            if targetIsVisible(element, id: id, in: app) { break }
-            let owners = app.scrollViews.containing(.any, identifier: id)
-            guard owners.count <= 1 else { XCTFail("Ambiguous scroll owner: \(id)"); return }
-            let scroll: XCUIElement
-            if let owningScroll = owner(of: id, in: app) {
-                scroll = owningScroll
-            } else {
-                guard app.scrollViews.count == 1 else { XCTFail("Missing or ambiguous scroll viewport: \(id)"); return }
-                scroll = app.scrollViews.element(boundBy: 0)
+            guard let target = activeTarget(app, id: id, type: type) else { return nil }
+            resolved = target
+            if targetIsVisible(target.0, owner: target.1, in: app) { break }
+            guard let scroll = target.1, let viewport = usableFrame(scroll, in: app), scroll.isHittable else {
+                resolutionFailure(app, id: id)
+                XCTFail("Unavailable active scroll viewport: \(id)")
+                return nil
             }
-            guard let viewport = usableFrame(scroll, in: app) else { XCTFail("Unavailable scroll viewport: \(id)"); return }
-            let target = finiteFrame(element)
-            let movingDown = target.map { $0.midY < viewport.midY } ?? false
+            let frame = finiteFrame(target.0)
+            let movingDown = frame.map { $0.midY < viewport.midY } ?? false
             let edge = movingDown ? viewport.minY : viewport.maxY
-            let distance = target.map { min(viewport.height * 0.55, max(70, abs($0.midY - edge) + 40)) } ?? viewport.height * 0.5
+            let distance = frame.map { min(viewport.height * 0.55, max(70, abs($0.midY - edge) + 40)) } ?? viewport.height * 0.5
             let startY: CGFloat = movingDown ? 0.25 : 0.75
             let endY = startY + (movingDown ? 1 : -1) * distance / viewport.height
             scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
                 .press(forDuration: 0.05, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
         }
-        ready(element)
-        let visible = targetIsVisible(element, id: id, in: app)
-        if !visible {
-            print(app.debugDescription)
-            let capture = XCTAttachment(screenshot: app.screenshot())
-            capture.name = "Failed visible target — \(id)"
-            capture.lifetime = .keepAlways
-            add(capture)
-        }
-        XCTAssertTrue(visible, "Control center must lie inside its owning viewport: \(id)")
+        guard let target = resolved else { return nil }
+        ready(target.0)
+        let visible = targetIsVisible(target.0, owner: target.1, in: app)
+        if !visible { resolutionFailure(app, id: id) }
+        XCTAssertTrue(visible, "Control center must lie inside its active owning viewport: \(id)")
+        return visible ? target.0 : nil
     }
 
     @MainActor private func tap(_ app: XCUIApplication, _ id: String) {
-        let element = app.buttons[id].firstMatch
-        scrollTo(element, id: id, in: app)
+        guard let element = scrollTo(id: id, in: app) else { return }
         element.tap()
         XCTAssertFalse(app.alerts.firstMatch.exists, "Unexpected failure after \(id)")
     }
 
     @MainActor private func openApp(_ app: XCUIApplication, _ route: String) {
-        let home = app.buttons["bananaOS.home"].firstMatch
-        if home.exists { ready(home); home.tap() }
+        if app.buttons.matching(identifier: "bananaOS.home").count > 0 { tap(app, "bananaOS.home") }
+        // The closing app may leave transient AX frames before Home is ready.
+        // Wait for the real Home anchor before inspecting/scanning its icons.
+        ready(app.buttons["bananaOS.app.email"].firstMatch)
+        XCTAssertEqual(app.buttons.matching(identifier: "bananaOS.home").count, 0, "Previous app must finish returning Home")
         tap(app, "bananaOS.app.\(route)")
-        ready(app.buttons["bananaOS.home"].firstMatch)
+        readyHome(app)
     }
 
     @MainActor private func openAndRead(_ app: XCUIApplication, _ route: String, _ version: String) {
@@ -317,7 +381,7 @@ final class ActsJourneyTests: XCTestCase {
 
     @MainActor private func preserve(_ app: XCUIApplication, _ version: String) {
         tap(app, "story.preserve.\(version)")
-        let button = app.buttons["story.preserve.\(version)"].firstMatch
+        guard let button = activeTarget(app, id: "story.preserve.\(version)", type: .button)?.0 else { return }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: button)], timeout: 5), .completed)
     }
 
@@ -333,7 +397,7 @@ final class ActsJourneyTests: XCTestCase {
             }
         }
         tap(app, "story.video.finish.\(version)")
-        let finished = app.buttons["story.video.finish.\(version)"].firstMatch
+        guard let finished = activeTarget(app, id: "story.video.finish.\(version)", type: .button)?.0 else { return }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finished)], timeout: 5), .completed)
     }
 
