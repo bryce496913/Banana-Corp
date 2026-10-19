@@ -66,6 +66,50 @@ final class AccessibilityAuditUITests: XCTestCase {
         try app.performAccessibilityAudit(for: .dynamicType)
     }
 
+    /// Diagnostic isolation only; separate category results are not a full audit pass.
+    @MainActor
+    func testHomeSingleCategoryAccessibilityDiagnostic() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard (environment["BANANA_QA_ACCESSIBILITY_CATEGORY"] ?? environment["TEST_RUNNER_BANANA_QA_ACCESSIBILITY_CATEGORY"]) == "owned-simulator" else {
+            throw XCTSkip("Requires the dedicated owned-simulator category diagnostic runner.")
+        }
+        let category = environment["BANANA_QA_AUDIT_CATEGORY"] ?? environment["TEST_RUNNER_BANANA_QA_AUDIT_CATEGORY"] ?? ""
+        let auditType: XCUIAccessibilityAuditType
+        switch category {
+        case "contrast": auditType = .contrast
+        case "element-detection": auditType = .elementDetection
+        case "hit-region": auditType = .hitRegion
+        case "element-description": auditType = .sufficientElementDescription
+        case "dynamic-type": auditType = .dynamicType
+        case "text-clipped": auditType = .textClipped
+        case "trait": auditType = .trait
+        default:
+            XCTFail("Unknown accessibility diagnostic category: \(category)")
+            return
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launch()
+        let email = app.buttons["bananaOS.app.email"].firstMatch
+        ready(email, timeout: 20)
+        settled(email, in: app)
+        XCTAssertFalse(app.buttons["bananaOS.home"].exists)
+        XCTAssertEqual(app.statusBars.count, 0)
+        XCTAssertFalse(app.alerts.firstMatch.exists)
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "Category diagnostic Home — \(category)"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "Category diagnostic pre-audit AX — \(category)"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+        print("BANANA_CATEGORY_AUDIT_START \(category)")
+        // Public iOS 17+ category audit. No issue handler or error suppression.
+        try app.performAccessibilityAudit(for: auditType)
+        print("BANANA_CATEGORY_AUDIT_END \(category)")
+    }
+
     @MainActor private func audit(_ app: XCUIApplication, name: String) throws {
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Accessibility audit — \(name)"

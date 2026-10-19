@@ -138,7 +138,7 @@ import json, os, pathlib, shutil, sys
 name=pathlib.Path(sys.argv[0]).name
 args=sys.argv[1:]
 root=pathlib.Path(os.environ['MOCK_ROOT'])
-guards={key:os.environ.get(key) for key in ['TEST_RUNNER_BANANA_QA_RESET','TEST_RUNNER_BANANA_QA_ACCESSIBILITY','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE']}
+guards={key:os.environ.get(key) for key in ['TEST_RUNNER_BANANA_QA_RESET','TEST_RUNNER_BANANA_QA_ACCESSIBILITY','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_CATEGORY','TEST_RUNNER_BANANA_QA_AUDIT_CATEGORY']}
 with (root/'commands.jsonl').open('a') as stream:
     stream.write(json.dumps([name,args,guards])+'\n')
 if name=='uname':
@@ -226,6 +226,8 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
             'Release-audit':('Release','Banana CorpUITests/AccessibilityAuditUITests/testHomeAndRegisteredApplicationsAccessibilityAudit'),
             'Debug-type':('Debug','Banana CorpUITests/AccessibilityAuditUITests/testHomeDynamicTypeAccessibilityAudit'),
             'Release-type':('Release','Banana CorpUITests/AccessibilityAuditUITests/testHomeDynamicTypeAccessibilityAudit')}
+        for token in ['contrast', 'element-detection', 'hit-region', 'element-description', 'dynamic-type', 'text-clipped', 'trait']:
+            expected_filters['Debug-category-'+token]=('Debug','Banana CorpUITests/AccessibilityAuditUITests/testHomeSingleCategoryAccessibilityDiagnostic')
         cases=selected or ['Debug-reset','Release-absence','Debug-audit','Release-audit']
         for (name,args,guards),case_name in zip(invocations,cases):
             configuration,test_id=expected_filters[case_name]
@@ -234,12 +236,17 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
             assert 'CODE_SIGNING_ALLOWED=NO' in args and 'ENABLE_TESTABILITY=YES' in args
             assert args[args.index('-parallel-testing-enabled')+1]=='NO'
             assert not any(argument.startswith(('-retry','-test-iterations','-allowProvisioning','-launch')) for argument in args)
-            if case_name.endswith('type'):
-                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':'owned-simulator'}
+            expected_guards={key:None for key in guards}
+            if case_name.startswith('Debug-category-'):
+                expected_guards['TEST_RUNNER_BANANA_QA_ACCESSIBILITY_CATEGORY']='owned-simulator'
+                expected_guards['TEST_RUNNER_BANANA_QA_AUDIT_CATEGORY']=case_name.removeprefix('Debug-category-')
+            elif case_name.endswith('type'):
+                expected_guards['TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE']='owned-simulator'
             elif case_name.endswith('audit'):
-                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY':'owned-simulator','TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':None}
+                expected_guards['TEST_RUNNER_BANANA_QA_ACCESSIBILITY']='owned-simulator'
             else:
-                assert guards=={'TEST_RUNNER_BANANA_QA_RESET':'fresh-simulator','TEST_RUNNER_BANANA_QA_ACCESSIBILITY':None,'TEST_RUNNER_BANANA_QA_ACCESSIBILITY_TYPE':None}
+                expected_guards['TEST_RUNNER_BANANA_QA_RESET']='fresh-simulator'
+            assert guards==expected_guards,(case_name,guards,expected_guards)
         results=next((root/'validation').iterdir())
         ledger=(results/'owned-simulators.tsv').read_text().splitlines()
         assert len(ledger)==len(invocations)+1
@@ -293,3 +300,8 @@ experience_case('optional focused Dynamic Type both configurations',selected=['D
 experience_case('focused Dynamic Type skip rejected',selected=['Debug-type'],summary=dict(passedTests=0,failedTests=0,skippedTests=1),expected=-1)
 experience_case('focused Dynamic Type native failure',selected=['Release-type'],native_fail=True,expected=42)
 print('PASS MOCK ONLY: three focused Dynamic Type command contracts; no native audit or simulator execution')
+
+experience_case('all seven optional Debug categories',selected=['Debug-category-contrast', 'Debug-category-element-detection', 'Debug-category-hit-region', 'Debug-category-element-description', 'Debug-category-dynamic-type', 'Debug-category-text-clipped', 'Debug-category-trait'])
+experience_case('category skip rejected',selected=['Debug-category-contrast'],summary=dict(passedTests=0,failedTests=0,skippedTests=1),expected=-1)
+experience_case('category native failure',selected=['Debug-category-trait'],native_fail=True,expected=42)
+print('PASS MOCK ONLY: category guard/filter isolation; no native accessibility diagnostic execution')
