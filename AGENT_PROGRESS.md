@@ -4,6 +4,15 @@ D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/AC
 
 Updated: 2026-10-19. Current phase: **B — Browser repair merged; native accessibility and reset validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
 
+
+## Playtest gate completion — 2026-10-19
+
+User explicitly requested reliable progression, verified save/relaunch and a tested physical installation route. Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45` (PR #36 merged); earlier draft references below are historical. Feature branch `fix/native-journey-readiness` strengthens only the journey/reset UI helpers: finite geometry before hit testing, successive stable observations within existing timeouts, owning scroll viewports and real registered puzzle-submit assertion. No app, story, save or action-retry change. Independent review passed; actual SDK checks are underway.
+
+The user connected/unlocked their iPhone14Pro. Xcode26.5 recognizes its iOS27.0.1 device services. Actual signed Debug `iphoneos` build succeeded with existing team/configuration, without provisioning updates, new certificates or credentials. Actual bundle/resource validation passed. The Mac `codesign --verify` reported CSSMERR_TP_NOT_TRUSTED; the iPhone's normal installer nevertheless accepted the build and ordinary launch succeeded. No trust setting was changed or bypassed. Existing app data was not erased; preinstall save-directory listing failed and is not proof of an empty save.
+
+Five hosted XCTest cases passed on the physical phone; the three normal launch/navigation UI tests are running. Evidence: `validation/device-install-route-20261019/` (Debug-build.log, install.json, launch-first.json, launch-navigation.xcresult/log). No reset/replay or journey runner metadata was supplied to the phone. App/test/project sources are frozen during this run. Remaining: inspect physical UI result, execute strict normal simulator campaign and reset checks, validate meaningful progress across relaunch, and retain an installation handoff with actual limits. Do not call these gates complete prematurely.
+
 ## Current native checkpoint — 2026-10-19
 
 - Main is `6dccd14d250c2a207c8cd518b99fa9340cbb5994`; focused status-bar accessibility repair [PR #38](https://github.com/bryce496913/Banana-Corp/pull/38) merged after native validation, exact production source comparison and independent review. Browser clipping repair [PR #32](https://github.com/bryce496913/Banana-Corp/pull/32) merged after actual Debug/Release integration and independent review. Full campaign validation remains incomplete.
