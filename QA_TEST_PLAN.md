@@ -76,3 +76,5 @@ Native experience coverage (2026-10-18): [dedicated reset/accessibility runner a
 Focused Home Dynamic Type: Debug passed natively (68.027 seconds, one pass/zero failures/skips). Release's first attempt failed before the audit due to invalid AX window geometry; no Release category result. A reviewed readiness guard is being validated on a fresh Release case, followed by reset. Evidence: validation/native-experience-20261018-142814-77365/.
 
 2026-10-18 completed focused/reset pack: guarded Release Home Dynamic Type PASS65.191s, one pass and zero failures/skips. Debug reset FAIL40.459s before Settings: the initial Evidence tap did not produce observable navigation. Reset semantics remain unverified. Results: `validation/native-experience-20261018-142814-77365/`. Investigate missed input with a single scoped profile; no retries or story shortcuts.
+
+2026-10-18: focused status-bar accessibility repair merged to main in PR#38 (`6dccd14d250c2a207c8cd518b99fa9340cbb5994`). Home contrast diagnostic PASS37.204s, exactly1pass/0fail/0skip; hit-region diagnostic is running separately. PR#36 remains draft for incomplete reset and broader QA.
