@@ -1,5 +1,16 @@
 # Agent progress and continuation record
 
+## Focused status-bar native repair — 2026-10-18
+
+The public accessibility audit identified a Home clock Dynamic Type cap. The focused repair removes that cap and stacks connectivity below status text at accessibility sizes; ordinary labels, effects and story/navigation authority are unchanged. All 83 production app-root blobs match the validated QA candidate; StatusBar.swift is the only production difference from main (blob fa8ca38ee2f672235a1e13bfc017e4fc69431873). QA tests/project additions remain on draft PR #36.
+
+Actual Xcode 26.5/iOS 26.5 validation: Debug and Release builds and product-bundle checks passed; five hosted tests per configuration and three Debug/four Release UI tests passed, with five/four dedicated opt-in skips. Evidence: validation/status-type-integration-20261018/. Focused Home Dynamic Type audits passed separately in Debug (68.027s) and Release (65.191s), each exactly one pass and zero failures/skips. The later Home contrast diagnostic passed37.204s, also one pass and zero failures/skips. No full accessibility pass is claimed: the default audit timed out with framework Code -56.
+
+Reset validation failed before Settings after a correctly targeted Evidence tap; its reset assertions remain unexecuted. Normal presentation controls separately reproduced missed Previous and Continue actions. Root-only automatic snapshots also occur around successful taps and do not isolate a cause. An explicit-simulator Instruments attempt failed to start its capture connection and produced no usable trace. These failures, full campaign matrix, VoiceOver/Reduce Motion, absent iOS18 runtime and physical installation remain separate release gates. No playtest/signing request is ready; no story, asset or save contract changed.
+
+Next: retain draft PR #36, continue isolated accessibility categories, diagnose missed input/reset and resume the normal Acts1–3 campaign matrix. Complete Act4/5 contracts remain unresolved and must not be invented.
+
+
 D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. Native stabilization remains separately tracked in PRs [#32](https://github.com/bryce496913/Banana-Corp/pull/32) and [#34](https://github.com/bryce496913/Banana-Corp/pull/34); this documentation change adds no build or test claim.
 
 Updated: 2026-10-15. Current phase: **B — native Debug/Release integration passed; full journey validation in progress**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
