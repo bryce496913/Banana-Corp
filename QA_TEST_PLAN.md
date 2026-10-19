@@ -1,6 +1,6 @@
 # QA test plan
 
-Updated: 2026-10-17. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-18. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
 
 ## Validation tiers and claims
 
@@ -60,3 +60,25 @@ First full native diagnostic journey passed (Debug/both,730.285s): normal contro
 2026-10-17 continuation: clean baseline Debug/both failed its first Email tap (29.648s). The separately isolated Home-background candidate in PR33 passed early Home interactions but failed at preservation (131.263s), with inbox/unread source still present after source-open. PR33 is closed without merge and its production change reverted. Root cause remains open. Minimal debugger state inspection is temporary and excluded from published code; do not count its failure-only pause as a production timeout or a clean journey pass.
 
 2026-10-17 state capture: the later diagnostic journey failed the target-center assertion at Observer session review, after sixteen alternating full-page swipes. LLDB returned navigation phase2/active; this failure does not establish a stalled transition. The helper now moves the target-containing scroll with bounded edge-derived drags; unchanged16-move limit and one final tap. Fresh-simulator diagnostic validation is in progress at `validation/state-cold-20261017.*`. Earlier missed-tap failures remain unresolved. Temporary registry/getter and first-failure pause must be removed before clean validation/publication.
+
+Clean candidate result2026-10-17: PR34 removes only the shared explicit pressed-state animation (unproven cause). Fresh Debug/both journey PASSED827.771s with zero failures/skips and no app probes, bypasses or retries; exported save passed official assertions (act4,61 reads,7 preserved records,both originals,expected Wall and no later ending flags). Evidence `validation/press-animation-b-20261017.*`. This establishes one candidate preservation/configuration path, not the eight-case matrix. Original animation restored for fresh A comparison in `validation/press-animation-a-restored-20261017.*`; inspect outcome before retaining candidate. Other paths/Release integration/press and Reduce Motion/reset/accessibility/physical route remain pending.
+
+Restored A failed59.396s at firstEmail, again with intended point inside its rendered icon. B has been restored for the complete official8-case matrix in `validation/acts-20261017-165809/`, log `validation/press-animation-clean-matrix-20261017.log`; no full matrix outcome yet. App/test/project sources must stay fixed while it runs. The12-checkpoint screenshot review of prior B passed only its bounded visual observations; capture omissions and unpictured states remain open. New native reset/audit tests and enforcing runner are staged outside the workspace, not compiled/executed.
+
+Full B matrix did notpass: firstDebug/bothFAILED105.860s on fourth promoContinue expected5of5; newpostcondition detected it directly. Globalanimation candidate is insufficient alone. Matrixended/ownedsimcleaned, artifacts retained. Next geometry experiment remains unproven; full8-case, Release/integration/accessibility/reset gates stay open.
+
+
+Native experience coverage (2026-10-18): [dedicated reset/accessibility runner and result boundaries](docs/native-experience-validation.md). First public native audit compiled and FAIL44.940s on Home clock Dynamic Type support; reset/Release absence remain NOT RUN. No accessibility, VoiceOver or Reduce Motion pass is inferred. Original press animation is restored; PR34 closed without merge after its failed matrix.
+
+
+2026-10-18 repair-branch checkpoint: native Debug/Release builds and bundle checks PASS; hosted5perconfiguration, UI3Debug/4Release PASS (5/4dedicated skips). Release diagnosticsabsence is verified; reset remains NOT RUN pending freshownedcase. Separate optional Home DynamicType audit runs in bothconfigs after the fullaudit's frameworkCode-56 timeout; it does not replace or narrow the default all-types audit. See validation/status-type-integration-20261018/ and the native experience record.
+
+Focused Home Dynamic Type: Debug passed natively (68.027 seconds, one pass/zero failures/skips). Release's first attempt failed before the audit due to invalid AX window geometry; no Release category result. A reviewed readiness guard is being validated on a fresh Release case, followed by reset. Evidence: validation/native-experience-20261018-142814-77365/.
+
+2026-10-18 completed focused/reset pack: guarded Release Home Dynamic Type PASS65.191s, one pass and zero failures/skips. Debug reset FAIL40.459s before Settings: the initial Evidence tap did not produce observable navigation. Reset semantics remain unverified. Results: `validation/native-experience-20261018-142814-77365/`. Investigate missed input with a single scoped profile; no retries or story shortcuts.
+
+2026-10-18: focused status-bar accessibility repair merged to main in PR#38 (`6dccd14d250c2a207c8cd518b99fa9340cbb5994`). Home contrast diagnostic PASS37.204s, exactly1pass/0fail/0skip; hit-region diagnostic is running separately. PR#36 remains draft for incomplete reset and broader QA.
+
+2026-10-19: the Home hit-region attempt ended before audit at launch readiness after a prolonged execution gap (7269.110s test, no audit-start marker). Result exit65 retained in `validation/native-experience-20261018-212232-84526/`; owned simulator cleaned. Hit-region remains untested pending interruption diagnosis.
+
+Power evidence for the interrupted hit-region attempt: Oct18 21:26:39 EDT recorded Clamshell Sleep despite both temporary idle assertions. Brief maintenance wakes align with the delayed failure/result. Filtered evidence retained as `validation/native-experience-20261018-212232-84526/power-window.txt`. This is an environmentally interrupted pre-audit run, not a hit-region finding; no sleep/lock preferences were changed.

@@ -154,6 +154,61 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertTrue(app.buttons["story.lead.version.act4.entry.v1"].exists)
     }
 
+    @MainActor
+    func testOpeningPresentationControlsAndRelaunch() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard (environment["BANANA_QA_PRESENTATION"] ?? environment["TEST_RUNNER_BANANA_QA_PRESENTATION"]) == "fresh-simulator" else {
+            throw XCTSkip("Requires a fresh, dedicated presentation simulator.")
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launch()
+        ready(app.buttons["bananaOS.app.email"], timeout: 20)
+        openApp(app, "news")
+        tap(app, "story.open.version.act1.news.launch.v1")
+        checkpoint(app, "presentation fixture launch coverage read")
+        let version = "version.act1.promo.v1"
+        openApp(app, "watchVideo")
+        tap(app, "story.open.\(version)")
+        expectSection(app, 1)
+        for section in 2...5 {
+            tap(app, "story.video.next.\(version)")
+            expectSection(app, section)
+        }
+        for (control, section) in [("Previous", 4), ("Previous", 3),
+                                   ("story.video.next.\(version)", 4),
+                                   ("story.video.next.\(version)", 5)] {
+            tap(app, control)
+            expectSection(app, section)
+        }
+        let finish = app.buttons["story.video.finish.\(version)"].firstMatch
+        ready(finish)
+        tap(app, "story.video.finish.\(version)")
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == false"), object: finish)], timeout: 5), .completed)
+        checkpoint(app, "presentation completed before relaunch")
+        openApp(app, "watchVideo")
+        tap(app, "story.open.\(version)")
+        expectSection(app, 1)
+        for section in 2...5 {
+            tap(app, "story.video.next.\(version)")
+            expectSection(app, section)
+        }
+        XCTAssertTrue(finish.exists)
+        XCTAssertFalse(finish.isEnabled, "Viewed presentation must remain viewed after relaunch")
+    }
+
+    @MainActor private func expectSection(_ app: XCUIApplication, _ section: Int) {
+        let arrived = app.staticTexts["\(section) of 5"].waitForExistence(timeout: 5)
+        if !arrived {
+            print(app.debugDescription)
+            let capture = XCTAttachment(screenshot: app.screenshot())
+            capture.name = "Failed presentation section \(section)"
+            capture.lifetime = .keepAlways
+            add(capture)
+        }
+        XCTAssertTrue(arrived, "Presentation must display section \(section)")
+    }
+
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
         let condition = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
         let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout)
