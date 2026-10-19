@@ -110,17 +110,34 @@ final class StoryResetUITests: XCTestCase {
         // Opening it is intentional, so do not call the generic no-alert tap.
         guard let reset = scrollTo(id: "Reset story slice", in: app) else { return }
         reset.tap()
-        // Automatic title visibility can hide the title on iPhone. Identify the
-        // dialog by its unique destructive action, then require Cancel inside it.
+        // Identify the native dialog by its unique destructive action. Compact
+        // sheets expose Cancel; adaptive popovers expose an outside dismiss region.
         let sheet = app.sheets.containing(.button, identifier: "Reset and continue").firstMatch
         let alert = app.alerts.containing(.button, identifier: "Reset and continue").firstMatch
         let appeared = NSPredicate { _, _ in sheet.exists || alert.exists }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: appeared, object: app)], timeout: 8), .completed)
         let dialog = sheet.exists ? sheet : alert
-        ready(dialog.buttons["Cancel"].firstMatch)
-        let action = dialog.buttons[confirming ? "Reset and continue" : "Cancel"].firstMatch
-        ready(action)
-        action.tap()
+        if confirming || dialog.buttons["Cancel"].firstMatch.exists {
+            let action = dialog.buttons[confirming ? "Reset and continue" : "Cancel"].firstMatch
+            ready(action)
+            action.tap()
+        } else {
+            let backdrop = app.otherElements["PopoverDismissRegion"].firstMatch
+            ready(backdrop)
+            guard let region = usableFrame(backdrop, in: app),
+                  let modal = finiteFrame(dialog) else { XCTFail("Missing native popover dismissal geometry"); return }
+            let inset = region.insetBy(dx: 24, dy: 24)
+            let points = [CGPoint(x: inset.minX, y: inset.midY),
+                          CGPoint(x: inset.maxX, y: inset.midY),
+                          CGPoint(x: inset.midX, y: inset.minY),
+                          CGPoint(x: inset.midX, y: inset.maxY)]
+            guard let point = points.first(where: { region.contains($0) && !modal.insetBy(dx: -16, dy: -16).contains($0) }) else {
+                XCTFail("No safe point in native popover dismiss region")
+                return
+            }
+            backdrop.coordinate(withNormalizedOffset: .zero)
+                .withOffset(CGVector(dx: point.x - region.minX, dy: point.y - region.minY)).tap()
+        }
         let dismissed = NSPredicate(format: "exists == false")
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: dismissed, object: dialog)], timeout: 8), .completed)
         XCTAssertFalse(app.alerts.firstMatch.exists, "Unexpected reset failure alert")

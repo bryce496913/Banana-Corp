@@ -1,6 +1,17 @@
 # QA test plan
 
-Updated: 2026-10-18. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+
+
+## Current requested playtest gates
+
+| Gate | Actual status |
+| --- | --- |
+| Tested physical installation route | PASS: existing-signing Debug iphoneos build, normal signature verification, bundle checks, install/launch/relaunch and eight XCTest cases on iPhone14Pro/iOS27.0.1; zero failures/skips |
+| Meaningful save/relaunch/reset | Native reset validation in progress; physical hosted snapshot/save/new-store test passed, but does not replace campaign checkpoints |
+| Reliable Acts1–3 progression into minimal Act4 entry | Full four-path Debug/Release normal-control matrix pending current native-helper validation; no production gameplay change or tap retry introduced |
+
+Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45`; PR #36 is merged. Physical evidence: `validation/device-install-route-20261019/`. Current helper work: [PR #39](https://github.com/bryce496913/Banana-Corp/pull/39). Broader accessibility/VoiceOver/Reduce Motion and absent iOS18 runtime remain explicit limits. The [draft handoff](docs/IPHONE_PLAYTEST_HANDOFF.md) is not yet a playtest invitation.
 
 ## Validation tiers and claims
 
@@ -35,7 +46,7 @@ Record actual Xcode/SDK, Swift, device model/runtime/UDID, configuration, source
 
 Use dedicated simulators; the full-journey runner owns and cleans up only those it creates. A supplied integration simulator is not owned/deleted by that script. A skipped journey is not a successful journey. Stop on build/test failure while retaining combined stdout/stderr diagnostics.
 
-Current Apple matrix: actual Xcode 26.5 Debug/Release builds and integration tests passed on iOS 26.5. Full journey has one diagnostic pass; the clean preservation/configuration matrix remains incomplete. iOS 18 is NOT RUN because its runtime is absent. Physical iPhone, native VoiceOver and Instruments are NOT RUN. See the retained native records below and [current progress](AGENT_PROGRESS.md); the earlier Linux limitation no longer describes this execution environment.
+Current Apple matrix: actual Xcode 26.5 Debug/Release builds and integration tests passed on iOS 26.5. Full journey has one diagnostic pass; the clean preservation/configuration matrix remains incomplete. iOS 18 is NOT RUN because its runtime is absent. Physical iPhone signed build/install/launch and eight hosted/UI XCTest cases passed with zero failures/skips; normal-host signature verification passed. Native VoiceOver remains NOT RUN; Instruments attempts produced no usable capture. See the retained native records below and [current progress](AGENT_PROGRESS.md); the earlier Linux limitation no longer describes this execution environment.
 
 ## Playtest/release gate
 
@@ -43,6 +54,10 @@ Before asking the creator to playtest, identify the intended scope, pass availab
 
 Signing, provisioning, TestFlight/external build distribution, spending and final App Store submission are separate consequential actions requiring approval. PR merges within the authorized repository may proceed after relevant validation and required GitHub checks, without force-push, protection bypass or fabricated native results.
 
+
+## Historical native checkpoints
+
+The dated records below retain the results and branch states at the time. Current status above supersedes historical NOT RUN and draft-PR references.
 
 Native Mac update (2026-10-15): Xcode 26.5 and iOS 26.5 are available. Actual Debug/Release simulator builds and bundle checks passed; five Debug hosted tests passed. Launch UI tests failed and remain under diagnosis; Release XCTest/full native journey are not yet established. iOS 18 runtime is absent. See [current native results and continuation](AGENT_PROGRESS.md#native-mac-execution--2026-10-15). Historical Linux limitations above describe the earlier run.
 

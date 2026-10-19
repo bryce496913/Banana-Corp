@@ -56,7 +56,7 @@ For a later build, choose a fresh evidence/DerivedData directory and update all 
 | --- | --- |
 | Complete normal-control Acts 1–3 → Act 4 entry matrix | **PENDING**; no full four-preservation-path Debug/Release pass claimed |
 | Meaningful progress and authentic preserved evidence after termination/relaunch | **PENDING native campaign verification**; hosted/model checks and launch smoke are narrower evidence |
-| Reset cancel/confirm, archive retention and replay where implemented | **PENDING**; prior run failed before Settings, so reset assertions were not executed |
+| Reset cancel/confirm, archive retention and replay where implemented | **PASS on iOS26.5 Debug simulator**; one test passed295.828s, zero failures/skips. Cancel retained meaningful progress; confirmed fresh state survived relaunch. Exported archive/source/receipt comparison passed. Release has no player reset control. |
 | Intermittent missed taps/Continue/Previous actions | **UNRESOLVED**; no proven production root cause/fix |
 | Complete accessibility, VoiceOver and Reduce Motion coverage | **PENDING**; focused Home Dynamic Type/contrast passes do not establish full coverage; default audit timed out with framework Code -56 |
 | iOS 18 and wider physical device matrix | **NOT RUN**; deployment support is not runtime proof |

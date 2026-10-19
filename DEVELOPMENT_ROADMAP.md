@@ -1,15 +1,15 @@
 # Development roadmap
 
-Updated: 2026-10-15. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
+Updated: 2026-10-19. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
 
 | Phase | Current state | Next concrete outcome |
 | --- | --- | --- |
 | A — Reconnaissance | Initial repository/history/code/asset/test audit complete | Keep inventory and blockers current after each focused PR |
-| B — Stabilization | Core offline progression covered; Apple build/device validation outstanding | Repair native QA invocation/logging, then execute actual Debug/Release builds on available Apple tooling |
+| B — Stabilization | Actual Debug/Release simulator builds and eight physical-device XCTest cases passed; campaign/reset matrix remains open | Close strict normal-control journey/reset validation and diagnose any remaining input failures |
 | C — Opening acts | Acts 1–2 implemented with preserved/unpreserved routes and local content | Verify actual launch, scrolling, accessibility, source replacement and relaunch on iOS 18/26 |
 | D — Conspiracy/takeover | Act 3 and explicit Act 4 entry implemented; full takeover/resistance absent | Prepare approved Act 4 dependency/presentation contracts; implement only established portions |
 | E — Final choice | Canonical endings described; playable route/ending evaluators absent | Settle explicit puzzle/route/cooperation/replay contracts before implementation |
-| F — Polish/device QA | Modern OS, themed surfaces and motion infrastructure present; native proof absent | Close Apple build/QA, integrate approved art/media, then prepare a valid playtest installation route |
+| F — Polish/device QA | Actual signed physical build/install/launch and basic navigation passed; full experience/accessibility verification pending | Close campaign/reset and experience QA, integrate approved art/media, and retain the tested local installation route |
 
 ## Verified inventory at reconnaissance
 
@@ -33,12 +33,16 @@ Updated: 2026-10-15. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [cre
 
 ## Missing inputs and boundaries
 
-Apple SDKs/runtimes and an authorized connected iPhone are not present in the current Linux execution environment. No native build or physical result is claimed. Creating paid macOS CI, obtaining signing/distribution access, spending, external build distribution and App Store submission require the creator's consequential approval.
+Historical reconnaissance ran on Linux without Apple SDKs/runtimes or an authorized connected iPhone; it established no native build or physical result. Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45` (PR #36 merged). Actual existing-signing Debug device build, normal-host signature verification, bundle checks, installation/launch and eight physical XCTest cases passed on iPhone 14 Pro/iOS 27.0.1 with zero failures/skips. The tested local installation route is PASS; full campaign/save/relaunch/reset and broader experience gates remain pending. See the [draft handoff](docs/IPHONE_PLAYTEST_HANDOFF.md); no playtest invitation is ready. Creating paid macOS CI, obtaining signing/distribution access, spending, external build distribution and App Store submission require the creator's consequential approval.
 
 The supplied directive approves the written Synthetic Reality direction. Actual mood-board/reference images and approved character/headset likeness sheets are not present in the repository; they were not independently reviewed. ChatGPT project conversations were not read in this audit; repo canon and explicitly supplied documents are the evidence used. Missing final puzzle/ending decisions must be documented or proposed, not silently inferred from inaccessible conversations.
 
 Existing historical validation documents retain their original results. [Release QA](docs/ACTS_1_3_RELEASE_QA.md), [Act 3 inventory](docs/act-three-content-inventory.md), [asset workflow](Assets/README.md) and [story implementation](docs/STORY_IMPLEMENTATION.md) provide detailed contracts. Future updates should clearly supersede historical limitations without rewriting old results into new passes.
 
+
+## Historical native checkpoints
+
+The dated records below retain their original outcomes and branch states. Current status above supersedes historical environment limitations and draft-PR references.
 
 Native Mac update (2026-10-15): Xcode 26.5 and iOS 26.5 are available. Actual Debug/Release simulator builds and bundle checks passed; five Debug hosted tests passed. Launch UI tests failed and remain under diagnosis; Release XCTest/full native journey are not yet established. iOS 18 runtime is absent. See [current native results and continuation](AGENT_PROGRESS.md#native-mac-execution--2026-10-15). Historical Linux limitations above describe the earlier run.
 
