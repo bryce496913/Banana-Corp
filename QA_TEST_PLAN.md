@@ -8,8 +8,8 @@ Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.c
 | Gate | Actual status |
 | --- | --- |
 | Tested physical installation route | PASS: existing-signing Debug iphoneos build, normal signature verification, bundle checks, install/launch/relaunch and eight XCTest cases on iPhone14Pro/iOS27.0.1; zero failures/skips |
-| Meaningful save/relaunch/reset | Native reset validation in progress; physical hosted snapshot/save/new-store test passed, but does not replace campaign checkpoints |
-| Reliable Acts1–3 progression into minimal Act4 entry | Full four-path Debug/Release normal-control matrix pending current native-helper validation; no production gameplay change or tap retry introduced |
+| Meaningful save/relaunch/reset | Debug reset/cancel/confirm/relaunch PASS295.828s (1/0/0), archived evidence/source/receipt verification PASS. Full Debug/both campaign save/relaunch passed17checkpoints plus35receipts/7preserved snapshots; remaining matrix stopped on input failure |
+| Reliable Acts1–3 progression into minimal Act4 entry | Debug/both PASS1482.638s with exported save/snapshot checks; Debug/email FAIL30.317s at initial Email tap. Matrix stopped; other paths/Release pending. Reset and Release diagnostics absence passed; no production gameplay change or tap retry introduced |
 
 Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45`; PR #36 is merged. Physical evidence: `validation/device-install-route-20261019/`. Current helper work: [PR #39](https://github.com/bryce496913/Banana-Corp/pull/39). Broader accessibility/VoiceOver/Reduce Motion and absent iOS18 runtime remain explicit limits. The [draft handoff](docs/IPHONE_PLAYTEST_HANDOFF.md) is not yet a playtest invitation.
 
