@@ -1,11 +1,11 @@
 # Development roadmap
 
-Updated: 2026-10-20. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
+Updated: 2026-10-21. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
 
 | Phase | Current state | Next concrete outcome |
 | --- | --- | --- |
 | A — Reconnaissance | Initial repository/history/code/asset/test audit complete | Keep inventory and blockers current after each focused PR |
-| B — Stabilization | Actual Debug/Release simulator builds and eight physical-device XCTest cases passed; campaign/input matrix remains open | Validate the evidenced status-clock refresh candidate in clean Debug/Release builds, then complete the normal-control campaign/input matrix |
+| B — Stabilization | Actual Debug/Release builds, eight physical smoke cases and one physical Debug/both full campaign with17relaunch checkpoints passed; simulator input failure remains open | Resolve the failed clean simulator navigation case, then complete the normal-control campaign/input matrix |
 | C — Opening acts | Acts 1–2 implemented with preserved/unpreserved routes and local content | Verify actual launch, scrolling, accessibility, source replacement and relaunch on iOS 18/26 |
 | D — Conspiracy/takeover | Act 3 and explicit Act 4 entry implemented; full takeover/resistance absent | Prepare approved Act 4 dependency/presentation contracts; implement only established portions |
 | E — Final choice | Canonical endings described; playable route/ending evaluators absent | Settle explicit puzzle/route/cooperation/replay contracts before implementation |

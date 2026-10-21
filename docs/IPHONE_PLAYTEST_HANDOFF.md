@@ -1,6 +1,6 @@
 # Physical iPhone playtest handoff — draft
 
-Updated: 2026-10-20. **Preparation only; no human playtest requested.** The physical installation route, reset, and one full Debug campaign with17relaunch checkpoints passed. Reliable campaign input across the remaining matrix is still pending. A status-clock candidate is undergoing fresh clean validation; the changed build must be rebuilt/installed before handoff. This document is not a complete-game readiness claim.
+Updated: 2026-10-21. **Preparation only; no human playtest requested.** The physical installation route, reset, and one full Debug campaign with17relaunch checkpoints passed. Reliable campaign input across the remaining matrix is still pending. The status-clock candidate passed one isolated physical Debug/both campaign, but still fails a clean iOS26.5 simulator navigation check. Final playtest installation must match the validated final source. This document is not a complete-game readiness claim.
 
 ## Build and supported scope
 
@@ -23,6 +23,8 @@ Retained locally under `validation/device-install-route-20261019/`:
 The restricted command environment initially returned `CSSMERR_TP_NOT_TRUSTED`; rerunning read-only verification through normal host trust services passed with exit0 (`codesign-verification.json`). The initial failure is retained. The iPhone installer and physical UI tests also accepted the build. No trust setting was changed, certificate check bypassed or alternate installer used. The packaged provisioning profile expires 2027-06-09 UTC; signing remains device/profile-specific.
 
 The existing app was not erased. A preinstall save-directory listing failed; it does not prove an empty save. Physical launch/navigation smoke tests do not establish campaign persistence, reset, full accessibility or complete progression. Separate iOS 26.5 simulator Debug reset/cancel/confirm/relaunch passed (295.828 seconds, one pass, zero failures/skips); Release diagnostics absence passed (25.807 seconds, one pass, zero failures/skips). Evidence: `validation/native-experience-20261019-135341-9708/`.
+
+An isolated side-by-side **Banana Corp QA** installation subsequently passed the full normal-control Debug/both campaign on this phone:1756.072seconds,1passed/0failed/0skipped,17termination/relaunch checkpoints through Acts1–3 and minimal Act4entry. Read-only final-save export passed official progression assertions plus35receipt/7preserved-snapshot catalogue checks. Evidence: `validation/physical-campaign-qa-20261021/qa-auto-20261021/Debug-both-unlocked.xcresult`. The original game/save was never targeted. This candidate includes the StatusBar refactor from draft PR40; it is not a Release or all-path pass and does not resolve the failed iOS26.5 simulator input check. Initial runner authentication failed before gameplay when the phone locked; that separate result remains retained.
 
 ## Tested local installation route
 

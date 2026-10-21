@@ -1,6 +1,6 @@
 # QA test plan
 
-Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-21. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
 
 
 ## Current requested playtest gates
@@ -11,7 +11,7 @@ Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.c
 | Meaningful save/relaunch/reset | Debug reset/cancel/confirm/relaunch PASS295.828s (1/0/0), archived evidence/source/receipt verification PASS. Full Debug/both campaign save/relaunch passed17checkpoints plus35receipts/7preserved snapshots; remaining matrix stopped on input failure |
 | Reliable Acts1–3 progression into minimal Act4 entry | Debug/both PASS1482.638s with exported save/snapshot checks; Debug/email FAIL30.317s at initial Email tap. Matrix stopped; other paths/Release pending. Reset and Release diagnostics absence passed; no production gameplay change or tap retry introduced |
 
-The StatusBar live-clock candidate on `fix/status-clock-refresh` passed real Debug/Release builds and bundle checks, but clean Debug XCTest ended7passed/1failed/7opt-in-skipped at the first Email tap; Release XCTest was not reached. The input fix is unvalidated and remains draft. Earlier physical installation/save successes establish the route and prior build behavior; the changed candidate must be rebuilt and revalidated before a handoff.
+The StatusBar live-clock candidate on `fix/status-clock-refresh` passed real Debug/Release builds and bundle checks, but clean Debug XCTest ended7passed/1failed/7opt-in-skipped at the first Email tap; Release XCTest was not reached. The input fix is unvalidated and remains draft. The changed candidate subsequently passed one signed physical Debug/both campaign on a separate QA identity in1756.072s (1/0/0), including17relaunch checkpoints and read-only final-save verification of35receipts/7preserved snapshots. Original game/save remained separate. Evidence: `validation/physical-campaign-qa-20261021/qa-auto-20261021/`. This does not clear the failed simulator case or establish Release/all-path readiness; final playtest installation must match the validated final source.
 
 Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45`; PR #36 is merged. Physical evidence: `validation/device-install-route-20261019/`. Current helper work: [PR #39](https://github.com/bryce496913/Banana-Corp/pull/39). Broader accessibility/VoiceOver/Reduce Motion and absent iOS18 runtime remain explicit limits. The [draft handoff](docs/IPHONE_PLAYTEST_HANDOFF.md) is not yet a playtest invitation.
 
