@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct StatusBar: View {
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            StatusBarTimelineContent(currentTime: context.date)
+        }
+    }
+}
+
+private struct StatusBarTimelineContent: View {
     @Environment(\.osPresentation) private var presentation
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @State private var currentTime = Date()
+    let currentTime: Date
 
     var body: some View {
         Group {
@@ -32,9 +39,6 @@ struct StatusBar: View {
         .padding(.horizontal, AppTheme.Spacing.md)
         .padding(.top, AppTheme.Spacing.sm)
         .frame(minHeight: 56)
-        .onReceive(timer) { _ in
-            currentTime = Date()
-        }
     }
 
     private var statusText: some View {

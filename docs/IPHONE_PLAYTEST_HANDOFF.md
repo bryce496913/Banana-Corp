@@ -1,6 +1,6 @@
 # Physical iPhone playtest handoff — draft
 
-Updated: 2026-10-19. **Preparation only; no human playtest requested.** Physical build/install/launch validation passed, but reliable campaign progression, meaningful campaign save/relaunch validation remain pending. This document is not a complete-game readiness claim.
+Updated: 2026-10-20. **Preparation only; no human playtest requested.** The physical installation route, reset, and one full Debug campaign with17relaunch checkpoints passed. Reliable campaign input across the remaining matrix is still pending. A status-clock candidate is undergoing fresh clean validation; the changed build must be rebuilt/installed before handoff. This document is not a complete-game readiness claim.
 
 ## Build and supported scope
 
