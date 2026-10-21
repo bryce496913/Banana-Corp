@@ -20,9 +20,9 @@ Retained locally under `validation/device-install-route-20261019/`:
 | Normal iPhone installer and launch | Accepted and launched |
 | Physical XCTest | Five hosted plus three normal launch/navigation UI cases passed: eight total, zero failed/skipped; `test-summary.json` and `launch-navigation.xcresult` |
 
-The restricted command environment initially returned `CSSMERR_TP_NOT_TRUSTED`; rerunning read-only verification through normal host trust services passed with exit0 (`codesign-verification.json`). The initial failure is retained. The iPhone installer and physical UI tests also accepted the build. No trust setting was changed, certificate check bypassed or alternate installer used. The packaged provisioning profile expires2027-06-09UTC; signing remains device/profile-specific.
+The restricted command environment initially returned `CSSMERR_TP_NOT_TRUSTED`; rerunning read-only verification through normal host trust services passed with exit0 (`codesign-verification.json`). The initial failure is retained. The iPhone installer and physical UI tests also accepted the build. No trust setting was changed, certificate check bypassed or alternate installer used. The packaged provisioning profile expires 2027-06-09 UTC; signing remains device/profile-specific.
 
-The existing app was not erased. A preinstall save-directory listing failed; it does not prove an empty save. Physical launch/navigation smoke tests do not establish campaign persistence, reset, full accessibility or complete progression. Separate iOS26.5 simulator Debug reset/cancel/confirm/relaunch passed (295.828s, one pass, zero failures/skips); Release diagnostics absence passed (25.807s, one pass, zero failures/skips). Evidence: `validation/native-experience-20261019-135341-9708/`.
+The existing app was not erased. A preinstall save-directory listing failed; it does not prove an empty save. Physical launch/navigation smoke tests do not establish campaign persistence, reset, full accessibility or complete progression. Separate iOS 26.5 simulator Debug reset/cancel/confirm/relaunch passed (295.828 seconds, one pass, zero failures/skips); Release diagnostics absence passed (25.807 seconds, one pass, zero failures/skips). Evidence: `validation/native-experience-20261019-135341-9708/`.
 
 ## Tested local installation route
 
@@ -33,7 +33,8 @@ xcrun devicectl list devices
 xcodebuild -project 'Banana Corp/Banana Corp.xcodeproj' \
   -scheme 'Banana Corp' -showdestinations
 
-# Set PHONE_UDID to the available physical destination reported by Xcode.
+# Set PHONE_UDID to the physical destination reported by Xcode.
+# Set CORE_DEVICE_ID to that same phone's identifier from devicectl list devices.
 xcodebuild -project 'Banana Corp/Banana Corp.xcodeproj' \
   -scheme 'Banana Corp' -configuration Debug \
   -destination "platform=iOS,id=$PHONE_UDID" \
@@ -42,9 +43,9 @@ xcodebuild -project 'Banana Corp/Banana Corp.xcodeproj' \
 python3 scripts/check-ios-project.py \
   --app-bundle 'validation/device-install-route-20261019/DerivedData/Build/Products/Debug-iphoneos/Banana Corp.app'
 
-xcrun devicectl device install app --device "$PHONE_UDID" \
+xcrun devicectl device install app --device "$CORE_DEVICE_ID" \
   'validation/device-install-route-20261019/DerivedData/Build/Products/Debug-iphoneos/Banana Corp.app'
-xcrun devicectl device process launch --device "$PHONE_UDID" \
+xcrun devicectl device process launch --device "$CORE_DEVICE_ID" \
   Bryce-Cameron-Design.Banana-Corp
 ```
 
@@ -54,9 +55,9 @@ For a later build, choose a fresh evidence/DerivedData directory and update all 
 
 | Gate | Current status |
 | --- | --- |
-| Complete normal-control Acts 1–3 → Act 4 entry matrix | **INCOMPLETE**; Debug/both passed1482.638s. Debug/email failed30.317s at first Email tap; other paths/Release not reached |
-| Meaningful progress and authentic preserved evidence after termination/relaunch | **PASS for Debug/both only**;17normal relaunch checkpoints, official final save facts and35published receipt/7preserved snapshot integrity checks passed. Other paths/configurations remain unverified |
-| Reset cancel/confirm, archive retention and replay where implemented | **PASS on iOS26.5 Debug simulator**; one test passed295.828s, zero failures/skips. Cancel retained meaningful progress; confirmed fresh state survived relaunch. Exported archive/source/receipt comparison passed. Release has no player reset control. |
+| Complete normal-control Acts 1–3 → Act 4 entry matrix | **INCOMPLETE**; Debug/both passed in 1,482.638 seconds. Debug/email failed in 30.317 seconds at first Email tap; other paths/Release not reached |
+| Meaningful progress and authentic preserved evidence after termination/relaunch | **PASS for Debug/both only**;17 normal relaunch checkpoints, official final save facts and35 published receipt/7 preserved snapshot integrity checks passed. Other paths/configurations remain unverified |
+| Reset cancel/confirm, archive retention and replay where implemented | **PASS on iOS 26.5 Debug simulator**; one test passed in 295.828 seconds, zero failures/skips. Cancel retained meaningful progress; confirmed fresh state survived relaunch. Exported archive/source/receipt comparison passed. Release has no player reset control. |
 | Intermittent missed taps/Continue/Previous actions | **UNRESOLVED**; no proven production root cause/fix |
 | Complete accessibility, VoiceOver and Reduce Motion coverage | **PENDING**; focused Home Dynamic Type/contrast passes do not establish full coverage; default audit timed out with framework Code -56 |
 | iOS 18 and wider physical device matrix | **NOT RUN**; deployment support is not runtime proof |
@@ -70,7 +71,7 @@ Once the intended milestone is ready, test normal controls without debug shortcu
 
 Across that journey, terminate/relaunch after meaningful discoveries and preserved evidence, confirm progress and original snapshots remain, and note navigation, scrolling, safe-area, gesture, text-size or media problems. Reset testing must use an explicitly disposable campaign after preserving bug evidence; do not reset an ongoing campaign merely to install a build.
 
-Gameplay duration is **unmeasured**. No timed ordinary-player completion of this scope is established, and automated test duration is not a player-duration estimate. Measure an end-to-end ordinary session before adding a duration commitment to an invitation.
+Gameplay duration is **unmeasured; planning estimate 30–60 minutes** for the recorded Acts 1–3/minimal Act 4 route. Its 31 read authored versions contain approximately 3,070 readable words (body plus titles/subtitles, excluding content-ID aliases and repeated snapshot copies). Assuming 180–240 words/minute gives 13–17 minutes of reading, plus an estimated 15–40 minutes for investigation, navigation, clue review and puzzles. These are planning assumptions, not measured player timing; optional exploration, repeated comparisons and accessibility needs can extend the session. Automated test duration was not used.
 
 ## Bug report template
 
