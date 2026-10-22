@@ -1,0 +1,7 @@
+{
+  "canonical_style_source": "Banana Corp/Banana Corp/AppMotion.swift",
+  "canonical_sha256": "773e07d98579544de3f5458ae4ff50ab41780308d1bb4f5a105bd264fc8e693d",
+  "prefix_sha256": "1476757f071f55e6bafaa2f796f1162dceba7f1ecc55a4fd7b9586310b1661bc",
+  "boundary": "before struct AppFeedbackModifier",
+  "fixture_only": true
+}
