@@ -1,6 +1,6 @@
 # QA test plan
 
-Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-22. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
 
 
 ## Current requested playtest gates
@@ -10,6 +10,8 @@ Updated: 2026-10-19. Scope: authorized [Banana Corp repository](https://github.c
 | Tested physical installation route | PASS: existing-signing Debug iphoneos build, normal signature verification, bundle checks, install/launch/relaunch and eight XCTest cases on iPhone14Pro/iOS27.0.1; zero failures/skips |
 | Meaningful save/relaunch/reset | Debug reset/cancel/confirm/relaunch PASS295.828s (1/0/0), archived evidence/source/receipt verification PASS. Full Debug/both campaign save/relaunch passed17checkpoints plus35receipts/7preserved snapshots; remaining matrix stopped on input failure |
 | Reliable Acts1–3 progression into minimal Act4 entry | Debug/both PASS1482.638s with exported save/snapshot checks; Debug/email FAIL30.317s at initial Email tap. Matrix stopped; other paths/Release pending. Reset and Release diagnostics absence passed; no production gameplay change or tap retry introduced |
+
+The StatusBar live-clock experiment passed real Debug/Release builds and one isolated physical Debug/both campaign (1756.072s,1/0/0,17relaunch checkpoints,35receipts/7preserved final snapshots), but failed clean Debug navigation (7passed/1failed/7opt-in-skipped). PR40 is now closed unmerged; canonical49app Swift files exactly match main after restoring StatusBar. That physical campaign is evidence for the retired experimental source; original main's physical build/install/eight-case smoke and earlier simulator journey evidence remain separately recorded. Clean simulator input failure is unresolved. Glass fallback, Home gesture composition and pressed-scale scratch changes did not resolve it; none was adopted. Independent Release XCTest on restored main app sources passed8/0/0, with actual built-bundle/resource verification and unchanged source hashes (`validation/release-integration-20261022/run-main-clock-a/`). This does not clear earlier Debug failures or certify the full Release campaign.
 
 Current main is `8d5ab77c41fbf20cf0fca14834759a522da63e45`; PR #36 is merged. Physical evidence: `validation/device-install-route-20261019/`. Current helper work: [PR #39](https://github.com/bryce496913/Banana-Corp/pull/39). Broader accessibility/VoiceOver/Reduce Motion and absent iOS18 runtime remain explicit limits. The [draft handoff](docs/IPHONE_PLAYTEST_HANDOFF.md) is not yet a playtest invitation.
 
