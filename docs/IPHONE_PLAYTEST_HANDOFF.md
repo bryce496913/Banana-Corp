@@ -1,6 +1,6 @@
 # Physical iPhone playtest handoff — draft
 
-Updated: 2026-10-22. **Preparation only; no human playtest requested.** The physical installation route, reset, and one full Debug campaign with17relaunch checkpoints passed. Reliable campaign input across the remaining matrix is still pending. The retired clock experiment passed one isolated physical Debug/both campaign but did not resolve the clean iOS26.5 simulator navigation failure. PR40 is closed unmerged; original main app sources are restored. Final playtest installation must match the validated final source. This document is not a complete-game readiness claim.
+Updated: 2026-10-22. **Preparation only; no human playtest requested.** The physical installation route, reset, and one full Debug campaign with17relaunch checkpoints passed. Reliable campaign input across the remaining matrix is still pending. The retired clock experiment passed one isolated physical Debug/both campaign but did not resolve the clean iOS26.5 simulator navigation failure. PR40 is closed unmerged; original main app sources are restored. Restored-main Release8-case smoke passed, but full Release/both failed its first Email→Home return. Final playtest installation must match the validated final source. This document is not a complete-game readiness claim.
 
 ## Build and supported scope
 
