@@ -1,6 +1,6 @@
 # Physical iPhone playtest handoff — draft
 
-Updated: 2026-10-23. **Preparation only; no human playtest requested.** Current-source physical Debug/both campaign and final save verification passed on a separate QA identity: 1 passed, 0 failed/skipped, 1747.692 seconds and 17 termination/relaunch checkpoints. Current-source physical Release/both also passed: 1 passed, 0 failed/skipped, 1754.814 seconds and 17 termination/relaunch checkpoints; read-only export, official save assertions and35receipt/7preserved snapshot checks passed. The simulator input matrix, other preservation paths and wider accessibility coverage remain incomplete. Production app sources remain unchanged. This certifies neither the full game nor human playtest readiness.
+Updated: 2026-10-23. **Preparation only; no human playtest requested.** All four current-source physical Release preservation policies passed, each with 17 termination/relaunch checkpoints and read-only save verification. Debug/both also passed. Other Debug policies, the simulator input matrix and wider accessibility coverage remain incomplete. Production app sources remain unchanged; full Act 4 takeover, Act 5 and endings remain unfinished.
 
 ## Build and supported scope
 
@@ -59,8 +59,8 @@ For a later build, choose a fresh evidence/DerivedData directory and update all 
 
 | Gate | Current status |
 | --- | --- |
-| Complete normal-control Acts 1–3 → Act 4 entry matrix | **INCOMPLETE**; Debug/both passed in 1,482.638 seconds. Debug/email failed in 30.317 seconds at first Email tap; other paths/Release not reached |
-| Meaningful progress and authentic preserved evidence after termination/relaunch | **PASS for Debug/both only**;17 normal relaunch checkpoints, official final save facts and35 published receipt/7 preserved snapshot integrity checks passed. Other paths/configurations remain unverified |
+| Complete normal-control Acts 1–3 → Act 4 entry matrix | **INCOMPLETE overall**; current-source physical Release all four policies and Debug/both passed. Remaining physical Debug policies have not completed; the clean simulator matrix failed its first Home return and stopped. Do not combine these separate scopes into a full matrix pass |
+| Meaningful progress and authentic preserved evidence after termination/relaunch | **PASS for physical Release all four policies and Debug/both**;17 normal relaunch checkpoints per case and official final save/snapshot checks passed. Release receipts/preserved: both35/7, email36/1, video35/6, neither36/0. Other Debug policies and clean simulator matrix remain incomplete |
 | Reset cancel/confirm, archive retention and replay where implemented | **PASS on iOS 26.5 Debug simulator**; one test passed in 295.828 seconds, zero failures/skips. Cancel retained meaningful progress; confirmed fresh state survived relaunch. Exported archive/source/receipt comparison passed. Release has no player reset control. |
 | Intermittent missed taps/Continue/Previous actions | **UNRESOLVED**; no proven production root cause/fix |
 | Complete accessibility, VoiceOver and Reduce Motion coverage | **PENDING**; focused Home Dynamic Type/contrast passes do not establish full coverage; default audit timed out with framework Code -56 |
