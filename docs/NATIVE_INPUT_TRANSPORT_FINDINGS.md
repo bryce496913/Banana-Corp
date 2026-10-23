@@ -82,3 +82,6 @@ Computer Use on fresh owned run `run-cua-awake-d` again refused permission befor
 
 
 Debugger authorization follow-up — 2026-10-23: after the creator repeated the local enable command, normal-host `/usr/sbin/DevToolsSecurity -status` now confirms enabled. The earlier disabled observation remains historical evidence. The known phone still reports tunnel unavailable and DDI services unavailable. This resolves the debugger authorization setting mismatch, not the separate device-connection or campaign/save acceptance requirements.
+
+
+Counted-tap comparator outcome — 2026-10-23: the isolated explicit one-tap/one-touch public XCTest API compiled in the real Apple SDK but did not resolve the neutral failure. Actual result: 1 passed, 1 failed, 0 skipped, native65; swipe case passed39.704s, loop failed27.477s. Strict trace/system capture, source integrity and owned simulator shutdown/delete passed, with no runner infrastructure error. Evidence: `validation/neutral-shell-counted-tap-20261023/run-counted-tap-a/`. The three neutral test action sites differ intentionally; canonical game app/tests remain unchanged. No API workaround or campaign acceptance is adopted. Next: restore a usable known-phone developer tunnel, then build/verify/install/test the fresh isolated current-source QA identity and verify exported campaign snapshots.
