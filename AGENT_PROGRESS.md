@@ -285,3 +285,19 @@ The clean official simulator matrix retry (`validation/acts-20261023-113847/`) b
 The first physical Release/email attempt (`qa-rel-email-20261023`) then failed with a CoreDevice/Mercury runner communication error after four checkpoints. Its developer tunnel became unavailable. This is not a full-path pass or a gameplay assertion failure. After USB reconnection, a read-only export preserved its partial Act1 save with one evidence record; the partial installation was not reset or reused. A distinct fresh retry (`qa-rel-email-b-20261023`) passed actual Release build, signature/profile/resource checks, built test mapping review, freshness and separate installation. Xcode initially waited for the phone to unlock; the gate subsequently cleared and the fresh email-only test body is now running, with no completed result yet. Video-only and neither workflows remain gated preparation, with exact existing assertions and snapshot checks retained.
 
 Previously verified physical Debug/Release both-preserved campaign and save results remain valid within scope. Next: finish the fresh email retry, export and assert its actual save, then review/run the remaining physical policies serially while retaining the unresolved simulator failure. No human playtest readiness claim; original and prior QA saves remain untouched.
+
+
+## Complete physical Release preservation matrix — 2026-10-23
+
+All four current-source Release policies passed on the known iPhone with fresh separate QA identities, normal controls and 17 termination/relaunch checkpoints each. Actual SDK builds, signature/profile/resource/deployment checks, built test mappings, fresh installations, read-only save exports, unchanged official assertions and published snapshot verification passed. Independent final audits agree.
+
+| Policy | XCTest pass/fail/skip | Duration | Receipts | Preserved |
+| --- | --- | --- | --- | --- |
+| Both | 1/0/0 | 1754.814s | 35 | 7 |
+| Email only, fresh retry | 1/0/0 | 1709.699s | 36 | 1 |
+| Video only | 1/0/0 | 1757.455s | 35 | 6 |
+| Neither | 1/0/0 | 1725.239s | 36 | 0 |
+
+Evidence is retained under `validation/physical-campaign-qa-20261021/qa-release-20261023/`, `qa-rel-email-b-20261023/`, `qa-rel-video-20261023/` and `qa-rel-neither-20261023/`. All used catalogue SHA256 `e500366e9a04a826a6f8a830d76e0fe046112741e200136f071b34d1a006481b`. This verifies final exported snapshot integrity and progression across normal relaunches, not full-state raw bytes at every checkpoint. Existing explicitly declared Optional-nil normalization remains disclosed; raw snapshots were unchanged. Original and prior QA saves were untouched.
+
+Debug/both also passed. The first Debug/email build failed before compilation with native70 because Xcode could not find the known destination; its error result is retained. A fresh destination query listed the phone again, but the new Debug/email retry also exited70 before compilation after a device-preparation timeout. CoreDevice then reported its tunnel unavailable; both error results are retained and the creator was asked to restore the connection. Debug video/neither remain preparation only. The simulator Home-return failure, broader accessibility/performance coverage and iOS18 runtime remain unresolved. Full Act4 takeover, Act5 and endings are unfinished; no complete-game or human playtest readiness claim. Next: finish remaining Debug policies with exact save checks and continue evidence-supported simulator/accessibility validation. No production Swift or canonical test changes were made during this matrix.
