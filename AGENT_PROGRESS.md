@@ -462,3 +462,12 @@ Debug/email C actual execution — 2026-10-23: after user USB recovery and actua
 Debug/email C launch gate — 2026-10-23: after successful native build/product/install gates, Xcode waits for device unlock before launching the full test body. Creator asked to unlock once. Native test remains pending; no acceptance from installation alone and no prior partial save reuse.
 
 Debug/email C unlocked — 2026-10-23: actual native test body is now running through early-content steps after the unlock gate cleared. No further device action currently needed; result remains pending. Do not restart the active phase.
+
+
+## Physical Debug/email verified — 2026-10-23
+
+Fresh `qa-dbg-email-c-20261023` PASSED actual full normal-controls Debug/email campaign:1passed/0failed/0skipped,native0,1733.535s,17termination/relaunch checkpoints through Acts1–3/minimalAct4entry. Actual Debug build/product/profile/mapping/fresh/install gates passed. Read-only export, unchanged official progression assertions and published snapshot verification PASSED36receipts/exactly1preserved ECHO original. Save SHA256 `b2022271d0a69aeafc873c6d9a726426410452516fe770cdacd3be12dd05ca09`; catalogue `e500366e9a04a826a6f8a830d76e0fe046112741e200136f071b34d1a006481b`. Final-export-only and declared Optional-nil normalization limits retained; raw snapshots unchanged. Earlier failed destination attempts retained; original/priorQA saves untouched.
+
+All four physical Release policies plus Debug/both and Debug/email now passed current-source campaigns. Reviewed fresh Debug/video build started serially; Debug/neither remains prepared only. Simulator matrix/input transport and full accessibility/iOS18 coverage remain open. No complete-game or human playtest readiness claim. Next: actual Debug/video product/xctestrun/fresh/install/campaign/export/assert gates, then Debug/neither.
+
+Debug/video actual execution — 2026-10-23: qa-dbg-video-20261023 passed real Debug build, verify/verify2, exact built target/emptyargs root review (SHA785da34627f155cb6bddf0a87846a1f8a9a6d7251c1380a7ead01a08f193d762), fresh2absence and separate installation. Full normal-controls test started; no path acceptance yet. Debug/email independent final audit agrees with1/0/0,17checkpoints,36receipts/1preserved and source integrity. Next: actual Debug/video test/export/assert, then Debug/neither.
