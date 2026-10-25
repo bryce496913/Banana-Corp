@@ -332,3 +332,8 @@ Actual combined Debug physical run completed native65 with one pass, one failure
 ## Shared title accessibility candidate — 2026-10-25
 
 The Home candidate with corrected guard passed actual Debug and Release builds and product/signature/resource checks. Its fresh two-test physical attempt stopped before test cases at a destination preparation timeout; no editing result. Xcode requested unlock recovery; creator asked to reconnect USB/unlock. A separate AppScreenHeader title sizing candidate now addresses the verified Email clipping finding, retaining subtitles/copy/global OSStoryText/navigation/scale/save contracts. This header revision requires fresh native build/audit validation; prior Home builds do not validate it. No playtest invitation or audit pass claimed.
+
+
+## Current-header Apple SDK results — 2026-10-25
+
+Actual generic iOS Debug and Release builds and built-bundle/executable/compiled-asset/exact-resource checks passed on the shared-header revision, deployment18.0 and unchanged source inventory. These products are unsigned and establish no installation/UI pass. Physical current-header build exited70 before compilation due to unavailable phone destination; earlier installed Home editing attempt timed out before any test case. Both retained. Pending creator reconnect/unlock; next run must use a fresh current-header QA identity and require unchanged default audit,15app navigation and corrected editing/relaunch test exact3/0/0. No native process remains running. Both focused PRs remain draft; no playtest invitation.
