@@ -30,6 +30,7 @@ struct AppScreenHeader: View {
                 displayNameOverride: appRoute.flatMap { presentation.resolved(at: Date()).apps[$0]?.displayName }
             )
             .appText(.screenTitle)
+            .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
             if let subtitle {
                 Text(subtitle).appText(.caption, color: AppTheme.Colors.secondaryText)

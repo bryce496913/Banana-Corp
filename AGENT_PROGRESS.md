@@ -327,3 +327,8 @@ Home accessibility validation update — 2026-10-25: current candidate includes 
 ## Home validation result — 2026-10-25
 
 Actual combined Debug physical run completed native65 with one pass, one failure and one skip. All15app navigation passed74.782s. Default audit completed Home, then failed on Email title clipping23.135s. Editing skipped before its body because its guard omitted Xcode’s forwarded unprefixed environment key. Corrected that test-only guard to the established unprefixed/prefixed fallback, retaining fresh-physical-qa opt-in. This supplies no editing pass. Fresh two-test navigation/editing validation is underway; known Email audit failure remains open for separate shared-header repair, without suppression. Current Release validation is pending. PR remains draft; prior eight campaign passes predate these Home changes.
+
+
+## Shared title accessibility candidate — 2026-10-25
+
+The Home candidate with corrected guard passed actual Debug and Release builds and product/signature/resource checks. Its fresh two-test physical attempt stopped before test cases at a destination preparation timeout; no editing result. Xcode requested unlock recovery; creator asked to reconnect USB/unlock. A separate AppScreenHeader title sizing candidate now addresses the verified Email clipping finding, retaining subtitles/copy/global OSStoryText/navigation/scale/save contracts. This header revision requires fresh native build/audit validation; prior Home builds do not validate it. No playtest invitation or audit pass claimed.
