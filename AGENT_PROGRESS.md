@@ -314,3 +314,8 @@ Failed destination attempts remain retained. Debug/neither B failed0/1/0 at498.4
 The scoped actual-game simulator diagnostic failed its initial Email tap0/1/0,39.935s; no Home action reached. Owned technical logs show active-contact removal/soft cancellation without proving shared cause or SDK defect. Separate unchanged neutral upstream diagnostic passed2/0/0 (21.458s/145.140s), with complete capture/integrity/owned cleanup. Public logs show62 synthesized actions/touch-up/completion confirmations; all succeeded, so there is no failed-contact comparison. Coarse classifier candidates are routine digitizer-service cancellations, not failure evidence. Simulator campaign reliability remains unresolved.
 
 Next: existing isolated presentation/default accessibility checks, simulator reliability and remaining readiness gaps. Full Act4/Act5/endings remain incomplete; no human playtest readiness claim.
+
+
+## Home accessibility repair in progress — 2026-10-25
+
+Physical default audit found clipped Home welcome text. A two-line candidate lets the header grow and preserves wrapped title height; Debug/Release SDK product checks and the existing 15-app physical navigation smoke (1/0/0,79.644s) passed. Required model/layout/navigation checks passed. Full accessibility remains open: an unnamed leaf over the grid persists after clipping repair; an ineffective container label was removed. Public non-suppressing diagnostic captured the exact leaf; a single-factor scratch drop-target experiment is pending. See docs/HOME_ACCESSIBILITY_REPAIR.md. Keep the repair draft; prior eight physical campaign passes predate this layout candidate. No playtest readiness claim.

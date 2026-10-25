@@ -15,7 +15,7 @@ struct HomeScreenView: View {
                 let iconSize = min(64, max(44, (width - 48) / 4))
                 VStack(spacing: 12) {
                     editHeader
-                        .frame(height: AppTheme.Layout.touchTarget)
+                        .frame(minHeight: AppTheme.Layout.touchTarget)
 
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
@@ -74,6 +74,7 @@ struct HomeScreenView: View {
         } else if let welcome = appState.content.availableItems(for: .email).first(where: { $0.id == "content.act1.welcome" }) {
             HStack {
                 Text(welcome.version.title).appText(.systemLabel, color: AppTheme.Colors.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 Button("Explore") { appState.open(.news) }
                     .buttonStyle(.appContent)
