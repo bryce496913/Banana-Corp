@@ -314,3 +314,16 @@ Failed destination attempts remain retained. Debug/neither B failed0/1/0 at498.4
 The scoped actual-game simulator diagnostic failed its initial Email tap0/1/0,39.935s; no Home action reached. Owned technical logs show active-contact removal/soft cancellation without proving shared cause or SDK defect. Separate unchanged neutral upstream diagnostic passed2/0/0 (21.458s/145.140s), with complete capture/integrity/owned cleanup. Public logs show62 synthesized actions/touch-up/completion confirmations; all succeeded, so there is no failed-contact comparison. Coarse classifier candidates are routine digitizer-service cancellations, not failure evidence. Simulator campaign reliability remains unresolved.
 
 Next: existing isolated presentation/default accessibility checks, simulator reliability and remaining readiness gaps. Full Act4/Act5/endings remain incomplete; no human playtest readiness claim.
+
+
+## Home accessibility repair in progress — 2026-10-25
+
+Physical default audit found clipped Home welcome text. A two-line candidate lets the header grow and preserves wrapped title height; Debug/Release SDK product checks and the existing 15-app physical navigation smoke (1/0/0,79.644s) passed. Required model/layout/navigation checks passed. Full accessibility remains open: an unnamed leaf over the grid persists after clipping repair; an ineffective container label was removed. Public non-suppressing diagnostic captured the exact leaf; a single-factor scratch drop-target experiment is pending. See docs/HOME_ACCESSIBILITY_REPAIR.md. Keep the repair draft; prior eight physical campaign passes predate this layout candidate. No playtest readiness claim.
+
+
+Home accessibility validation update — 2026-10-25: current candidate includes wrapped welcome text, edit-only transparent background taps and an intrinsically sized Explore button. A guarded real UI test verifies drag/reorder, Done, relaunch persistence, blank-area exit and normal navigation. The isolated background experiment completed Home's audit; its subsequent Email audit exposed Explore clipping. All four drop targets and navigation/scale behavior remain unchanged. Current Debug build/product/mapping/fresh-install gates passed. The exact three-test run is waiting for iPhone unlock; current Release is prepared only. PR49 remains draft. See docs/HOME_ACCESSIBILITY_REPAIR.md for evidence and rejected hypotheses.
+
+
+## Home validation result — 2026-10-25
+
+Actual combined Debug physical run completed native65 with one pass, one failure and one skip. All15app navigation passed74.782s. Default audit completed Home, then failed on Email title clipping23.135s. Editing skipped before its body because its guard omitted Xcode’s forwarded unprefixed environment key. Corrected that test-only guard to the established unprefixed/prefixed fallback, retaining fresh-physical-qa opt-in. This supplies no editing pass. Fresh two-test navigation/editing validation is underway; known Email audit failure remains open for separate shared-header repair, without suppression. Current Release validation is pending. PR remains draft; prior eight campaign passes predate these Home changes.
