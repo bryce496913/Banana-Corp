@@ -322,3 +322,8 @@ Physical default audit found clipped Home welcome text. A two-line candidate let
 
 
 Home accessibility validation update — 2026-10-25: current candidate includes wrapped welcome text, edit-only transparent background taps and an intrinsically sized Explore button. A guarded real UI test verifies drag/reorder, Done, relaunch persistence, blank-area exit and normal navigation. The isolated background experiment completed Home's audit; its subsequent Email audit exposed Explore clipping. All four drop targets and navigation/scale behavior remain unchanged. Current Debug build/product/mapping/fresh-install gates passed. The exact three-test run is waiting for iPhone unlock; current Release is prepared only. PR49 remains draft. See docs/HOME_ACCESSIBILITY_REPAIR.md for evidence and rejected hypotheses.
+
+
+## Home validation result — 2026-10-25
+
+Actual combined Debug physical run completed native65 with one pass, one failure and one skip. All15app navigation passed74.782s. Default audit completed Home, then failed on Email title clipping23.135s. Editing skipped before its body because its guard omitted Xcode’s forwarded unprefixed environment key. Corrected that test-only guard to the established unprefixed/prefixed fallback, retaining fresh-physical-qa opt-in. This supplies no editing pass. Fresh two-test navigation/editing validation is underway; known Email audit failure remains open for separate shared-header repair, without suppression. Current Release validation is pending. PR remains draft; prior eight campaign passes predate these Home changes.

@@ -3,7 +3,8 @@ import XCTest
 final class LaunchSmokeTests: XCTestCase {
     @MainActor
     func testHomeEditingGridReorderPersistsAndBlankTapExits() throws {
-        guard ProcessInfo.processInfo.environment["TEST_RUNNER_BANANA_QA_HOME_EDITING"] == "fresh-physical-qa" else {
+        let environment = ProcessInfo.processInfo.environment
+        guard (environment["BANANA_QA_HOME_EDITING"] ?? environment["TEST_RUNNER_BANANA_QA_HOME_EDITING"]) == "fresh-physical-qa" else {
             throw XCTSkip("Requires runner-verified fresh dedicated physical QA identity")
         }
         continueAfterFailure = false
