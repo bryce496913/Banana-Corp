@@ -2,6 +2,118 @@ import XCTest
 
 final class LaunchSmokeTests: XCTestCase {
     @MainActor
+    func testHomeEditingGridReorderPersistsAndBlankTapExits() throws {
+        guard ProcessInfo.processInfo.environment["TEST_RUNNER_BANANA_QA_HOME_EDITING"] == "fresh-physical-qa" else {
+            throw XCTSkip("Requires runner-verified fresh dedicated physical QA identity")
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launch()
+        let email = app.buttons["bananaOS.app.email"].firstMatch
+        waitUntilReady(email, timeout: 20)
+        let web = app.buttons["bananaOS.app.browser"].firstMatch
+        let social = app.buttons["bananaOS.app.social"].firstMatch
+        let done = app.buttons["Done"].firstMatch
+        func frame(_ element: XCUIElement) -> CGRect? {
+            guard element.exists else { return nil }
+            let f = element.frame
+            guard [f.minX, f.minY, f.width, f.height].allSatisfy({ $0.isFinite }),
+                  f.width > 0, f.height > 0, app.frame.contains(f) else { return nil }
+            return f
+        }
+        func requireState(_ name: String, _ condition: @escaping () -> Bool) -> Bool {
+            let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in condition() }, object: app)], timeout: 8)
+            if result != .completed {
+                print(app.debugDescription)
+                let image = XCTAttachment(screenshot: app.screenshot())
+                image.name = name; image.lifetime = .keepAlways; add(image)
+            }
+            XCTAssertEqual(result, .completed, name)
+            return result == .completed
+        }
+        // Explicitly bounded to the reviewed physical 393x852-point presentation.
+        XCTAssertTrue([app.frame.width, app.frame.height].allSatisfy({ $0.isFinite }))
+        XCTAssertEqual(app.frame.width, 393, accuracy: 1)
+        XCTAssertEqual(app.frame.height, 852, accuracy: 1)
+        XCTAssertEqual(app.statusBars.count, 0)
+        XCTAssertFalse(app.buttons["bananaOS.home"].exists)
+        guard requireState("Fresh ordered grid", {
+            guard let w = frame(web), let s = frame(social) else { return false }
+            return web.isHittable && social.isHittable && abs(w.minY - s.minY) < 2 && w.midX < s.midX
+        }) else { return }
+        // Real long press; do not invoke accessibility action or edit AppState.
+        social.press(forDuration: 0.6)
+        guard requireState("Editing entered", {
+            done.exists && done.isEnabled && done.isHittable && frame(done) != nil
+                && String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        // Move SECOND grid item before FIRST, which cannot be an accepted no-op.
+        // Both items are in grid; no drop into the already-full dock.
+        guard let initialWeb = frame(web), let initialSocial = frame(social) else {
+            XCTFail("Invalid drag source/target geometry"); return
+        }
+        XCTAssertLessThan(initialWeb.midX, initialSocial.midX)
+        social.press(forDuration: 0.6, thenDragTo: web)
+        guard requireState("Grid order actually changed", {
+            guard let w = frame(web), let s = frame(social) else { return false }
+            return abs(w.minY - s.minY) < 2 && s.midX < w.midX
+                && done.exists && String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        waitUntilReady(done); done.tap()
+        guard requireState("Done exits editing", {
+            !done.exists && !String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        app.terminate(); app.launch()
+        waitUntilReady(email, timeout: 20)
+        guard requireState("Reordered grid survives process relaunch", {
+            guard let w = frame(web), let s = frame(social) else { return false }
+            return abs(w.minY - s.minY) < 2 && s.midX < w.midX
+                && !done.exists && !String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        social.press(forDuration: 0.6)
+        guard requireState("Editing reentered", {
+            done.exists && done.isHittable && String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        // Choose a verified blank point BELOW every grid button, inside its viewport.
+        let viewport = app.scrollViews.containing(.button, identifier: "bananaOS.app.browser")
+        XCTAssertEqual(viewport.count, 1)
+        guard viewport.count == 1, let bounds = frame(viewport.firstMatch) else {
+            XCTFail("Ambiguous/invalid grid viewport"); return
+        }
+        let gridButtons = viewport.firstMatch.buttons.allElementsBoundByIndex
+        var bottom = bounds.minY
+        for button in gridButtons {
+            guard let b = frame(button) else { XCTFail("Invalid grid-button geometry"); return }
+            bottom = max(bottom, b.maxY)
+        }
+        let blank = CGPoint(x: bounds.midX, y: bottom + 20)
+        guard bounds.insetBy(dx: 8, dy: 8).contains(blank),
+              app.frame.insetBy(dx: 8, dy: 8).contains(blank) else {
+            XCTFail("No verified blank area in reviewed viewport"); return
+        }
+        for button in app.buttons.allElementsBoundByIndex where button.exists {
+            if let b = frame(button) { XCTAssertFalse(b.insetBy(dx: -4, dy: -4).contains(blank)) }
+        }
+        app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: blank.x, dy: blank.y)).tap()
+        guard requireState("Blank tap exits editing", {
+            !done.exists && !String(describing: social.value ?? "").contains("Editing")
+        }) else { return }
+        waitUntilReady(web); web.tap()
+        let home = app.buttons["bananaOS.home"].firstMatch
+        waitUntilReady(home); home.tap()
+        waitUntilReady(email)
+        XCTAssertFalse(home.exists)
+        XCTAssertEqual(app.statusBars.count, 0)
+        guard let finalWeb = frame(web), let finalSocial = frame(social) else {
+            XCTFail("Final grid geometry missing"); return
+        }
+        XCTAssertLessThan(finalSocial.midX, finalWeb.midX)
+        XCTAssertEqual(app.buttons.matching(identifier: "bananaOS.app.browser").count, 1)
+        XCTAssertEqual(app.buttons.matching(identifier: "bananaOS.app.social").count, 1)
+    }
+
+    @MainActor
     func testEveryApplicationOpensAndReturnsHome() {
         continueAfterFailure = false
         let app = XCUIApplication()

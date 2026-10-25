@@ -49,11 +49,14 @@ struct HomeScreenView: View {
         .onDisappear { appState.finishEditingHomeScreen() }
     }
 
+    @ViewBuilder
     private var outsideTapArea: some View {
-        Color.clear
-            .contentShape(Rectangle())
-            .onTapGesture { appState.finishEditingHomeScreen() }
-            .accessibilityHidden(true)
+        if appState.isEditingHomeScreen {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture { appState.finishEditingHomeScreen() }
+                .accessibilityHidden(true)
+        }
     }
 
     @ViewBuilder
@@ -76,10 +79,13 @@ struct HomeScreenView: View {
                 Text(welcome.version.title).appText(.systemLabel, color: AppTheme.Colors.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
-                Button("Explore") { appState.open(.news) }
-                    .buttonStyle(.appContent)
-                    .frame(minHeight: AppTheme.Layout.touchTarget)
-                    .accessibilityHint("Open launch coverage in News.")
+                Button { appState.open(.news) } label: {
+                    Text("Explore")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(minHeight: AppTheme.Layout.touchTarget)
+                }
+                .buttonStyle(.appContent)
+                .accessibilityHint("Open launch coverage in News.")
             }
         }
     }
