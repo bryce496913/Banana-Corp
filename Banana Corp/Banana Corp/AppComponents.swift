@@ -524,3 +524,108 @@ private struct AppComponentsPreview: View {
         .environment(\.dynamicTypeSize, .accessibility3)
 }
 #endif
+
+
+/// App-local controls never open external URLs or change story/read state.
+struct BrowserChrome: View {
+    @Binding var address: String
+    var homeLabel = "Browser Home"
+    var onBack: (() -> Void)?
+    let onHome: () -> Void
+    let onRefresh: () -> Void
+    let onGo: () -> Void
+    var notice: String?
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
+                Image(systemName: "globe").foregroundStyle(AppTheme.Colors.accent).accessibilityHidden(true)
+                TextField("Address or search local pages", text: $address)
+                    .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
+                    .submitLabel(.go).onSubmit(onGo)
+                    .accessibilityIdentifier("browser.address")
+                    .accessibilityLabel("Address or search local pages")
+                Button(action: onGo) {
+                    Image(systemName: "arrow.right").frame(minWidth: 44, minHeight: 44)
+                }.buttonStyle(.appContent).accessibilityLabel("Go").accessibilityIdentifier("browser.go")
+            }
+            .padding(.leading, 12)
+            .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppTheme.Colors.separator))
+            HStack {
+                chromeButton("Back", symbol: "chevron.left", id: onBack == nil ? "browser.back" : "story.back", action: onBack)
+                Spacer()
+                chromeButton(homeLabel, symbol: "house", id: "browser.home", action: onHome)
+                Spacer()
+                OSStoryText(text: "Browser", target: .screenTitle(.browser)).appText(.caption, color: AppTheme.Colors.secondaryText)
+                Spacer()
+                chromeButton("Refresh", symbol: "arrow.clockwise", id: "browser.refresh", action: onRefresh)
+            }
+            if let notice { Text(notice).appText(.caption, color: AppTheme.Colors.secondaryText).fixedSize(horizontal: false, vertical: true) }
+        }
+        .padding(.horizontal, 12).padding(.vertical, 8)
+        .background(AppTheme.Colors.background)
+    }
+    private func chromeButton(_ label: String, symbol: String, id: String, action: (() -> Void)?) -> some View {
+        Button { action?() } label: {
+            Image(systemName: symbol).frame(minWidth: 44, minHeight: 44)
+        }.buttonStyle(.appContent).disabled(action == nil)
+            .accessibilityLabel(label).accessibilityIdentifier(id)
+    }
+}
+
+struct MailChrome: View {
+    let title: String
+    var onBack: (() -> Void)?
+    let onInbox: () -> Void
+    let onRefresh: () -> Void
+    var notice: String?
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Button { onBack?() } label: {
+                    Image(systemName: "chevron.left").frame(minWidth: 44, minHeight: 44)
+                }.disabled(onBack == nil).accessibilityLabel("Back")
+                    .accessibilityIdentifier(onBack == nil ? "mail.back" : "story.back")
+                OSStoryText(text: title, target: .screenTitle(.email)).appText(.screenTitle).fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer(minLength: 8)
+                Button(action: onInbox) {
+                    Image(systemName: "tray").frame(minWidth: 44, minHeight: 44)
+                }.accessibilityLabel("Inbox").accessibilityIdentifier("mail.inbox")
+                Button(action: onRefresh) {
+                    Image(systemName: "arrow.clockwise").frame(minWidth: 44, minHeight: 44)
+                }.accessibilityLabel("Refresh mail").accessibilityIdentifier("mail.refresh")
+            }.buttonStyle(.appContent)
+            if let notice { Text(notice).appText(.caption, color: AppTheme.Colors.secondaryText).fixedSize(horizontal: false, vertical: true) }
+        }.padding(.horizontal, 8).padding(.vertical, 4)
+    }
+}
+
+struct MailSourceRow: View {
+    let version: StoryContentVersion
+    let unread: Bool
+    let timestamp: String?
+    private var sender: String {
+        if case .email(let payload) = version.payload { return payload.sender }
+        return version.source ?? "Email"
+    }
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            ZStack {
+                Circle().fill(AppTheme.Colors.accent.opacity(0.18))
+                Text(String(sender.prefix(1))).appText(.sectionTitle)
+            }.frame(width: 40, height: 40).accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(sender).appText(.systemLabel).fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 4)
+                    if unread { Circle().fill(AppTheme.Colors.highlight).frame(width: 7, height: 7).accessibilityLabel("Unread") }
+                }
+                Text(version.title).appText(.sectionTitle).fixedSize(horizontal: false, vertical: true)
+                if let subtitle = version.subtitle { Text(subtitle).appText(.caption, color: AppTheme.Colors.secondaryText).fixedSize(horizontal: false, vertical: true) }
+                if let timestamp { Text(timestamp).appText(.caption, color: AppTheme.Colors.secondaryText) }
+            }
+            Image(systemName: "chevron.right").font(.caption).foregroundStyle(AppTheme.Colors.secondaryText).accessibilityHidden(true)
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 4)
+    }
+}

@@ -198,6 +198,19 @@ final class AppState: ObservableObject {
         feedbackEvent = AppFeedbackEvent(kind: .openedApp)
     }
 
+    /// An explicit in-app root action; local stacks remain separate from OS routes.
+    @discardableResult
+    func requestAppRoot(_ route: PhoneAppRoute) -> Bool {
+        var next = navigation
+        guard next.requestAppRoot(route) else { return false }
+        navigation = next
+        if route == .email {
+            reconcileFirstAnomalyAtBoundary()
+            reconcileActTwoAtBoundary(surface: .email)
+        }
+        return true
+    }
+
     func goHome() {
         finishEditingHomeScreen()
         var next = navigation

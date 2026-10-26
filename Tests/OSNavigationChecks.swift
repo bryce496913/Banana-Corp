@@ -6,6 +6,9 @@ struct OSNavigationChecks {
         var state = OSNavigationState()
         precondition(state.isHomeReady && state.activeApp == nil)
         precondition(!state.goHome())
+        let initial = state
+        precondition(!state.requestAppRoot(.email))
+        precondition(state == initial, "Home cannot recreate an app stack")
         precondition(!state.completeTransition(state.transitionID))
 
         var cycles = 0
@@ -18,12 +21,25 @@ struct OSNavigationChecks {
                 let pending = state
                 precondition(!state.open(.settings))
                 precondition(state == pending, "Double opens must be rejected atomically")
+                precondition(!state.requestAppRoot(route), "Opening cannot recreate an app stack")
+                precondition(state == pending)
                 precondition(!state.completeTransition(opening &- 1))
                 precondition(state.phase == .opening)
                 precondition(state.completeTransition(opening))
                 precondition(state.phase == .active && state.activeApp == route)
                 precondition(!state.completeTransition(opening), "Completion must be idempotent")
                 precondition(!state.open(route))
+                let active = state
+                let wrongRoute = route == .email ? PhoneAppRoute.browser : .email
+                precondition(!state.requestAppRoot(wrongRoute))
+                precondition(state == active, "An inactive route cannot reset the current app")
+                for revision in 1...2 {
+                    precondition(state.requestAppRoot(route))
+                    precondition(state.contentRootRevision == active.contentRootRevision &+ UInt(revision))
+                    precondition(state.phase == .active && state.activeApp == route)
+                    precondition(state.transitionID == opening, "App-root requests must not trigger OS transitions")
+                    precondition(!state.isHomeReady)
+                }
 
                 precondition(state.goHome())
                 let closing = state.transitionID
@@ -32,6 +48,7 @@ struct OSNavigationChecks {
                 let outgoing = state
                 precondition(!state.open(route), "A rapid reopen must not overlap removal")
                 precondition(!state.goHome())
+                precondition(!state.requestAppRoot(route), "Closing cannot resurrect a content stack")
                 precondition(state == outgoing)
                 precondition(!state.completeTransition(opening), "Stale opening completion must not unlock home")
                 precondition(state.completeTransition(closing))
@@ -70,6 +87,6 @@ struct OSNavigationChecks {
             precondition(HomeSwipeIntent.shouldReturnHome(translation: CGSize(width: x, height: y)) == expected)
         }
 
-        print("PASS: \(cycles) app cycles, rapid reopen/double-open rejection, canceled opening, stale/idempotent completion, root recovery, and \(swipes.count) home-swipe cases")
+        print("PASS: \(cycles) app cycles, guarded active app-root revisions, rapid reopen/double-open rejection, canceled opening, stale/idempotent completion, root recovery, and \(swipes.count) home-swipe cases")
     }
 }

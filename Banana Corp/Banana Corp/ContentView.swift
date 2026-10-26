@@ -56,6 +56,11 @@ struct BananaOSView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var presentedRoute: PhoneAppRoute?
 
+    private struct AppContentIdentity: Hashable {
+        let route: PhoneAppRoute
+        let rootRevision: UInt
+    }
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -71,7 +76,7 @@ struct BananaOSView: View {
                     destinationView(for: route)
                         .environment(\.osAppRoute, route)
                 }
-                .id(route)
+                .id(AppContentIdentity(route: route, rootRevision: appState.navigation.contentRootRevision))
                 .statusBarHidden(true)
                 .transition(AppMotion.appTransition(reduceMotion: reduceMotion))
                 .allowsHitTesting(appState.navigation.phase == .active)

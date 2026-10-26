@@ -18,18 +18,31 @@ struct RestrictedAccessEntries: View {
 }
 
 struct RestrictedResourceView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
     let resourceID: String
     var accessOverride: RestrictedAccessStore? = nil
     @State private var selection: StoryContentSelection?
     @State private var failed = false
     @State private var justCompleted = false
+    @State private var address = ""
+    @State private var refreshNotice: String?
+    private var showsBrowserChrome: Bool { appState.activeApp == .browser && accessOverride == nil }
     @State private var feedback: AppFeedbackEvent?
     private var access: RestrictedAccessStore { accessOverride ?? appState.access }
     var body: some View {
-        PhoneShellView(title: "Protected access") {
-            AppScreenScroll {
-                EvidenceBackControl()
+        PhoneShellView(title: showsBrowserChrome ? nil : "Protected access") {
+            VStack(spacing: 0) {
+                if showsBrowserChrome {
+                    BrowserChrome(address: $address, onBack: { dismiss() },
+                                  onHome: { appState.requestAppRoot(.browser) },
+                                  onRefresh: {
+                                      _ = access.resourceState(resourceID)
+                                      refreshNotice = "Protected access checked."
+                                  }, onGo: openAddress, notice: refreshNotice)
+                }
+                AppScreenScroll {
+                if !showsBrowserChrome { EvidenceBackControl() }
                 if let resource = access.catalogue?.resourcesByID[resourceID] {
                     switch access.resourceState(resourceID) {
                     case .hidden:
@@ -79,12 +92,21 @@ struct RestrictedResourceView: View {
                         }
                     }
                 } else { AppErrorState(title: "Entry unavailable", message: "The local access record could not be loaded.") }
+                }
             }
         }
         .modifier(AppFeedbackModifier(event: feedback))
         .navigationDestination(item: $selection) { StorySourceDetailView(selection: $0) }
         .alert("Source unavailable", isPresented: $failed) { Button("OK", role: .cancel) {} }
             message: { Text("The source could not be opened. Your records remain intact.") }
+    }
+    private func openAddress() {
+        let path = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let item = appState.content.availableItems(for: .web).first(where: {
+            if case .web(let page) = $0.version.payload { return page.path == path }
+            return false
+        }) else { failed = true; return }
+        open(item.id)
     }
     private func copy(for resource: RestrictedResource) -> PuzzlePresentationCopy? {
         guard resource.id == "resource.banana_wall" else { return nil }

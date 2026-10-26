@@ -82,3 +82,12 @@ Focused Home Dynamic Type: Debug passed natively (68.027 seconds, one pass/zero 
 2026-10-19: the Home hit-region attempt ended before audit at launch readiness after a prolonged execution gap (7269.110s test, no audit-start marker). Result exit65 retained in `validation/native-experience-20261018-212232-84526/`; owned simulator cleaned. Hit-region remains untested pending interruption diagnosis.
 
 Power evidence for the interrupted hit-region attempt: Oct18 21:26:39 EDT recorded Clamshell Sleep despite both temporary idle assertions. Brief maintenance wakes align with the delayed failure/result. Filtered evidence retained as `validation/native-experience-20261018-212232-84526/power-window.txt`. This is an environmentally interrupted pre-audit run, not a hit-region finding; no sleep/lock preferences were changed.
+
+
+## Browser and Email UI update — 2026-10-26
+
+Creator prioritizes UI before further campaign playthroughs. Added Browser address/local-page search/Go, Back/Home/Refresh across catalogue pages and protected panels; Email inbox sender/subject rows, search/unread filter, Back/Inbox/Refresh and retained message headers/preservation/attachments. Shared authorized queries and explicit read actions remain; local refresh does not mutate opened/preserved versions or advance story. Guarded AppState/OSNavigationState app-root revision resets only the current app’s local stack; Email retains the established inbox boundary. Bible1.13 section14/changelog records approved controls without new canon/gates.
+
+Actual final generic iOS Debug/Release SDK builds and actual product/executable/compiled-assets/resource checks passed, deployment18.0. All10 applicable model checks passed, including guarded app-root navigation. Unsigned products establish no installation or new UI interaction/campaign pass. Existing prior campaign evidence remains source-qualified. User requested campaign pause; next focused validation covers Browser address/Back/Home, Email search/unread/Inbox, nested email-to-web return and preservation before source removal, once UI validation resumes.
+
+Cleanup: removed10 targeted inactive task-only compiler/cache/log/temp paths after lsof checks,161.4MiB logical files; free space increased163463168bytes during the cleanup measurement. Final built apps/logs/model evidence/manifests and all prior unresolved diagnostics/signing/simulator environments retained; no uncertain cleanup or approval needed. Ledger validation/browser-mail-ui-20261026/cleanup-report.json. No native process running.
