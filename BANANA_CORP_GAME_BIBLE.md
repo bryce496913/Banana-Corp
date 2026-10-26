@@ -1,7 +1,7 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.12
-**Last updated:** 2026-10-14  
+**Version:** 1.13
+**Last updated:** 2026-10-26  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
 
@@ -519,6 +519,10 @@ This pass authors only neutral test fixtures, not new player-facing story scenes
 
 A separate Files app, Voice Memos, Calendar, or a dedicated Diagnostics app remain possible additions, not a confirmed requirement to build every app. Evidence is the implemented archive route; do not add a duplicate archive under another title. Diagnostic content is established; its final UI location beyond the known Assistant log is `[TBD]`.
 
+### Approved Browser and Email controls (2026-10-26)
+
+The creator authorizes modern app chrome for the existing Browser and Email surfaces. Browser provides Back, Home, Refresh and an address/search bar for available local catalogue pages. Email provides an Inbox, sender/subject correspondence rows, search, an unread filter, Back, Inbox and Refresh. Returning to Inbox retains the established deliberate source-removal/reconciliation boundary. Refresh only rechecks local content/availability; it does not read a source, complete a presentation, rewrite an opened or preserved version, unlock protected research or advance an act. Search/address navigation resolves only currently authorized available sources and must not expose withheld paths, correspondence or later knowledge. These controls add no external internet requirement, outgoing mail, new correspondence, clues, puzzle gates or ending rules.
+
 ### Mini-game boundaries
 
 Possible ideas include anomalous Pong prediction, messages appearing through Snake, or an impossible Tic Tac Toe symbol. These are `[PROPOSED]`; do not present them as existing act gates or require high scores without an approved puzzle design.
@@ -735,3 +739,4 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-14 | 1.10 | Pass 6: authorized progressive autonomy evidence and explicit synthesis, archived Maya ASCENSION lead, separated plan/energy records and public-versus-restricted confirmation. Knowledge-gated Assistant questions preserve cooperation; no takeover milestone, Act 4 handoff, mechanism or later responsibility reveal is activated. |
 | 2026-10-14 | 1.11 | Pass 7: authorized progressive Daniel contribution/concealment evidence, missing Maya guidance transcript, mandatory Observer participation discovery, factual-history references, gated Assistant questions and source-linked Act 3 conclusion. Optional Observer/ending facts, Maya rescue, Act 4 transition, takeover and unresolved identities/outcomes remain unchanged. |
 | 2026-10-14 | 1.12 | Pass 8: approved exact saved Act 3 completion prerequisites, explicit atomic consecutive Act 4 entry and minimal resistance objective. Optional investigation order/evidence/Observer clues remain independent; takeover, rescue, countermeasures, endings and Act 5 remain reserved. |
+| 2026-10-26 | 1.13 | Creator-approved modern Browser/Email chrome and local navigation/search/refresh controls. Retain explicit read/preservation rules, inbox boundary, authorized sources and reveal order; no new story content or progression gates. |

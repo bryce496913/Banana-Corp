@@ -14,10 +14,39 @@ struct StorySurfaceContent<Placeholder: View>: View {
     @ViewBuilder let placeholder: () -> Placeholder
     @State private var selection: StoryContentSelection?
     @State private var readFailure = false
+    @State private var query = ""
+    @State private var unreadOnly = false
+    @State private var refreshNotice: String?
+    private var usesAppChrome: Bool { surface == .email || surface == .web }
 
     var body: some View {
         Group {
-            if scrollsContent && showsCatalogueOrRecovery {
+            if usesAppChrome {
+                VStack(spacing: 0) {
+                    if surface == .web {
+                        BrowserChrome(address: $query, onHome: { query = ""; refreshNotice = nil },
+                                      onRefresh: refreshLocalSources, onGo: openAddress,
+                                      notice: refreshNotice)
+                    } else {
+                        MailChrome(title: "Inbox", onInbox: { query = ""; unreadOnly = false; refreshNotice = nil },
+                                   onRefresh: refreshLocalSources, notice: refreshNotice)
+                    }
+                    AppScreenScroll {
+                        if surface == .email {
+                            AppSearchField(label: "Search mail", text: $query)
+                                .accessibilityIdentifier("mail.search")
+                            Toggle("Unread only", isOn: $unreadOnly).tint(AppTheme.Colors.accent)
+                                .accessibilityIdentifier("mail.unread")
+                        } else {
+                            if !appState.access.visibleResources().isEmpty || !appState.access.diagnostics.isEmpty {
+                                RestrictedAccessEntries()
+                            }
+                            AppSectionHeader("Available pages")
+                        }
+                        sourceContent
+                    }
+                }
+            } else if scrollsContent && showsCatalogueOrRecovery {
                 AppScreenScroll { sourceContent }
             } else {
                 sourceContent
@@ -49,10 +78,13 @@ struct StorySurfaceContent<Placeholder: View>: View {
         if !appState.content.loadDiagnostics.isEmpty || !appState.story.isWritable {
             AppErrorState(title: "Content unavailable", message: "The local source or saved progress needs recovery. Your progress has not been reset.", retry: { _ = appState.story.load() })
         } else if appState.content.catalogue?.items.contains(where: { $0.appSurface == surface }) == true {
-            let items = appState.content.availableItems(for: surface)
+            let available = appState.content.availableItems(for: surface)
+            let items = filtered(available)
             FirstAnomalyHandoffControl()
             if items.isEmpty {
-                AppEmptyState(symbol: surface.symbol, title: "No content available", message: "There are no available items in this source right now.")
+                AppEmptyState(symbol: surface.symbol,
+                              title: available.isEmpty ? "No content available" : "No matches",
+                              message: available.isEmpty ? "There are no available items in this source right now." : "Try another search or turn off the unread filter.")
             }
             ForEach(items) { item in
                 AppCard {
@@ -68,8 +100,13 @@ struct StorySurfaceContent<Placeholder: View>: View {
                                 }
                             }
                         } label: {
-                            AppListRow(title: item.version.title, subtitle: item.version.subtitle, detail: item.version.source,
-                                       metadata: StoryContentTime.label(for: item.version, context: appState.storyTimeContext), symbol: surface.symbol, isUnread: item.availability == .availableUnread)
+                            if surface == .email {
+                                MailSourceRow(version: item.version, unread: item.availability == .availableUnread,
+                                              timestamp: StoryContentTime.label(for: item.version, context: appState.storyTimeContext))
+                            } else {
+                                AppListRow(title: item.version.title, subtitle: item.version.subtitle, detail: item.version.source,
+                                           metadata: StoryContentTime.label(for: item.version, context: appState.storyTimeContext), symbol: surface.symbol, isUnread: item.availability == .availableUnread)
+                            }
                         }
                         .buttonStyle(.appContent)
                         .accessibilityIdentifier("story.open.\(item.version.id)")
@@ -80,13 +117,47 @@ struct StorySurfaceContent<Placeholder: View>: View {
             }
         } else { placeholder() }
     }
+
+    private func refreshLocalSources() {
+        _ = appState.content.availableItems(for: surface)
+        refreshNotice = surface == .email ? "Local inbox refreshed." : "Local pages refreshed."
+    }
+
+    private func filtered(_ items: [DeliveredStoryContent]) -> [DeliveredStoryContent] {
+        guard usesAppChrome else { return items }
+        let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        return items.filter { item in
+            guard !unreadOnly || item.availability == .availableUnread else { return false }
+            var fields = [item.version.title, item.version.subtitle ?? "", item.version.source ?? ""]
+            if case .email(let mail) = item.version.payload { fields += [mail.sender] + mail.recipients }
+            if case .web(let page) = item.version.payload { fields.append(page.path) }
+            return term.isEmpty || fields.contains { $0.localizedCaseInsensitiveContains(term) }
+        }
+    }
+
+    private func openAddress() {
+        let path = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let item = appState.content.availableItems(for: .web).first(where: {
+            if case .web(let page) = $0.version.payload { return page.path == path }
+            return false
+        }) else { refreshNotice = "Search results show available local pages."; return }
+        switch appState.content.read(item.id, versionID: item.version.id) {
+        case .success:
+            selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: .web)
+        case .failure: readFailure = true
+        }
+    }
 }
 
 struct StorySourceDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
     let selection: StoryContentSelection
     @State private var linkedSelection: StoryContentSelection?
     @State private var failure = false
+    @State private var address = ""
+    @State private var refreshNotice: String?
+    private var usesAppChrome: Bool { selection.surface == .web || selection.surface == .email }
 
     private var version: StoryContentVersion? {
         if let snapshot = appState.content.engagedSnapshot(selection.contentID, versionID: selection.versionID) { return snapshot.version }
@@ -96,9 +167,19 @@ struct StorySourceDetailView: View {
     }
 
     var body: some View {
-        PhoneShellView(title: selection.surface.displayName) {
-            AppScreenScroll {
-                EvidenceBackControl()
+        PhoneShellView(title: usesAppChrome ? nil : selection.surface.displayName) {
+            VStack(spacing: 0) {
+                if selection.surface == .web {
+                    BrowserChrome(address: $address, homeLabel: appState.activeApp == .browser ? "Browser Home" : (appState.activeApp == .email ? "Inbox" : "App home"),
+                                  onBack: { dismiss() }, onHome: returnToRoot,
+                                  onRefresh: refreshOpenedSource,
+                                  onGo: openAddress, notice: refreshNotice)
+                } else if selection.surface == .email {
+                    MailChrome(title: "Email", onBack: { dismiss() }, onInbox: returnToRoot,
+                               onRefresh: refreshOpenedSource, notice: refreshNotice)
+                }
+                AppScreenScroll {
+                if !usesAppChrome { EvidenceBackControl() }
                 if let version {
                     if case .video(let payload) = version.payload {
                         StoryPromotionView(contentID: selection.contentID, version: version, payload: payload)
@@ -118,12 +199,33 @@ struct StorySourceDetailView: View {
                 } else {
                     AppErrorState(title: "Content unavailable", message: "The opened version could not be restored.")
                 }
+                }
             }
+        }
+        .onAppear {
+            if case .web(let page) = version?.payload { address = page.path }
         }
         .onDisappear { appState.reconcileActTwoAtBoundary(surface: selection.surface) }
         .navigationDestination(item: $linkedSelection) { StorySourceDetailView(selection: $0) }
         .alert("Page unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
             message: { Text("This source cannot be opened right now. Your progress has not changed.") }
+    }
+
+    private func refreshOpenedSource() {
+        _ = appState.content.availability(for: selection.contentID, versionID: selection.versionID)
+        refreshNotice = "Source availability checked. The opened version is retained."
+    }
+    private func returnToRoot() {
+        guard let route = appState.activeApp else { return }
+        appState.requestAppRoot(route)
+    }
+    private func openAddress() {
+        let path = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let item = appState.content.availableItems(for: .web).first(where: {
+            if case .web(let page) = $0.version.payload { return page.path == path }
+            return false
+        }) else { failure = true; return }
+        open(item.id)
     }
 
     private func links(for version: StoryContentVersion) -> [StoryContentLink] {

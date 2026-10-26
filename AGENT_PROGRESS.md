@@ -337,3 +337,12 @@ The Home candidate with corrected guard passed actual Debug and Release builds a
 ## Current-header Apple SDK results — 2026-10-25
 
 Actual generic iOS Debug and Release builds and built-bundle/executable/compiled-asset/exact-resource checks passed on the shared-header revision, deployment18.0 and unchanged source inventory. These products are unsigned and establish no installation/UI pass. Physical current-header build exited70 before compilation due to unavailable phone destination; earlier installed Home editing attempt timed out before any test case. Both retained. Pending creator reconnect/unlock; next run must use a fresh current-header QA identity and require unchanged default audit,15app navigation and corrected editing/relaunch test exact3/0/0. No native process remains running. Both focused PRs remain draft; no playtest invitation.
+
+
+## Browser and Email UI update — 2026-10-26
+
+Creator prioritizes UI before further campaign playthroughs. Added Browser address/local-page search/Go, Back/Home/Refresh across catalogue pages and protected panels; Email inbox sender/subject rows, search/unread filter, Back/Inbox/Refresh and retained message headers/preservation/attachments. Shared authorized queries and explicit read actions remain; local refresh does not mutate opened/preserved versions or advance story. Guarded AppState/OSNavigationState app-root revision resets only the current app’s local stack; Email retains the established inbox boundary. Bible1.13 section14/changelog records approved controls without new canon/gates.
+
+Actual final generic iOS Debug/Release SDK builds and actual product/executable/compiled-assets/resource checks passed, deployment18.0. All10 applicable model checks passed, including guarded app-root navigation. Unsigned products establish no installation or new UI interaction/campaign pass. Existing prior campaign evidence remains source-qualified. User requested campaign pause; next focused validation covers Browser address/Back/Home, Email search/unread/Inbox, nested email-to-web return and preservation before source removal, once UI validation resumes.
+
+Cleanup: removed10 targeted inactive task-only compiler/cache/log/temp paths after lsof checks,161.4MiB logical files; free space increased163463168bytes during the cleanup measurement. Final built apps/logs/model evidence/manifests and all prior unresolved diagnostics/signing/simulator environments retained; no uncertain cleanup or approval needed. Ledger validation/browser-mail-ui-20261026/cleanup-report.json. No native process running.
