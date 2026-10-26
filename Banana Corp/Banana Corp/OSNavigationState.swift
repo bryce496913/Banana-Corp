@@ -7,6 +7,7 @@ struct OSNavigationState: Equatable {
     private(set) var phase: Phase = .home
     private(set) var activeApp: PhoneAppRoute?
     private(set) var transitionID: UInt = 0
+    private(set) var contentRootRevision: UInt = 0
 
     var isHomeReady: Bool { phase == .home }
 
@@ -16,6 +17,14 @@ struct OSNavigationState: Equatable {
         activeApp = route
         phase = .opening
         transitionID &+= 1
+        return true
+    }
+
+    /// Recreate only the active app's local content stack, without an OS transition.
+    @discardableResult
+    mutating func requestAppRoot(_ route: PhoneAppRoute) -> Bool {
+        guard phase == .active, activeApp == route else { return false }
+        contentRootRevision &+= 1
         return true
     }
 
