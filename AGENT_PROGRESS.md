@@ -314,3 +314,8 @@ Failed destination attempts remain retained. Debug/neither B failed0/1/0 at498.4
 The scoped actual-game simulator diagnostic failed its initial Email tap0/1/0,39.935s; no Home action reached. Owned technical logs show active-contact removal/soft cancellation without proving shared cause or SDK defect. Separate unchanged neutral upstream diagnostic passed2/0/0 (21.458s/145.140s), with complete capture/integrity/owned cleanup. Public logs show62 synthesized actions/touch-up/completion confirmations; all succeeded, so there is no failed-contact comparison. Coarse classifier candidates are routine digitizer-service cancellations, not failure evidence. Simulator campaign reliability remains unresolved.
 
 Next: existing isolated presentation/default accessibility checks, simulator reliability and remaining readiness gaps. Full Act4/Act5/endings remain incomplete; no human playtest readiness claim.
+
+
+## Mandatory cleanup instructions — 2026-10-26
+
+Added the creator's Mandatory Agent Cleanup Policy verbatim to AGENTS.md. Existing instructions were preserved and compared against main; custom whitespace and relative-documentation-link checks passed. Documentation-only change; no app builds required. Cleanup review for this instruction task found no newly created disposable artifacts. Existing unresolved native diagnostics, test products, signing inputs, simulator environments and sources remain preserved. Continue physical QA only with reviewed current-source products and actual device readiness; the policy does not authorize deleting unresolved evidence or active/shared outputs.
