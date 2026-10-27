@@ -545,7 +545,7 @@ struct BrowserChrome: View {
                     .accessibilityIdentifier("browser.address")
                     .accessibilityLabel("Address or search local pages")
                 Button(action: onGo) {
-                    Image(systemName: "arrow.right").frame(minWidth: 44, minHeight: 44)
+                    Image(systemName: "arrow.right").frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
                 }.buttonStyle(.appContent).accessibilityLabel("Go").accessibilityIdentifier("browser.go")
             }
             .padding(.leading, 12)
@@ -567,7 +567,7 @@ struct BrowserChrome: View {
     }
     private func chromeButton(_ label: String, symbol: String, id: String, action: (() -> Void)?) -> some View {
         Button { action?() } label: {
-            Image(systemName: symbol).frame(minWidth: 44, minHeight: 44)
+            Image(systemName: symbol).frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
         }.buttonStyle(.appContent).disabled(action == nil)
             .accessibilityLabel(label).accessibilityIdentifier(id)
     }
@@ -575,6 +575,7 @@ struct BrowserChrome: View {
 
 struct MailChrome: View {
     let title: String
+    var inboxLabel = "Inbox"
     var onBack: (() -> Void)?
     let onInbox: () -> Void
     let onRefresh: () -> Void
@@ -583,17 +584,17 @@ struct MailChrome: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Button { onBack?() } label: {
-                    Image(systemName: "chevron.left").frame(minWidth: 44, minHeight: 44)
+                    Image(systemName: "chevron.left").frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
                 }.disabled(onBack == nil).accessibilityLabel("Back")
                     .accessibilityIdentifier(onBack == nil ? "mail.back" : "story.back")
                 OSStoryText(text: title, target: .screenTitle(.email)).appText(.screenTitle).fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
                 Spacer(minLength: 8)
                 Button(action: onInbox) {
-                    Image(systemName: "tray").frame(minWidth: 44, minHeight: 44)
-                }.accessibilityLabel("Inbox").accessibilityIdentifier("mail.inbox")
+                    Image(systemName: "tray").frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
+                }.accessibilityLabel(inboxLabel).accessibilityIdentifier("mail.inbox")
                 Button(action: onRefresh) {
-                    Image(systemName: "arrow.clockwise").frame(minWidth: 44, minHeight: 44)
+                    Image(systemName: "arrow.clockwise").frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
                 }.accessibilityLabel("Refresh mail").accessibilityIdentifier("mail.refresh")
             }.buttonStyle(.appContent)
             if let notice { Text(notice).appText(.caption, color: AppTheme.Colors.secondaryText).fixedSize(horizontal: false, vertical: true) }

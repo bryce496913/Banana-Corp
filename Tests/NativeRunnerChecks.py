@@ -57,6 +57,8 @@ if name == 'xcrun':
         number = int(counter.read_text()) + 1 if counter.exists() else 1
         counter.write_text(str(number))
         print('owned-simulator-' + str(number))
+    elif args[:2] == ['simctl', 'shutdown'] and os.environ.get('MOCK_SHUTDOWN_FAIL') == '1':
+        sys.exit(42)
     elif args[:2] == ['simctl', 'get_app_container']:
         print(root / 'container')
     elif args[:4] == ['xcresulttool', 'get', 'test-results', 'summary']:
@@ -67,7 +69,7 @@ raise RuntimeError(name)
 '''
 
 
-def run_case(runner, failure=None, skip=False):
+def run_case(runner, failure=None, skip=False, shutdown_failure=False):
     with tempfile.TemporaryDirectory(prefix="banana-runner-contract-") as directory:
         root = Path(directory)
         (root / "scripts").mkdir()
@@ -81,7 +83,8 @@ def run_case(runner, failure=None, skip=False):
             executable.chmod(0o755)
         environment = os.environ.copy()
         environment.update(PATH=str(root / "bin") + os.pathsep + environment["PATH"],
-                           MOCK_ROOT=str(root), MOCK_FAIL=failure or "", MOCK_SKIP="1" if skip else "0")
+                           MOCK_ROOT=str(root), MOCK_FAIL=failure or "", MOCK_SKIP="1" if skip else "0",
+                           MOCK_SHUTDOWN_FAIL="1" if shutdown_failure else "0")
         integration = runner == "validate-ios-integration.sh"
         arguments = (["00000000-0000-0000-0000-000000000001", str(root / "results")]
                      if integration else ["com.apple.CoreSimulator.SimRuntime.iOS-18-0",
@@ -100,6 +103,7 @@ def run_case(runner, failure=None, skip=False):
         logs = list(root.rglob("*.log"))
         assert logs
         for log in logs:
+            if log.name == "simulator-cleanup.log": continue
             action = "build" if log.name.startswith("build-") else "test"
             assert "mock diagnostic " + action in log.read_text(), log
             assert "mock stdout " + action in log.read_text(), log
@@ -119,11 +123,24 @@ def run_case(runner, failure=None, skip=False):
             assert not mutations, "Integration runner must not delete the caller's simulator"
         else:
             created = [entry for entry in commands if entry[0] == "xcrun" and entry[1][:2] == ["simctl", "create"]]
-            assert len(mutations) == 2 * len(created)
+            assert len(mutations) == len(created)
+            assert not any(args[1] == "delete" for args in mutations), "Journey QA must retain simulators"
+            retained_files = list(root.rglob("retained-simulators.jsonl"))
+            assert len(retained_files) == 1
+            records = [json.loads(line) for line in retained_files[0].read_text().splitlines()]
+            assert len(records) == len(created), "Each owned simulator must be recorded exactly once"
             for number in range(1, len(created) + 1):
                 identifier = "owned-simulator-" + str(number)
                 assert ["simctl", "shutdown", identifier] in mutations
-                assert ["simctl", "delete", identifier] in mutations
+                record = records[number - 1]
+                assert record["udid"] == identifier and record["created_by_runner"] and record["retained"]
+                assert record["shutdown_exit"] == (42 if shutdown_failure else 0)
+                assert record["shutdown_succeeded"] == (not shutdown_failure)
+                assert record["configuration"] in ["Debug", "Release"]
+                assert record["preservation_path"] in ["both", "email", "video", "neither"]
+                assert record["runtime"] == arguments[0] and record["device_type"] == arguments[1]
+                assert Path(record["xcresult"]).parent == retained_files[0].parent
+                assert Path(record["save"]).parent == retained_files[0].parent
 
 
 for runner in ["validate-ios-integration.sh", "validate-acts-journey.sh"]:
@@ -131,7 +148,8 @@ for runner in ["validate-ios-integration.sh", "validate-acts-journey.sh"]:
     run_case(runner, failure="test")
 run_case("validate-ios-integration.sh", failure="build")
 run_case("validate-acts-journey.sh", skip=True)
-print("PASS: six mocked existing native-runner cases")
+run_case("validate-acts-journey.sh", shutdown_failure=True)
+print("PASS: seven mocked existing native-runner cases, including retained journey simulators")
 
 EXPERIENCE_MOCK = r'''#!/usr/bin/env python3
 import json, os, pathlib, shutil, sys

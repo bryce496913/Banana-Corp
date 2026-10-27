@@ -21,14 +21,31 @@ xcodebuild -version | tee "$results/xcode.txt"
 xcrun simctl list runtimes | tee "$results/runtimes.txt"
 xcrun simctl list devicetypes | tee "$results/device-types.txt"
 qa_simulator=''
+qa_runtime="$1"
+qa_device_type="$2"
 cleanup() {
     if [[ -n "$qa_simulator" ]]; then
-        xcrun simctl shutdown "$qa_simulator" || true
-        xcrun simctl delete "$qa_simulator" || true
+        local shutdown_status=0
+        xcrun simctl shutdown "$qa_simulator" >> "$results/simulator-cleanup.log" 2>&1 || shutdown_status=$?
+        python3 - "$results/retained-simulators.jsonl" "$qa_simulator" "$configuration" "$path" "$qa_runtime" "$qa_device_type" "$shutdown_status" <<'PYRETAIN' || echo 'Could not record retained QA simulator; inspect cleanup log and owned simulator.' >&2
+import json,sys
+from pathlib import Path
+record_path,identifier,configuration,path,runtime,device_type,shutdown_status=sys.argv[1:]
+results=Path(record_path).parent
+record=dict(udid=identifier,created_by_runner=True,retained=True,configuration=configuration,
+            preservation_path=path,runtime=runtime,device_type=device_type,
+            shutdown_exit=int(shutdown_status),shutdown_succeeded=shutdown_status=='0',
+            xcresult=str(results/f'{configuration}-{path}.xcresult'),
+            save=str(results/f'{configuration}-{path}-save.json'),
+            note='Retained for explicit review/reuse; do not restart a fresh-journey test on this progressed save.')
+with open(record_path,'a') as output: output.write(json.dumps(record)+'\n')
+PYRETAIN
+        qa_simulator=''
     fi
 }
 trap cleanup EXIT
-# Only simulators created by this script are deleted. Never reset a player's device/save.
+# Shut down only this runner's simulators; retain their identities and saves for review/reuse.
+# Never automatically delete simulators or reset a player's device/save.
 for configuration in Debug Release; do
     for path in both email video neither; do
         qa_simulator="$(xcrun simctl create "Banana QA $configuration $path" "$2" "$1")"
