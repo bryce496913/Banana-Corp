@@ -175,7 +175,8 @@ struct StorySourceDetailView: View {
                                   onRefresh: refreshOpenedSource,
                                   onGo: openAddress, notice: refreshNotice)
                 } else if selection.surface == .email {
-                    MailChrome(title: "Email", onBack: { dismiss() }, onInbox: returnToRoot,
+                    MailChrome(title: "Email", inboxLabel: appState.activeApp == .email ? "Inbox" : (appState.activeApp == .browser ? "Browser Home" : "App home"),
+                               onBack: { dismiss() }, onInbox: returnToRoot,
                                onRefresh: refreshOpenedSource, notice: refreshNotice)
                 }
                 AppScreenScroll {

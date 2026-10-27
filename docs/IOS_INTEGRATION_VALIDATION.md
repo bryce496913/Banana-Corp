@@ -165,3 +165,8 @@ Raw initial logs, results and failure attachments are retained locally in `valid
 
 
 Isolated confirmation (2026-10-16 continuation): actual Debug/Release builds and bundle checks passed. Five hosted and three UI smoke cases passed in each configuration, including all 15 apps, repeated launch/Home and reserved-strip swipe. Release evidence: `validation/native-fixed-20261015/tests-Release-isolated.xcresult`. Full journey is running separately; its integration skip is not a journey pass. Earlier Release failures are retained. Run one QA simulator at a time and check for owned simulators left booted after interruption. See [current tracking](../AGENT_PROGRESS.md).
+
+
+## Browser/Email campaign integration continuation (2026-10-27)
+
+See [Browser/Email gameplay QA](BROWSER_EMAIL_GAMEPLAY_QA.md) for source-qualified native results, the incomplete campaign and unresolved accessibility finding. The standard journey runner now shuts down and retains only its own simulators, writing retention metadata rather than deleting devices automatically. Portable runner contracts cover this behavior; they are not native gameplay evidence. A storage-efficient validation-only workflow uses one task-owned simulator with independent cold app sandboxes; report that isolation accurately rather than as eight cold devices. Keep all partial saves/results and enforce storage guards.

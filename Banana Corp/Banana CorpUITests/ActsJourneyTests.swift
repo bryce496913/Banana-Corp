@@ -17,7 +17,9 @@ final class ActsJourneyTests: XCTestCase {
         app.launch()
         ready(app.buttons["bananaOS.app.email"], timeout: 20)
         XCTAssertEqual(app.statusBars.count, 0)
+        exerciseOpeningBrowserControls(app)
         openApp(app, "email")
+        exerciseUnreadMailFilters(app)
         XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists, "Fresh campaign must not have the leak unlocked")
         openApp(app, "news")
         tap(app, "story.open.version.act1.news.launch.v1")
@@ -27,10 +29,16 @@ final class ActsJourneyTests: XCTestCase {
         checkpoint(app, "before email read")
         openApp(app, "email")
         tap(app, "story.open.version.act1.echo_review.v1")
+        tap(app, "mail.refresh")
+        XCTAssertTrue(app.staticTexts["Source availability checked. The opened version is retained."].exists)
+        ready(app.buttons["story.preserve.version.act1.echo_review.v1"])
         if preserveEmail { preserve(app, "version.act1.echo_review.v1") }
         checkpoint(app, "after email read before return")
         // Relaunch returns to the real Home/inbox boundary; no injected story event.
         openApp(app, "email")
+        XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
+        // Keep the original pre-return checkpoint intact; Inbox is now an idempotent real boundary.
+        tap(app, "mail.inbox")
         XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
         checkpoint(app, "after removal before unknown warning")
         openApp(app, "messager")
@@ -66,7 +74,11 @@ final class ActsJourneyTests: XCTestCase {
         openAndRead(app, "news", "version.act2.news.official.v1")
         openAndRead(app, "messager", "version.act2.messages.daniel.v1")
         openAndRead(app, "email", "version.act2.email.maya.v1")
-        openAndRead(app, "browser", "version.act2.web.echo07.v1")
+        openApp(app, "browser")
+        enterBrowserAddress(app, "/research/echo-07/summary")
+        ready(app.buttons["story.back"], timeout: 5)
+        XCTAssertEqual(app.textFields["browser.address"].value as? String, "/research/echo-07/summary")
+        XCTAssertTrue(app.staticTexts["ECHO-07 — Neural Synchronization Trial — Preliminary Findings"].exists)
         checkpoint(app, "after ECHO-07 read")
         // Existing catalogue guidance opens the diagnostic source explicitly.
         openApp(app, "browser")
@@ -93,7 +105,21 @@ final class ActsJourneyTests: XCTestCase {
         tap(app, "story.puzzle.hint.\(puzzle)")
         for source in ["content.act2.messages.daniel", "content.act2.news.official", "content.act2.email.maya", "content.act2.web.echo07"] {
             tap(app, "story.puzzle.clue.\(source)")
+            if source == "content.act2.email.maya" {
+                XCTAssertEqual(app.buttons["mail.inbox"].label, "Browser Home",
+                               "An email clue inside Browser must name its actual app root")
+            }
             tap(app, "story.back")
+            if source == "content.act2.email.maya" {
+                XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists,
+                              "Back from an email clue must return to the puzzle")
+                tap(app, "story.puzzle.clue.\(source)")
+                tap(app, "mail.inbox")
+                ready(app.buttons["story.resource.resource.banana_wall"])
+                XCTAssertFalse(app.buttons["story.back"].exists, "Browser Home must discard the nested clue stack")
+                tap(app, "story.resource.resource.banana_wall")
+                XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists)
+            }
         }
         let fields = [("discipline", "neural systems"), ("trial", "ECHO-07"), ("public_scope", "selected preferences"), ("research_scope", "recorded cognitive patterns")]
         for (id, value) in fields {
@@ -197,6 +223,65 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertFalse(finish.isEnabled, "Viewed presentation must remain viewed after relaunch")
     }
 
+    @MainActor private func enterBrowserAddress(_ app: XCUIApplication, _ path: String) {
+        let address = app.textFields["browser.address"].firstMatch
+        ready(address)
+        address.tap()
+        if let value = address.value as? String, value != "Address or search local pages", !value.isEmpty {
+            address.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: value.count))
+        }
+        address.typeText(path)
+        tap(app, "browser.go")
+    }
+
+    @MainActor private func exerciseOpeningBrowserControls(_ app: XCUIApplication) {
+        openApp(app, "browser")
+        tap(app, "browser.refresh")
+        XCTAssertTrue(app.staticTexts["Local pages refreshed."].exists)
+        enterBrowserAddress(app, "/banana-vision")
+        ready(app.buttons["story.back"], timeout: 5)
+        XCTAssertEqual(app.textFields["browser.address"].value as? String, "/banana-vision")
+        tap(app, "browser.refresh")
+        XCTAssertTrue(app.staticTexts["Source availability checked. The opened version is retained."].exists)
+        tap(app, "story.back")
+        ready(app.buttons["story.open.version.act1.product.v1"])
+        tap(app, "browser.home")
+        enterBrowserAddress(app, "/research/echo-07/summary")
+        XCTAssertTrue(app.staticTexts["Search results show available local pages."].exists)
+        XCTAssertFalse(app.buttons["story.back"].exists, "An unavailable future address must remain at the local-page root")
+        XCTAssertFalse(app.buttons["story.open.version.act2.web.echo07.v1"].exists)
+        tap(app, "browser.home")
+        enterBrowserAddress(app, "/banana-vision")
+        ready(app.buttons["story.back"], timeout: 5)
+        tap(app, "browser.home")
+        ready(app.buttons["story.open.version.act1.product.v1"])
+        XCTAssertFalse(app.buttons["story.back"].exists)
+    }
+
+    @MainActor private func exerciseUnreadMailFilters(_ app: XCUIApplication) {
+        let welcome = app.buttons["story.open.version.act1.welcome.v1"].firstMatch
+        ready(welcome)
+        let unread = app.switches["mail.unread"].firstMatch
+        ready(unread); unread.tap()
+        XCTAssertEqual(unread.value as? String, "1")
+        ready(welcome)
+        let search = app.textFields["mail.search"].firstMatch
+        ready(search); search.tap(); search.typeText("No matching local mail")
+        XCTAssertTrue(app.staticTexts["No matches"].waitForExistence(timeout: 5))
+        tap(app, "mail.inbox")
+        XCTAssertEqual(unread.value as? String, "0")
+        ready(welcome)
+        // Filtering must not read the welcome source: it still appears under Unread only.
+        unread.tap()
+        XCTAssertEqual(unread.value as? String, "1")
+        ready(welcome)
+        tap(app, "mail.inbox")
+        XCTAssertEqual(unread.value as? String, "0")
+        ready(welcome)
+        tap(app, "mail.refresh")
+        XCTAssertTrue(app.staticTexts["Local inbox refreshed."].exists)
+    }
+
     @MainActor private func expectSection(_ app: XCUIApplication, _ section: Int) {
         let arrived = app.staticTexts["\(section) of 5"].waitForExistence(timeout: 5)
         if !arrived {
@@ -210,7 +295,25 @@ final class ActsJourneyTests: XCTestCase {
     }
 
     @MainActor private func ready(_ element: XCUIElement, timeout: TimeInterval = 8) {
-        let condition = NSPredicate(format: "exists == true AND hittable == true AND enabled == true")
+        let app = XCUIApplication()
+        var previous: CGRect?
+        var stableObservations = 0
+        let condition = NSPredicate { _, _ in
+            guard element.exists, element.isHittable, element.isEnabled else {
+                previous = nil; stableObservations = 0
+                return false
+            }
+            let frame = element.frame
+            guard [frame.minX, frame.minY, frame.width, frame.height].allSatisfy({ $0.isFinite }),
+                  frame.width > 0, frame.height > 0,
+                  app.frame.insetBy(dx: 1, dy: 1).contains(CGPoint(x: frame.midX, y: frame.midY)) else {
+                previous = nil; stableObservations = 0
+                return false
+            }
+            stableObservations = previous == frame ? stableObservations + 1 : 0
+            previous = frame
+            return stableObservations >= 2
+        }
         let result = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: element)], timeout: timeout)
         if result != .completed {
             print(XCUIApplication().debugDescription)

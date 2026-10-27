@@ -116,8 +116,26 @@ final class AccessibilityAuditUITests: XCTestCase {
         attachment.lifetime = .keepAlways
         add(attachment)
         // iOS 17+ public XCTest API, supported by the project's iOS 18 target.
-        // Default issue reporting: no handler suppresses or filters findings.
-        try app.performAccessibilityAudit()
+        // Default acceptance runs retain the unmodified public audit.
+        let environment = ProcessInfo.processInfo.environment
+        if (environment["BANANA_QA_AUDIT_LOG_NODES"] ?? environment["TEST_RUNNER_BANANA_QA_AUDIT_LOG_NODES"]) == "1" {
+            try app.performAccessibilityAudit { issue in
+                var details = "AUDIT_NODE_BEGIN\ncompact: \(issue.compactDescription)\ndetailed: \(issue.detailedDescription)\n"
+                if let element = issue.element {
+                    details += "element: \(element.debugDescription)\nlabel: \(element.label)\nidentifier: \(element.identifier)\ntype: \(element.elementType.rawValue)\nframe: \(element.frame)\n"
+                }
+                details += "AUDIT_NODE_END"
+                print(details)
+                let diagnostic = XCTAttachment(string: details)
+                diagnostic.name = "Accessibility audit issue node"
+                diagnostic.lifetime = .keepAlways
+                self.add(diagnostic)
+                // False records the issue normally; no finding is suppressed.
+                return false
+            }
+        } else {
+            try app.performAccessibilityAudit()
+        }
     }
 
     @MainActor private func visible(_ element: XCUIElement, id: String, in app: XCUIApplication) -> Bool {
