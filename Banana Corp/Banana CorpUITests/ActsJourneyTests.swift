@@ -375,7 +375,12 @@ final class ActsJourneyTests: XCTestCase {
         ready(unread); unread.tap()
         XCTAssertEqual(unread.value as? String, "1")
         ready(welcome)
-        let search = app.textFields["mail.search"].firstMatch
+        // SwiftUI may expose a growing input as TextView instead of TextField.
+        let field = app.textFields["mail.search"].firstMatch
+        let area = app.textViews["mail.search"].firstMatch
+        let inputExists = NSPredicate { _, _ in field.exists || area.exists }
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: inputExists, object: app)], timeout: 8), .completed)
+        let search = field.exists ? field : area
         ready(search); search.tap(); search.typeText("No matching local mail")
         XCTAssertTrue(app.staticTexts["No matches"].waitForExistence(timeout: 5))
         tap(app, "mail.inbox")

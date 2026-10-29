@@ -10,6 +10,8 @@ Evidence remains local under `validation/complete-story-native-20261029/fresh-qa
 
 `AppSearchField` now passes vertical axis to the existing `AppTextInput`, whose one-to-four-line layout can grow for large text/long queries. No smaller font, Dynamic Type cap, hidden label, audit suppression or changed filter/read action is introduced. The existing search predicate already trims surrounding whitespace/newlines. Browser address navigation and story rules are unchanged.
 
+The opening journey keeps the exact `mail.search` identifier and waits for either a native TextField or TextView, since SwiftUI can expose a growing input as either. The original input typing, empty-result, unread and Inbox checks remain unchanged. Both Debug/Release XCTest builds pass after this selector update.
+
 The audit test additionally terminates its exact target app in async XCTest teardown and checks stopped state. The failed native run entered Tear Down without an observed test-body termination assertion, so Swift defer alone is not treated as sufficient release evidence. The default all-types audit API remains unchanged; teardown cannot suppress findings.
 
 Actual generic iPhone Debug/Release builds and both XCTest compilation configurations pass. A signed Debug candidate using the same isolated QA identity passes live four-bundle signature/profile/entitlement, exact source/resources, iOS18 deployment and test-mapping checks. These establish compile/install preparation, not an accessibility pass. Candidate products/inputs are retained under `validation/mail-search-accessibility-20261029/`.
