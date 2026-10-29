@@ -383,8 +383,12 @@ struct FirstAnomalyHandoffControl: View {
                     message: { Text("Your investigation has not advanced. Please try again.") }
         } else if appState.story.state.currentAct == .somethingIsntRight {
             ActTwoInvestigationControl(currentContentID: currentContentID)
-        } else if appState.story.state.currentAct == .theConspiracy || appState.story.state.currentAct == .theTakeover {
+        } else if appState.story.state.currentAct == .theConspiracy {
             ActThreeInvestigationControl(currentContentID: currentContentID)
+        } else if appState.story.state.currentAct == .theTakeover {
+            ActFourInvestigationControl(currentContentID: currentContentID)
+        } else if appState.story.state.currentAct == .theFinalChoice {
+            EndgameInvestigationControl(currentContentID: currentContentID)
         }
     }
 }
@@ -505,5 +509,64 @@ struct ActThreeInvestigationControl: View {
         case .success(.unchanged): break
         case .failure: failure = true
         }
+    }
+}
+
+
+/// Approved resistance actions use the shared content/progression authority.
+struct ActFourInvestigationControl: View {
+    var currentContentID: String? = nil
+    @EnvironmentObject private var appState: AppState
+    @State private var selection: StoryContentSelection?
+    @State private var failure = false
+    @State private var feedback: AppFeedbackEvent?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("The Takeover").appText(.sectionTitle)
+            if appState.content.valeComparisonAvailable {
+                action("Compare Vale’s authorization and loss of control", id: "vale.compare") { appState.content.compareValeRecords() }
+            }
+            if appState.content.rootAuthorizationAvailable {
+                action("Obtain emergency Root Authorization", id: "root.authorize") { appState.content.obtainRootAuthorization() }
+            }
+            if appState.content.deploymentVerificationAvailable {
+                action("Verify the Deployment Channel", id: "deployment.verify") { appState.content.verifyDeploymentChannel() }
+            }
+            if appState.content.lanternAuthorizationAvailable {
+                action("Authorize LANTERN safety access", id: "lantern.authorize") { appState.content.authorizeLanternSafetyAccess() }
+            }
+            if appState.content.takeoverConfirmationAvailable {
+                action("Connect the resistance and takeover evidence", id: "takeover.connect") { appState.content.confirmTakeoverEvidence() }
+            }
+            if let milestone = appState.story.state.ascensionMilestone, milestone.percentage == 87 {
+                Text("ASCENSION · 87%").appText(.sectionTitle)
+                    .accessibilityLabel("ASCENSION, eighty-seven percent. Story milestone, not a countdown.")
+            }
+            if appState.content.actFiveHandoffAvailable {
+                action("Enter the final investigation", id: "advance.act5") { appState.content.beginActFive() }
+            }
+            if let lead = appState.content.actFourSuggestedLead, lead.id != currentContentID {
+                Button {
+                    if lead.surface != .video, case .failure = appState.content.read(lead.id, versionID: lead.version.id) { failure = true; return }
+                    selection = .init(contentID: lead.id, versionID: lead.version.id, surface: lead.surface)
+                } label: { Label(lead.version.title, systemImage: lead.surface.symbol) }
+                    .buttonStyle(.modernPhone).accessibilityIdentifier("story.lead.\(lead.version.id)")
+            }
+        }
+        .navigationDestination(item: $selection) { StorySourceDetailView(selection: $0) }
+        .modifier(AppFeedbackModifier(event: feedback))
+        .alert("Investigation update unavailable", isPresented: $failure) { Button("OK", role: .cancel) {} }
+            message: { Text("The action could not be saved. Your existing records remain intact.") }
+    }
+
+    private func action(_ title: String, id: String, perform: @escaping () -> StoryContentDeliveryResult) -> some View {
+        Button(title) {
+            switch perform() {
+            case .success(.changed): feedback = AppFeedbackEvent(kind: .confirmedAction)
+            case .success(.unchanged): break
+            case .failure: failure = true
+            }
+        }.buttonStyle(.appPrimary).accessibilityIdentifier("story.act4.\(id)")
     }
 }

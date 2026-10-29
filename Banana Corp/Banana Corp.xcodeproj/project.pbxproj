@@ -75,6 +75,9 @@
 		FE1900000000000000000002 /* ActsJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1900000000000000000001 /* ActsJourneyTests.swift */; };
 		FE2000000000000000000002 /* AccessibilityAuditUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2000000000000000000001 /* AccessibilityAuditUITests.swift */; };
 		FE2000000000000000000004 /* StoryResetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2000000000000000000003 /* StoryResetUITests.swift */; };
+		24A12223DAA900EF20022C62 /* EndgameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172445D9A5575163D6EA5741 /* EndgameStore.swift */; };
+		8C6E7275E45023DEAAB556AB /* EndgameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EC3DB401B50EF1ABE30D1 /* EndgameViews.swift */; };
+		A7E4C3688D7EEF645FB7E0E2 /* LateStoryJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -140,6 +143,9 @@
 		FE1900000000000000000001 /* ActsJourneyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActsJourneyTests.swift; sourceTree = "<group>"; };
 		FE2000000000000000000001 /* AccessibilityAuditUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAuditUITests.swift; sourceTree = "<group>"; };
 		FE2000000000000000000003 /* StoryResetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryResetUITests.swift; sourceTree = "<group>"; };
+		172445D9A5575163D6EA5741 /* EndgameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndgameStore.swift; sourceTree = "<group>"; };
+		A80EC3DB401B50EF1ABE30D1 /* EndgameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndgameViews.swift; sourceTree = "<group>"; };
+		3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateStoryJourneyTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +211,8 @@
                 EE5800052E3A000000000001 /* RestrictedAccessViews.swift */,
                 EE5800072E3A000000000001 /* RestrictedAccess.json */,
                 EE5300092E35000000000001 /* StoryContent.json */,
+                172445D9A5575163D6EA5741 /* EndgameStore.swift */,
+                A80EC3DB401B50EF1ABE30D1 /* EndgameViews.swift */,
                 EE5300072E35000000000001 /* StoryContentStore.swift */,
                 EE5300052E35000000000001 /* StoryContentCatalogue.swift */,
                 EE5300032E35000000000001 /* StoryContentRules.swift */,
@@ -245,7 +253,7 @@
 			sourceTree = "<group>";
 		};
 		FE1800000000000000000002 /* Banana CorpTests */ = {isa = PBXGroup; children = (FE1800000000000000000003 /* IOSIntegrationTests.swift */,); path = "Banana CorpTests"; sourceTree = "<group>"; };
-		FE1800000000000000000016 /* Banana CorpUITests */ = {isa = PBXGroup; children = (FE1800000000000000000017 /* LaunchSmokeTests.swift */, FE1900000000000000000001 /* ActsJourneyTests.swift */, FE2000000000000000000001 /* AccessibilityAuditUITests.swift */, FE2000000000000000000003 /* StoryResetUITests.swift */,); path = "Banana CorpUITests"; sourceTree = "<group>"; };
+		FE1800000000000000000016 /* Banana CorpUITests */ = {isa = PBXGroup; children = (3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */,FE1800000000000000000017 /* LaunchSmokeTests.swift */, FE1900000000000000000001 /* ActsJourneyTests.swift */, FE2000000000000000000001 /* AccessibilityAuditUITests.swift */, FE2000000000000000000003 /* StoryResetUITests.swift */,); path = "Banana CorpUITests"; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -368,6 +376,8 @@
                 EE5800022E3A000000000001 /* RestrictedAccessModels.swift in Sources */,
                 EE5800042E3A000000000001 /* RestrictedAccessStore.swift in Sources */,
                 EE5800062E3A000000000001 /* RestrictedAccessViews.swift in Sources */,
+                24A12223DAA900EF20022C62 /* EndgameStore.swift in Sources */,
+                8C6E7275E45023DEAAB556AB /* EndgameViews.swift in Sources */,
                 EE5300082E35000000000001 /* StoryContentStore.swift in Sources */,
                 EE5300062E35000000000001 /* StoryContentCatalogue.swift in Sources */,
                 EE5300042E35000000000001 /* StoryContentRules.swift in Sources */,
@@ -399,7 +409,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FE1800000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FE1800000000000000000004 /* IOSIntegrationTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
-		FE180000000000000000001A = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */, FE1900000000000000000002 /* ActsJourneyTests.swift in Sources */, FE2000000000000000000002 /* AccessibilityAuditUITests.swift in Sources */, FE2000000000000000000004 /* StoryResetUITests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
+		FE180000000000000000001A = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A7E4C3688D7EEF645FB7E0E2 /* LateStoryJourneyTests.swift in Sources */, FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */, FE1900000000000000000002 /* ActsJourneyTests.swift in Sources */, FE2000000000000000000002 /* AccessibilityAuditUITests.swift in Sources */, FE2000000000000000000004 /* StoryResetUITests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */

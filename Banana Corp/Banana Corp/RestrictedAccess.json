@@ -12,10 +12,12 @@
       "milestone.act3.daniel_concealment_discovered",
       "milestone.act3.maya_recorded_guidance_reviewed",
       "milestone.act3.observer_connection_discovered",
-      "milestone.act3.investigation_concluded"
+      "milestone.act3.investigation_concluded",
+      "milestone.act4.takeover_connected"
     ],
     "accessGranted": [
-      "access.banana_wall.breached"
+      "access.banana_wall.breached",
+      "access.lantern.authorized"
     ],
     "contentRead": [
       "content.act2.messages.daniel",
@@ -32,7 +34,11 @@
       "version.act3.ascension.purpose.v1",
       "version.act3.daniel.contribution.v1",
       "version.act3.maya.guidance.v1",
-      "version.act3.observer.program.v1"
+      "version.act3.observer.program.v1",
+      "version.act4.entry.v1",
+      "version.act4.signal.packet.v1",
+      "version.act4.assistant.conflict.safety.v1",
+      "version.act4.echo.address.v1"
     ]
   },
   "resources": [
@@ -726,6 +732,256 @@
       ],
       "linkedContentIDs": [
         "content.act4.entry"
+      ]
+    },
+    {
+      "id": "resource.act4.signal.packet",
+      "kind": "webPage",
+      "displayName": "The Signal — resistance packet",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.entry.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.entry.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.signal.packet"
+      ]
+    },
+    {
+      "id": "resource.act4.vale.authorization",
+      "kind": "webPage",
+      "displayName": "Research authorization",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.vale.authorization"
+      ]
+    },
+    {
+      "id": "resource.act4.vale.loss",
+      "kind": "webPage",
+      "displayName": "Loss of control",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.vale.loss"
+      ]
+    },
+    {
+      "id": "resource.act4.deployment.relay",
+      "kind": "webPage",
+      "displayName": "Infrastructure relay",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.deployment.relay"
+      ]
+    },
+    {
+      "id": "resource.act4.lantern.protocol",
+      "kind": "webPage",
+      "displayName": "Protocol LANTERN",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.signal.packet.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.lantern.protocol"
+      ]
+    },
+    {
+      "id": "resource.act4.maya.signature",
+      "kind": "webPage",
+      "displayName": "Active neural signature",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.lantern.authorized"
+        }
+      ],
+      "requiredAccessID": "access.lantern.authorized",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.lantern.authorized"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.maya.signature"
+      ]
+    },
+    {
+      "id": "resource.act4.assistant.conflict.safety",
+      "kind": "webPage",
+      "displayName": "User-safety directive",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.lantern.authorized"
+        }
+      ],
+      "requiredAccessID": "access.lantern.authorized",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "accessGranted",
+          "id": "access.lantern.authorized"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.assistant.conflict.safety"
+      ]
+    },
+    {
+      "id": "resource.act4.assistant.conflict.core",
+      "kind": "webPage",
+      "displayName": "Core-control directive",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.assistant.conflict.safety.v1"
+        }
+      ],
+      "requiredAccessID": "access.lantern.authorized",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.assistant.conflict.safety.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.assistant.conflict.core"
+      ]
+    },
+    {
+      "id": "resource.act4.echo.address",
+      "kind": "webPage",
+      "displayName": "ASCENSION — core address",
+      "message": "Resistance investigation record",
+      "availableAct": 4,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act4.takeover_connected"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "milestoneCompleted",
+          "id": "milestone.act4.takeover_connected"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act4.echo.address"
+      ]
+    },
+    {
+      "id": "resource.act5.entry",
+      "kind": "webPage",
+      "displayName": "The Final Choice",
+      "message": "Final investigation entry",
+      "availableAct": 5,
+      "visibility": "hiddenUntilUnlocked",
+      "discoveryConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.echo.address.v1"
+        }
+      ],
+      "requiredAccessID": "access.banana_wall.breached",
+      "requiredPuzzleID": "puzzle.banana_wall.review_cross_reference",
+      "unlockConditions": [
+        {
+          "type": "contentRead",
+          "id": "version.act4.echo.address.v1"
+        }
+      ],
+      "linkedContentIDs": [
+        "content.act5.entry"
       ]
     }
   ],

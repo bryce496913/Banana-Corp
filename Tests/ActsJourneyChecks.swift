@@ -513,9 +513,13 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.currentAct == .theTakeover && content.actFourEntry != nil)
         var expected = completed; expected.currentAct = .theTakeover
         precondition(story.state == expected)
-        let beforeEntryUnread = content.unreadCount(for: .web)
+        let beforeEntryUnread = Set(content.availableItems(for: .web).filter { $0.availability == .availableUnread }.map(\.id))
         _ = try content.read(ActThreeHandoffContract.entry, versionID: "version.act4.entry.v1").get()
-        precondition(content.unreadCount(for: .web) == beforeEntryUnread - 1)
+        // Approved Act4 now delivers the Signal packet only after explicit entry read.
+        let expectedUnread = beforeEntryUnread.subtracting([ActThreeHandoffContract.entry]).union([ActFourContract.signal])
+        let actualUnread = Set(content.availableItems(for: .web).filter { $0.availability == .availableUnread }.map(\.id))
+        precondition(actualUnread == expectedUnread)
+        precondition(content.unreadCount(for: .web) == expectedUnread.count)
         let entered = story.state
         _ = try content.beginActFour().get()
         precondition(story.state == entered)
@@ -523,8 +527,8 @@ private final class WallFailingPersistence: StoryPersistence {
         precondition(story.state.ascensionMilestone == nil && story.state.routePrerequisiteIDs == completed.routePrerequisiteIDs)
         precondition(story.state.preservedEvidence == completed.preservedEvidence && story.state.contentDelivery.notifications == completed.contentDelivery.notifications)
         precondition(story.state.contentDelivery.activeVersionIDs[ActTwoContract.alex] == ActTwoContract.replacementWarning)
-        if case .failure(.transitionNotConfigured) = story.advanceAct(to: .theFinalChoice) {} else { preconditionFailure() }
-        print("PASS: all completion gates, explicit atomic handoff, legacy facts, optional independence, entry/retry and closed Act 5")
+        if case .failure(.prerequisitesNotMet) = story.advanceAct(to: .theFinalChoice) {} else { preconditionFailure() }
+        print("PASS: all completion gates, explicit atomic handoff, legacy facts, optional independence, entry/retry and unmet Act 5 resistance prerequisites")
     }
 
     @MainActor static func solveWall(_ story: StoryProgressionStore, _ access: RestrictedAccessStore, _ content: StoryContentStore, disk: StoryFilePersistence) throws {
