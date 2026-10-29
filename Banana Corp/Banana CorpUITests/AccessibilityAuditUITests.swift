@@ -11,6 +11,10 @@ final class AccessibilityAuditUITests: XCTestCase {
         }
         continueAfterFailure = false
         let app = XCUIApplication()
+        defer {
+            app.terminate()
+            XCTAssertEqual(app.state, .notRunning, "Release the QA phone after this audit")
+        }
         app.launch()
         let email = app.buttons["bananaOS.app.email"].firstMatch
         ready(email, timeout: 20)
@@ -51,6 +55,10 @@ final class AccessibilityAuditUITests: XCTestCase {
         }
         continueAfterFailure = false
         let app = XCUIApplication()
+        defer {
+            app.terminate()
+            XCTAssertEqual(app.state, .notRunning, "Release the QA phone after this audit")
+        }
         app.launch()
         let email = app.buttons["bananaOS.app.email"].firstMatch
         ready(email, timeout: 20)
@@ -89,6 +97,10 @@ final class AccessibilityAuditUITests: XCTestCase {
         }
         continueAfterFailure = false
         let app = XCUIApplication()
+        defer {
+            app.terminate()
+            XCTAssertEqual(app.state, .notRunning, "Release the QA phone after this audit")
+        }
         app.launch()
         let email = app.buttons["bananaOS.app.email"].firstMatch
         ready(email, timeout: 20)

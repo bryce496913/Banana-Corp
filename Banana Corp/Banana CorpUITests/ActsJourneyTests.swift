@@ -3,6 +3,42 @@ import XCTest
 /// Run on a fresh, dedicated simulator via scripts/validate-acts-journey.sh.
 /// Mode belongs to the test runner only: no launch arguments or app-state bypasses.
 final class ActsJourneyTests: XCTestCase {
+    private struct CampaignPause: Error { let completed: Int }
+
+    @MainActor
+    func testActsOneThreePlayerJourneyBlock() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard (environment["BANANA_QA_BLOCK"] ?? environment["TEST_RUNNER_BANANA_QA_BLOCK"]) == "physical-checkpoint-block" else {
+            throw XCTSkip("Requires an explicitly authorized physical QA block; never continues automatically")
+        }
+        guard let mode = environment["BANANA_QA_PATH"] ?? environment["TEST_RUNNER_BANANA_QA_PATH"],
+              ["both", "email", "video", "neither"].contains(mode),
+              let start = Int(environment["BANANA_QA_BLOCK_START"] ?? environment["TEST_RUNNER_BANANA_QA_BLOCK_START"] ?? ""),
+              let end = Int(environment["BANANA_QA_BLOCK_END"] ?? environment["TEST_RUNNER_BANANA_QA_BLOCK_END"] ?? ""),
+              0 <= start, start < end, end <= 17 else {
+            XCTFail("Valid runner-only path and checkpoint bounds required"); return
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        var actualEnd = start
+        print("BANANA_BLOCK_BEGIN startAfter=\(start) requestedEnd=\(end) path=\(mode)")
+        defer {
+            app.terminate()
+            XCTAssertEqual(app.state, .notRunning, "The QA app must release the daily-driver phone after each block")
+            print("BANANA_BLOCK_END startAfter=\(start) actualEnd=\(actualEnd) requestedEnd=\(end)")
+        }
+        do {
+            try runCampaign(app, mode: mode, startAfter: start, endAt: end, softPauseAfter: 420) { index, name in
+                actualEnd = index
+                print("BANANA_BLOCK_CHECKPOINT index=\(index) name=\(name)")
+            }
+        } catch let pause as CampaignPause {
+            XCTAssertEqual(actualEnd, pause.completed)
+            print("BANANA_BLOCK_SOFT_PAUSE completed=\(pause.completed); explicit creator continuation required")
+        }
+        XCTAssertGreaterThan(actualEnd, start, "A successful block must complete a canonical checkpoint")
+    }
+
     @MainActor
     func testActsOneThreePlayerJourney() throws {
         let environment = ProcessInfo.processInfo.environment
@@ -11,173 +47,247 @@ final class ActsJourneyTests: XCTestCase {
         }
         XCTAssertTrue(["both", "email", "video", "neither"].contains(mode))
         continueAfterFailure = false
+        // Full acceptance always runs all17; block metadata cannot shorten this method.
+        try runCampaign(XCUIApplication(), mode: mode, startAfter: 0, endAt: 17,
+                        softPauseAfter: nil, completed: { _, _ in })
+    }
+
+    @MainActor private func runCampaign(_ app: XCUIApplication, mode: String,
+                                       startAfter: Int, endAt: Int, softPauseAfter: TimeInterval?,
+                                       completed: (Int, String) -> Void) throws {
         let preserveEmail = mode == "both" || mode == "email"
         let preserveVideo = mode == "both" || mode == "video"
-        let app = XCUIApplication()
+        let puzzle = "puzzle.banana_wall.review_cross_reference"
+        let started = ProcessInfo.processInfo.systemUptime
         app.launch()
         ready(app.buttons["bananaOS.app.email"], timeout: 20)
         XCTAssertEqual(app.statusBars.count, 0)
-        exerciseOpeningBrowserControls(app)
-        openApp(app, "email")
-        exerciseUnreadMailFilters(app)
-        XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists, "Fresh campaign must not have the leak unlocked")
-        openApp(app, "news")
-        tap(app, "story.open.version.act1.news.launch.v1")
-        checkpoint(app, "launch coverage read")
-        openApp(app, "watchVideo")
-        presentation(app, "version.act1.promo.v1", preserve: false)
-        checkpoint(app, "before email read")
-        openApp(app, "email")
-        tap(app, "story.open.version.act1.echo_review.v1")
-        tap(app, "mail.refresh")
-        XCTAssertTrue(app.staticTexts["Source availability checked. The opened version is retained."].exists)
-        ready(app.buttons["story.preserve.version.act1.echo_review.v1"])
-        if preserveEmail { preserve(app, "version.act1.echo_review.v1") }
-        checkpoint(app, "after email read before return")
-        // Relaunch returns to the real Home/inbox boundary; no injected story event.
-        openApp(app, "email")
-        XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
-        // Keep the original pre-return checkpoint intact; Inbox is now an idempotent real boundary.
-        tap(app, "mail.inbox")
-        XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
-        checkpoint(app, "after removal before unknown warning")
-        openApp(app, "messager")
-        tap(app, "story.open.version.act1.first_anomaly.warning.v1")
-        openApp(app, "aiAssistant")
-        tap(app, "story.assistant.version.act1.first_anomaly.denial.v1")
-        checkpoint(app, "after Assistant questioning")
-        if preserveEmail {
-            comparison(app, "evidence.act1.echo_review.v1")
-            XCTAssertTrue(app.staticTexts["Current source unavailable"].waitForExistence(timeout: 8))
-        } else {
-            openApp(app, "evidence")
-            XCTAssertFalse(app.buttons["story.evidence.evidence.act1.echo_review.v1"].exists)
+        func boundary(_ index: Int, _ name: String) throws {
+            // checkpoint() already saved naturally, terminated/relaunched and verified Home readiness.
+            completed(index, name)
+            if let budget = softPauseAfter, index < endAt,
+               ProcessInfo.processInfo.systemUptime - started >= budget {
+                throw CampaignPause(completed: index)
+            }
+        }
+        if startAfter < 1 && endAt >= 1 {
+            exerciseOpeningBrowserControls(app)
             openApp(app, "email")
-            tap(app, "story.open.version.act1.first_anomaly.trace.v1")
+            exerciseUnreadMailFilters(app)
+            XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists, "Fresh campaign must not have the leak unlocked")
+            openApp(app, "news")
+            tap(app, "story.open.version.act1.news.launch.v1")
+            checkpoint(app, "launch coverage read")
+            try boundary(1, "launch coverage read")
         }
-        tap(app, "story.advance.act2")
-        openApp(app, "watchVideo")
-        presentation(app, "version.act2.alex_review.v1", preserve: preserveVideo)
-        checkpoint(app, "before Alex replacement")
-        openApp(app, "watchVideo")
-        XCTAssertFalse(app.buttons["story.open.version.act2.alex_review.v1"].exists)
-        presentation(app, "version.act2.alex_review.v2", preserve: false)
-        checkpoint(app, "after Alex replacement inspected")
-        if preserveVideo {
-            comparison(app, "evidence.act2.alex_review.v1")
-            XCTAssertTrue(app.staticTexts["Visible differences"].waitForExistence(timeout: 8))
-        } else {
-            openApp(app, "evidence")
-            XCTAssertFalse(app.buttons["story.evidence.evidence.act2.alex_review.v1"].exists)
+        if startAfter < 2 && endAt >= 2 {
+            openApp(app, "watchVideo")
+            presentation(app, "version.act1.promo.v1", preserve: false)
+            checkpoint(app, "before email read")
+            try boundary(2, "before email read")
         }
-        openAndRead(app, "news", "version.act2.news.concerns.v1")
-        openAndRead(app, "news", "version.act2.news.official.v1")
-        openAndRead(app, "messager", "version.act2.messages.daniel.v1")
-        openAndRead(app, "email", "version.act2.email.maya.v1")
-        openApp(app, "browser")
-        enterBrowserAddress(app, "/research/echo-07/summary")
-        ready(app.buttons["story.back"], timeout: 5)
-        XCTAssertEqual(app.textFields["browser.address"].value as? String, "/research/echo-07/summary")
-        XCTAssertTrue(app.staticTexts["ECHO-07 — Neural Synchronization Trial — Preliminary Findings"].exists)
-        checkpoint(app, "after ECHO-07 read")
-        // Existing catalogue guidance opens the diagnostic source explicitly.
-        openApp(app, "browser")
-        tap(app, "story.lead.version.act2.diagnostics.excerpt.v1")
-        if !preserveVideo { openAndRead(app, "news", "version.act2.news.corroboration.v1") }
-        openApp(app, "aiAssistant")
-        tap(app, "story.assistant.version.act2.assistant.edits.v1")
-        checkpoint(app, "before explicit synthesis")
-        openApp(app, "browser")
-        tap(app, "story.connect.act2")
-        checkpoint(app, "immediately before Act 3")
-        openApp(app, "browser")
-        tap(app, "story.advance.act3")
-        tap(app, "story.resource.resource.banana_wall")
-        XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
-        checkpoint(app, "locked Banana Wall")
-        openApp(app, "browser")
-        tap(app, "story.resource.resource.banana_wall")
-        XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
-        XCTAssertFalse(app.buttons["Submit"].exists)
-        XCTAssertEqual(app.statusBars.count, 0)
-        XCTAssertFalse(app.alerts.firstMatch.exists)
-        let puzzle = "puzzle.banana_wall.review_cross_reference"
-        tap(app, "story.puzzle.hint.\(puzzle)")
-        for source in ["content.act2.messages.daniel", "content.act2.news.official", "content.act2.email.maya", "content.act2.web.echo07"] {
-            tap(app, "story.puzzle.clue.\(source)")
-            if source == "content.act2.email.maya" {
-                XCTAssertEqual(app.buttons["mail.inbox"].label, "Browser Home",
-                               "An email clue inside Browser must name its actual app root")
+        if startAfter < 3 && endAt >= 3 {
+            openApp(app, "email")
+            tap(app, "story.open.version.act1.echo_review.v1")
+            tap(app, "mail.refresh")
+            XCTAssertTrue(app.staticTexts["Source availability checked. The opened version is retained."].exists)
+            ready(app.buttons["story.preserve.version.act1.echo_review.v1"])
+            if preserveEmail { preserve(app, "version.act1.echo_review.v1") }
+            checkpoint(app, "after email read before return")
+            try boundary(3, "after email read before return")
+        }
+        if startAfter < 4 && endAt >= 4 {
+            // Relaunch returns to the real Home/inbox boundary; no injected story event.
+            openApp(app, "email")
+            XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
+            // Keep the original pre-return checkpoint intact; Inbox is now an idempotent real boundary.
+            tap(app, "mail.inbox")
+            XCTAssertFalse(app.buttons["story.open.version.act1.echo_review.v1"].exists)
+            checkpoint(app, "after removal before unknown warning")
+            try boundary(4, "after removal before unknown warning")
+        }
+        if startAfter < 5 && endAt >= 5 {
+            openApp(app, "messager")
+            tap(app, "story.open.version.act1.first_anomaly.warning.v1")
+            openApp(app, "aiAssistant")
+            tap(app, "story.assistant.version.act1.first_anomaly.denial.v1")
+            checkpoint(app, "after Assistant questioning")
+            try boundary(5, "after Assistant questioning")
+        }
+        if startAfter < 6 && endAt >= 6 {
+            if preserveEmail {
+                comparison(app, "evidence.act1.echo_review.v1")
+                XCTAssertTrue(app.staticTexts["Current source unavailable"].waitForExistence(timeout: 8))
+            } else {
+                openApp(app, "evidence")
+                XCTAssertFalse(app.buttons["story.evidence.evidence.act1.echo_review.v1"].exists)
+                openApp(app, "email")
+                tap(app, "story.open.version.act1.first_anomaly.trace.v1")
             }
-            tap(app, "story.back")
-            if source == "content.act2.email.maya" {
-                XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists,
-                              "Back from an email clue must return to the puzzle")
+            tap(app, "story.advance.act2")
+            openApp(app, "watchVideo")
+            presentation(app, "version.act2.alex_review.v1", preserve: preserveVideo)
+            checkpoint(app, "before Alex replacement")
+            try boundary(6, "before Alex replacement")
+        }
+        if startAfter < 7 && endAt >= 7 {
+            openApp(app, "watchVideo")
+            XCTAssertFalse(app.buttons["story.open.version.act2.alex_review.v1"].exists)
+            presentation(app, "version.act2.alex_review.v2", preserve: false)
+            checkpoint(app, "after Alex replacement inspected")
+            try boundary(7, "after Alex replacement inspected")
+        }
+        if startAfter < 8 && endAt >= 8 {
+            if preserveVideo {
+                comparison(app, "evidence.act2.alex_review.v1")
+                XCTAssertTrue(app.staticTexts["Visible differences"].waitForExistence(timeout: 8))
+            } else {
+                openApp(app, "evidence")
+                XCTAssertFalse(app.buttons["story.evidence.evidence.act2.alex_review.v1"].exists)
+            }
+            openAndRead(app, "news", "version.act2.news.concerns.v1")
+            openAndRead(app, "news", "version.act2.news.official.v1")
+            openAndRead(app, "messager", "version.act2.messages.daniel.v1")
+            openAndRead(app, "email", "version.act2.email.maya.v1")
+            openApp(app, "browser")
+            enterBrowserAddress(app, "/research/echo-07/summary")
+            ready(app.buttons["story.back"], timeout: 5)
+            XCTAssertEqual(app.textFields["browser.address"].value as? String, "/research/echo-07/summary")
+            XCTAssertTrue(app.staticTexts["ECHO-07 — Neural Synchronization Trial — Preliminary Findings"].exists)
+            checkpoint(app, "after ECHO-07 read")
+            try boundary(8, "after ECHO-07 read")
+        }
+        if startAfter < 9 && endAt >= 9 {
+            // Existing catalogue guidance opens the diagnostic source explicitly.
+            openApp(app, "browser")
+            tap(app, "story.lead.version.act2.diagnostics.excerpt.v1")
+            if !preserveVideo { openAndRead(app, "news", "version.act2.news.corroboration.v1") }
+            openApp(app, "aiAssistant")
+            tap(app, "story.assistant.version.act2.assistant.edits.v1")
+            checkpoint(app, "before explicit synthesis")
+            try boundary(9, "before explicit synthesis")
+        }
+        if startAfter < 10 && endAt >= 10 {
+            openApp(app, "browser")
+            tap(app, "story.connect.act2")
+            checkpoint(app, "immediately before Act 3")
+            try boundary(10, "immediately before Act 3")
+        }
+        if startAfter < 11 && endAt >= 11 {
+            openApp(app, "browser")
+            tap(app, "story.advance.act3")
+            tap(app, "story.resource.resource.banana_wall")
+            XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+            checkpoint(app, "locked Banana Wall")
+            try boundary(11, "locked Banana Wall")
+        }
+        if startAfter < 12 && endAt >= 12 {
+            openApp(app, "browser")
+            tap(app, "story.resource.resource.banana_wall")
+            XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+            XCTAssertFalse(app.buttons["Submit"].exists)
+            XCTAssertEqual(app.statusBars.count, 0)
+            XCTAssertFalse(app.alerts.firstMatch.exists)
+            tap(app, "story.puzzle.hint.\(puzzle)")
+            for source in ["content.act2.messages.daniel", "content.act2.news.official", "content.act2.email.maya", "content.act2.web.echo07"] {
                 tap(app, "story.puzzle.clue.\(source)")
-                tap(app, "mail.inbox")
-                ready(app.buttons["story.resource.resource.banana_wall"])
-                XCTAssertFalse(app.buttons["story.back"].exists, "Browser Home must discard the nested clue stack")
-                tap(app, "story.resource.resource.banana_wall")
-                XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists)
+                if source == "content.act2.email.maya" {
+                    XCTAssertEqual(app.buttons["mail.inbox"].label, "Browser Home",
+                                   "An email clue inside Browser must name its actual app root")
+                }
+                tap(app, "story.back")
+                if source == "content.act2.email.maya" {
+                    XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists,
+                                  "Back from an email clue must return to the puzzle")
+                    tap(app, "story.puzzle.clue.\(source)")
+                    tap(app, "mail.inbox")
+                    ready(app.buttons["story.resource.resource.banana_wall"])
+                    XCTAssertFalse(app.buttons["story.back"].exists, "Browser Home must discard the nested clue stack")
+                    tap(app, "story.resource.resource.banana_wall")
+                    XCTAssertTrue(app.descendants(matching: .any)["story.resource.locked.resource.banana_wall"].firstMatch.exists)
+                }
             }
-        }
-        let fields = [("discipline", "neural systems"), ("trial", "ECHO-07"), ("public_scope", "selected preferences"), ("research_scope", "recorded cognitive patterns")]
-        for (id, value) in fields {
-            let input = app.textFields["story.puzzle.input.input.banana_wall.\(id)"].firstMatch
-            for _ in 0..<16 {
-                if input.exists && input.isHittable { break }
-                if input.exists && input.frame.midY < app.frame.midY { app.scrollViews.firstMatch.swipeDown() }
-                else { app.scrollViews.firstMatch.swipeUp() }
+            let fields = [("discipline", "neural systems"), ("trial", "ECHO-07"), ("public_scope", "selected preferences"), ("research_scope", "recorded cognitive patterns")]
+            for (id, value) in fields {
+                let input = app.textFields["story.puzzle.input.input.banana_wall.\(id)"].firstMatch
+                for _ in 0..<16 {
+                    if input.exists && input.isHittable { break }
+                    if input.exists && input.frame.midY < app.frame.midY { app.scrollViews.firstMatch.swipeDown() }
+                    else { app.scrollViews.firstMatch.swipeUp() }
+                }
+                ready(input); input.tap(); input.typeText(value)
+                let done = app.keyboards.buttons["Done"].firstMatch
+                ready(done); done.tap()
             }
-            ready(input); input.tap(); input.typeText(value)
-            let done = app.keyboards.buttons["Done"].firstMatch
-            ready(done); done.tap()
+            openApp(app, "browser")
+            tap(app, "story.resource.resource.banana_wall")
+            XCTAssertEqual(app.textFields["story.puzzle.input.input.banana_wall.discipline"].value as? String, "neural systems")
+            tap(app, "story.puzzle.submit.\(puzzle)")
+            XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+            tap(app, "story.resource.open.content.act3.banana_wall.scope_record")
+            XCTAssertTrue(app.buttons["story.preserve.version.act3.banana_wall.scope_record.v1"].waitForExistence(timeout: 8))
+            checkpoint(app, "approved Wall solved and first record opened")
+            try boundary(12, "approved Wall solved and first record opened")
         }
-        openApp(app, "browser")
-        tap(app, "story.resource.resource.banana_wall")
-        XCTAssertEqual(app.textFields["story.puzzle.input.input.banana_wall.discipline"].value as? String, "neural systems")
-        tap(app, "story.puzzle.submit.\(puzzle)")
-        XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
-        tap(app, "story.resource.open.content.act3.banana_wall.scope_record")
-        XCTAssertTrue(app.buttons["story.preserve.version.act3.banana_wall.scope_record.v1"].waitForExistence(timeout: 8))
-        checkpoint(app, "approved Wall solved and first record opened")
-        openApp(app, "browser")
-        tap(app, "story.resource.resource.banana_wall")
-        XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
-        XCTAssertFalse(app.buttons["story.puzzle.submit.\(puzzle)"].exists)
-        for key in ["mirror.origins", "echo.correspondence", "neural.capabilities"] {
-            openAndRead(app, "browser", "version.act3.\(key).v1")
-            if preserveVideo { preserve(app, "version.act3.\(key).v1") }
+        if startAfter < 13 && endAt >= 13 {
+            openApp(app, "browser")
+            tap(app, "story.resource.resource.banana_wall")
+            XCTAssertTrue(app.descendants(matching: .any)["story.resource.unlocked.resource.banana_wall"].firstMatch.waitForExistence(timeout: 8))
+            XCTAssertFalse(app.buttons["story.puzzle.submit.\(puzzle)"].exists)
+            for key in ["mirror.origins", "echo.correspondence", "neural.capabilities"] {
+                openAndRead(app, "browser", "version.act3.\(key).v1")
+                if preserveVideo { preserve(app, "version.act3.\(key).v1") }
+            }
+            checkpoint(app, "MIRROR ECHO and influence discovered")
+            try boundary(13, "MIRROR ECHO and influence discovered")
         }
-        checkpoint(app, "MIRROR ECHO and influence discovered")
-        openApp(app, "browser")
-        tap(app, "story.lead.version.act3.autonomy.actions.v1")
-        openAndRead(app, "email", "version.act3.autonomy.maya.v1")
-        tap(app, "story.connect.act3.autonomy")
-        checkpoint(app, "autonomy explicitly connected")
-        openApp(app, "watchVideo")
-        presentation(app, "version.act3.ascension.recording.v1", preserve: preserveVideo, sections: 3)
-        openAndRead(app, "browser", "version.act3.ascension.purpose.v1")
-        openApp(app, "browser")
-        tap(app, "story.lead.version.act3.energy.transfer.v1")
-        openAndRead(app, "browser", "version.act3.energy.growth.v1")
-        tap(app, "story.connect.act3.contradiction")
-        checkpoint(app, "ASCENSION energy and public contradiction")
-        openAndRead(app, "browser", "version.act3.daniel.contribution.v1")
-        openAndRead(app, "email", "version.act3.daniel.concealment.v1")
-        openApp(app, "watchVideo")
-        presentation(app, "version.act3.maya.guidance.v1", preserve: preserveVideo)
-        openAndRead(app, "browser", "version.act3.observer.program.v1")
-        openApp(app, "browser")
-        tap(app, "story.lead.version.act3.observer.session.v1")
-        checkpoint(app, "Observer connection discovered Maya still missing")
-        openAndRead(app, "browser", "version.act3.conclusion.resistance.v1")
-        tap(app, "story.advance.act4")
-        openApp(app, "browser")
-        tap(app, "story.lead.version.act4.entry.v1")
-        checkpoint(app, "Act 4 entry read without takeover")
-        openApp(app, "browser")
-        XCTAssertTrue(app.buttons["story.lead.version.act4.entry.v1"].exists)
+        if startAfter < 14 && endAt >= 14 {
+            openApp(app, "browser")
+            tap(app, "story.lead.version.act3.autonomy.actions.v1")
+            openAndRead(app, "email", "version.act3.autonomy.maya.v1")
+            tap(app, "story.connect.act3.autonomy")
+            checkpoint(app, "autonomy explicitly connected")
+            try boundary(14, "autonomy explicitly connected")
+        }
+        if startAfter < 15 && endAt >= 15 {
+            openApp(app, "watchVideo")
+            presentation(app, "version.act3.ascension.recording.v1", preserve: preserveVideo, sections: 3)
+            openAndRead(app, "browser", "version.act3.ascension.purpose.v1")
+            openApp(app, "browser")
+            tap(app, "story.lead.version.act3.energy.transfer.v1")
+            openAndRead(app, "browser", "version.act3.energy.growth.v1")
+            tap(app, "story.connect.act3.contradiction")
+            checkpoint(app, "ASCENSION energy and public contradiction")
+            try boundary(15, "ASCENSION energy and public contradiction")
+        }
+        if startAfter < 16 && endAt >= 16 {
+            openAndRead(app, "browser", "version.act3.daniel.contribution.v1")
+            openAndRead(app, "email", "version.act3.daniel.concealment.v1")
+            openApp(app, "watchVideo")
+            presentation(app, "version.act3.maya.guidance.v1", preserve: preserveVideo)
+            openAndRead(app, "browser", "version.act3.observer.program.v1")
+            openApp(app, "browser")
+            tap(app, "story.lead.version.act3.observer.session.v1")
+            checkpoint(app, "Observer connection discovered Maya still missing")
+            try boundary(16, "Observer connection discovered Maya still missing")
+        }
+        if startAfter < 17 && endAt >= 17 {
+            openAndRead(app, "browser", "version.act3.conclusion.resistance.v1")
+            tap(app, "story.advance.act4")
+            openApp(app, "browser")
+            tap(app, "story.lead.version.act4.entry.v1")
+            checkpoint(app, "Act 4 entry read without takeover")
+            openApp(app, "browser")
+            XCTAssertTrue(app.buttons["story.lead.version.act4.signal.packet.v1"].exists, "Explicit entry read now unlocks the approved Signal investigation")
+            if softPauseAfter != nil {
+                // The final full-test assertions above reopen Browser; release the phone from real Home.
+                let home = app.buttons["bananaOS.home"].firstMatch
+                ready(home); home.tap()
+                ready(app.buttons["bananaOS.app.email"])
+                XCTAssertFalse(home.exists)
+            }
+            try boundary(17, "Act 4 entry read without takeover")
+        }
     }
 
     @MainActor
