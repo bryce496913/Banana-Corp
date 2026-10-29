@@ -72,8 +72,9 @@ struct AppPrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, AppTheme.Spacing.lg)
             .padding(.vertical, AppTheme.Spacing.sm)
             .frame(minHeight: AppTheme.Layout.touchTarget)
+            .contentShape(Rectangle())
             .background(
-                presentation.resolved(at: Date()).visualPalette.accent.opacity(configuration.isPressed ? 0.75 : 1),
+                presentation.resolved(at: Date()).visualPalette.accent.opacity(configuration.isPressed ? 0.65 : 0.8),
                 in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous)
             )
             .opacity(isEnabled ? 1 : 0.45)
@@ -92,6 +93,7 @@ struct ModernPhoneButtonStyle: ButtonStyle {
             .padding(.horizontal, AppTheme.Spacing.lg)
             .padding(.vertical, AppTheme.Spacing.sm)
             .frame(minHeight: AppTheme.Layout.touchTarget)
+            .contentShape(Rectangle())
             .modernSurface(
                 in: RoundedRectangle(cornerRadius: AppTheme.Radius.md, style: .continuous),
                 tint: prominent ? presentation.resolved(at: Date()).visualPalette.accent.opacity(0.25) : AppTheme.Colors.surface.opacity(0.5),

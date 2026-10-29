@@ -598,3 +598,20 @@ Cleanup Report: No additionaldisposableartifactsfound inthisrepaircheckpoint. Te
 
 
 Mail-searchcandidatefinalcompile2026-10-29: openingjourneyquery retains exactmail.searchidentifier and accepts nativeTextField/TextView accessibilityinputtypes withsame8secondexistencewait andunchangedtyping/filter/unread/Inboxpostconditions. BothDebug/ReleaseXCTestbuildsrerunPASS; exactgeneratedDebugxctestrunrestoredatitsoriginaltestroot afterReleasebuild. Live4bundle/profile/source/resource/targetmappingverificationPASSagain, withoutmanualresigning orphoneinteraction. DraftPR57 remainsnative-retestpending. CandidateQA-updatehelperpropagatesnativefailure andrequiresbefore/afterexactsaveequality. No newdisposableartifacts; allfailed-audit/candidateproducts preserved.
+
+
+## Ongoing phone authorization / audit continuation — 2026-10-29
+
+Creator explicitly lifted the ten-minute limit: phone testing may continue as long as needed; creator will message beforedisconnecting. This is current-session authorization to continue without repeated permission questions, superseding earlier daily-driverwindowlimit until withdrawn. Keep individual nativecommands bounded and pause promptly onnotice. Originalgame/save remain separate.
+
+PR57candidate update preserved exactQAstate andranunchangedaudit: Homeinitialcheckpassed, EmailstillTextClipped in23.957seconds, this time the recordednode is coveredHome Welcometothefuture, notmail.search. BANANA_AUDIT_APP_RELEASED observed fromnewasync teardown; native65/no timeout. Framework restartedrunnerafterfailurebut no secondtestexecution wasrequested. Do not infercompleteMail/Homeauditacceptance. Nextcandidate keeps retainedHomeatnatural scale1oncephase.active (itremainsmounted/hidden); transition-only0.99 retained. Added separatelyguarded diagnosticinventory withcontinueAfterFailuretrue andallissuesrecorded, handleralwaysfalse; defaultacceptanceauditunchanged. Diagnosticcannotreplacedefaultpass. Builds/provenance under validation/home-natural-geometry-20261029/.
+
+
+## Full native audit inventory / shared repair candidate — 2026-10-29
+
+The completed diagnostic inventory reached Home and all15registered apps, recording25findings (earlier6were partialoutput), native65; BANANA_AUDIT_APP_RELEASED confirmed. Findings: Mail/Settings contrast, Browser/News clipping, Preserve/Settings/Assistant hit areas, primarybutton contrast and PongDynamicType caps. No mail.search or coveredHome clipping inthisinventory; defaultacceptance remains pending. Fullsource/results retained at validation/home-natural-geometry-20261029/.
+
+Sharedcandidate adds explicit44ptlabelareas, wrappingBrowseraddress/News titles, opaquewhiteMail/empty-statecopy and darkerprimaryfills. Creator explicitly approved Pong text/layout-only repair; removedtwoDynamicTypecaps, no controls/physics/scoring changes. Initialsandbox SDKbuild failed due inaccessible signing/services; notanApplebuildpass. Retainedfailedlog; preparingnormalhostbuildusingexisting signingauthorization only.
+
+
+Reviewed shared-UI candidate actual signed Debug/Release Apple SDK app+XCTest builds PASS; live strictfourbundle signatures/profile/deployment18/source/resource/targetmapping checks PASS. SameQAonly update retainedexactbefore/aftersavestate. Physicaldefaultaudit command launched butwaitingUnlockiPhonetoContinue; no auditresult yet. Originalgameuntouched. RelevantFoundationchecks runningwithtask-ownedmodulecache; sandboxmacroexecutionrequiredhostaccess. Changedfilespass gitdiff--no-index--check againstretainedPR57source (checkout lacks.git). Candidate/evidence: validation/shared-ui-audit-20261029/.

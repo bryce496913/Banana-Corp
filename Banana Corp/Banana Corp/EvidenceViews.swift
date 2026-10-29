@@ -51,6 +51,8 @@ struct PreserveEvidenceButton: View {
             }
         } label: {
             Label(isSaved ? "Preserved in Evidence" : "Preserve Evidence", systemImage: isSaved ? "archivebox.fill" : "archivebox")
+                .frame(minHeight: AppTheme.Layout.touchTarget)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.modernPhone)
         .accessibilityIdentifier("story.preserve.\(versionID)")

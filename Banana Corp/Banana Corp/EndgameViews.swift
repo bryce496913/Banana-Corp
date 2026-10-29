@@ -219,7 +219,7 @@ struct EndingCompletionView: View {
                     Button("Return to final decision") { apply(appState.story.restoreFinalDecision()) }
                         .buttonStyle(.appPrimary).accessibilityIdentifier("story.ending.restore")
                         .disabled(!appState.story.hasFinalDecisionCheckpoint)
-                    Button("New game") { newGame = true }.buttonStyle(.modernPhone)
+                    Button { newGame = true } label: { Text("New game").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle()) }.buttonStyle(.modernPhone)
                     if !appState.story.earnedEndings.isEmpty {
                         AppSectionHeader("Earned endings")
                         ForEach(EndgameEnding.allCases.filter { appState.story.earnedEndings.contains($0) }) { ending in
@@ -275,7 +275,7 @@ struct PlayerProgressSettings: View {
     @State private var failure = false
     var body: some View {
         AppSectionHeader("Campaign")
-        Button("New game") { newGame = true }.buttonStyle(.modernPhone)
+        Button { newGame = true } label: { Text("New game").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle()) }.buttonStyle(.modernPhone)
             .accessibilityIdentifier("story.new_game")
             .confirmationDialog("Start a new game?", isPresented: $newGame) {
                 Button("New game", role: .destructive) { apply(appState.resetStoryForNewGame()) }
