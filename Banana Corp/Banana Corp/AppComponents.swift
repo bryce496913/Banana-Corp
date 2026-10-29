@@ -239,7 +239,8 @@ struct AppSearchField: View {
     @Binding var text: String
 
     var body: some View {
-        AppTextInput(label: label, text: $text, symbol: "magnifyingglass", submitLabel: .search)
+        // The placeholder and query must be able to wrap at accessibility text sizes.
+        AppTextInput(label: label, text: $text, symbol: "magnifyingglass", axis: .vertical, submitLabel: .search)
     }
 }
 

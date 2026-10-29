@@ -3,6 +3,19 @@ import XCTest
 // Public audits inspect visible UI;
 // they do not verify VoiceOver reading order, gestures or spoken experience.
 final class AccessibilityAuditUITests: XCTestCase {
+    override func tearDown() async throws {
+        // XCTest's audit failure can abort the test body before Swift defer runs.
+        // Teardown is still invoked, so release the exact target app here as well.
+        await MainActor.run {
+            let app = XCUIApplication()
+            app.terminate()
+            let stopped = app.state == .notRunning
+            XCTAssertTrue(stopped, "Release the QA phone after the audit")
+            if stopped { print("BANANA_AUDIT_APP_RELEASED") }
+        }
+        try await super.tearDown()
+    }
+
     @MainActor
     func testHomeAndRegisteredApplicationsAccessibilityAudit() throws {
         let environment = ProcessInfo.processInfo.environment
