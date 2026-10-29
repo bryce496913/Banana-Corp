@@ -1,6 +1,6 @@
 # Development roadmap
 
-Updated: 2026-10-15. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
+Updated: 2026-10-28. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
 
 | Phase | Current state | Next concrete outcome |
 | --- | --- | --- |
@@ -70,10 +70,19 @@ Actual final generic iOS Debug/Release SDK builds and actual product/executable/
 Cleanup: removed10 targeted inactive task-only compiler/cache/log/temp paths after lsof checks,161.4MiB logical files; free space increased163463168bytes during the cleanup measurement. Final built apps/logs/model evidence/manifests and all prior unresolved diagnostics/signing/simulator environments retained; no uncertain cleanup or approval needed. Ledger validation/browser-mail-ui-20261026/cleanup-report.json. No native process running.
 
 
-## Browser/Email gameplay QA continuation — 2026-10-27
+## UI/gameplay continuation and resource checkpoint — 2026-10-27
 
-Integrated new Browser/Mail controls into the unchanged17checkpoint campaign and natural preservation branches. Corrected linked Mail root labels and toolbar hit shapes; added unsuppressed opt-in issue-node diagnostics and stricter finite/stable readiness without longer timeouts or action retries. Journey runner retains owned simulators; portable command contracts passed. See docs/BROWSER_EMAIL_GAMEPLAY_QA.md for full evidence and limitations.
+Current source integrates new controls into all17-checkpoint campaign paths and fixes cross-app Mail root labels/toolbar hit shapes. See docs/BROWSER_EMAIL_GAMEPLAY_QA.md for actual8pass1fail7optinskips UI integration results, three-checkpoint failed first campaign, preserved original, normal-pointer Email-open result after relaunch/unlock and unresolved inactiveHome text audit finding. The ineffective accessibility-group experiment was reverted. No complete campaign/audit pass claimed.
 
-Actual initial iOS26.5 Debug/Release builds and bundle checks passed. Debug integration8passed/1audit failure/7explicit opt-in skips: hosted5 plus all15routes, repeatedHome and reserved gesture passed. First fresh-app campaign failed175.138s after three canonical save/relaunch checkpoints when Email did not open after removal; partial save preserves original. One normal-pointer click opened Email after normal relaunch/unlock, not an isolated root-cause proof or campaign pass. Accessibility retains inactiveHome clipping finding; ineffective grouping experiment reverted. Current stronger-readiness Debug test source compiled; subsequent verification stopped after boot at2GiB disk guard before install/test. Current-source Release and full matrix are pending.
+Latest stronger finite/stable-frame readiness source compiled in native-c-20261027. Verification stopped after boot at the2GiB free-space guard before any test; native-b previously stopped at setup space guard. Original partial save and original executor source are preserved. Future export must query current bundle/container and verify exact MCMMetadataIdentifier because XCTest relocated the app sandbox during installation; no app save was edited. Root-reviewed fresh-app matrix uses one retained owned simulator, sharedruntime—not eight cold devices. No current native job is running.
 
-Full playthrough remains incomplete. User reported additional space, but native-host df/statvfs/diskutil still agreed on about4.2GiB free; earlier boot reached334MiB.47 exact inactive task-owned compiler/index caches were cleaned (1367.2MiB logical), preserving all products/symbols/saves/xcresults/logs/source/signing/simulators. No old verified task-owned simulator matches remained to delete. Keep all failed runs immutable; next actual attempt needs measured headroom and a fresh reviewed workflow/app namespace. No native job running; no signing/distribution/playtest handoff or merge acceptance claimed.
+Storage cleanup removed47 exact inactive known-owned compiler/index directories,1367.2MiB logical files; products/symbols/saves/xcresults/logs/source/signing/simulators kept. Read-only old-owned-device audit found no remaining matches to delete. User asked to make df Avail at least8G; full matrix is pending measured space and fresh workflow. Keep main at last verifiede3b6b48 and parent mergecb1622 distinctions; don't merge unvalidated work. No disposable results or simulator deletion authorized.
+
+
+## Approved five-act implementation — 2026-10-28
+
+The creator approved [the completion contract](docs/STORY_COMPLETION_PROPOSAL.md), now bible1.14. Production catalogue now102items with the original70 definitions unchanged. Act4 resistance/component investigations, LANTERN/Maya signature, explicit87% synthesis and Act5 handoff are implemented. Act5 has common safety diagnostics, Maya D–F–A/440Hz reconstruction, earned cooperation/ordered DAWN, explicit negotiation agreement/deception, optional five-clue Observer refusal, five ending presentations, immutable final-decision replay and earned-ending collection. Existing StoryProgressionStore remains the sole save authority; optional endgame data retains schema2 compatibility. Player newgame/collection review is available in Settings.
+
+Actual generic iPhone Debug/Release builds pass. Applicable Foundation checks and natural catalogue integration cover4preservationpaths×5endings, including failure/restore/collection/evidence. These are model/compile results, not complete native gameplay or accessibility acceptance. No final endgame phone playtest or public distribution is claimed.
+
+Remaining priorities: compile XCTest/UI coverage for new controls; native all-ending UI journeys in bounded sessions; verify unsuppressed Home-layer audit candidate and other15app accessibility; iOS18 unavailable-runtime coverage; approved media/art polish and physical-playtest handoff once gates pass. Preserve the prior paused-phone limit and do not start phone tests without explicit ten-minute window authorization.

@@ -1,3 +1,5 @@
+> Current completion update (2026-10-28): the creator approved [the five-act completion plan](STORY_COMPLETION_PROPOSAL.md), incorporated in bible1.14. Production now102records/51app sources includes Act4/Act5/five ending/checkpoint/replay implementations. Model integration covers4preservationpaths×5endings; actual Debug/Release builds pass. New native late-story UI execution remains pending, and the unsuppressed accessibility finding is not yet closed. Historical scope notes below describe their original passes. See [Act4 implementation](act-four-content.md), [endgame engine](endgame-engine.md) and [current QA plan](../QA_TEST_PLAN.md).
+
 # Story implementation conventions
 
 ## Canon and scope

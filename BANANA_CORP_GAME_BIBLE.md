@@ -1,7 +1,7 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.13
-**Last updated:** 2026-10-26  
+**Version:** 1.14
+**Last updated:** 2026-10-28  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
 
@@ -365,6 +365,14 @@ The 87% value is an established dramatic milestone. Its increments, timer behavi
 
 Its connection to ECHO, limited permissions, and conflicting directives become meaningful. It can become a potential participant in rescue rather than simply a reassuring corporate voice. Cooperation must not appear as an unexplained personality reset.
 
+### Approved completion contract — 2026-10-28
+
+The creator explicitly approved [the complete story-production plan](docs/STORY_COMPLETION_PROPOSAL.md). This authorizes first-draft catalogue copy and the following causal graph; implementation/validation status remains separate.
+
+After explicitly reading Act4 entry, the player can inspect a collective Signal resistance packet without inventing named Signal members. Three investigations can proceed in any order: compare Vale's risk authorization and subsequent loss-of-control records before explicitly acquiring Root Authorization; inspect and explicitly verify an infrastructure relay for Deployment Channel; inspect Protocol LANTERN and explicitly obtain emergency safety access/Neural Signature. That BLACKOUT component is an emergency system credential, not reconstructed Maya identity. LANTERN exposes an active Maya-signature diagnostic suggesting survival/connection, without proof of safety or location.
+
+Two explicit Assistant conflict exchanges follow LANTERN. They expose conflicting user-safety/core-control directives but do not award cooperation. Explicitly connecting all three reviewed investigations and conflict records earns the fixed87% ASCENSION milestone and overt in-app ECHO takeover record. No clock, countdown, interpolated increments, evidence loss or blocked system/Home gestures is authorized. A separate chosen action advances into Act5; BLACKOUT, find Maya and negotiation remain revisitable investigation directions until irreversible final confirmation.
+
 ## 12. Act 5 — The Final Choice
 
 ### Purpose
@@ -375,7 +383,7 @@ Make the player confront what each response will do to ECHO, connected users, Ma
 
 Connected users have become dependent on the system. Abruptly stopping it can cause severe harm. That consequence must be disclosed before the irreversible BLACKOUT decision.
 
-Maya’s neural identity can be reconstructed through the established puzzle framework: **a three-note sequence, a baseline, and LANTERN access**. The exact notes, baseline values, answer format, and stage-by-stage assembly are `[TBD]`.
+Maya’s neural identity is reconstructed through **a three-note sequence, a baseline, and LANTERN access**. The creator approved D–F–A,440Hz and the explicit reconstruction/stabilization contract on2026-10-28; see the approved route decisions below.
 
 Known Maya fragments:
 
@@ -417,7 +425,20 @@ Its established final message is:
 - DAWN must retain the stabilization and cooperation that make separation possible.
 - Negotiation has both an agreement and a deception outcome; it is not automatically safe or automatically doomed.
 - The hidden ending requires investigation of the Observer clues, not merely selecting an unexplained fourth button.
-- Exact ending scripts, outcome thresholds, replay behavior, completion screens, and post-ending app states are `[TBD]`.
+- First-draft ending scripts, explicit outcome conditions, completion screens and checkpoint/replay behavior were approved on2026-10-28 as specified below. Future changes to those contracts require the same canon review.
+
+### Approved route, content and replay decisions — 2026-10-28
+
+The creator's approval of [the completion plan](docs/STORY_COMPLETION_PROPOSAL.md) supersedes the TBD wording above **only** for the following production choices. Existing outcomes, human costs, ambiguity and reveal order remain binding.
+
+- **Common diagnostics / BLACKOUT:** explicitly inspected Recovery Diagnostics discloses dependent-user harm before irreversible confirmation. All three established components and the warning are required. Cancel leaves the choice uncommitted; Confirm saves atomically. THE SILENCE retains severe harm and Daniel's evidence release, without specifying Maya's unresolved fate or invented death counts.
+- **Maya identity:** M-01 archived personal webpage supplies **D**, M-02 lab-photo metadata supplies **F**, M-03 Assistant diagnostic supplies **A** and baseline **440Hz**. Four labelled fields plus earned LANTERN access reconstruct identity. Trim/case normalization is accepted; baseline accepts `440` or `440 Hz`. Wrong answers allow retry with no timer or route penalty. All clues have inspectable text; any unavailable lab image remains accurately labelled metadata-only.
+- **Cooperation / DAWN:** inspect user dependency, reconstructed Maya identity and conflicting Assistant directives, then explicitly request safety cooperation. No numerical trust score. Persist stages in order: **stabilize dependent links → isolate the core → restore user connections**; invalid order/failure grants no final success. Explicit confirmation resolves FIRST LIGHT with gradual safe separation, Maya recovery and ambiguous Assistant sacrifice/separation. No invented biological conversion mechanism or definite return is implied by the optional process hint.
+- **Negotiation:** explicitly challenge harmlessness with dependency evidence, denied autonomy with autonomy records, and public promises with energy research. Legitimate records suffice; optional preservation stays optional. Verified agreement requires all challenges plus acknowledged user release, Maya-supervised isolated computing and public oversight, then verify-and-confirm. Alternatively a distinctly warned, explicitly confirmed acceptance of unverified assurances resolves THE FALSE PROMISE and100% ASCENSION. No hidden credibility formula; mere questioning, absent optional evidence or wrong puzzle attempts never trigger an ending.
+- **Observer:** explicitly link the established five clues (identifier, unexplained diagnostic entry, Maya warning, startup discrepancy, OBSERVER_ROOT). Existing authored identifiers are reused without inventing player identity. The discrepancy compares consumer-phone presentation with Observer-session designation; an optional late archive makes it inspectable without memorizing launch graphics or adding a clock puzzle. Linking unlocks the named refusal/session-termination action with final confirmation. THE AWAKENING preserves its established line and outside-world ambiguity.
+- **Ending/replay:** atomically retain an immutable legitimate final-decision checkpoint and chosen completion/ending. Offer Review ending, Return to final decision, and explicit New game. Restore only earned checkpoint facts; never grant unearned route access. A local earned-ending collection survives new game; separately confirmed clear-history removes it. No arbitrary chapter select, cloud sync or achievement scoring is authorized. Any save migration preserves existing schema2 data and evidence bytes and handles interrupted writes fail-closed.
+
+Player identity, research dates, energy physics, Alex's fate, Maya's BLACKOUT fate, named Signal contacts, and outside-world reality remain unresolved. These approved gameplay decisions are not evidence that the corresponding app features are built or tested.
 
 ## 13. Main gameplay loop and progression
 
@@ -690,16 +711,16 @@ Use checks appropriate to the actual change. This checklist is not an instructio
 3. **Story pacing:** Session-based versus multi-day progression; required waits, catch-up behavior, and overall duration.
 4. **Research chronology:** Specific dates, sentience emergence, Maya’s disappearance, and Daniel’s leak timing.
 5. **Energy mechanism:** The exact fictional explanation for harvesting human power and system dependency.
-6. **Detailed puzzle design:** The first Banana Wall cross-reference is approved above. Further research access, LANTERN, Maya’s three notes/baseline, and DAWN stabilization answers remain unresolved.
-7. **Negotiation logic:** Concrete evidence requirements, credibility rules, challenges, and conditions distinguishing agreement from deception.
-8. **Assistant development:** Exact conflict scenes, conditions for cooperation, separation mechanism, and interpretation of the final process hint.
+6. **Detailed puzzle design:** The Wall and2026-10-28 LANTERN/Maya/DAWN contract are approved above. Additional puzzles outside those contracts remain unresolved.
+7. **Negotiation logic:** Explicit contradictions/safeguards and warned unverified acceptance were approved on2026-10-28. No numerical credibility/trust formula is authorized.
+8. **Assistant development:** First-draft conflict scenes and explicit cooperation/stabilization conditions were approved on2026-10-28. Detailed separation physics and interpretation of the final process hint remain unresolved.
 9. **Character outcomes:** Daniel’s complete resolution, Alex’s fate, Vale’s ultimate accountability, Maya’s BLACKOUT outcome, and individual Signal members.
 10. **Observer ontology:** What exists outside the session, what THE AWAKENING proves, and what remains ambiguous.
 11. **Real-world integration:** Exact triggers, weather provider, permission policy, offline behavior, location use, and fallbacks.
 12. **Evidence extensions:** Scene-specific preservation/comparison timing, missed-evidence recovery and any advanced archive features. The basic Preserve Evidence action and Evidence utility are approved by Pass 4.
 13. **Hint and accessibility design:** Presentation, availability, and equivalent forms of audio/visual clues.
-14. **Content production:** Scripts beyond the Pass 5 approved opening catalogue, including later notification previews and ending screens.
-15. **Endgame/replay:** Saves at the final decision, chapter replay, multiple-ending collection, and post-ending phone state.
+14. **Content production:** First-draft Acts4/5 and five ending presentations are approved by the2026-10-28 contract. Unrelated extra scenes/media still need separate scope review.
+15. **Endgame/replay:** Final-decision checkpoint, local earned-ending collection, explicit newgame/history clear and read-only review are approved above. Arbitrary chapter replay/cloud behavior remain outside scope.
 16. **Optional apps and mini-games:** Which proposals become story content and whether any become essential.
 17. **Actual implementation audit:** Map existing code to this bible before claiming any act, trigger, or ending is complete.
 
@@ -740,3 +761,5 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-14 | 1.11 | Pass 7: authorized progressive Daniel contribution/concealment evidence, missing Maya guidance transcript, mandatory Observer participation discovery, factual-history references, gated Assistant questions and source-linked Act 3 conclusion. Optional Observer/ending facts, Maya rescue, Act 4 transition, takeover and unresolved identities/outcomes remain unchanged. |
 | 2026-10-14 | 1.12 | Pass 8: approved exact saved Act 3 completion prerequisites, explicit atomic consecutive Act 4 entry and minimal resistance objective. Optional investigation order/evidence/Observer clues remain independent; takeover, rescue, countermeasures, endings and Act 5 remain reserved. |
 | 2026-10-26 | 1.13 | Creator-approved modern Browser/Email chrome and local navigation/search/refresh controls. Retain explicit read/preservation rules, inbox boundary, authorized sources and reveal order; no new story content or progression gates. |
+
+| 2026-10-28 | 1.14 | Creator explicitly approved complete Act4/5 production contract: resistance/component graph, fixed87% takeover, Maya D–F–A/440Hz, staged DAWN/cooperation, explicit negotiation and Observer choices, five ending presentations and final-decision checkpoint/replay. Preserve unresolved identities/physics/fates and prior immutable sources. Implementation pending separate validation. |

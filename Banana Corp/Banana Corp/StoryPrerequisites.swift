@@ -65,7 +65,7 @@ struct StoryActTransition {
 
 struct StoryProgressionRules {
     let actTransitions: [StoryAct: StoryActTransition]
-    // Approved consecutive handoffs through Act 4 entry; Act 5 stays closed.
+    // Approved consecutive handoffs; Act 5 requires the explicit completed takeover investigation.
     static let production = StoryProgressionRules(actTransitions: [
         .somethingIsntRight: StoryActTransition(
             requiredMilestoneIDs: [FirstAnomalyContract.investigated, FirstAnomalyContract.suspiciousMaterial],
@@ -73,7 +73,9 @@ struct StoryProgressionRules {
         .theConspiracy: StoryActTransition(requiredMilestoneIDs: [ActTwoContract.connected],
                                           condition: ActTwoContract.handoffPrerequisites),
         .theTakeover: StoryActTransition(requiredMilestoneIDs: ActThreeHandoffContract.requiredMilestones,
-                                        condition: ActThreeHandoffContract.prerequisites)
+                                        condition: ActThreeHandoffContract.prerequisites),
+        .theFinalChoice: StoryActTransition(requiredMilestoneIDs: [ActFourContract.takeoverConnected],
+                                           condition: ActFourContract.handoffPrerequisites)
     ])
 }
 
@@ -206,4 +208,51 @@ enum ActThreeHandoffContract {
         .contentRead("version.act3.maya.guidance.v1"), .contentRead("version.act3.conclusion.resistance.v1")
     ] + requiredMilestones.sorted().map(StoryCondition.milestoneCompleted)
       + requiredEvents.sorted().map(StoryCondition.eventCompleted))
+}
+
+/// Creator-approved resistance graph. Exact explicit actions, not clocks/read counts,
+/// award the three components and the single fixed takeover milestone.
+enum ActFourContract {
+    static let signal = "content.act4.signal.packet"
+    static let valeSources = ["version.act4.vale.authorization.v1", "version.act4.vale.loss.v1"]
+    static let valeCompared = "milestone.act4.vale_accountability_compared"
+    static let valeEvent = "event.act4.vale_compared"
+    static let rootAuthorization = "route.blackout.root_authorization"
+    static let rootEvent = "event.act4.root_obtained"
+    static let deploymentChannel = "route.blackout.deployment_channel"
+    static let deploymentEvent = "event.act4.deployment_verified"
+    static let neuralSignature = "route.blackout.neural_signature"
+    static let lanternAccess = "access.lantern.authorized"
+    static let lanternAuthorized = "milestone.act4.lantern_authorized"
+    static let lanternEvent = "event.act4.lantern_authorized"
+    static let takeoverConnected = "milestone.act4.takeover_connected"
+    static let takeoverEvent = "event.act4.takeover_connected"
+    static let ascension = "ascension.act4.takeover"
+    static let echoAddress = "content.act4.echo.address"
+    static let finalEntry = "content.act5.entry"
+    static let conflictSources = ["version.act4.assistant.conflict.safety.v1", "version.act4.assistant.conflict.core.v1"]
+    static let takeoverSources = ["version.act4.entry.v1", "version.act4.signal.packet.v1",
+        "version.act4.vale.authorization.v1", "version.act4.vale.loss.v1",
+        "version.act4.deployment.relay.v1", "version.act4.lantern.protocol.v1",
+        "version.act4.maya.signature.v1"] + conflictSources
+
+    static func inspected(_ sources: [String]) -> StoryCondition {
+        .all([.actReached(.theTakeover)] + sources.flatMap {
+            [.contentRead($0), .eventCompleted("event.read." + $0)]
+        })
+    }
+    static let rootPrerequisites: StoryCondition = .all([
+        inspected(["version.act4.signal.packet.v1"]), .milestoneCompleted(valeCompared), .eventCompleted(valeEvent)
+    ])
+    static let deploymentPrerequisites = inspected(["version.act4.signal.packet.v1", "version.act4.deployment.relay.v1"])
+    static let lanternPrerequisites = inspected(["version.act4.signal.packet.v1", "version.act4.lantern.protocol.v1"])
+    static let takeoverPrerequisites: StoryCondition = .all([
+        inspected(takeoverSources), .milestoneCompleted(valeCompared), .eventCompleted(valeEvent),
+        .routePrerequisite(rootAuthorization), .routePrerequisite(deploymentChannel), .routePrerequisite(neuralSignature),
+        .accessGranted(lanternAccess), .eventCompleted(rootEvent), .eventCompleted(deploymentEvent), .eventCompleted(lanternEvent)
+    ])
+    static let handoffPrerequisites: StoryCondition = .all([
+        takeoverPrerequisites, .milestoneCompleted(takeoverConnected), .eventCompleted(takeoverEvent),
+        inspected(["version.act4.echo.address.v1"])
+    ])
 }

@@ -122,7 +122,10 @@ final class StoryProgressionStore {
     @discardableResult
     func resetForNewGame() -> StoryActionResult {
         do {
-            let fresh = StoryState()
+            var fresh = StoryState()
+            if isWritable, let earned = state.endgame?.earnedEndings, !earned.isEmpty {
+                fresh.endgame = EndgameProgress(earnedEndings: earned)
+            }
             let bytes = try codec.encode(fresh)
             try persistence.archiveForReset()
             try persistence.write(bytes)
@@ -164,8 +167,9 @@ final class StoryProgressionStore {
         }
     }
 
-    private func transact(when condition: StoryCondition? = nil, mutation: (inout StoryState) throws -> Void) -> StoryActionResult {
+    func transact(when condition: StoryCondition? = nil, allowingCompleted: Bool = false, mutation: (inout StoryState) throws -> Void) -> StoryActionResult {
         if case .recoveryRequired(let issue) = saveStatus { return .failure(.recoveryRequired(issue)) }
+        if !allowingCompleted && state.endgame?.currentEnding != nil { return .failure(.prerequisitesNotMet) }
         if let condition {
             guard condition.isWellFormed() else { return .failure(.invalidCondition) }
             guard condition.evaluate(in: state) else { return .failure(.prerequisitesNotMet) }

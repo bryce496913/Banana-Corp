@@ -15,6 +15,8 @@ struct SettingsView: View {
                     .buttonStyle(.modernPhone)
                 #endif
 
+                PlayerProgressSettings()
+
                 AppSectionHeader("Advanced settings")
                 AppEmptyState(
                     symbol: "gearshape",
