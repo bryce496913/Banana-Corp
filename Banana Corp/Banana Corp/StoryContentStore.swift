@@ -621,3 +621,138 @@ extension StoryContentStore {
         return availableItems(for: item.appSurface).first { $0.id == id }
     }
 }
+
+// MARK: - Approved Act 4 resistance, fixed takeover and explicit Act 5 handoff
+extension StoryContentStore {
+    private func actFourSourcesInspected(_ sources: [String]) -> Bool {
+        guard progression.state.currentAct == .theTakeover,
+              progression.satisfies(ActFourContract.inspected(sources)), let catalogue else { return false }
+        return sources.allSatisfy { versionID in
+            guard let contentID = catalogue.versionOwners[versionID], let item = catalogue.itemsByID[contentID],
+                  currentVersion(for: contentID)?.id == versionID,
+                  let remembered = progression.state.contentDelivery.versionReceipts[versionID] else { return false }
+            return authorized(item, state: progression.state) && matches(remembered, expected: versionReceipts[versionID])
+        }
+    }
+
+    private func actFourActionAvailable(_ sources: [String], prerequisites: StoryCondition, event: String) -> Bool {
+        !progression.state.completedEventIDs.contains(event) && progression.satisfies(prerequisites)
+            && actFourSourcesInspected(sources)
+    }
+
+    var valeComparisonAvailable: Bool {
+        actFourActionAvailable(ActFourContract.valeSources + ["version.act4.signal.packet.v1"],
+            prerequisites: ActFourContract.inspected(ActFourContract.valeSources), event: ActFourContract.valeEvent)
+    }
+    var rootAuthorizationAvailable: Bool {
+        actFourActionAvailable(ActFourContract.valeSources + ["version.act4.signal.packet.v1"],
+            prerequisites: ActFourContract.rootPrerequisites, event: ActFourContract.rootEvent)
+    }
+    var deploymentVerificationAvailable: Bool {
+        actFourActionAvailable(["version.act4.signal.packet.v1", "version.act4.deployment.relay.v1"],
+            prerequisites: ActFourContract.deploymentPrerequisites, event: ActFourContract.deploymentEvent)
+    }
+    var lanternAuthorizationAvailable: Bool {
+        actFourActionAvailable(["version.act4.signal.packet.v1", "version.act4.lantern.protocol.v1"],
+            prerequisites: ActFourContract.lanternPrerequisites, event: ActFourContract.lanternEvent)
+    }
+    var takeoverConfirmationAvailable: Bool {
+        actFourActionAvailable(ActFourContract.takeoverSources,
+            prerequisites: ActFourContract.takeoverPrerequisites, event: ActFourContract.takeoverEvent)
+    }
+
+    private func commitActFourAction(event: String, prerequisites: StoryCondition, available: Bool,
+                                    facts: [(String, String)], completion: StoryCondition,
+                                    actions: [StoryAction]) -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        guard let catalogue, (catalogue.declaredFacts["eventCompleted"] ?? []).contains(event),
+              facts.allSatisfy({ (catalogue.declaredFacts[$0.0] ?? []).contains($0.1) }) else { return .failure(.contentUnavailable) }
+        if progression.state.completedEventIDs.contains(event) {
+            return progression.satisfies(completion) ? .success(.unchanged) : .failure(.invalidSnapshot)
+        }
+        guard available else { return .failure(.progression(.prerequisitesNotMet)) }
+        return progression.completeEvent(event, actions: actions, when: prerequisites).mapError(StoryContentDeliveryError.progression)
+    }
+
+    @discardableResult
+    func compareValeRecords() -> StoryContentDeliveryResult {
+        commitActFourAction(event: ActFourContract.valeEvent,
+            prerequisites: ActFourContract.inspected(ActFourContract.valeSources), available: valeComparisonAvailable,
+            facts: [("milestoneCompleted", ActFourContract.valeCompared)],
+            completion: .milestoneCompleted(ActFourContract.valeCompared),
+            actions: [.recordMilestone(ActFourContract.valeCompared)])
+    }
+    @discardableResult
+    func obtainRootAuthorization() -> StoryContentDeliveryResult {
+        commitActFourAction(event: ActFourContract.rootEvent, prerequisites: ActFourContract.rootPrerequisites,
+            available: rootAuthorizationAvailable, facts: [("routePrerequisite", ActFourContract.rootAuthorization)],
+            completion: .routePrerequisite(ActFourContract.rootAuthorization),
+            actions: [.recordRoutePrerequisite(ActFourContract.rootAuthorization)])
+    }
+    @discardableResult
+    func verifyDeploymentChannel() -> StoryContentDeliveryResult {
+        commitActFourAction(event: ActFourContract.deploymentEvent, prerequisites: ActFourContract.deploymentPrerequisites,
+            available: deploymentVerificationAvailable, facts: [("routePrerequisite", ActFourContract.deploymentChannel)],
+            completion: .routePrerequisite(ActFourContract.deploymentChannel),
+            actions: [.recordRoutePrerequisite(ActFourContract.deploymentChannel)])
+    }
+    @discardableResult
+    func authorizeLanternSafetyAccess() -> StoryContentDeliveryResult {
+        commitActFourAction(event: ActFourContract.lanternEvent, prerequisites: ActFourContract.lanternPrerequisites,
+            available: lanternAuthorizationAvailable,
+            facts: [("accessGranted", ActFourContract.lanternAccess), ("routePrerequisite", ActFourContract.neuralSignature),
+                    ("milestoneCompleted", ActFourContract.lanternAuthorized)],
+            completion: .all([.accessGranted(ActFourContract.lanternAccess), .routePrerequisite(ActFourContract.neuralSignature),
+                              .milestoneCompleted(ActFourContract.lanternAuthorized)]),
+            actions: [.grantAccess(ActFourContract.lanternAccess), .recordRoutePrerequisite(ActFourContract.neuralSignature),
+                      .recordMilestone(ActFourContract.lanternAuthorized)])
+    }
+    @discardableResult
+    func confirmTakeoverEvidence() -> StoryContentDeliveryResult {
+        let result = commitActFourAction(event: ActFourContract.takeoverEvent, prerequisites: ActFourContract.takeoverPrerequisites,
+            available: takeoverConfirmationAvailable, facts: [("milestoneCompleted", ActFourContract.takeoverConnected)],
+            completion: .milestoneCompleted(ActFourContract.takeoverConnected),
+            actions: [.recordAscension(.init(id: ActFourContract.ascension, percentage: 87)),
+                      .recordMilestone(ActFourContract.takeoverConnected)])
+        if case .success = result, progression.state.ascensionMilestone != AscensionMilestone(id: ActFourContract.ascension, percentage: 87) {
+            return .failure(.invalidSnapshot)
+        }
+        return result
+    }
+
+    var actFiveHandoffAvailable: Bool {
+        guard progression.state.currentAct == .theTakeover,
+              progression.state.ascensionMilestone == AscensionMilestone(id: ActFourContract.ascension, percentage: 87),
+              progression.satisfies(ActFourContract.handoffPrerequisites),
+              actFourSourcesInspected(ActFourContract.takeoverSources + ["version.act4.echo.address.v1"]),
+              let item = catalogue?.itemsByID[ActFourContract.finalEntry], item.actAvailable == .theFinalChoice,
+              let resourceID = item.restrictedResourceID else { return false }
+        var finalState = progression.state
+        finalState.currentAct = .theFinalChoice
+        return access?.resourceState(resourceID, state: finalState) == .unlocked
+    }
+    @discardableResult
+    func beginActFive() -> StoryContentDeliveryResult {
+        if let error = recoveryError { return .failure(error) }
+        if progression.state.currentAct == .theFinalChoice { return .success(.unchanged) }
+        guard actFiveHandoffAvailable else { return .failure(.progression(.prerequisitesNotMet)) }
+        return progression.advanceAct(to: .theFinalChoice).mapError(StoryContentDeliveryError.progression)
+    }
+
+    /// Guidance exposes one actually available unread record; no passive mutation.
+    var actFourSuggestedLead: DeliveredStoryContent? {
+        guard progression.state.currentAct == .theTakeover else { return nil }
+        let ordered = ["content.act4.entry", ActFourContract.signal, "content.act4.vale.authorization", "content.act4.vale.loss",
+            "content.act4.deployment.relay", "content.act4.lantern.protocol", "content.act4.maya.signature",
+            "content.act4.assistant.conflict.safety", "content.act4.assistant.conflict.core", ActFourContract.echoAddress]
+        for id in ordered {
+            guard let item = catalogue?.itemsByID[id], let delivered = availableItems(for: item.appSurface).first(where: { $0.id == id }),
+                  delivered.availability == .availableUnread else { continue }
+            return delivered
+        }
+        return nil
+    }
+    var actFiveEntry: DeliveredStoryContent? {
+        availableItems(for: .web).first { $0.id == ActFourContract.finalEntry }
+    }
+}

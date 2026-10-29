@@ -118,6 +118,8 @@ struct StoryState: Codable, Equatable {
     // Strings retain future app identities across older builds; existing raw values stay stable.
     var lockedAppIDs: Set<String> = []
     var contentDelivery = StoryContentDeliveryState()
+    /// Optional additive schema-2 field; old saves decode without a migration or evidence rewrite.
+    var endgame: EndgameProgress?
 
     var isValid: Bool {
         let groups = [discoveredContentIDs, readContentIDs, solvedPuzzleIDs, accessMilestoneIDs,
@@ -136,6 +138,42 @@ struct StoryState: Codable, Equatable {
             && ascensionMilestone?.isValid != false && time.isValid
             && lockedAppIDs.allSatisfy { !$0.isEmpty && $0.utf8.count <= 128 && $0.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) } }
             && !lockedAppIDs.contains(PhoneAppRoute.settings.rawValue)
-            && contentDelivery.isValid
+            && contentDelivery.isValid && endgame?.isValid != false
+    }
+}
+
+/// Stable ending IDs are independent of presentation titles.
+enum EndgameEnding: String, Codable, CaseIterable, Identifiable {
+    case silence = "ending.silence"
+    case firstLight = "ending.first_light"
+    case agreement = "ending.agreement"
+    case falsePromise = "ending.false_promise"
+    case awakening = "ending.awakening"
+    var id: String { rawValue }
+    var contentKey: String { String(rawValue.dropFirst("ending.".count)) }
+    var versionID: String { "version.act5.ending." + contentKey + ".v1" }
+    var title: String {
+        switch self {
+        case .silence: return "THE SILENCE"
+        case .firstLight: return "FIRST LIGHT"
+        case .agreement: return "THE AGREEMENT"
+        case .falsePromise: return "THE FALSE PROMISE"
+        case .awakening: return "THE AWAKENING"
+        }
+    }
+}
+
+struct EndgameProgress: Codable, Equatable {
+    var currentEnding: EndgameEnding?
+    var earnedEndings: Set<EndgameEnding> = []
+    /// Encoded legitimate campaign immediately before its first irreversible decision.
+    /// The nested save has no endgame field, preventing recursive checkpoints.
+    var decisionCheckpoint: Data?
+    var isValid: Bool {
+        guard currentEnding == nil || decisionCheckpoint != nil else { return false }
+        guard let decisionCheckpoint else { return true }
+        guard let checkpoint = try? JSONDecoder().decode(StoryState.self, from: decisionCheckpoint),
+              checkpoint.endgame == nil, checkpoint.currentAct == .theFinalChoice else { return false }
+        return checkpoint.isValid
     }
 }

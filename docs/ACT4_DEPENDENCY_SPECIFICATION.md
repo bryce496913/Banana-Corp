@@ -1,3 +1,5 @@
+> Superseded design status (2026-10-28): the creator explicitly approved [the complete-story contract](STORY_COMPLETION_PROPOSAL.md), now bible1.14. [Act4 implementation](act-four-content.md) and [endgame implementation](endgame-engine.md) record the resulting production contracts. The original D-01 draft below is retained as design history, not the current approval status.
+
 # Act 4 dependency and presentation specification — D-01 draft
 
 Date: 2026-10-17. Status: **engineering specification draft, not approval of new canon or a production content contract**. This document maps established requirements to existing implementation seams and identifies the decisions needed before D-02. It adds no catalogue records, production IDs, effects, puzzle answers, route eligibility or act transitions. The [game bible](../BANANA_CORP_GAME_BIBLE.md) remains authoritative.

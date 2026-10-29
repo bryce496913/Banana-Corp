@@ -67,7 +67,10 @@ struct BananaOSView: View {
             HomeScreenView()
                 .environment(\.osEffectsEnabled, appState.navigation.isHomeReady)
                 .scaleEffect(reduceMotion || presentedRoute == nil ? 1 : 0.99)
-                .opacity(presentedRoute == nil ? 1 : 0.95)
+                // Keep Home state mounted, but stop rendering its scaled text once
+                // the opaque app transition completes. Public audits can otherwise
+                // inspect that covered layer despite accessibilityHidden below.
+                .opacity(appState.navigation.phase == .active || appState.story.currentEnding != nil ? 0 : (presentedRoute == nil ? 1 : 0.95))
                 .allowsHitTesting(appState.navigation.isHomeReady)
                 .accessibilityHidden(!appState.navigation.isHomeReady)
 
@@ -79,8 +82,15 @@ struct BananaOSView: View {
                 .id(AppContentIdentity(route: route, rootRevision: appState.navigation.contentRootRevision))
                 .statusBarHidden(true)
                 .transition(AppMotion.appTransition(reduceMotion: reduceMotion))
-                .allowsHitTesting(appState.navigation.phase == .active)
+                .opacity(appState.story.currentEnding == nil ? 1 : 0)
+                .allowsHitTesting(appState.navigation.phase == .active && appState.story.currentEnding == nil)
+                .accessibilityHidden(appState.story.currentEnding != nil)
                 .zIndex(1)
+            }
+            if appState.story.currentEnding != nil {
+                EndingCompletionView()
+                    .background(AppTheme.Colors.background.ignoresSafeArea())
+                    .zIndex(2)
             }
         }
         .overlay(alignment: .top) {
