@@ -541,7 +541,7 @@ struct ActFourInvestigationControl: View {
             }
             if let milestone = appState.story.state.ascensionMilestone, milestone.percentage == 87 {
                 Text("ASCENSION · 87%").appText(.sectionTitle)
-                    .accessibilityLabel("ASCENSION, eighty-seven percent. Story milestone, not a countdown.")
+                    .accessibilityLabel("ASCENSION, eighty-seven percent.")
             }
             if appState.content.actFiveHandoffAvailable {
                 action("Enter the final investigation", id: "advance.act5") { appState.content.beginActFive() }
