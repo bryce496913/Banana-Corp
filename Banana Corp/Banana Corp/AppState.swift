@@ -259,3 +259,37 @@ final class AppState: ObservableObject {
         }
     }
 }
+
+
+extension AppState {
+    var phoneLife: PhoneLifeState { story.phoneLife }
+    func conversationEntries(channel: String) -> [DeviceConversationEntry] {
+        phoneLife.conversations.filter { $0.channel == channel }
+    }
+
+    @discardableResult func sendDeviceMessage(channel: String, text: String, answerID: String? = nil) -> StoryActionResult {
+        let question = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !question.isEmpty, question.utf8.count <= 512 else { return .failure(.invalidRecord) }
+        let probes = ["company", "banana corp", "echo", "research", "secret", "control people", "controls the company", "harvest", "maya", "daniel"]
+        let company = channel == "assistant" && probes.contains { question.localizedCaseInsensitiveContains($0) }
+        let fallback: String
+        switch channel {
+        case "messages": fallback = "content.device.assistant.message_reply"
+        case "social": fallback = "content.device.assistant.social_reply"
+        case "assistant": fallback = company && phoneLife.companyQuestions >= 3 ? "content.device.assistant.pushback" : "content.device.assistant.fallback"
+        default: return .failure(.invalidRecord)
+        }
+        let available = content.availableItems(for: .assistant)
+        let chosen = channel == "assistant" ? answerID ?? fallback : fallback
+        guard let response = available.first(where: { $0.id == chosen }), case .assistant(let payload) = response.version.payload else {
+            return .failure(.prerequisitesNotMet)
+        }
+        guard !payload.turns.filter({ $0.role == .assistant }).isEmpty else { return .failure(.invalidRecord) }
+        return content.read(response.id, versionID: response.version.id,
+                            conversation: DeviceConversationRequest(channel: channel, question: question, companyQuestion: company))
+            .mapError { error in
+                if case .progression(let failure) = error { return failure }
+                return .invalidRecord
+            }
+    }
+}

@@ -325,7 +325,9 @@ struct AppSegmentedControl: View {
     let label: String
     let options: [String]
     @Binding var selection: String
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
 
     var body: some View {
         Picker(label, selection: $selection) {

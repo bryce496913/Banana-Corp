@@ -27,7 +27,9 @@ struct BananaAppIcon: View {
     let action: () -> Void
     let editAction: () -> Void
 
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
     @ScaledMetric(relativeTo: .caption) private var labelHeight: CGFloat = 32
 
     private var wiggleDirection: Double {
@@ -151,6 +153,7 @@ struct PhoneAppInfo: Identifiable {
         case .pong: return PhoneAppInfo(title: "Pong", image: .symbol("circle.grid.cross.fill"), route: .pong)
         case .xo: return PhoneAppInfo(title: "X / O", image: .symbol("square.grid.3x3.fill"), route: .xo)
         case .evidence: return PhoneAppInfo(title: "Evidence", image: .symbol("archivebox.fill"), route: .evidence)
+        case .banking: return PhoneAppInfo(title: "Banking", image: .symbol("building.columns.fill"), route: .banking)
         }
     }
 }

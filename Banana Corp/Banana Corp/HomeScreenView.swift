@@ -3,7 +3,9 @@ import SwiftUI
 struct HomeScreenView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.osPresentation) private var presentation
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
 

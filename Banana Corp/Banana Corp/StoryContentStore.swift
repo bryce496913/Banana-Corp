@@ -136,13 +136,31 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
 
     /// The UI must pass the version actually opened; stale list/detail selections cannot read a newer version.
     @discardableResult
-    func read(_ id: String, versionID: String) -> StoryContentDeliveryResult {
+    func read(_ id: String, versionID: String, conversation: DeviceConversationRequest? = nil) -> StoryContentDeliveryResult {
         if let error = recoveryError { return .failure(error) }
         guard let catalogue else { return .failure(.catalogueUnavailable) }
         guard let item = catalogue.itemsByID[id] else { return .failure(.unknownContent(id)) }
         guard catalogue.versionOwners[versionID] == id, let version = catalogue.versionsByID[versionID] else { return .failure(.unknownVersion(versionID)) }
         guard authorized(item, state: progression.state) else { return .failure(.contentUnavailable) }
-        if progression.state.completedEventIDs.contains(version.readEventID) { return .success(.unchanged) }
+        func appendConversation(to next: inout StoryState) throws {
+            guard let conversation else { return }
+            guard case .assistant(let payload) = version.payload else { throw StoryActionError.invalidRecord }
+            var answer = payload.turns.filter { $0.role == .assistant }.map(\.text).joined(separator: "\n\n")
+            // Repetition may add corporate resistance, never withhold an earned answer/read.
+            if conversation.companyQuestion, (next.phoneLife?.companyQuestions ?? 0) >= 3,
+               id != "content.device.assistant.pushback",
+               let notice = currentVersion(for: "content.device.assistant.pushback"),
+               availability(for: "content.device.assistant.pushback").isAvailable,
+               case .assistant(let noticePayload) = notice.payload {
+                answer += "\n\n" + noticePayload.turns.filter { $0.role == .assistant }.map(\.text).joined(separator: "\n\n")
+            }
+            try StoryProgressionStore.appendConversation(conversation, answer: answer, versionID: versionID, to: &next)
+        }
+        if progression.state.completedEventIDs.contains(version.readEventID) {
+            guard conversation != nil else { return .success(.unchanged) }
+            guard currentVersion(for: id)?.id == versionID, availability(for: id, versionID: versionID).isAvailable else { return .failure(.contentUnavailable) }
+            return progression.transact { try appendConversation(to: &$0) }.mapError(StoryContentDeliveryError.progression)
+        }
         guard currentVersion(for: id)?.id == versionID else { return .failure(.staleVersion) }
         guard availability(for: id, versionID: versionID).isAvailable else { return .failure(.contentUnavailable) }
         var staged = progression.state
@@ -176,6 +194,13 @@ typealias StoryContentDeliveryResult = Result<StoryActionOutcome, StoryContentDe
                     try append(.recordReplacement(ContentReplacementRecord(id: "replacement.\(versionID).e\(index)", contentID: target, originalVersionID: old.id, replacementVersionID: next.id)))
                     try append(.activateContentVersion(contentID: target, versionID: next.id))
                 }
+            }
+            if conversation != nil {
+                return progression.transact { next in
+                    for action in actions { try StoryProgressionStore.apply(action, to: &next) }
+                    next.completedEventIDs.insert(version.readEventID)
+                    try appendConversation(to: &next)
+                }.mapError(StoryContentDeliveryError.progression)
             }
             return progression.completeEvent(version.readEventID, actions: actions).mapError(StoryContentDeliveryError.progression)
         } catch let error as StoryContentDeliveryError { return .failure(error) }

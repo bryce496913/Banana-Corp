@@ -361,7 +361,7 @@ final class ActsJourneyTests: XCTestCase {
         ready(app.buttons["story.open.version.act1.product.v1"])
         tap(app, "browser.home")
         enterBrowserAddress(app, "/research/echo-07/summary")
-        XCTAssertTrue(app.staticTexts["Search results show available local pages."].exists)
+        XCTAssertTrue(app.staticTexts["Connection unavailable. Choose an available destination below."].exists)
         XCTAssertFalse(app.buttons["story.back"].exists, "An unavailable future address must remain at the local-page root")
         XCTAssertFalse(app.buttons["story.open.version.act2.web.echo07.v1"].exists)
         tap(app, "browser.home")

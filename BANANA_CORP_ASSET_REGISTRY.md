@@ -282,3 +282,8 @@ Format: **ID | filename stem | purpose | priority**. Add a status (`planned`, `a
 - When an asset can be reused across apps (e.g. HQ photo), prefer one canonical underlying file and references rather than unrelated regenerations.
 - `OS-005` is a production **icon-set deliverable**; export its child runtime icons individually with unique names before wiring to the home screen.
 - Reconcile the inventory with the latest game bible and implementation before treating a proposed art item as a required story beat.
+
+
+## Creator-supplied runtime integration — 2026-10-30
+
+BC-001, BC-004, VR-001, VR-006 and PHOTO-001 have visually reviewed optimized derivatives in the existing app catalogue and typed asset map. Source masters remain under All Images; exact source/derivative hashes, dimensions and mappings are recorded in [the provenance manifest](Assets/Images/generated-runtime-assets.json) and [visual inventory](docs/GENERATED_ASSET_INTEGRATION.md). Other entries above remain planned. Imported public imagery establishes no character identity, puzzle answer or Observer clue; mood-board/reference approval is not claimed from unavailable references. SDK/image-loading verification is tracked separately.
