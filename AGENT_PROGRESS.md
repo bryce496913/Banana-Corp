@@ -1,5 +1,7 @@
 # Agent progress and continuation record
 
+Current review (2026-10-30): **five acts implemented; full device playthrough acceptance outstanding.** See [full readiness review](docs/FULL_STORY_READINESS_REVIEW.md). Latest signed Debug/Release source matches the current candidate; Browser prompt repair remains untested after disconnected preflight. New native ending/relaunch coverage and late-game presentation gaps were found. PR58 is now merged into its parent branch, not main. Older headings below are chronological history, not current readiness.
+
 D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. The specification adds no native build or test claim. Current engineering results are summarized below.
 
 Updated: 2026-10-22. Current phase: **B — Native input isolation; human playtest readiness remains open**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
@@ -628,3 +630,8 @@ Browserpromptcandidate2026-10-30signedDebug/ReleaseAppleSDKapp+XCTestbuildsPASS;
 PreparedBrowserpromptretry stoppedatreadiness: tunnel disconnected/DDIfalse, beforeanysavecopy/install/test. Preservedfirstone-shotpreflight under validation/browser-placeholder-20261030/disconnected-preflight-1/,keepingcandidateavailableforfreshliveverificationafterUSBreconnect. Creatoraskedforconnectionrestoration; currentmilestoneauthorizationstands. Noautomaticretryagainstunreadydevice. PR58headbdaaccbda5aab1defdb6c4f99655d5bc61b06e27 includescompiledpromptrepair; noacceptanceclaim.
 
 Roadmap/QAplan2026-10-30nowleadwithimplementedbible1.14Acts4/5ratherthanstaleabsenceclaims;historicalevidencepreserved. LocaldocumentationlinkcheckPASS. Continuation:afterUSBreconnectrun python3 validation/browser-placeholder-20261030/run-audit.py withhostXcodeaccess; it requiresliveverificationandfreshreadinessbeforeQAupdate/savecomparison. Onpasscontinueactualnormal-controlcampaign; no fullnativeacceptanceyet. Cleanupreview:355042844+31185019logicalbytesremovedfromverified-unusedtaskcaches;allunresolveddiagnostics/buildproducts/savespreserved,nosimulator/signing/global/usercleanup. Noactivephonejobatthischeckpoint.
+
+
+## Exhaustive Markdown readiness review — 2026-10-30
+
+Reviewed all118existingMarkdownfiles (44repository/74validationhistory), source-qualified implementation and retained native evidence through coordinated read-only reviews. Five-act/102record/five-ending first-draft implementation exists; no current-source fullnative acceptance. Added consolidated review and marked old physicalhandoffhistorical. Found missingcommitted-ending-relaunch UIassertion, otherlate-lifecycle cases, automaticSimulatordeletion conflict, latepresentation/media gaps, unintegratedmain andcriticalstoragepressure. No newbuild/test/phoneinteraction inthisreview. LocalMarkdownpath/hashledgerpreservedunder validation/full-story-readiness-20261030/. Next taskandacceptancegatesdocumentedintheconsolidatedreview. Cleanup: nodisposableartifactscreated; preservedallnativeevidence/products/saves.
