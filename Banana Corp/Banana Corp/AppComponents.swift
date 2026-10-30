@@ -541,7 +541,9 @@ struct BrowserChrome: View {
         VStack(spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "globe").foregroundStyle(AppTheme.Colors.accent).accessibilityHidden(true)
-                TextField("Address or search local pages", text: $address, axis: .vertical)
+                TextField("Address or search local pages", text: $address,
+                          prompt: Text("Address or search local pages").foregroundStyle(AppTheme.Colors.text),
+                          axis: .vertical)
                     .lineLimit(1...4)
                     .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
                     .submitLabel(.go).onSubmit(onGo)
