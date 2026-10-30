@@ -1,6 +1,6 @@
 # QA test plan
 
-Updated: 2026-10-18. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
+Updated: 2026-10-30. Scope: authorized [Banana Corp repository](https://github.com/bryce496913/Banana-Corp) only. Use [game canon](BANANA_CORP_GAME_BIBLE.md), [roadmap](DEVELOPMENT_ROADMAP.md) and [progress tracking](AGENT_PROGRESS.md).
 
 ## Validation tiers and claims
 
@@ -22,7 +22,7 @@ Always use PASS, FAIL, BLOCKED or NOT RUN with the tier and tool/device evidence
 - Genuine original/live version distinctions; exact immutable snapshots, repeated preservation, removed/missing source and truthful comparison.
 - Legitimate in-game Banana Wall clues, wrong/normalized answers, hints, saved success/retry, old pending states and no debug bypass.
 - MIRROR/ECHO/influence, two-source autonomy, ASCENSION knowledge versus takeover, human-energy records, Daniel accountability, archived Maya guidance, mandatory Observer discovery and conclusion.
-- Optional clues/evidence/questions remain independent; no hidden scoring. Incomplete facts and failed saves cannot advance. Act 4 entry grants no takeover/countermeasure/cooperation/ending facts; Act 5 remains closed.
+- Optional clues/evidence/questions remain independent; no hidden scoring. Incomplete facts and failed saves cannot advance. Act 4 entry alone grants no takeover/countermeasure/cooperation/ending facts; later approved Acts 4–5 actions require their explicit prerequisites.
 - Relaunch at meaningful boundaries; exact acts, evidence, receipts, access, puzzle, replacements, unread counters and nonduplicated notifications/events.
 - Query-cache invalidation on story changes, alternative-state queries and authorizer reference changes; passive queries never award reads.
 - Native app open/Home/swipe/Back, scrolling/keyboard, modal dismissal, edit/drag/drop persistence, accessibility labels/Dynamic Type/Reduce Motion and mini-game gesture/lifecycle reliability.
@@ -109,3 +109,15 @@ Bible1.14 approved late-act contracts supersede the historical Act5-closed expec
 Actual generic iPhone Debug/Release builds pass for the new51source/102record candidate. The signed physical device journeys throughAct4entry and freshopening checks are PRE-ENDGAME-source evidence. New Act4/5 controls, ending completion layer, production Settings reset/collection review, all five outcome journeys and physical save migration remain NOT RUN natively. The covered-Home opacity candidate has builds/model checks but unsuppressed audit retest remains pending. No failures are suppressed.
 
 Before release: run XCTest plus normal UI journeys for new acts/choices; cancel and stale-confirmation behavior, partial DAWN termination/relaunch, wrong Maya input, source-based negotiation, optional Observer independence, every ending/restore/newgame/collection, unchanged old evidence bytes after app update and Reduce Motion/VoiceOver/layout. Keep daily-driver tests to explicitly authorized roughly ten-minute blocks; close the QA app before each check-in.
+
+
+## Current complete-story acceptance — 2026-10-30
+
+- PASS: signed Debug/Release Apple SDK app/XCTest builds; strict QA bundle/profile/resource/mapping checks; applicable Foundation checks including Act4/endgame. Model coverage remains separate from UI interactions.
+- FAIL: latest completed shared-control public audit, Browser contrast after Home/Mail completed; QA app termination confirmed. Screenshot identifies address placeholder despite mismatched XCTest node label.
+- BLOCKED: compiled explicit Browser prompt repair awaits connected developer tunnel, before installation/test. All failures remain unsuppressed.
+- NOT RUN: complete current-source ordered opening→Act4→Act5 native campaign, five endings through earned final-decision replay, and corresponding final save/evidence checks. Older-source campaigns do not establish this pass.
+
+Next native sequence: live strict verification, QA-only update with exact save equality, full public audit, contiguous original17checkpoints, then eight late-story phases. Use ordinary controls, no app launch bypasses or save injection. Verify cancellation, reconstruction retry, partial DAWN relaunch, negotiation/Observer prerequisites, immutable earlier evidence, restore/newgame/collection behavior and UI gestures. Public audits do not establish spoken VoiceOver quality.
+
+Creator authorizes continued daily-driver testing through the next large milestone and will message before disconnecting. This supersedes older ten-minute check-ins for this session. Keep commands bounded, use only the separate QA identity and pause promptly on notice. Preserve all unresolved diagnostics; clean only verified-unused task artifacts.

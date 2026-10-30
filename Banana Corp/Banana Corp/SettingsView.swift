@@ -11,7 +11,9 @@ struct SettingsView: View {
 
                 #if DEBUG
                 DevelopmentPuzzleEntry()
-                NavigationLink("Story slice diagnostics") { FirstAnomalyDebugView() }
+                NavigationLink { FirstAnomalyDebugView() } label: {
+                    Text("Story slice diagnostics").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle())
+                }
                     .buttonStyle(.modernPhone)
                 #endif
 

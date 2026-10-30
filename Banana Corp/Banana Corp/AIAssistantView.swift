@@ -33,11 +33,15 @@ struct AIAssistantView: View {
                     Text("Choose a question").appText(.sectionTitle)
                     Text("Local answers for your phone and Banana Vision.").appText(.caption, color: AppTheme.Colors.secondaryText)
                     ForEach(responses.filter { $0.id != "content.act1.assistant.welcome" }) { response in
-                        Button(response.version.title) {
+                        Button {
                             switch appState.content.read(response.id, versionID: response.version.id) {
                             case .success: selectedID = response.id
                             case .failure: failure = true
                             }
+                        } label: {
+                            Text(response.version.title)
+                                .frame(minHeight: AppTheme.Layout.touchTarget)
+                                .contentShape(Rectangle())
                         }.buttonStyle(.modernPhone)
                             .accessibilityIdentifier("story.assistant.\(response.version.id)")
                     }

@@ -152,7 +152,7 @@ final class ActsJourneyTests: XCTestCase {
             openApp(app, "browser")
             enterBrowserAddress(app, "/research/echo-07/summary")
             ready(app.buttons["story.back"], timeout: 5)
-            XCTAssertEqual(app.textFields["browser.address"].value as? String, "/research/echo-07/summary")
+            XCTAssertEqual(browserAddress(app).value as? String, "/research/echo-07/summary")
             XCTAssertTrue(app.staticTexts["ECHO-07 — Neural Synchronization Trial — Preliminary Findings"].exists)
             checkpoint(app, "after ECHO-07 read")
             try boundary(8, "after ECHO-07 read")
@@ -333,8 +333,12 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertFalse(finish.isEnabled, "Viewed presentation must remain viewed after relaunch")
     }
 
+    @MainActor private func browserAddress(_ app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(NSPredicate(format: "identifier == %@ AND (elementType == %d OR elementType == %d)", "browser.address", XCUIElement.ElementType.textField.rawValue, XCUIElement.ElementType.textView.rawValue)).firstMatch
+    }
+
     @MainActor private func enterBrowserAddress(_ app: XCUIApplication, _ path: String) {
-        let address = app.textFields["browser.address"].firstMatch
+        let address = browserAddress(app)
         ready(address)
         address.tap()
         if let value = address.value as? String, value != "Address or search local pages", !value.isEmpty {
@@ -350,7 +354,7 @@ final class ActsJourneyTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Local pages refreshed."].exists)
         enterBrowserAddress(app, "/banana-vision")
         ready(app.buttons["story.back"], timeout: 5)
-        XCTAssertEqual(app.textFields["browser.address"].value as? String, "/banana-vision")
+        XCTAssertEqual(browserAddress(app).value as? String, "/banana-vision")
         tap(app, "browser.refresh")
         XCTAssertTrue(app.staticTexts["Source availability checked. The opened version is retained."].exists)
         tap(app, "story.back")
