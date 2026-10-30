@@ -35,7 +35,7 @@ Record actual Xcode/SDK, Swift, device model/runtime/UDID, configuration, source
 
 Use dedicated simulators; the full-journey runner owns and cleans up only those it creates. A supplied integration simulator is not owned/deleted by that script. A skipped journey is not a successful journey. Stop on build/test failure while retaining combined stdout/stderr diagnostics.
 
-Current Apple matrix: actual Xcode 26.5 Debug/Release builds and integration tests passed on iOS 26.5. Full journey has one diagnostic pass; the clean preservation/configuration matrix remains incomplete. iOS 18 is NOT RUN because its runtime is absent. Physical iPhone, native VoiceOver and Instruments are NOT RUN. See the retained native records below and [current progress](AGENT_PROGRESS.md); the earlier Linux limitation no longer describes this execution environment.
+Current Apple matrix (2026-10-30): signed Debug/Release builds pass for the latest complete-story candidate; earlier iOS 26.5 integration and eight physical pre-endgame campaigns are source-qualified historical results. The current full Acts 1–5/ending/replay native journey and full public audit are not accepted. iOS 18 remains NOT RUN because its runtime is absent. Spoken VoiceOver and performance acceptance are outstanding. See [the exhaustive readiness review](docs/FULL_STORY_READINESS_REVIEW.md) and [current progress](AGENT_PROGRESS.md); historical limitations below do not override newer actual evidence.
 
 ## Playtest/release gate
 
