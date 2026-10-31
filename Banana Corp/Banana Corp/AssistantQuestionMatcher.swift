@@ -6,9 +6,14 @@ enum AvailableAssistantMatcher {
     static func answerID(for input: String, available: [DeliveredStoryContent]) -> String? {
         let question = normalized(input)
         guard !question.isEmpty else { return nil }
+        if ["hello", "hi", "hey", "help"].contains(question),
+           available.contains(where: { $0.id == "content.device.assistant.help" }) {
+            return "content.device.assistant.help"
+        }
+        let serviceAnswers: Set<String> = ["content.device.assistant.shop", "content.device.assistant.credits", "content.device.assistant.security"]
         let candidates = available.filter {
             $0.surface == .assistant && $0.id != "content.act1.assistant.welcome"
-                && $0.id != "content.act1.assistant.choices" && !$0.id.hasPrefix("content.device.")
+                && $0.id != "content.act1.assistant.choices" && (!$0.id.hasPrefix("content.device.") || serviceAnswers.contains($0.id))
         }
         if let exact = candidates.first(where: { item in
             if normalized(item.version.title) == question { return true }
@@ -19,6 +24,10 @@ enum AvailableAssistantMatcher {
         func has(_ text: String) -> Bool { question.contains(text) }
         func any(_ words: [String]) -> Bool { words.contains(where: has) }
         var topics: [String] = []
+        if any(["credits", "banking", "earn money", "earn credit"]) { topics.append("device.assistant.credits") }
+        if any(["buy", "purchase", "reserve", "price", "cost"]) && any(["vision", "headset"]) { topics.append("device.assistant.shop") }
+        if any(["phishing", "scam", "secure my account", "account security", "hacked"]) { topics.append("device.assistant.security") }
+
         if any(["saved", "preserved"]) && has("email") { topics.append("act1.first_anomaly.challenge") }
         if has("email") && any(["missing", "gone", "disappear", "happened"]) { topics.append("act1.first_anomaly.denial") }
         if any(["saved", "preserved"]) && any(["alex", "warning", "transcript"]) { topics.append("act2.assistant.saved_warning") }

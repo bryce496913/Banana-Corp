@@ -49,19 +49,29 @@ cleanup_failed=0
 cleanup() {
     if [[ -n "$qa_simulator" ]]; then
         cleanup_attempted=1
-        # This variable is assigned only from a successful create in this run.
-        if ! xcrun simctl shutdown "$qa_simulator" >> "$results/cleanup.log" 2>&1; then
-            echo "Shutdown did not complete for owned simulator $qa_simulator; attempting deletion (it may already be shut down)." | tee -a "$results/cleanup.log" >&2
-        fi
-        if xcrun simctl delete "$qa_simulator" >> "$results/cleanup.log" 2>&1; then
-            qa_simulator=''
-            cleanup_failed=0
-        else
+        # This variable comes only from this run's successful create. Retain it and its data.
+        local shutdown_status=0
+        local record_status=0
+        xcrun simctl shutdown "$qa_simulator" >> "$results/cleanup.log" 2>&1 || shutdown_status=$?
+        python3 - "$results/retained-simulators.jsonl" "$qa_simulator" "$case_name" "$runtime" "$device_type" "$shutdown_status" <<'PYRETAIN' || record_status=$?
+import json,sys
+from pathlib import Path
+record_path,identifier,case_name,runtime,device_type,shutdown_status=sys.argv[1:]
+results=Path(record_path).parent
+record=dict(udid=identifier,created_by_runner=True,retained=True,case=case_name,
+            runtime=runtime,device_type=device_type,shutdown_exit=int(shutdown_status),
+            shutdown_succeeded=shutdown_status=='0',xcresult=str(results/f'{case_name}.xcresult'),
+            note='Retained for explicit review/reuse. No automatic deletion or erasure.')
+with open(record_path,'a') as output: output.write(json.dumps(record)+'\n')
+PYRETAIN
+        if [[ "$shutdown_status" -ne 0 || "$record_status" -ne 0 ]]; then
             cleanup_failed=1
             printf '%s\n' "$qa_simulator" > "$results/outstanding-owned-simulator.txt"
-            echo "CLEANUP FAILED: owned simulator $qa_simulator remains outstanding; see $results/cleanup.log and outstanding-owned-simulator.txt." >&2
+            echo "CLEANUP FAILED: shutdown/retention recording for owned simulator $qa_simulator; simulator retained, see cleanup.log and ownership ledgers." >&2
             return 1
         fi
+        qa_simulator=''
+        cleanup_failed=0
     fi
     return 0
 }
@@ -75,7 +85,7 @@ finalize() {
         original_status=70
     fi
     # Preserve the native/test failure when cleanup also fails. Never retry
-    # deletion automatically or discard an outstanding owned UUID.
+    # shutdown automatically or discard an outstanding owned UUID.
     exit "$original_status"
 }
 trap finalize EXIT

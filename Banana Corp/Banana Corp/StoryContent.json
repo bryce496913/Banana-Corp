@@ -6229,6 +6229,118 @@
           }
         }
       ]
+    },
+    {
+      "id": "content.device.web.prize",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 530,
+      "initialVersionID": "version.device.web.prize.v1",
+      "versions": [
+        {
+          "id": "version.device.web.prize.v1",
+          "version": 1,
+          "title": "Your complimentary headset offer",
+          "source": "Vision Rewards Desk",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/offers/free-headset",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Claim a FREE Banana Vision reservation by sharing the demonstration account profile on this phone."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Prize service: banana-prizes.example. This offer is separate from the official Banana Vision store."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.shop",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 710,
+      "initialVersionID": "version.device.assistant.shop.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.shop.v1",
+          "version": 1,
+          "title": "How do I reserve Banana Vision?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.shop.assistant",
+                  "role": "assistant",
+                  "text": "Open VR Experience, Banking or banana.example/store. A reservation costs 300 Banana Credits and requires confirmation. It is an optional in-game order: no real payment or delivery, and no investigation access depends on it."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.credits",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 711,
+      "initialVersionID": "version.device.assistant.credits.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.credits.v1",
+          "version": 1,
+          "title": "How do I earn Banana Credits?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.credits.assistant",
+                  "role": "assistant",
+                  "text": "Open Banking and choose an opportunity. Wallet orientation, the product-interest survey and demonstration dispatch each award 100 credits once per campaign. Your account begins with 100 credits. Review the activity ledger to see each credit and debit."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.security",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 712,
+      "initialVersionID": "version.device.assistant.security.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.security.v1",
+          "version": 1,
+          "title": "How do I secure my account?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.security.assistant",
+                  "role": "assistant",
+                  "text": "Open Settings, then Account security. If a prize service used the demonstration profile, revoke that session to recover its disputed credits. An offer is not an official reservation. No real personal information is needed for these on-phone services."
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

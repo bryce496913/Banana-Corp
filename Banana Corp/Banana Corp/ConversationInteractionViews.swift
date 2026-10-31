@@ -75,6 +75,7 @@ struct DeviceConversationPanel: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(entry.isPlayer ? .leading : .trailing, AppTheme.Spacing.md)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("device.chat.\(channel).entry.\(entry.id)")
     }
 

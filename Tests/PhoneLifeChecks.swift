@@ -52,6 +52,10 @@ private final class PhoneLifePersistence: StoryPersistence {
         _ = try story.updatePhonePreferences(prefs).get()
         let available = content.availableItems(for: .assistant)
         precondition(AvailableAssistantMatcher.answerID(for: "what is banana vision?", available: available) == "content.act1.assistant.vision")
+        precondition(AvailableAssistantMatcher.answerID(for: "how do I buy a headset?", available: available) == "content.device.assistant.shop")
+        precondition(AvailableAssistantMatcher.answerID(for: "how do I earn credits?", available: available) == "content.device.assistant.credits")
+        precondition(AvailableAssistantMatcher.answerID(for: "my account was hacked", available: available) == "content.device.assistant.security")
+        precondition(AvailableAssistantMatcher.answerID(for: "hello", available: available) == "content.device.assistant.help")
         for question in ["ASCENSION", "Maya", "Observer", "Project ECHO", "ECHO-07"] {
             precondition(AvailableAssistantMatcher.answerID(for: question, available: available) == nil)
         }

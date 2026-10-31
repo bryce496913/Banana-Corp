@@ -47,8 +47,35 @@ final class AppState: ObservableObject {
         self.content = StoryContentStore(progression: self.story, catalogue: contentCatalogue, access: self.access)
         self.story.onStateWillChange = { [weak self] in self?.objectWillChange.send() }
         self.story.onStateDidChange = { [weak self] in
-            guard let self, let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) else { return }
-            self.goHome()
+            guard let self else { return }
+            self.reconcileSavedStoryPresentation()
+            if let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) {
+                self.goHome()
+            }
+        }
+        reconcileSavedStoryPresentation()
+    }
+
+    /// Derive the approved takeover appearance from committed campaign facts, including on relaunch.
+    /// This is cosmetic reconciliation: it never consumes an event, reveals content, or advances story.
+    func reconcileSavedStoryPresentation() {
+        let takeover = OSPresentationConfiguration(mode: .compromised, palette: .compromised)
+        let saved = story.state
+        let showsTakeover = story.isWritable
+            && saved.currentAct.rawValue >= StoryAct.theTakeover.rawValue
+            && saved.completedEventIDs.contains(ActFourContract.takeoverEvent)
+            && saved.completedMilestoneIDs.contains(ActFourContract.takeoverConnected)
+            && saved.ascensionMilestone == AscensionMilestone(id: ActFourContract.ascension, percentage: 87)
+            && saved.endgame?.currentEnding == nil
+
+        if showsTakeover {
+            // No transient event means no timer, notification, pulse, haptic or replay on every save.
+            guard presentation.configuration != takeover else { return }
+            _ = configureStoryPresentation(takeover, when: { _ in true })
+        } else if presentation.configuration == takeover {
+            // Reset and final confirmation release only this owned appearance. Other explicit
+            // configurations (including the first anomaly) keep their existing lifetime contracts.
+            restoreNormalPresentation()
         }
     }
 

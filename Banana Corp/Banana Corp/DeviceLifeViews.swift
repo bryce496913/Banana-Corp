@@ -7,6 +7,9 @@ struct BankingView: View {
     private let titles = ["orientation": "Review wallet basics", "survey": "Product interest survey", "delivery": "Check a demonstration dispatch"]
     var body: some View {
         PhoneShellView(title: "Banking", subtitle: "BANANA CREDITS") {
+            if !appState.story.isWritable {
+                AppErrorState(title: "Account unavailable", message: "The saved account needs recovery. Your account has not been reset.", retry: { _ = appState.story.load() })
+            } else {
             AppScreenScroll {
                 AppCard {
                     Text("Available balance").appText(.caption)
@@ -33,6 +36,7 @@ struct BankingView: View {
                     }
                 }
                 HeadsetShopCard()
+            }
             }
         }
         .sheet(item: Binding(get: { opportunity.map(DeviceOpportunity.init) }, set: { opportunity = $0?.id })) { item in
@@ -82,14 +86,15 @@ struct HeadsetShopCard: View {
             Image(asset: .vr001HeadsetHero).resizable().scaledToFit().accessibilityLabel("Banana Vision headset")
             Text("Banana Vision Store").appText(.sectionTitle)
             Text("300 Banana Credits • In-game reservation").appText(.body)
-            Text("Balance: \(appState.phoneLife.balance) BC").appText(.caption)
+            if appState.story.isWritable { Text("Balance: \(appState.phoneLife.balance) BC").appText(.caption) }
+            else { Text("Saved account unavailable").appText(.caption) }
             if appState.phoneLife.headsetPurchased {
                 Label("Reservation confirmed", systemImage: "checkmark.seal").appText(.body)
                     .accessibilityIdentifier("shop.purchased")
             } else {
                 Button("Reserve Banana Vision • 300 BC") { confirm = true }
                     .buttonStyle(.appPrimary).accessibilityIdentifier("shop.purchase")
-                    .disabled(appState.phoneLife.balance < PhoneLifeState.headsetPrice || appState.phoneLife.securityCompromised)
+                    .disabled(!appState.story.isWritable || appState.phoneLife.balance < PhoneLifeState.headsetPrice || appState.phoneLife.securityCompromised)
                 if appState.phoneLife.securityCompromised { Text("Secure your account in Settings before purchasing.").appText(.caption) }
                 else if appState.phoneLife.balance < PhoneLifeState.headsetPrice { Text("Open Banking for optional earning opportunities.").appText(.caption) }
             }
@@ -146,6 +151,7 @@ struct DeviceLifeActions: View {
     var body: some View {
         if contentID == "content.device.web.store" { HeadsetShopCard() }
         if contentID == "content.device.web.security" { DeviceSecurityCard() }
+        if contentID == "content.device.web.prize" { PrizeOfferCard() }
         if contentID == "content.device.web.home" || contentID == "content.device.web.company" {
             Image(asset: contentID == "content.device.web.home" ? .bc001PrimaryLogo : .photo001HQExterior)
                 .resizable().scaledToFit().accessibilityLabel(contentID == "content.device.web.home" ? "Banana Corp corporate mark" : "Banana Corp headquarters")
@@ -158,14 +164,22 @@ struct DeviceLifeActions: View {
     }
 }
 private struct PrizeOfferView: View {
+    var body: some View {
+        PhoneShellView(title: "Vision Rewards", subtitle: "banana-prizes.example") {
+            AppScreenScroll {
+                DeviceCatalogueCopy(contentID: "content.device.web.prize")
+                PrizeOfferCard()
+            }
+        }
+    }
+}
+private struct PrizeOfferCard: View {
     @EnvironmentObject private var appState: AppState
     @State private var share = false
     @State private var failed = false
     var body: some View {
-        PhoneShellView(title: "Vision Rewards", subtitle: "banana-prizes.example") {
-            AppScreenScroll {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
                 Image(asset: .vr001HeadsetHero).resizable().scaledToFit().accessibilityLabel("Headset prize advertisement")
-                DeviceCatalogueCopy(contentID: "content.device.mail.prize")
                 AppCard {
                     Text("Device owner • BNC-DEMO").appText(.systemLabel)
                     Text("Demonstration account profile. No personal information is requested.").appText(.caption)
@@ -177,7 +191,6 @@ private struct PrizeOfferView: View {
                     Button("Share demonstration profile") { share = true }.buttonStyle(.appPrimary)
                         .accessibilityIdentifier("prize.share")
                 }
-            }
         }
         .confirmationDialog("Share the on-phone profile?", isPresented: $share, titleVisibility: .visible) {
             Button("Share profile") { if case .failure = appState.story.submitFictionalPrizeProfile() { failed = true } }

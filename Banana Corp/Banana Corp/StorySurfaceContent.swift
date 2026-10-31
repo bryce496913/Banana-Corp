@@ -311,6 +311,7 @@ private struct BrowserRecoveryLinks: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
                 Label(isSearch ? "Search destinations" : "Connection unavailable", systemImage: "network.slash")
                     .appText(.sectionTitle).fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("browser.connection.feedback")
                 Text(isSearch
                      ? "Try another search or choose one of the available sites."
                      : "This address cannot be reached on the Banana network. Your available destinations are listed below.")
@@ -336,7 +337,6 @@ private struct BrowserRecoveryLinks: View {
                 }
             }
         }
-        .accessibilityIdentifier("browser.connection.feedback")
     }
 }
 

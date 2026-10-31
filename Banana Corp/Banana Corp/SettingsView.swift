@@ -21,7 +21,7 @@ struct SettingsView: View {
                     AppScreenScroll { DeviceSecurityCard(); DeviceCatalogueCopy(contentID: "content.device.web.security") }
                 } } label: { AppListRow(title: "Account security", subtitle: appState.phoneLife.securityCompromised ? "Action needed" : "Protected", symbol: "lock.shield") }
                     .buttonStyle(.appContent).accessibilityIdentifier("settings.security")
-                NavigationLink { BankingView() } label: { AppListRow(title: "Banking", subtitle: "\(appState.phoneLife.balance) Banana Credits", symbol: "building.columns") }
+                NavigationLink { BankingView() } label: { AppListRow(title: "Banking", subtitle: appState.story.isWritable ? "\(appState.phoneLife.balance) Banana Credits" : "Saved account unavailable", symbol: "building.columns") }
                     .buttonStyle(.appContent)
                 AppSectionHeader("Personalization and privacy")
                 Button("Restore default Home arrangement") { resetLayout = true }.buttonStyle(.modernPhone)

@@ -38,7 +38,7 @@ struct AIAssistantView: View {
                 } else {
                     Text("Choose a question").appText(.sectionTitle)
                     Text("Local answers for your phone and Banana Vision.").appText(.caption, color: AppTheme.Colors.secondaryText)
-                    ForEach(responses.filter { $0.id != "content.act1.assistant.welcome" && $0.id != "content.act1.assistant.choices" && !$0.id.hasPrefix("content.device.") }) { response in
+                    ForEach(responses.filter { $0.id != "content.act1.assistant.welcome" && $0.id != "content.act1.assistant.choices" && (!$0.id.hasPrefix("content.device.") || ["content.device.assistant.shop", "content.device.assistant.credits", "content.device.assistant.security"].contains($0.id)) }) { response in
                         Button {
                             switch appState.sendDeviceMessage(channel: "assistant", text: response.version.title, answerID: response.id) {
                             case .success: break

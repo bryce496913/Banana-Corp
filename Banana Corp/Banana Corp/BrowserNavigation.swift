@@ -23,10 +23,14 @@ enum BrowserAddressIntent: Equatable {
         guard looksLikeAddress else { return .search(value) }
         guard let components = URLComponents(string: value.contains("://") ? value : "https://" + value),
               ["https", "http"].contains(components.scheme?.lowercased() ?? ""),
-              ["banana.example", "www.banana.example"].contains(components.host?.lowercased() ?? ""),
               components.user == nil, components.password == nil, components.port == nil else {
             return .connectionIssue
         }
+        let host = components.host?.lowercased() ?? ""
+        if ["banana-prizes.example", "www.banana-prizes.example"].contains(host) {
+            return ["", "/", "/claim"].contains(components.path) ? .path("/offers/free-headset") : .connectionIssue
+        }
+        guard ["banana.example", "www.banana.example"].contains(host) else { return .connectionIssue }
         return components.path.isEmpty || components.path == "/" ? .home : .path(components.path)
     }
 }

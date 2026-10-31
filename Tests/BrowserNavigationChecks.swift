@@ -27,6 +27,9 @@ struct BrowserNavigationChecks {
         precondition(!PhoneEdgeBackIntent.shouldGoBack(horizontal: -100, vertical: 0))
         precondition(!PhoneEdgeBackIntent.shouldGoBack(horizontal: 80, vertical: 60))
         precondition(!PhoneEdgeBackIntent.shouldGoBack(horizontal: 80, vertical: 100))
+        precondition(BrowserAddressIntent.resolve("https://banana-prizes.example/claim") == .path("/offers/free-headset"))
+        precondition(BrowserAddressIntent.resolve("banana-prizes.example") == .path("/offers/free-headset"))
+        precondition(BrowserAddressIntent.resolve("https://banana-prizes.example/private") == .connectionIssue)
         print("PASS: fictional Browser address normalization, credential/domain rejection, and directional edge-back intent. Model only; no UI/network execution.")
     }
 }

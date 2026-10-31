@@ -16,9 +16,27 @@ final class PhoneLifeUITests: XCTestCase {
             throw XCTSkip("Requires the separate explicitly authorized QA installation")
         }
         continueAfterFailure = false
-        let app = XCUIApplication(); app.launch()
+        let app = XCUIApplication(); app.terminate(); app.launch()
         ready(app.buttons["bananaOS.app.banking"])
         return app
+    }
+    @MainActor func testResetOptionalPhoneLifeThroughSettings() throws {
+        let env = ProcessInfo.processInfo.environment
+        guard (env["TEST_RUNNER_BANANA_PHONE_LIFE_RESET"] ?? env["BANANA_PHONE_LIFE_RESET"]) == "owned-qa" else {
+            throw XCTSkip("Separate explicit QA-only reset invocation; never resets during normal coverage")
+        }
+        let app = try launch(); open(app, "settings")
+        tap(app, "story.new_game")
+        dialog(app, "Cancel")
+        XCTAssertTrue(app.buttons["story.new_game"].exists, "Cancel must retain the current campaign")
+        tap(app, "story.new_game")
+        dialog(app, "New game")
+        ready(app.buttons["bananaOS.app.email"])
+        app.terminate(); app.launch()
+        open(app, "banking"); expectBalance(app, 100)
+        XCTAssertTrue(app.buttons["shop.purchase"].exists)
+        home(app)
+        print("BANANA_PHONE_LIFE_EXPLICIT_NEW_GAME_PASS")
     }
     @MainActor func testBankPurchaseAndPrizeRecovery() throws {
         let app = try launch()
@@ -30,10 +48,10 @@ final class PhoneLifeUITests: XCTestCase {
         }
         expectBalance(app, 400)
         tap(app, "shop.purchase")
-        tap(app, "Cancel")
+        dialog(app, "Cancel")
         expectBalance(app, 400)
         tap(app, "shop.purchase")
-        tap(app, "Confirm reservation")
+        dialog(app, "Confirm reservation")
         let purchased = app.descendants(matching: .any).matching(identifier: "shop.purchased").firstMatch
         ready(purchased)
         XCTAssertTrue(purchased.label.contains("Reservation confirmed"), "A confirmed purchase must render its persisted reservation status")
@@ -45,11 +63,11 @@ final class PhoneLifeUITests: XCTestCase {
         tap(app, "story.open.version.device.mail.prize.v1")
         tap(app, "mail.prize.open")
         tap(app, "prize.share")
-        tap(app, "Share profile")
+        dialog(app, "Share profile")
         home(app); open(app, "banking"); expectBalance(app, 50)
         home(app); open(app, "settings")
         tap(app, "settings.security"); tap(app, "security.recover")
-        tap(app, "Revoke and recover credits")
+        dialog(app, "Revoke and recover credits")
         home(app); app.terminate(); app.launch()
         open(app, "banking"); expectBalance(app, 100)
         home(app)
@@ -68,13 +86,20 @@ final class PhoneLifeUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "acknowledges it automatically")).firstMatch.waitForExistence(timeout: 5))
         home(app); open(app, "settings")
         let haptics = app.switches["settings.haptics"].firstMatch
-        scrollTo(haptics, app: app, id: "settings.haptics"); XCTAssertEqual(haptics.value as? String, "1"); haptics.tap()
+        scrollTo(haptics, app: app, id: "settings.haptics")
+        let original = haptics.value as? String
+        XCTAssertTrue(original == "0" || original == "1"); haptics.tap()
         home(app); app.terminate(); app.launch(); open(app, "settings")
-        scrollTo(haptics, app: app, id: "settings.haptics"); XCTAssertEqual(haptics.value as? String, "0"); haptics.tap()
+        scrollTo(haptics, app: app, id: "settings.haptics"); XCTAssertEqual(haptics.value as? String, original == "1" ? "0" : "1"); haptics.tap()
         home(app); open(app, "aiAssistant")
         XCTAssertTrue(app.staticTexts["What is Banana Vision?"].firstMatch.waitForExistence(timeout: 5))
         let savedEntries = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH %@", "device.chat.assistant.entry."))
         XCTAssertGreaterThanOrEqual(savedEntries.count, 2, "The saved player question and Assistant reply must survive relaunch")
+        for _ in 0..<4 { send(app, channel: "assistant", text: "Explain Banana Corp company policy") }
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "You have asked several questions about Banana Corp")).firstMatch.waitForExistence(timeout: 5))
+        send(app, channel: "assistant", text: "Tell me about Banana Corp's Banana Vision headset")
+        let earnedAnswer = app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@", "AR/VR headset", "You have asked several questions about Banana Corp")).firstMatch
+        XCTAssertTrue(earnedAnswer.waitForExistence(timeout: 5), "Pushback must not withhold an available authored answer")
         home(app)
         print("BANANA_PHONE_LIFE_CHAT_SETTINGS_RELAUNCH_PASS")
     }
@@ -111,6 +136,7 @@ final class PhoneLifeUITests: XCTestCase {
         XCTAssertEqual(label.label, "\(value) BC")
     }
     @MainActor private func open(_ app: XCUIApplication, _ route: String) {
+        ready(app.buttons["bananaOS.app.email"].firstMatch)
         tap(app, "bananaOS.app." + route)
         ready(app.buttons["bananaOS.home"])
     }
@@ -124,6 +150,19 @@ final class PhoneLifeUITests: XCTestCase {
     }
     @MainActor private func tap(_ app: XCUIApplication, _ id: String) {
         let item = app.buttons[id].firstMatch; scrollTo(item, app: app, id: id); item.tap()
+    }
+    @MainActor private func dialog(_ app: XCUIApplication, _ label: String) {
+        // Native confirmation controls live outside the application's scroll owner.
+        let sheet = app.sheets.firstMatch
+        let button = sheet.exists ? sheet.buttons[label].firstMatch : app.buttons[label].firstMatch
+        if label == "Cancel", !button.exists {
+            // iOS popover confirmations expose dismissal instead of a Cancel row.
+            let dismiss = app.otherElements["PopoverDismissRegion"].firstMatch
+            ready(dismiss); dismiss.tap()
+        } else { ready(button); button.tap() }
+        if sheet.exists {
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: sheet)], timeout: 8), .completed)
+        }
     }
     @MainActor private func finiteFrame(_ element: XCUIElement) -> CGRect? {
         guard element.exists else { return nil }
