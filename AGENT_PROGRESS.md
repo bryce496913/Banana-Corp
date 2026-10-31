@@ -1,5 +1,7 @@
 # Agent progress and continuation record
 
+Current review (2026-10-30): **five acts implemented; full device playthrough acceptance outstanding.** See [full readiness review](docs/FULL_STORY_READINESS_REVIEW.md). Latest signed Debug/Release source matches the current candidate; Browser prompt repair remains untested after disconnected preflight. New native ending/relaunch coverage and late-game presentation gaps were found. PR58 is now merged into its parent branch, not main. Older headings below are chronological history, not current readiness.
+
 D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. The specification adds no native build or test claim. Current engineering results are summarized below.
 
 Updated: 2026-10-22. Current phase: **B — Native input isolation; human playtest readiness remains open**. See [roadmap](DEVELOPMENT_ROADMAP.md), [test plan](QA_TEST_PLAN.md), [creator directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) and [repository instructions](AGENTS.md).
@@ -584,3 +586,52 @@ The full opening→Act4 journey test now has a separate opt-in bounded method th
 First next authorized phone window installs only this fresh unique QA identity and runs the unsuppressed Home/all15apps audit,420second host-test cap plus bounded ownedprocessgroupcleanup, no retry. Live verifier must succeed before ANYdevicecommand, not just an oldreceipt. Existing removed-QA saves stay onMac as evidence and are never injected. Subsequent authorized blocks progress from fresh state through original17checkpoints and8late-story phase selectors using normalcontrols and retainedverifiedsaves. No native complete-story/audit pass yet.
 
 Cleanup Report: Removed4verifiedclosedobsolete task-only cache directories from the abandoned old-QA update DerivedData, 119806000logicalbytes (about114.26MiB). Retained prior signedproducts/sealfailure evidence, newfreshsignedbuild/testenvironment, source/assets, allsaveexports/results/signing andsimulators. No filesystemfree-space delta claimed. No phone state changed.
+
+
+## Fresh physical public audit / Mail search candidate — 2026-10-29
+
+Creator explicitly authorized one fresh roughly ten-minute installation/audit block. Live strict verification succeeded before any devicecommand. New unique QA installed; originalgame untouched. Actual public audit ran onconnectedphone: Home step passed, Email failedTextClipped targeting mail.search in22.766seconds; native65,total1/pass0/fail1/skip0,no timeout/retry. Remaining14app routes not reached. No entireaudit/nativecomplete-story pass. The known auditedPID was absent inpost-runscopedprocess query; phone released andno furtherdevicequeries. Evidence/3necessary failureattachments retained under validation/complete-story-native-20261029/fresh-qa/.
+
+Investigated recordedSearchmailplaceholder finding locally. AppSearchField candidate nowusesexistingverticalaxis/1–4lineinputinstead ofhorizontalonly; nofontcap,labelhiding,auditsuppression orquery/progressionchange. NativefailureenteredTearDownwithoutobservedtest-bodytermination, so addedasyncXCTesttearDownexacttargetterminate+stoppedcheck+conditionalBANANA_AUDIT_APP_RELEASED marker aswellasdefer. ActualDebug/Releaseappbuilds andbothXCTestbuildconfigs passed; signedDebugcandidatepasseslive4bundle/profile/resource/mapping/deployment18checks. Sourcefix branchfix/mail-search-dynamic-typefromnativeblocks2bbca32. See docs/mail-search-accessibility.md.
+
+Prepared one-shotcandidateupdate/auditrerun withliveverification BEFOREphonecommands, exactbefore/afterQA-saveequality, unchangedfullaudit,420secondhostcap+ownedgroupcleanup/no retry. Notinstalled/executed; usermustauthorizeanotherblock. CandidateusesonlycurrentfreshQAidentity, nooriggameorsaveinjection. Oldfailureevidenceandoldsource/productskept.
+
+Cleanup Report: No additionaldisposableartifactsfound inthisrepaircheckpoint. Testevidence, candidatebuildenvironment, signingmetadataandnecessaryscratchsourcepreserved forunresolvednativevalidation. No diskrecoveryclaimed; no sharedcache,simulator,signingoruserdata deletion.
+
+
+Mail-searchcandidatefinalcompile2026-10-29: openingjourneyquery retains exactmail.searchidentifier and accepts nativeTextField/TextView accessibilityinputtypes withsame8secondexistencewait andunchangedtyping/filter/unread/Inboxpostconditions. BothDebug/ReleaseXCTestbuildsrerunPASS; exactgeneratedDebugxctestrunrestoredatitsoriginaltestroot afterReleasebuild. Live4bundle/profile/source/resource/targetmappingverificationPASSagain, withoutmanualresigning orphoneinteraction. DraftPR57 remainsnative-retestpending. CandidateQA-updatehelperpropagatesnativefailure andrequiresbefore/afterexactsaveequality. No newdisposableartifacts; allfailed-audit/candidateproducts preserved.
+
+
+## Ongoing phone authorization / audit continuation — 2026-10-29
+
+Creator explicitly lifted the ten-minute limit: phone testing may continue as long as needed; creator will message beforedisconnecting. This is current-session authorization to continue without repeated permission questions, superseding earlier daily-driverwindowlimit until withdrawn. Keep individual nativecommands bounded and pause promptly onnotice. Originalgame/save remain separate.
+
+PR57candidate update preserved exactQAstate andranunchangedaudit: Homeinitialcheckpassed, EmailstillTextClipped in23.957seconds, this time the recordednode is coveredHome Welcometothefuture, notmail.search. BANANA_AUDIT_APP_RELEASED observed fromnewasync teardown; native65/no timeout. Framework restartedrunnerafterfailurebut no secondtestexecution wasrequested. Do not infercompleteMail/Homeauditacceptance. Nextcandidate keeps retainedHomeatnatural scale1oncephase.active (itremainsmounted/hidden); transition-only0.99 retained. Added separatelyguarded diagnosticinventory withcontinueAfterFailuretrue andallissuesrecorded, handleralwaysfalse; defaultacceptanceauditunchanged. Diagnosticcannotreplacedefaultpass. Builds/provenance under validation/home-natural-geometry-20261029/.
+
+
+## Full native audit inventory / shared repair candidate — 2026-10-29
+
+The completed diagnostic inventory reached Home and all15registered apps, recording25findings (earlier6were partialoutput), native65; BANANA_AUDIT_APP_RELEASED confirmed. Findings: Mail/Settings contrast, Browser/News clipping, Preserve/Settings/Assistant hit areas, primarybutton contrast and PongDynamicType caps. No mail.search or coveredHome clipping inthisinventory; defaultacceptance remains pending. Fullsource/results retained at validation/home-natural-geometry-20261029/.
+
+Sharedcandidate adds explicit44ptlabelareas, wrappingBrowseraddress/News titles, opaquewhiteMail/empty-statecopy and darkerprimaryfills. Creator explicitly approved Pong text/layout-only repair; removedtwoDynamicTypecaps, no controls/physics/scoring changes. Initialsandbox SDKbuild failed due inaccessible signing/services; notanApplebuildpass. Retainedfailedlog; preparingnormalhostbuildusingexisting signingauthorization only.
+
+
+Reviewed shared-UI candidate actual signed Debug/Release Apple SDK app+XCTest builds PASS; live strictfourbundle signatures/profile/deployment18/source/resource/targetmapping checks PASS. SameQAonly update retainedexactbefore/aftersavestate. Physicaldefaultaudit command launched butwaitingUnlockiPhonetoContinue; no auditresult yet. Originalgameuntouched. RelevantFoundationchecks runningwithtask-ownedmodulecache; sandboxmacroexecutionrequiredhostaccess. Changedfilespass gitdiff--no-index--check againstretainedPR57source (checkout lacks.git). Candidate/evidence: validation/shared-ui-audit-20261029/.
+
+
+## Native audit follow-up / milestone authorization — 2026-10-30
+
+Creator authorizes continuedphone testing throughthenextlargemilestone and autonomousordinarydesign/story/buildwork; pauseifneededfordisconnect. Priorphoneauditactuallyranafterunlock: HomeandMailcompleted, BrowserContrastfailed38.166sec/native65, BANANA_AUDIT_APP_RELEASEDconfirmed. LoggednodeWelcome to the future isnotreliablyattributed: exportedissueelementimagevisiblyshowsBrowseraddressplaceholder. Retainboth; donotreportHomecontrastastheestablishedcause. ExplicitwhiteBrowserpromptcandidatepreparedat validation/browser-placeholder-20261030/. PriorSDKproducts/source/resultsintact. AllapplicableFoundationregressionsincludingAct4/endgamePASS; portablemocksremainseparate.
+
+Storagepassremoved9verified-unusedtask-ownedmodule/index/compilationcachesfromthreecompletedDerivedDatadirectories,355042844logicalbytes; allsignedproducts, diagnosticbundles, sources, saves, signingandSimulatorenvironmentsretained. Earlier31185019logicalbytestaskmodelcachecleanupalsoverified. Free-spacepressuremeansnobootedSimulatorcampaign. Next: build/strictverifyBrowserpromptcandidate, sameQA-onlyupdate/exactsavecomparison, unchangedpublicaudit; thennormalorderedopening→Act4→Act5/fiveending/replaycampaignwithoutsaveinjection. PR58remainssafelydraftpendingnativeacceptance.
+
+Browserpromptcandidate2026-10-30signedDebug/ReleaseAppleSDKapp+XCTestbuildsPASS;livefourbundle/profile/source/resource/deployment18/native-mappingverificationPASS. AuthorizedQA-onlyupdate/fullpublicauditstartedwithliveverification,notreceipttrust. Actualnativeverdictpending; originalgameexcluded.
+
+PreparedBrowserpromptretry stoppedatreadiness: tunnel disconnected/DDIfalse, beforeanysavecopy/install/test. Preservedfirstone-shotpreflight under validation/browser-placeholder-20261030/disconnected-preflight-1/,keepingcandidateavailableforfreshliveverificationafterUSBreconnect. Creatoraskedforconnectionrestoration; currentmilestoneauthorizationstands. Noautomaticretryagainstunreadydevice. PR58headbdaaccbda5aab1defdb6c4f99655d5bc61b06e27 includescompiledpromptrepair; noacceptanceclaim.
+
+Roadmap/QAplan2026-10-30nowleadwithimplementedbible1.14Acts4/5ratherthanstaleabsenceclaims;historicalevidencepreserved. LocaldocumentationlinkcheckPASS. Continuation:afterUSBreconnectrun python3 validation/browser-placeholder-20261030/run-audit.py withhostXcodeaccess; it requiresliveverificationandfreshreadinessbeforeQAupdate/savecomparison. Onpasscontinueactualnormal-controlcampaign; no fullnativeacceptanceyet. Cleanupreview:355042844+31185019logicalbytesremovedfromverified-unusedtaskcaches;allunresolveddiagnostics/buildproducts/savespreserved,nosimulator/signing/global/usercleanup. Noactivephonejobatthischeckpoint.
+
+
+## Exhaustive Markdown readiness review — 2026-10-30
+
+Reviewed all118existingMarkdownfiles (44repository/74validationhistory), source-qualified implementation and retained native evidence through coordinated read-only reviews. Five-act/102record/five-ending first-draft implementation exists; no current-source fullnative acceptance. Added consolidated review and marked old physicalhandoffhistorical. Found missingcommitted-ending-relaunch UIassertion, otherlate-lifecycle cases, automaticSimulatordeletion conflict, latepresentation/media gaps, unintegratedmain andcriticalstoragepressure. No newbuild/test/phoneinteraction inthisreview. LocalMarkdownpath/hashledgerpreservedunder validation/full-story-readiness-20261030/. Next taskandacceptancegatesdocumentedintheconsolidatedreview. Cleanup: nodisposableartifactscreated; preservedallnativeevidence/products/saves.

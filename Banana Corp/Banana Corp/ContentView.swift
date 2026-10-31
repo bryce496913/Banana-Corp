@@ -66,7 +66,8 @@ struct BananaOSView: View {
             Color.black.ignoresSafeArea()
             HomeScreenView()
                 .environment(\.osEffectsEnabled, appState.navigation.isHomeReady)
-                .scaleEffect(reduceMotion || presentedRoute == nil ? 1 : 0.99)
+                // Once covered, keep the retained Home at its natural text geometry.
+                .scaleEffect(reduceMotion || presentedRoute == nil || appState.navigation.phase == .active ? 1 : 0.99)
                 // Keep Home state mounted, but stop rendering its scaled text once
                 // the opaque app transition completes. Public audits can otherwise
                 // inspect that covered layer despite accessibilityHidden below.

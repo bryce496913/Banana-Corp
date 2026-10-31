@@ -27,7 +27,8 @@ cleanup() {
     if [[ -n "$qa_simulator" ]]; then
         local shutdown_status=0
         xcrun simctl shutdown "$qa_simulator" >> "$results/simulator-cleanup.log" 2>&1 || shutdown_status=$?
-        python3 - "$results/retained-simulators.jsonl" "$qa_simulator" "$configuration" "$path" "$qa_runtime" "$qa_device_type" "$shutdown_status" <<'PYRETAIN' || echo 'Could not record retained QA simulator; inspect cleanup log and owned simulator.' >&2
+        local record_status=0
+        python3 - "$results/retained-simulators.jsonl" "$qa_simulator" "$configuration" "$path" "$qa_runtime" "$qa_device_type" "$shutdown_status" <<'PYRETAIN' || record_status=$?
 import json,sys
 from pathlib import Path
 record_path,identifier,configuration,path,runtime,device_type,shutdown_status=sys.argv[1:]
@@ -40,10 +41,26 @@ record=dict(udid=identifier,created_by_runner=True,retained=True,configuration=c
             note='Retained for explicit review/reuse; do not restart a fresh-journey test on this progressed save.')
 with open(record_path,'a') as output: output.write(json.dumps(record)+'\n')
 PYRETAIN
+        if [[ "$shutdown_status" -ne 0 || "$record_status" -ne 0 ]]; then
+            printf '%s\n' "$qa_simulator" > "$results/outstanding-owned-simulator.txt"
+            echo 'CLEANUP FAILED: owned simulator retained; inspect shutdown/retention metadata.' >&2
+            qa_simulator=''
+            return 1
+        fi
         qa_simulator=''
     fi
+    return 0
 }
-trap cleanup EXIT
+finalize() {
+    local original_status=$?
+    if ! cleanup; then
+        if [[ "$original_status" -eq 0 ]]; then original_status=70; fi
+    fi
+    exit "$original_status"
+}
+trap finalize EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 # Shut down only this runner's simulators; retain their identities and saves for review/reuse.
 # Never automatically delete simulators or reset a player's device/save.
 for configuration in Debug Release; do
@@ -97,7 +114,7 @@ assert not state['observerClueIDs']
 assert not state['routePrerequisiteIDs']
 assert set(required).issubset(state['readContentIDs'])
 PY
-        cleanup
+        if ! cleanup; then exit 70; fi
         qa_simulator=''
     done
 done

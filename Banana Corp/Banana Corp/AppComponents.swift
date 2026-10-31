@@ -85,7 +85,7 @@ struct AppEmptyState: View {
                     .frame(minHeight: max(64, symbolSize + 16))
                     .accessibilityHidden(true)
                 Text(title).appText(.sectionTitle)
-                Text(message).appText(.body, color: AppTheme.Colors.secondaryText)
+                Text(message).appText(.body)
             }
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
@@ -160,6 +160,7 @@ struct AppListRow: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(title).appText(.body).fontWeight(isUnread ? .semibold : .regular)
+                        .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 8)
                     if let metadata {
                         Text(metadata).appText(.caption, color: AppTheme.Colors.secondaryText)
@@ -239,7 +240,8 @@ struct AppSearchField: View {
     @Binding var text: String
 
     var body: some View {
-        AppTextInput(label: label, text: $text, symbol: "magnifyingglass", submitLabel: .search)
+        // The placeholder and query must be able to wrap at accessibility text sizes.
+        AppTextInput(label: label, text: $text, symbol: "magnifyingglass", axis: .vertical, submitLabel: .search)
     }
 }
 
@@ -539,7 +541,10 @@ struct BrowserChrome: View {
         VStack(spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "globe").foregroundStyle(AppTheme.Colors.accent).accessibilityHidden(true)
-                TextField("Address or search local pages", text: $address)
+                TextField("Address or search local pages", text: $address,
+                          prompt: Text("Address or search local pages").foregroundStyle(AppTheme.Colors.text),
+                          axis: .vertical)
+                    .lineLimit(1...4)
                     .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
                     .submitLabel(.go).onSubmit(onGo)
                     .accessibilityIdentifier("browser.address")
@@ -623,7 +628,7 @@ struct MailSourceRow: View {
                     if unread { Circle().fill(AppTheme.Colors.highlight).frame(width: 7, height: 7).accessibilityLabel("Unread") }
                 }
                 Text(version.title).appText(.sectionTitle).fixedSize(horizontal: false, vertical: true)
-                if let subtitle = version.subtitle { Text(subtitle).appText(.caption, color: AppTheme.Colors.secondaryText).fixedSize(horizontal: false, vertical: true) }
+                if let subtitle = version.subtitle { Text(subtitle).appText(.caption).fixedSize(horizontal: false, vertical: true) }
                 if let timestamp { Text(timestamp).appText(.caption, color: AppTheme.Colors.secondaryText) }
             }
             Image(systemName: "chevron.right").font(.caption).foregroundStyle(AppTheme.Colors.secondaryText).accessibilityHidden(true)

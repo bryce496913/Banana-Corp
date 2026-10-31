@@ -142,7 +142,6 @@ struct PongGameView: View {
                     AppScorePanel(label: "RIGHT", value: String(model.aiScore))
                 }
                 .padding(.horizontal, AppTheme.Spacing.lg)
-                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
                 GeometryReader { geometry in
                     let boardSize = CGSize(width: geometry.size.width - 24, height: geometry.size.height)
@@ -167,7 +166,6 @@ struct PongGameView: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, AppTheme.Spacing.lg)
                     .frame(minHeight: 20)
-                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             }
         }
         .onReceive(timer) { _ in

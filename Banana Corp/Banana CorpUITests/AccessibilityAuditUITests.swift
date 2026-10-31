@@ -3,6 +3,19 @@ import XCTest
 // Public audits inspect visible UI;
 // they do not verify VoiceOver reading order, gestures or spoken experience.
 final class AccessibilityAuditUITests: XCTestCase {
+    override func tearDown() async throws {
+        // XCTest's audit failure can abort the test body before Swift defer runs.
+        // Teardown is still invoked, so release the exact target app here as well.
+        await MainActor.run {
+            let app = XCUIApplication()
+            app.terminate()
+            let stopped = app.state == .notRunning
+            XCTAssertTrue(stopped, "Release the QA phone after the audit")
+            if stopped { print("BANANA_AUDIT_APP_RELEASED") }
+        }
+        try await super.tearDown()
+    }
+
     @MainActor
     func testHomeAndRegisteredApplicationsAccessibilityAudit() throws {
         let environment = ProcessInfo.processInfo.environment
@@ -43,6 +56,43 @@ final class AccessibilityAuditUITests: XCTestCase {
             settled(email, in: app)
             XCTAssertFalse(home.exists, route)
             XCTAssertEqual(app.buttons.matching(identifier: id).count, 1)
+        }
+    }
+
+    /// Diagnostic inventory: retain every issue; never substitutes for the default acceptance test.
+    @MainActor
+    func testRegisteredApplicationsIssueInventory() throws {
+        let env = ProcessInfo.processInfo.environment
+        guard (env["BANANA_QA_AUDIT_INVENTORY"] ?? env["TEST_RUNNER_BANANA_QA_AUDIT_INVENTORY"]) == "owned-qa" else {
+            throw XCTSkip("Requires an explicitly authorized QA issue inventory")
+        }
+        continueAfterFailure = true
+        let app = XCUIApplication()
+        app.launch()
+        let email = app.buttons["bananaOS.app.email"].firstMatch
+        ready(email, timeout: 20)
+        settled(email, in: app)
+        func inspect(_ name: String) {
+            print("BANANA_AUDIT_INVENTORY_START \(name)")
+            do { try audit(app, name: name) }
+            catch { XCTFail("Audit inventory error at \(name): \(error)") }
+            print("BANANA_AUDIT_INVENTORY_END \(name)")
+        }
+        inspect("Home")
+        for route in ["email", "browser", "social", "watchVideo", "messager", "photoAlbum", "settings", "phone", "news", "aiAssistant", "vrExperience", "snake", "pong", "xo", "evidence"] {
+            let id = "bananaOS.app.\(route)"
+            let icon = app.buttons[id].firstMatch
+            scrollTo(icon, id: id, in: app)
+            guard icon.exists && icon.isHittable else { XCTFail("Inventory cannot open \(route)"); return }
+            icon.tap()
+            let home = app.buttons["bananaOS.home"].firstMatch
+            ready(home)
+            guard home.exists && home.isHittable else { XCTFail("Inventory lost Home control in \(route)"); return }
+            settled(home, in: app)
+            inspect(route)
+            home.tap()
+            ready(email)
+            settled(email, in: app)
         }
     }
 
