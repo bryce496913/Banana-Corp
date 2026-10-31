@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "date": "2026-10-30",
+  "source_count": 31,
+  "master_files_modified": false,
+  "assets": [
+    {
+      "registry_id": "BC-001",
+      "catalog_name": "BC-001_primary_logo",
+      "source_file": "Assets/Images/All Images/ChatGPT Image Oct 14, 2026, 04_18_46 PM-1.png",
+      "source_sha256": "904a7f8441291ac9938de0d0fa99ebf47bb93d8013a872a125eebebe3a277d1e",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "derivative_file": "Banana Corp/Banana Corp/Assets.xcassets/BC-001_primary_logo.imageset/BC-001_primary_logo.jpg",
+      "derivative_sha256": "b6fa33e2029c7a0dc5d9466296ba9df306bfa2d99553e9861048e1ef3a6bbb3f",
+      "derivative_dimensions": [
+        960,
+        960
+      ],
+      "derivative_bytes": 47884,
+      "purpose": "Corporate branding, public",
+      "provenance": "Generated images supplied by creator in repository; selected for integration by creator request on 2026-10-30",
+      "status": "imported; consumer integration and Apple-bundle validation pending",
+      "reveal_boundary": "public Act1 marketing; never grants discoveries or story reads"
+    },
+    {
+      "registry_id": "BC-004",
+      "catalog_name": "BC-004_corporate_background",
+      "source_file": "Assets/Images/All Images/ChatGPT Image Oct 14, 2026, 04_18_48 PM-3.png",
+      "source_sha256": "84039ae6e5fe15ab72f8de41683bd90117532eecab1c678c9f699b541ac2d451",
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "derivative_file": "Banana Corp/Banana Corp/Assets.xcassets/BC-004_corporate_background.imageset/BC-004_corporate_background.jpg",
+      "derivative_sha256": "ed83b7639629ee0f8f4d404066e96072fb89c242565ef5b20af2a8b9424658e8",
+      "derivative_dimensions": [
+        1280,
+        720
+      ],
+      "derivative_bytes": 117348,
+      "purpose": "Abstract corporate backdrop, public",
+      "provenance": "Generated images supplied by creator in repository; selected for integration by creator request on 2026-10-30",
+      "status": "imported; consumer integration and Apple-bundle validation pending",
+      "reveal_boundary": "public Act1 marketing; never grants discoveries or story reads"
+    },
+    {
+      "registry_id": "VR-001",
+      "catalog_name": "VR-001_headset_hero",
+      "source_file": "Assets/Images/All Images/ChatGPT Image Oct 14, 2026, 04_24_49 PM-5.png",
+      "source_sha256": "c18c8f24ac318ea50d8c9465996508e6847bde1744734c955c2105dea8f13eac",
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "derivative_file": "Banana Corp/Banana Corp/Assets.xcassets/VR-001_headset_hero.imageset/VR-001_headset_hero.jpg",
+      "derivative_sha256": "d1fb370adc6bae9dca9a2e857e60bd864f3db3d53d5f17e8fe9ea1c8fcd1576c",
+      "derivative_dimensions": [
+        1280,
+        720
+      ],
+      "derivative_bytes": 115632,
+      "purpose": "Banana Vision shop/product illustration, public",
+      "provenance": "Generated images supplied by creator in repository; selected for integration by creator request on 2026-10-30",
+      "status": "imported; consumer integration and Apple-bundle validation pending",
+      "reveal_boundary": "public Act1 marketing; never grants discoveries or story reads"
+    },
+    {
+      "registry_id": "VR-006",
+      "catalog_name": "VR-006_headset_launch_display",
+      "source_file": "Assets/Images/All Images/ChatGPT Image Oct 14, 2026, 04_24_47 PM-3.png",
+      "source_sha256": "4ecc13eada1071374a1684bf32472ee63c3cfe461a501f11b935336402896816",
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "derivative_file": "Banana Corp/Banana Corp/Assets.xcassets/VR-006_headset_launch_display.imageset/VR-006_headset_launch_display.jpg",
+      "derivative_sha256": "1f0447bb8ee445d7af02a482b0298759ea10692f580706cea8e079dfc74d3416",
+      "derivative_dimensions": [
+        1280,
+        720
+      ],
+      "derivative_bytes": 147319,
+      "purpose": "Generic public launch-stage illustration; no named speaker",
+      "provenance": "Generated images supplied by creator in repository; selected for integration by creator request on 2026-10-30",
+      "status": "imported; consumer integration and Apple-bundle validation pending",
+      "reveal_boundary": "public Act1 marketing; never grants discoveries or story reads"
+    },
+    {
+      "registry_id": "PHOTO-001",
+      "catalog_name": "PHOTO-001_hq_exterior",
+      "source_file": "Assets/Images/All Images/ChatGPT Image Oct 14, 2026, 04_24_51 PM-6.png",
+      "source_sha256": "fe5028a086beafdda143256e2b11b361b24b677fb8376e6b2d3f58b798321253",
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "derivative_file": "Banana Corp/Banana Corp/Assets.xcassets/PHOTO-001_hq_exterior.imageset/PHOTO-001_hq_exterior.jpg",
+      "derivative_sha256": "fadc50f0a83139abcbc351c484b3fffc98b293550728a3fef29f9d7831dcc25a",
+      "derivative_dimensions": [
+        1280,
+        720
+      ],
+      "derivative_bytes": 224061,
+      "purpose": "Public company exterior; no location or clue inference",
+      "provenance": "Generated images supplied by creator in repository; selected for integration by creator request on 2026-10-30",
+      "status": "imported; consumer integration and Apple-bundle validation pending",
+      "reveal_boundary": "public Act1 marketing; never grants discoveries or story reads"
+    }
+  ]
+}

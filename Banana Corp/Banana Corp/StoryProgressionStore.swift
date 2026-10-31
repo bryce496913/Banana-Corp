@@ -123,6 +123,9 @@ final class StoryProgressionStore {
     func resetForNewGame() -> StoryActionResult {
         do {
             var fresh = StoryState()
+            if isWritable, let old = state.phoneLife {
+                var life = PhoneLifeState(); life.preferences = old.preferences; fresh.phoneLife = life
+            }
             if isWritable, let earned = state.endgame?.earnedEndings, !earned.isEmpty {
                 fresh.endgame = EndgameProgress(earnedEndings: earned)
             }
@@ -279,5 +282,80 @@ final class StoryProgressionStore {
                 try requireID(changedID); state.completedEventIDs.insert(changedID)
             }
         }
+    }
+}
+
+
+extension StoryProgressionStore {
+    var phoneLife: PhoneLifeState { state.phoneLife ?? PhoneLifeState() }
+
+    @discardableResult func clearDeviceConversations() -> StoryActionResult {
+        transact(allowingCompleted: true) { next in
+            guard var life = next.phoneLife else { return }
+            life.conversations = []; life.companyQuestions = 0; next.phoneLife = life
+        }
+    }
+
+    @discardableResult func updatePhonePreferences(_ preferences: PhoneLifePreferences) -> StoryActionResult {
+        transact(allowingCompleted: true) { next in
+            var life = next.phoneLife ?? PhoneLifeState()
+            life.preferences = preferences; next.phoneLife = life
+        }
+    }
+
+    @discardableResult func earnDeviceCredits(task: String) -> StoryActionResult {
+        guard PhoneLifeState.taskIDs.contains(task) else { return .failure(.invalidRecord) }
+        return transact { next in
+            var life = next.phoneLife ?? PhoneLifeState()
+            let id = "credit.task." + task
+            guard !life.ledger.contains(where: { $0.id == id }) else { return }
+            life.ledger.append(DeviceCreditEntry(id: id, amount: 100)); next.phoneLife = life
+        }
+    }
+
+    @discardableResult func purchaseHeadset() -> StoryActionResult {
+        transact { next in
+            var life = next.phoneLife ?? PhoneLifeState()
+            guard !life.headsetPurchased else { return }
+            guard !life.securityCompromised, life.balance >= PhoneLifeState.headsetPrice else { throw StoryActionError.prerequisitesNotMet }
+            life.ledger.append(DeviceCreditEntry(id: "credit.headset.purchase", amount: -PhoneLifeState.headsetPrice))
+            life.headsetPurchased = true; next.phoneLife = life
+        }
+    }
+
+    /// The player shares a fixed fictional profile, never real credentials or contact data.
+    @discardableResult func submitFictionalPrizeProfile() -> StoryActionResult {
+        transact { next in
+            var life = next.phoneLife ?? PhoneLifeState()
+            guard !life.ledger.contains(where: { $0.id == "credit.phishing.debit" }) else { return }
+            life.ledger.append(DeviceCreditEntry(id: "credit.phishing.debit", amount: -min(50, life.balance)))
+            life.securityCompromised = true; next.phoneLife = life
+        }
+    }
+
+    @discardableResult func recoverDeviceAccount() -> StoryActionResult {
+        transact { next in
+            var life = next.phoneLife ?? PhoneLifeState()
+            guard life.securityCompromised,
+                  let debit = life.ledger.first(where: { $0.id == "credit.phishing.debit" }),
+                  !life.ledger.contains(where: { $0.id == "credit.phishing.recovery" }) else { return }
+            life.ledger.append(DeviceCreditEntry(id: "credit.phishing.recovery", amount: -debit.amount))
+            life.securityCompromised = false; next.phoneLife = life
+        }
+    }
+
+    static func appendConversation(_ request: DeviceConversationRequest, answer: String, versionID: String,
+                                   to next: inout StoryState) throws {
+        guard ["assistant", "messages", "social"].contains(request.channel),
+              !request.question.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              request.question.utf8.count <= 512, !answer.isEmpty, answer.utf8.count <= 4096 else { throw StoryActionError.invalidRecord }
+        var life = next.phoneLife ?? PhoneLifeState()
+        life.conversations.append(DeviceConversationEntry(id: "chat.entry." + UUID().uuidString.lowercased(), channel: request.channel,
+                                                         text: request.question, isPlayer: true, responseVersionID: nil))
+        life.conversations.append(DeviceConversationEntry(id: "chat.entry." + UUID().uuidString.lowercased(), channel: request.channel,
+                                                         text: answer, isPlayer: false, responseVersionID: versionID))
+        life.conversations = Array(life.conversations.suffix(60))
+        if request.companyQuestion { life.companyQuestions = min(1000, life.companyQuestions + 1) }
+        next.phoneLife = life
     }
 }

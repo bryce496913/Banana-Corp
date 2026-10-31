@@ -325,7 +325,9 @@ struct AppSegmentedControl: View {
     let label: String
     let options: [String]
     @Binding var selection: String
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
 
     var body: some View {
         Picker(label, selection: $selection) {
@@ -530,6 +532,7 @@ private struct AppComponentsPreview: View {
 
 /// App-local controls never open external URLs or change story/read state.
 struct BrowserChrome: View {
+    @FocusState private var addressFocused: Bool
     @Binding var address: String
     var homeLabel = "Browser Home"
     var onBack: (() -> Void)?
@@ -546,10 +549,11 @@ struct BrowserChrome: View {
                           axis: .vertical)
                     .lineLimit(1...4)
                     .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
-                    .submitLabel(.go).onSubmit(onGo)
+                    .focused($addressFocused)
+                    .submitLabel(.go).onSubmit { addressFocused = false; onGo() }
                     .accessibilityIdentifier("browser.address")
                     .accessibilityLabel("Address or search local pages")
-                Button(action: onGo) {
+                Button { addressFocused = false; onGo() } label: {
                     Image(systemName: "arrow.right").frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
                 }.buttonStyle(.appContent).accessibilityLabel("Go").accessibilityIdentifier("browser.go")
             }

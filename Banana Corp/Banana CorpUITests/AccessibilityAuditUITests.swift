@@ -39,7 +39,7 @@ final class AccessibilityAuditUITests: XCTestCase {
         // arguments, save edits, injected unlocks or content replay are used.
         let routes = ["email", "browser", "social", "watchVideo", "messager",
                       "photoAlbum", "settings", "phone", "news", "aiAssistant",
-                      "vrExperience", "snake", "pong", "xo", "evidence"]
+                      "vrExperience", "snake", "pong", "xo", "evidence", "banking"]
         for route in routes {
             let id = "bananaOS.app.\(route)"
             let icon = app.buttons[id].firstMatch
@@ -79,7 +79,7 @@ final class AccessibilityAuditUITests: XCTestCase {
             print("BANANA_AUDIT_INVENTORY_END \(name)")
         }
         inspect("Home")
-        for route in ["email", "browser", "social", "watchVideo", "messager", "photoAlbum", "settings", "phone", "news", "aiAssistant", "vrExperience", "snake", "pong", "xo", "evidence"] {
+        for route in ["email", "browser", "social", "watchVideo", "messager", "photoAlbum", "settings", "phone", "news", "aiAssistant", "vrExperience", "snake", "pong", "xo", "evidence", "banking"] {
             let id = "bananaOS.app.\(route)"
             let icon = app.buttons[id].firstMatch
             scrollTo(icon, id: id, in: app)

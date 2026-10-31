@@ -121,3 +121,8 @@ Before release: run XCTest plus normal UI journeys for new acts/choices; cancel 
 Next native sequence: live strict verification, QA-only update with exact save equality, full public audit, contiguous original17checkpoints, then eight late-story phases. Use ordinary controls, no app launch bypasses or save injection. Verify cancellation, reconstruction retry, partial DAWN relaunch, negotiation/Observer prerequisites, immutable earlier evidence, restore/newgame/collection behavior and UI gestures. Public audits do not establish spoken VoiceOver quality.
 
 Creator authorizes continued daily-driver testing through the next large milestone and will message before disconnecting. This supersedes older ten-minute check-ins for this session. Keep commands bounded, use only the separate QA identity and pause promptly on notice. Preserve all unresolved diagnostics; clean only verified-unused task artifacts.
+
+
+## Interactive phone expansion QA — 2026-10-30
+
+Run `bash scripts/check-phone-life.sh` for model-only optional wallet, no-double-reward/purchase/scam/recovery, old-save compatibility, atomic answer-read/transcript failure and gated matching. Verify actualBrowseredge navigation, all16apps, chat/sourceknowledge boundaries, Settings haptic/motion/banner behavior and relaunch, threeopportunities, purchasecancel/confirm/duplicate, prize-sharingdecline/confirm, finiteaccountlossandrecovery, ledgerpersistandnewgame/replaycompatibility. `PhoneLifeUITests` is runner-guarded andpreparedonlyuntilactualexecution. Run current55sourceDebug/Release SDKbuildsandhostedassetloading foralltypedcases. Preserve originalgame; nocash/credentials/networkorrealaccountaccess. Fullpublicauditandcompletefive-actnativecampaignstillrequired.

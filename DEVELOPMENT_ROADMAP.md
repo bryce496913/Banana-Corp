@@ -91,3 +91,8 @@ Remaining priorities: compile XCTest/UI coverage for new controls; native all-en
 ## Current native milestone — 2026-10-30
 
 See [shared UI repair evidence](docs/shared-ui-accessibility.md). PR58 remains draft: its first shared-control audit completed Home/Mail before Browser contrast failed; the explicit Browser prompt repair builds successfully but awaits device reconnection. The creator authorizes ongoing phone testing through the next large milestone, superseding earlier ten-minute check-ins for this session; pause promptly if the phone is needed. Full current-source native acceptance is not yet established.
+
+
+## Approved interactive phone expansion — 2026-10-30
+
+Creator-authorized optional Browser/edge, authored chat, Settings, automated service/community replies, supplied art, fictional Banking/credits, headset reservation and recoverable prize phishing are the current engineering slice. See [feature contract and validation](docs/INTERACTIVE_PHONE_EXPANSION.md) and bible1.15. Candidate implementation is55app sources/16routes/117records; source-qualified SDK/device validation is pending. No change to essential five-act gates or ending requirements. Complete feature checks, then return to full-story native acceptance before a human playtest invitation.
