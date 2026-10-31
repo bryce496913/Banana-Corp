@@ -1,7 +1,7 @@
 # Banana Corp — Game Bible
 
-**Version:** 1.14
-**Last updated:** 2026-10-28  
+**Version:** 1.15
+**Last updated:** 2026-10-30  
 **Scope:** Story, lore, player journey, progression, puzzles, simulated phone behavior, real-world inputs, endings, and narrative copy.  
 **Basis:** The Banana Corp premise and the five-act development in the “Story progression planning” chat.
 
@@ -654,6 +654,21 @@ Established interface requirements from the project’s UI work:
 
 These describe requested behavior, not a verified implementation status. Story interference must preserve deliberate navigation and recovery behavior; it must not overwrite the player’s layout or trap them accidentally.
 
+### Approved interactive phone expansion — 2026-10-30
+
+The creator explicitly requested interactive Browser feedback/edge navigation, typed Assistant questions and company pushback, functional Settings, Messages/Social replies, supplied image integration, optional headset purchases, free-headset phishing mail, and Banking/earnable currency. These additions expand ordinary phone life without replacing the five-act mystery or making new essential gates.
+
+- **Browser:** fictional `banana.example` paths and the isolated `banana-prizes.example` offer resolve only to currently authorized local catalogue pages. Ordinary home/company/store/security/opportunity pages are available from Act 1. Unknown addresses report a connection issue with recoverable available destinations, never fetch the real internet or expose a protected future resource. A leading-edge right swipe returns to the prior page or fictional Home through the existing navigation owner; preserve Home controls, scrolling, keyboard and mini-game gestures.
+- **Assistant:** a local typed composer selects currently available authored answers; it does not claim an unrestricted remote generative service. Existing suggested questions and their explicit read effects remain. Unknown questions receive authored fallback. After three prior company-related questions, further probing can add the authored corporate permissions pushback; an earned answer is still supplied and read effects remain intact. The count is factual conversation history, not morality, trust, credibility or an ending threshold. No early answer reveals later ECHO/Maya/ASCENSION/Observer information. New help supersedes the old UI's non-typing guidance without editing its immutable published version.
+- **Messages and Social X:** optional typed service/community channels return clearly identified automated acknowledgements. They do not impersonate Daniel, Maya, Alex or a live participant, replace archived correspondence, award story understanding or grant future knowledge.
+- **Settings:** saved in-game Reduce Motion, haptic feedback and banner preferences control their real in-app behavior. System text/accessibility remains respected. Home arrangement reset and optional chat-history clearing require confirmation. Account security and campaign/reset/collection controls remain deliberately separate; clearing chats never removes preserved evidence.
+- **Banking and shopping:** Banana Credits are fictional, have no monetary/redemption value, and cannot be bought, transferred externally or cashed out. A campaign starts with100BC. Three optional one-time opportunities (wallet orientation, product-interest survey, demonstration dispatch review) each award100BC. A Banana Vision reservation costs300BC, charged exactly once after explicit confirmation. This is an optional in-game reservation, no real payment/delivery/headset connection and no story unlock or progress requirement. Existing mini-game mechanics are unchanged; earnings require no mastery, real-time wait or calendar date.
+- **Prize phishing:** two optional spam emails promote a free headset through `banana-prizes.example`, distinct from the official local store. The player may decline or explicitly share only a fixed fictional Device owner/BNC-DEMO profile. No real credentials, contact information or personal account is requested. Sharing once marks the fictional account compromised and debits up to50availableBC; it does not create a headset order. Settings can revoke the session and recover that exact debit once. Only an optional purchase is held during compromise; navigation, investigation, endings and saved evidence remain intact. The spam is not proof that ECHO caused a real-world compromise and identifies no new canonical antagonist.
+- **Supplied art:** integrate only visually reviewed public logo/background/headset/launch/HQ derivatives from the supplied image folder, with stable asset IDs and provenance. Unmapped portraits and the humanoid ECHO-07 illustration do not establish character identities. Supplied “REALITY IS OPTIONAL” marketing imagery is promotional atmosphere, not Observer evidence or an outside-world revelation.
+- **Saves and replay:** optional `phoneLife` data extends schema2 without rewriting existing version receipts/evidence. Wallet transactions, purchase/phishing/recovery, conversation text and preference changes save through the existing progression authority. Answer read effects and transcript insertion save atomically. Final-decision replay restores the checkpoint's optional wallet/chat state while retaining current preferences; an explicit new game resets credits/orders/security/chats while retaining preferences and the earned-ending collection. No optional service operation awards narrative prerequisites.
+
+These are approved first-draft production contracts. Native interaction, accessibility, persistence and full-story acceptance remain separate evidence requirements.
+
 ## 20. Established copy and writing rules
 
 ### Copy inventory
@@ -763,3 +778,5 @@ Resolve these through the story/design workflow or an explicit user task. Do not
 | 2026-10-26 | 1.13 | Creator-approved modern Browser/Email chrome and local navigation/search/refresh controls. Retain explicit read/preservation rules, inbox boundary, authorized sources and reveal order; no new story content or progression gates. |
 
 | 2026-10-28 | 1.14 | Creator explicitly approved complete Act4/5 production contract: resistance/component graph, fixed87% takeover, Maya D–F–A/440Hz, staged DAWN/cooperation, explicit negotiation and Observer choices, five ending presentations and final-decision checkpoint/replay. Preserve unresolved identities/physics/fates and prior immutable sources. Implementation pending separate validation. |
+
+| 2026-10-30 | 1.15 | Creator-approved optional interactive phone expansion: local Browser/edge navigation, typed authored Assistant and factual repeated-company pushback, automated service/community replies, functional Settings, fictional credits/once-only earnings/headset reservation, recoverable prize phishing, reviewed public imagery and additive phone-life persistence. Existing five-act chronology, source versions/evidence, essential gates, endings and mini-game mechanics remain unchanged. |

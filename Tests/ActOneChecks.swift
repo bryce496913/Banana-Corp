@@ -5,9 +5,9 @@ import Foundation
         let resource = URL(fileURLWithPath: CommandLine.arguments[1])
         let catalogue = StoryContentCatalogueLoader.load(fileURL: resource, restrictedResourceIDs: ["resource.banana_wall", "resource.act3.mirror.origins", "resource.act3.echo.correspondence", "resource.act3.neural.capabilities", "resource.act3.assistant.mirror", "resource.act3.assistant.influence", "resource.act3.autonomy.actions", "resource.act3.autonomy.maya", "resource.act3.ascension.recording", "resource.act3.ascension.purpose", "resource.act3.energy.transfer", "resource.act3.energy.growth", "resource.act3.assistant.autonomy", "resource.act3.assistant.ascension", "resource.act3.assistant.energy", "resource.act3.daniel.contribution", "resource.act3.daniel.concealment", "resource.act3.maya.guidance", "resource.act3.observer.program", "resource.act3.observer.session", "resource.act3.conclusion.resistance", "resource.act3.assistant.daniel", "resource.act3.assistant.maya", "resource.act3.assistant.observer", "resource.act4.entry", "resource.act4.signal.packet", "resource.act4.vale.authorization", "resource.act4.vale.loss", "resource.act4.deployment.relay", "resource.act4.lantern.protocol", "resource.act4.maya.signature", "resource.act4.assistant.conflict.safety", "resource.act4.assistant.conflict.core", "resource.act4.echo.address", "resource.act5.entry"])
         let definitions = try catalogue.get()
-        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.count == 25)
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct && $0.id.hasPrefix("content.act1.") }.count == 25)
         precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.versions.count == 1 })
-        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.id.hasPrefix("content.act1.") })
+        precondition(definitions.items.filter { $0.actAvailable == .thePerfectProduct }.allSatisfy { $0.id.hasPrefix("content.act1.") || $0.id.hasPrefix("content.device.") })
         // A restarted executable must resolve exactly the previously saved production versions.
         if CommandLine.arguments.count == 4 {
             let story = StoryProgressionStore(persistence: StoryFilePersistence(fileURL: URL(fileURLWithPath: CommandLine.arguments[3])))
@@ -23,7 +23,7 @@ import Foundation
             } else {
                 precondition(story.state.completedMilestoneIDs.contains("milestone.act1.first_suspicious_material"))
                 precondition(store.unreadCount(for: .messages) == 0)
-                precondition(store.unreadCount(for: .email) == 1)
+                precondition(store.unreadCount(for: .email) == 4)
                 let saved = store.preservedItem("evidence.act1.echo_review.v1")!
                 precondition(saved.snapshot.version.title == "RE: Project ECHO — Internal Review")
                 precondition(saved.record.sourceVersionID == "version.act1.echo_review.v1")
@@ -43,8 +43,8 @@ import Foundation
         precondition(story.state == initial, "List rendering must never read or progress story")
         precondition(store.availableItems(for: .news).count == 3)
         precondition(store.availableItems(for: .social).count == 5)
-        precondition(store.availableItems(for: .assistant).count == 6)
-        precondition(store.unreadCount(for: .email) == 1 && store.unreadCount(for: .messages) == 1)
+        precondition(store.availableItems(for: .assistant).filter { $0.id.hasPrefix("content.act1.") }.count == 6)
+        precondition(store.unreadCount(for: .email) == 4 && store.unreadCount(for: .messages) == 1)
         precondition(store.availability(for: "content.act1.echo_review") == .locked)
         expectFailure(store.read("content.act1.echo_review", versionID: "version.act1.echo_review.v1"), .contentUnavailable)
         expectFailure(store.preserve("content.act1.echo_review", versionID: "version.act1.echo_review.v1"), .contentUnavailable)
@@ -69,7 +69,7 @@ import Foundation
         progress.goBack(); precondition(!progress.canComplete(count: count)); progress.advance(count: count)
         precondition(!story.state.completedMilestoneIDs.contains("milestone.act1.promo_viewed"))
         expect(store.completePresentation("content.act1.promo", versionID: promotion.id, progress: progress), .changed)
-        precondition(store.availableItems(for: .email).count == 2)
+        precondition(store.availableItems(for: .email).filter { $0.id.hasPrefix("content.act1.") }.count == 2)
         precondition(!story.state.completedMilestoneIDs.contains("milestone.act1.first_suspicious_material"))
         let email = store.currentVersion(for: "content.act1.echo_review")!
         guard case .email(let correspondence) = email.payload else { preconditionFailure() }

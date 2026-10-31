@@ -23,4 +23,5 @@ enum PhoneAppRoute: String, Codable, Hashable, CaseIterable {
     case pong
     case xo
     case evidence
+    case banking
 }

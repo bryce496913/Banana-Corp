@@ -41,6 +41,10 @@ struct StorySurfaceContent<Placeholder: View>: View {
                             if !appState.access.visibleResources().isEmpty || !appState.access.diagnostics.isEmpty {
                                 RestrictedAccessEntries()
                             }
+                            Text("Banana Network").appText(.sectionTitle)
+                            Text("Visit banana.example, enter an address above, or choose an available site.")
+                                .appText(.caption, color: AppTheme.Colors.secondaryText)
+                                .fixedSize(horizontal: false, vertical: true)
                             AppSectionHeader("Available pages")
                         }
                         sourceContent
@@ -52,6 +56,7 @@ struct StorySurfaceContent<Placeholder: View>: View {
                 sourceContent
             }
         }
+        .onChange(of: query) { _, _ in refreshNotice = nil }
         .onAppear {
             if surface == .email && selection == nil { appState.reconcileFirstAnomalyAtBoundary() }
             if selection == nil { appState.reconcileActTwoAtBoundary(surface: surface) }
@@ -82,9 +87,14 @@ struct StorySurfaceContent<Placeholder: View>: View {
             let items = filtered(available)
             FirstAnomalyHandoffControl()
             if items.isEmpty {
-                AppEmptyState(symbol: surface.symbol,
-                              title: available.isEmpty ? "No content available" : "No matches",
-                              message: available.isEmpty ? "There are no available items in this source right now." : "Try another search or turn off the unread filter.")
+                if surface == .web {
+                    BrowserRecoveryLinks(address: query, sites: available,
+                                         onHome: { query = ""; refreshNotice = nil }, onVisit: openWebItem)
+                } else {
+                    AppEmptyState(symbol: surface.symbol,
+                                  title: available.isEmpty ? "No content available" : "No matches",
+                                  message: available.isEmpty ? "There are no available items in this source right now." : "Try another search or turn off the unread filter.")
+                }
             }
             ForEach(items) { item in
                 AppCard {
@@ -125,7 +135,14 @@ struct StorySurfaceContent<Placeholder: View>: View {
 
     private func filtered(_ items: [DeliveredStoryContent]) -> [DeliveredStoryContent] {
         guard usesAppChrome else { return items }
-        let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let term: String
+        if surface == .web {
+            switch BrowserAddressIntent.resolve(query) {
+            case .home: term = ""
+            case .path(let path), .search(let path): term = path
+            case .connectionIssue: term = query.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        } else { term = query.trimmingCharacters(in: .whitespacesAndNewlines) }
         return items.filter { item in
             guard !unreadOnly || item.availability == .availableUnread else { return false }
             var fields = [item.version.title, item.version.subtitle ?? "", item.version.source ?? ""]
@@ -136,11 +153,24 @@ struct StorySurfaceContent<Placeholder: View>: View {
     }
 
     private func openAddress() {
-        let path = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let item = appState.content.availableItems(for: .web).first(where: {
-            if case .web(let page) = $0.version.payload { return page.path == path }
-            return false
-        }) else { refreshNotice = "Search results show available local pages."; return }
+        switch BrowserAddressIntent.resolve(query) {
+        case .home:
+            query = ""; refreshNotice = "Banana Network home. Choose an available site."
+        case .path(let path):
+            guard let item = appState.content.availableItems(for: .web).first(where: {
+                if case .web(let page) = $0.version.payload { return page.path == path }
+                return false
+            }) else { refreshNotice = "Connection unavailable. Choose an available destination below."; return }
+            openWebItem(item)
+        case .search:
+            refreshNotice = "Choose an available search result to visit its page."
+        case .connectionIssue:
+            refreshNotice = "Connection unavailable. This address cannot be reached on the Banana network."
+        }
+    }
+
+    private func openWebItem(_ item: DeliveredStoryContent) {
+        // Availability is checked again by read; suggestions cannot bypass resource authorization.
         switch appState.content.read(item.id, versionID: item.version.id) {
         case .success:
             selection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: .web)
@@ -156,6 +186,7 @@ struct StorySourceDetailView: View {
     @State private var linkedSelection: StoryContentSelection?
     @State private var failure = false
     @State private var address = ""
+    @State private var showsBrowserRecovery = false
     @State private var refreshNotice: String?
     private var usesAppChrome: Bool { selection.surface == .web || selection.surface == .email }
 
@@ -167,7 +198,7 @@ struct StorySourceDetailView: View {
     }
 
     var body: some View {
-        PhoneShellView(title: usesAppChrome ? nil : selection.surface.displayName) {
+        PhoneShellView(title: usesAppChrome ? nil : selection.surface.displayName, backAction: { dismiss() }) {
             VStack(spacing: 0) {
                 if selection.surface == .web {
                     BrowserChrome(address: $address, homeLabel: appState.activeApp == .browser ? "Browser Home" : (appState.activeApp == .email ? "Inbox" : "App home"),
@@ -180,6 +211,10 @@ struct StorySourceDetailView: View {
                                onRefresh: refreshOpenedSource, notice: refreshNotice)
                 }
                 AppScreenScroll {
+                if showsBrowserRecovery {
+                    BrowserRecoveryLinks(address: address, sites: appState.content.availableItems(for: .web),
+                                         onHome: returnToRoot, onVisit: { open($0.id) })
+                }
                 if !usesAppChrome { EvidenceBackControl() }
                 if let version {
                     if case .video(let payload) = version.payload {
@@ -190,6 +225,7 @@ struct StorySourceDetailView: View {
                             Text("This opened version is no longer the available live source.").appText(.caption, color: AppTheme.Colors.secondaryText)
                         }
                         StoryReadableContent(version: version)
+                        DeviceLifeActions(contentID: selection.contentID)
                     }
                     FirstAnomalyHandoffControl(currentContentID: selection.contentID)
                     ForEach(links(for: version), id: \.contentID) { link in
@@ -221,12 +257,19 @@ struct StorySourceDetailView: View {
         appState.requestAppRoot(route)
     }
     private func openAddress() {
-        let path = address.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let item = appState.content.availableItems(for: .web).first(where: {
-            if case .web(let page) = $0.version.payload { return page.path == path }
-            return false
-        }) else { failure = true; return }
-        open(item.id)
+        switch BrowserAddressIntent.resolve(address) {
+        case .home: returnToRoot()
+        case .path(let path):
+            guard let item = appState.content.availableItems(for: .web).first(where: {
+                if case .web(let page) = $0.version.payload { return page.path == path }
+                return false
+            }) else { showsBrowserRecovery = true; refreshNotice = "Connection unavailable. Your current page is retained."; return }
+            showsBrowserRecovery = false
+            open(item.id)
+        case .search, .connectionIssue:
+            showsBrowserRecovery = true
+            refreshNotice = "Choose an available destination below. Your current page is retained."
+        }
     }
 
     private func links(for version: StoryContentVersion) -> [StoryContentLink] {
@@ -244,6 +287,56 @@ struct StorySourceDetailView: View {
         guard let item = appState.content.availableItems(for: appState.content.catalogue?.itemsByID[id]?.appSurface ?? .web).first(where: { $0.id == id }) else { failure = true; return }
         if item.surface != .video, case .failure = appState.content.read(item.id, versionID: item.version.id) { failure = true; return }
         linkedSelection = StoryContentSelection(contentID: item.id, versionID: item.version.id, surface: item.surface)
+    }
+}
+
+/// Suggestions use only authorized delivery results; no hidden destination is enumerated.
+private struct BrowserRecoveryLinks: View {
+    let address: String
+    let sites: [DeliveredStoryContent]
+    let onHome: () -> Void
+    let onVisit: (DeliveredStoryContent) -> Void
+
+    private var isSearch: Bool {
+        if case .search = BrowserAddressIntent.resolve(address) { return true }
+        return false
+    }
+    private var suggestions: [DeliveredStoryContent] {
+        let query = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        let matches = sites.filter { $0.version.title.localizedCaseInsensitiveContains(query) }
+        return Array((matches.isEmpty ? sites : matches).prefix(4))
+    }
+    var body: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                Label(isSearch ? "Search destinations" : "Connection unavailable", systemImage: "network.slash")
+                    .appText(.sectionTitle).fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("browser.connection.feedback")
+                Text(isSearch
+                     ? "Try another search or choose one of the available sites."
+                     : "This address cannot be reached on the Banana network. Your available destinations are listed below.")
+                    .appText(.body).fixedSize(horizontal: false, vertical: true)
+                Button(action: onHome) {
+                    Text("Browser Home").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle())
+                }.buttonStyle(.modernPhone)
+                    .accessibilityIdentifier("browser.recovery.home")
+                ForEach(suggestions) { item in
+                    if case .web(let page) = item.version.payload {
+                        Button { onVisit(item) } label: {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item.version.title).appText(.systemLabel)
+                                Text("banana.example" + page.path).appText(.caption)
+                            }
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(minHeight: AppTheme.Layout.touchTarget, alignment: .leading)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.modernPhone)
+                        .accessibilityIdentifier("browser.suggestion.\(item.version.id)")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -277,7 +370,7 @@ struct StoryReadableContent: View {
                 ForEach(data.replies ?? [], id: \.id) { message in messageCard(message) }
             case .messages(let data):
                 ForEach(data.messages, id: \.id) { message in messageCard(message) }
-                Text("This is an incoming service thread. Replies are not available.").appText(.caption, color: AppTheme.Colors.secondaryText)
+                Text("Archived correspondence. Use the service conversation in Messages for automated replies.").appText(.caption, color: AppTheme.Colors.secondaryText)
             case .assistant(let data):
                 ForEach(data.turns, id: \.id) { turn in
                     AppCard {

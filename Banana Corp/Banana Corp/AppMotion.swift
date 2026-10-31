@@ -23,7 +23,9 @@ struct AppPressFeedback: ViewModifier {
     var scale: CGFloat = 0.98
     var pressedOpacity: Double = 0.92
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
 
     func body(content: Content) -> some View {
         let pressed = isPressed && isEnabled
@@ -54,11 +56,12 @@ extension ButtonStyle where Self == AppContentButtonStyle {
 }
 
 struct AppFeedbackModifier: ViewModifier {
+    @Environment(\.deviceHapticsEnabled) private var hapticsEnabled
     let event: AppFeedbackEvent?
 
     func body(content: Content) -> some View {
         content.sensoryFeedback(trigger: event) { _, newEvent in
-            guard let newEvent else { return nil }
+            guard hapticsEnabled, let newEvent else { return nil }
             switch newEvent.kind {
             case .openedApp: return .impact(weight: .light, intensity: 0.5)
             case .enteredEditing, .completedDrop: return .selection
@@ -89,5 +92,21 @@ struct AppConfirmationModifier: ViewModifier {
                 Text(message)
             }
             .modifier(AppFeedbackModifier(event: feedbackEvent))
+    }
+}
+
+private struct DeviceHapticsEnabledKey: EnvironmentKey { static let defaultValue = true }
+extension EnvironmentValues {
+    var deviceHapticsEnabled: Bool {
+        get { self[DeviceHapticsEnabledKey.self] }
+        set { self[DeviceHapticsEnabledKey.self] = newValue }
+    }
+}
+
+private struct DeviceReduceMotionKey: EnvironmentKey { static let defaultValue = false }
+extension EnvironmentValues {
+    var deviceReduceMotion: Bool {
+        get { self[DeviceReduceMotionKey.self] }
+        set { self[DeviceReduceMotionKey.self] = newValue }
     }
 }

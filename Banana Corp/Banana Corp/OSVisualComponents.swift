@@ -51,7 +51,9 @@ struct OSStoryText: View {
     var target: OSVisualTarget?
     var displayNameOverride: String?
     @Environment(\.osPresentation) private var presentation
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
     @Environment(\.osEffectsEnabled) private var effectsEnabled
 
     var body: some View {
@@ -95,7 +97,9 @@ struct OSStoryText: View {
 struct OSControlledEffect: ViewModifier {
     let target: OSVisualTarget?
     @Environment(\.osPresentation) private var presentation
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.deviceReduceMotion) private var phoneReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || phoneReduceMotion }
     @Environment(\.osEffectsEnabled) private var effectsEnabled
 
     func body(content: Content) -> some View {

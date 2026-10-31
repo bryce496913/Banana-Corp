@@ -124,7 +124,7 @@ final class LaunchSmokeTests: XCTestCase {
         // Match the registered production routes, using only ordinary Home controls.
         let routes = ["email", "browser", "social", "watchVideo", "messager",
                       "photoAlbum", "settings", "phone", "news", "aiAssistant",
-                      "vrExperience", "snake", "pong", "xo", "evidence"]
+                      "vrExperience", "snake", "pong", "xo", "evidence", "banking"]
         for route in routes {
             let icon = app.buttons["bananaOS.app.\(route)"].firstMatch
             // Grid apps can be below the fold on compact phones or custom layouts.

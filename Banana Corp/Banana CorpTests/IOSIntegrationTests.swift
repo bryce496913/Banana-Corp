@@ -92,4 +92,53 @@ final class IOSIntegrationTests: XCTestCase {
         _ = try reopened.content.preserve(item.id, versionID: item.version.id).get()
         XCTAssertEqual(reopened.content.preservedItems().count, 1)
     }
+
+    @MainActor
+    func testSavedTakeoverAppearanceIsPassiveAndRestoresAcrossEndingLifecycle() throws {
+        // Neutral hosted fixture, not an injected campaign or player-visible shortcut.
+        var saved = StoryState()
+        saved.currentAct = .theFinalChoice
+        saved.completedEventIDs.insert(ActFourContract.takeoverEvent)
+        saved.completedMilestoneIDs.insert(ActFourContract.takeoverConnected)
+        saved.ascensionMilestone = AscensionMilestone(id: ActFourContract.ascension, percentage: 87)
+        saved.routePrerequisiteIDs = EndgameContract.components
+        saved.readContentIDs = [EndgameContract.version("recovery"), EndgameContract.version("dependency_warning")]
+        saved.discoveredContentIDs = saved.readContentIDs
+        let storage = InMemoryStoryPersistence(data: try StorySaveCodec().encode(saved))
+        let store = StoryProgressionStore(persistence: storage)
+        let app = AppState(story: store)
+        XCTAssertEqual(store.state, saved, "Presentation must never award or consume story facts")
+        XCTAssertEqual(app.presentation.configuration.mode, .compromised)
+        XCTAssertNil(app.presentation.activeEvent, "Rehydrating takeover must not schedule a transient replay")
+        app.reconcileSavedStoryPresentation()
+        XCTAssertEqual(store.state, saved)
+        var preferences = store.phoneLife.preferences; preferences.reduceMotion = true
+        _ = try store.updatePhonePreferences(preferences).get()
+        XCTAssertEqual(app.presentation.configuration.mode, .compromised)
+        XCTAssertNil(app.presentation.activeEvent)
+        let reopened = AppState(story: StoryProgressionStore(persistence: storage))
+        XCTAssertEqual(reopened.presentation.configuration.mode, .compromised)
+        XCTAssertEqual(reopened.story.state, store.state)
+        let decision = try XCTUnwrap(store.prepareEnding(.silence))
+        _ = try store.confirmEnding(decision).get()
+        XCTAssertEqual(app.presentation.configuration.mode, .normal)
+        _ = try store.restoreFinalDecision().get()
+        XCTAssertEqual(app.presentation.configuration.mode, .compromised)
+        XCTAssertTrue(store.phoneLife.preferences.reduceMotion)
+        _ = try store.resetForNewGame().get()
+        XCTAssertEqual(app.presentation.configuration.mode, .normal)
+        XCTAssertTrue(store.phoneLife.preferences.reduceMotion)
+
+        var variants = [saved, saved, saved, saved]
+        variants[0].completedEventIDs.remove(ActFourContract.takeoverEvent)
+        variants[1].completedMilestoneIDs.remove(ActFourContract.takeoverConnected)
+        variants[2].ascensionMilestone = AscensionMilestone(id: ActFourContract.ascension, percentage: 86)
+        variants[3].currentAct = .theConspiracy
+        for variant in variants {
+            let invalidEligibility = AppState(story: StoryProgressionStore(persistence: InMemoryStoryPersistence(data: try StorySaveCodec().encode(variant))))
+            XCTAssertEqual(invalidEligibility.presentation.configuration.mode, .normal)
+            XCTAssertEqual(invalidEligibility.story.state, variant)
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 # Agent progress and continuation record
 
+Current work (2026-10-30): creator-approved interactive-phone expansion under bible1.15. Browser recovery/edge navigation, authored typed chats, working Settings, Banking/fictional credits, headset reservation, recoverable prize phishing and five reviewed images are implemented as a candidate.55app sources/16routes/121records. New model checks and signed Debug/Release Apple SDK builds pass; native interaction validation is pending. No fullplaythrough readiness claim.
+
 Current review (2026-10-30): **five acts implemented; full device playthrough acceptance outstanding.** See [full readiness review](docs/FULL_STORY_READINESS_REVIEW.md). Latest signed Debug/Release source matches the current candidate; Browser prompt repair remains untested after disconnected preflight. New native ending/relaunch coverage and late-game presentation gaps were found. PR58 is now merged into its parent branch, not main. Older headings below are chronological history, not current readiness.
 
 D-01 documentation update (2026-10-17): [Act 4 dependency specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md) is an engineering draft for review. It maps established facts and unresolved production contracts; it approves no new canon, values, gates or gameplay. The specification adds no native build or test claim. Current engineering results are summarized below.
@@ -635,3 +637,51 @@ Roadmap/QAplan2026-10-30nowleadwithimplementedbible1.14Acts4/5ratherthanstaleabs
 ## Exhaustive Markdown readiness review — 2026-10-30
 
 Reviewed all118existingMarkdownfiles (44repository/74validationhistory), source-qualified implementation and retained native evidence through coordinated read-only reviews. Five-act/102record/five-ending first-draft implementation exists; no current-source fullnative acceptance. Added consolidated review and marked old physicalhandoffhistorical. Found missingcommitted-ending-relaunch UIassertion, otherlate-lifecycle cases, automaticSimulatordeletion conflict, latepresentation/media gaps, unintegratedmain andcriticalstoragepressure. No newbuild/test/phoneinteraction inthisreview. LocalMarkdownpath/hashledgerpreservedunder validation/full-story-readiness-20261030/. Next taskandacceptancegatesdocumentedintheconsolidatedreview. Cleanup: nodisposableartifactscreated; preservedallnativeevidence/products/saves.
+
+
+## Interactive phone-life expansion candidate — 2026-10-30
+
+Creator explicitly authorized nine-featureUI/storyexpansion andautonomousordinary decisions. Featurebranch feature/interactive-phone-life startsfromverifiedmergedPR59parent7ad923be (mainstillolder). Bible1.15records optionalservices/economy/phishing/conversation/persistence contracts.102publishedcatalogueitemsunchanged;15newoptionalrecords. NewphoneLifeoptionalfieldstaysinschema2, existingEvidence/receiptsuntouched. Answerread+conversation areoneexistingstoretransaction. No numericaltrustscore or mandatorypurchase/minigamegate. Fivepublicartderivatives652244bytesvisuallyreviewed; mastersunchanged; otherimagesunassigned.
+
+Modelphone-life/browsercheckspassed;staticproject55sources/16routespassed. NativeQA-onlytestsfornewcontrolsregisteredbutnotyetexecuted. RootpreparingactualSDKbuildandfullregressions. Cleanupverified147unusedtask-onlycompiler/indexpathsfromworkspaceownershipmetadataandlsof;3182.5MiBlogicalrecovered,allproducts/results/signing/saves/simulatorspreserved. Assetcontact-sheets410983logicalbytesremovedafterreview. Evidenceledger validation/interactive-phone-20261030/.
+
+Combinedinteractive-phoneDebugAppleSDKapp+XCTestbuildPASS2026-10-30;Releasebuildrunning. XcodecaughtandrootfixedReduceMotionpropertycollisionandread-onlysystemenvironmentassignment;dedicateddeviceReduceMotionenvironmentnowrespectssystemsettingandappchoice. Sourceinventorymatchesbuildsnapshot. ExistingAct1/2countsremainexactfortheirpublishednamespaces;newoptionalemailcountsexplicitlyaccountedforratherthanweakenedgates. PhoneLifeFoundation/browsermodelsPASS;all102publisheddefinitionsunchanged;regressionsprogressing. NativefeatureinteractionsNOTRUNyet.
+
+Allinteractive-phoneapplicableFoundationregressionsPASS, includingcomplete-story20combinations, alongsideactualsignedDebug/Releaseapp+XCTestSDKbuildsandlivestrictverification. Initialnativebuilderrorsrepairedandretained; noknowncompilererrorremains. PuremodelpassesdonotestablishnewUIacceptance. Readinesspreflightqueryunderongoingcreatorauthorizationinprogress. SeparatefocusedrunnercleanupfixhasportablemockcontractsPASS; noactualsimulatordelete.
+
+Physicalinteractive-phoneQA2026-10-30: knowniPhonereadinessPASS, live4bundleverificationPASS, sameQA-onlyinstallationpreservedexactbefore/afterstory-savebytes. ActualhostedXCTest5/5PASS onphone, includingallregisteredrouteartwork/Homecycles, all6typedimagecaseloads, compiledcataloguesandEvidencefilepersistence. PhoneLifeUITestsordinary-controlcasescurrentlyrunning; nofullfeatureUIpassorfullstoryacceptanceclaimed. Originalgameexcluded. Nativeevidence validation/interactive-phone-20261030/Phone-life.xcresult andtest.log.
+
+TheofferportalnowalsoresolvesfromitsreservedfictionalBrowserhostbanana-prizes.exampletoasharedauthoredclaimpage; unknownhosts/pathsremainconnectionerrorswithnoexternalnetwork. Thisaddsoneoptionalrecord(current118/16new)andusesthesameonce-onlyprizeledgeractionasMail. Earlier117-recordSDKresultsremainhistoricaltothatcandidate; latestrevisionneedscombinedbuild.
+
+
+## Interactive phone native findings / continued engineering
+
+PR60drafthead35f897c6e7a5fdb33be3865788090d36e5e87625 containsinitial9-featureimplementation. Actualphonehosted5PASS/newUI3FAIL/native65,noskips: chat/settingsfailedtestscroll-ownerlookupafterrelaunchbeforeLaunchfinished; Bankfailedtestscroll-ownerlookupfornativeCancelafterallthreecreditsawarded; Browseredge-backfromstoreworkedbutunknownaddressretainedkeyboardandcontainerAXIDoverrodechildrecoverybuttonIDs. CapturedAXhierarchyestablishesidentifierpropagation. QAappclosedaftereachcase. Rawinputs/signedproducts/resultsretainedunder validation/interactive-phone-20261030/.
+
+Focusedrepairs(code+test)builtDebug/ReleasePASSwithstrictverification. Round2normalUIResetinstallationagainpreservedexactbytes,butXcodestoppedatUnlockiPhonetoContinuebeforeanyteststarted(native65). Noresetwasperformed. CurrentQAstatecontains3creditedopportunitiesandoptionalchat/hapticchangesfromfirstfailedtest; neverdirectlyeditsave. UseexplicitnormalSettingsresettestbeforecleanfeaturecase. Originalgameexcluded.
+
+PR61cleanupfixmergeda42ed528e5bec064776e8534a28a15009d7af230intoparentfeaturebranchafterportablecontractsPASSandcleanGitHubmergeability/noreportedCIcontexts; notmain. CurrentrunnersretainownedSimulatorsandhonorshutdownfailure.
+
+Furtherauthorizedengineeringclosespriorreadinessgaps: AppStatepassivelyrehydratesapprovedfixed87compromisedpresentationwithoutstorywrites; hostedlifecycletestadded. LateStoryUItestnowcheckscommittedendingrelaunch,Mayawrongretry,partialDAWNrelaunchandfinalreplay/reset/collectionphase. StableSettingsdialogIDsaddedwithoutchangingcanon. Browserprizedomainandsharedclaimcardincreaseoptionalcatalogueto118total. NewestAppState/UI/cataloguechangesneedfreshcombinedSDKproof; donotcarryolderbuildclaimsforward.
+
+Additional106closednestedtaskcompiler/indexpathsremovedafterownershipmetadata+lsofchecks,estimatedallocated1562.5MiB;observedfree-spaceincrease1584.1MiB(systemactivitymaycontribute). Sparse26.4GiBlogicaltotalisNOTclaimedrecovery. Currenttaskbuild/products,allxcresults/logs/saves/signing/imagesandSimulatorspreserved. Free~5.8GiB; investigateavailableownedSimulatorwithstrictresourceguardifphonecontinueslocked,neverbypassrequiredguardsorclaimphysicalpass.
+
+Addednewcatalogue-backedAssistantshop/credits/securityFAQanswersandgreetinghelpselectionsooptionalservicesintegratewithtypedchat. Oldpublishedanswersstayimmutable. Current121records/19optional; mainstory102definitionsunchanged. LatestsourcefreezeispreparedforcombinedSDK/regressions; donotcarry117-recordnativepassesforward.
+
+
+## Native phone-life validation update — 2026-10-31
+
+The current 121-record candidate (102 unchanged original story records and 19 optional phone-life records) passes actual signed Xcode Debug and Release app/XCTest builds and live source, resource, deployment-target, signature and target-mapping verification. Six hosted XCTest cases passed on the iPhone, including passive takeover presentation restoration. Normal-control UI tests passed for credits, reservation cancellation/confirmation, relaunch, phishing debit and recovery, Browser connection feedback and leading-edge navigation. A separate normal Settings reset test passed. These are scoped results, not full campaign acceptance.
+
+The chat/settings case remains unresolved: the previous run reached an unexpected Assistant screen before the intended Home tap. The latest test explicitly starts a fresh process and additionally checks company-question pushback without withholding an available answer. It compiles in both configurations. Its next physical attempt preserved exact save bytes during the QA-only update, but Xcode waited for the locked iPhone before any test began; the owned session was stopped. No original-game interaction or save modification was performed.
+
+The current Simulator Debug/Release builds passed for their recorded source snapshot, but its guarded native attempt stopped on low disk space before test execution. No Simulator feature pass or iOS 18 result is claimed; no compatible iOS 18 runtime is installed. Preserve the unresolved native results and signed products.
+
+Next: run only the chat/settings case on the existing legitimate QA save, then the unsuppressed all-app accessibility audit. Continue the ordered opening-through-five-endings campaign and final replay test afterward, exporting final evidence before destructive replay/reset controls. Do not request human playtesting or merge the feature as fully accepted yet.
+
+Cleanup review: no new disposable artifacts were created by this continuation. Preserved signed builds, source manifests, saves, unresolved xcresults, images, signing assets and Simulator environments. Earlier measured targeted cleanup remains recorded separately; no additional recovered-space claim.
+
+
+Continuation closure — 2026-10-31: PR #60 updated at f986bc506ed97a03be7f97d014485844ffa009cc; GitHub reports clean mergeability, retained as draft. The targeted phone attempt ended with native runner cancellation (exit 73) at the locked-device preflight; zero application test cases executed. Its result bundle records a runner error, not a gameplay assertion failure. Phone-life model checks and portable native-runner command-contract checks passed again; static Xcode project validation passed. The sandbox initially blocked Swift macro plugins; the authorized host-toolchain rerun passed.
+
+Cleanup Report: removed the completed publication serialization and isolated Swift module cache after open-file checks (32,399,360 allocated bytes, approximately 30.9 MiB). Preserved all signed products, source snapshots, saves and unresolved test evidence. No global caches, user files, signing assets or Simulator environments were removed. Remaining acceptance work is the targeted chat/settings test, unsuppressed accessibility audit and ordered full campaign through endings/replay; no human playtest readiness claim.

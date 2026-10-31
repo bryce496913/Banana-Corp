@@ -47,8 +47,35 @@ final class AppState: ObservableObject {
         self.content = StoryContentStore(progression: self.story, catalogue: contentCatalogue, access: self.access)
         self.story.onStateWillChange = { [weak self] in self?.objectWillChange.send() }
         self.story.onStateDidChange = { [weak self] in
-            guard let self, let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) else { return }
-            self.goHome()
+            guard let self else { return }
+            self.reconcileSavedStoryPresentation()
+            if let activeApp = self.activeApp, !self.unlockedApps.contains(activeApp) {
+                self.goHome()
+            }
+        }
+        reconcileSavedStoryPresentation()
+    }
+
+    /// Derive the approved takeover appearance from committed campaign facts, including on relaunch.
+    /// This is cosmetic reconciliation: it never consumes an event, reveals content, or advances story.
+    func reconcileSavedStoryPresentation() {
+        let takeover = OSPresentationConfiguration(mode: .compromised, palette: .compromised)
+        let saved = story.state
+        let showsTakeover = story.isWritable
+            && saved.currentAct.rawValue >= StoryAct.theTakeover.rawValue
+            && saved.completedEventIDs.contains(ActFourContract.takeoverEvent)
+            && saved.completedMilestoneIDs.contains(ActFourContract.takeoverConnected)
+            && saved.ascensionMilestone == AscensionMilestone(id: ActFourContract.ascension, percentage: 87)
+            && saved.endgame?.currentEnding == nil
+
+        if showsTakeover {
+            // No transient event means no timer, notification, pulse, haptic or replay on every save.
+            guard presentation.configuration != takeover else { return }
+            _ = configureStoryPresentation(takeover, when: { _ in true })
+        } else if presentation.configuration == takeover {
+            // Reset and final confirmation release only this owned appearance. Other explicit
+            // configurations (including the first anomaly) keep their existing lifetime contracts.
+            restoreNormalPresentation()
         }
     }
 
@@ -257,5 +284,39 @@ final class AppState: ObservableObject {
             do { try await Task.sleep(for: .seconds(active.payload.duration)) } catch { return }
             self?.endPresentationEvent(active.id)
         }
+    }
+}
+
+
+extension AppState {
+    var phoneLife: PhoneLifeState { story.phoneLife }
+    func conversationEntries(channel: String) -> [DeviceConversationEntry] {
+        phoneLife.conversations.filter { $0.channel == channel }
+    }
+
+    @discardableResult func sendDeviceMessage(channel: String, text: String, answerID: String? = nil) -> StoryActionResult {
+        let question = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !question.isEmpty, question.utf8.count <= 512 else { return .failure(.invalidRecord) }
+        let probes = ["company", "banana corp", "echo", "research", "secret", "control people", "controls the company", "harvest", "maya", "daniel"]
+        let company = channel == "assistant" && probes.contains { question.localizedCaseInsensitiveContains($0) }
+        let fallback: String
+        switch channel {
+        case "messages": fallback = "content.device.assistant.message_reply"
+        case "social": fallback = "content.device.assistant.social_reply"
+        case "assistant": fallback = company && phoneLife.companyQuestions >= 3 ? "content.device.assistant.pushback" : "content.device.assistant.fallback"
+        default: return .failure(.invalidRecord)
+        }
+        let available = content.availableItems(for: .assistant)
+        let chosen = channel == "assistant" ? answerID ?? fallback : fallback
+        guard let response = available.first(where: { $0.id == chosen }), case .assistant(let payload) = response.version.payload else {
+            return .failure(.prerequisitesNotMet)
+        }
+        guard !payload.turns.filter({ $0.role == .assistant }).isEmpty else { return .failure(.invalidRecord) }
+        return content.read(response.id, versionID: response.version.id,
+                            conversation: DeviceConversationRequest(channel: channel, question: question, companyQuestion: company))
+            .mapError { error in
+                if case .progression(let failure) = error { return failure }
+                return .invalidRecord
+            }
     }
 }

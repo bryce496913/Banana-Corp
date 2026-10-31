@@ -120,6 +120,8 @@ struct StoryState: Codable, Equatable {
     var contentDelivery = StoryContentDeliveryState()
     /// Optional additive schema-2 field; old saves decode without a migration or evidence rewrite.
     var endgame: EndgameProgress?
+    /// Optional additive device-life state; existing schema-2 saves remain readable.
+    var phoneLife: PhoneLifeState?
 
     var isValid: Bool {
         let groups = [discoveredContentIDs, readContentIDs, solvedPuzzleIDs, accessMilestoneIDs,
@@ -138,7 +140,7 @@ struct StoryState: Codable, Equatable {
             && ascensionMilestone?.isValid != false && time.isValid
             && lockedAppIDs.allSatisfy { !$0.isEmpty && $0.utf8.count <= 128 && $0.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) } }
             && !lockedAppIDs.contains(PhoneAppRoute.settings.rawValue)
-            && contentDelivery.isValid && endgame?.isValid != false
+            && contentDelivery.isValid && endgame?.isValid != false && phoneLife?.isValid != false
     }
 }
 
@@ -176,4 +178,66 @@ struct EndgameProgress: Codable, Equatable {
               checkpoint.endgame == nil, checkpoint.currentAct == .theFinalChoice else { return false }
         return checkpoint.isValid
     }
+}
+
+
+// Optional phone-life systems never satisfy an investigation or ending prerequisite.
+struct DeviceConversationEntry: Codable, Equatable, Identifiable {
+    let id: String
+    let channel: String
+    let text: String
+    let isPlayer: Bool
+    let responseVersionID: String?
+    var isValid: Bool {
+        StoryID.isValid(id) && ["assistant", "messages", "social"].contains(channel)
+            && !text.isEmpty && text.utf8.count <= 4096
+            && responseVersionID.map(StoryID.isValid) != false
+    }
+}
+
+struct DeviceCreditEntry: Codable, Equatable, Identifiable {
+    let id: String
+    let amount: Int
+    var isValid: Bool { StoryID.isValid(id) && (-300...100).contains(amount) }
+}
+
+struct PhoneLifePreferences: Codable, Equatable {
+    var reduceMotion = false
+    var haptics = true
+    var banners = true
+}
+
+struct PhoneLifeState: Codable, Equatable {
+    static let headsetPrice = 300
+    static let initialCredits = 100
+    static let taskIDs = ["orientation", "survey", "delivery"]
+    var preferences = PhoneLifePreferences()
+    var ledger: [DeviceCreditEntry] = []
+    var headsetPurchased = false
+    var securityCompromised = false
+    var companyQuestions = 0
+    var conversations: [DeviceConversationEntry] = []
+    var balance: Int { Self.initialCredits + ledger.reduce(0) { $0 + $1.amount } }
+    var isValid: Bool {
+        ledger.count <= 8 && ledger.allSatisfy(\.isValid)
+            && Set(ledger.map(\.id)).count == ledger.count && (0...400).contains(balance)
+            && (0...1000).contains(companyQuestions) && conversations.count <= 60
+            && conversations.allSatisfy(\.isValid)
+            && Set(conversations.map(\.id)).count == conversations.count
+            && ledger.allSatisfy { entry in
+                if Self.taskIDs.contains(String(entry.id.dropFirst("credit.task.".count))) && entry.id.hasPrefix("credit.task.") { return entry.amount == 100 }
+                if entry.id == "credit.headset.purchase" { return entry.amount == -Self.headsetPrice }
+                if entry.id == "credit.phishing.debit" { return (-50...0).contains(entry.amount) }
+                if entry.id == "credit.phishing.recovery" { return ledger.first(where: { $0.id == "credit.phishing.debit" }).map { -$0.amount == entry.amount } ?? false }
+                return false
+            }
+            && (headsetPurchased == ledger.contains { $0.id == "credit.headset.purchase" })
+            && (securityCompromised == (ledger.contains { $0.id == "credit.phishing.debit" } && !ledger.contains { $0.id == "credit.phishing.recovery" }))
+    }
+}
+
+struct DeviceConversationRequest {
+    let channel: String
+    let question: String
+    let companyQuestion: Bool
 }
