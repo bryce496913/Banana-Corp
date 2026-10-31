@@ -5791,6 +5791,556 @@
           "id": "event.act5.completed.awakening"
         }
       ]
+    },
+    {
+      "id": "content.device.assistant.help",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 700,
+      "initialVersionID": "version.device.assistant.help.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.help.v1",
+          "version": 1,
+          "title": "Talk to Banana Assist",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.help.assistant",
+                  "role": "assistant",
+                  "text": "Type a question about the phone or choose a suggested question. I answer from the records currently available to you. I may not have an answer for every request. These conversations stay on this fictional phone."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.fallback",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 700,
+      "initialVersionID": "version.device.assistant.fallback.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.fallback.v1",
+          "version": 1,
+          "title": "Request received",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.fallback.assistant",
+                  "role": "assistant",
+                  "text": "I cannot verify that request from the information currently available. Try a suggested question, or ask about navigation, saving evidence or Banana Vision. Available sources can be reviewed directly."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.pushback",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 700,
+      "initialVersionID": "version.device.assistant.pushback.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.pushback.v1",
+          "version": 1,
+          "title": "Corporate support notice",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.pushback.assistant",
+                  "role": "assistant",
+                  "text": "You have asked several questions about Banana Corp. Repeating a request does not expand my permissions. Review the sources you can access, or choose a question I can answer. Your investigation and saved evidence remain available."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.message_reply",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 700,
+      "initialVersionID": "version.device.assistant.message_reply.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.message_reply.v1",
+          "version": 1,
+          "title": "Automated service reply",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.message_reply.assistant",
+                  "role": "assistant",
+                  "text": "Banana Support received your message. This is an automated service channel, not a live reply from a researcher. For purchases and credits, open VR Experience or Banking. For account problems, open Settings → Account security."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.social_reply",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 700,
+      "initialVersionID": "version.device.assistant.social_reply.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.social_reply.v1",
+          "version": 1,
+          "title": "Community channel receipt",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.social_reply.assistant",
+                  "role": "assistant",
+                  "text": "Your post was added to the local community channel. The community service acknowledges it automatically. Existing public posts and research archives remain separate; this receipt does not speak for their authors."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.home",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 510,
+      "initialVersionID": "version.device.web.home.v1",
+      "versions": [
+        {
+          "id": "version.device.web.home.v1",
+          "version": 1,
+          "title": "Banana Network",
+          "source": "Banana Corp",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Welcome to the Banana Network. Browse product information, visit the local store, or review account security. Pages are supplied inside your fictional phone; an unavailable address may report a connection issue."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.company",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 510,
+      "initialVersionID": "version.device.web.company.v1",
+      "versions": [
+        {
+          "id": "version.device.web.company.v1",
+          "version": 1,
+          "title": "Inside Banana Corp",
+          "source": "Banana Corp",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/company",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Tools for a more connected day. Explore Banana Vision and the ordinary services on your Banana Corp phone."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Public company information does not authenticate every message claiming to represent us. Review the sender and destination before sharing an account profile."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.store",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 510,
+      "initialVersionID": "version.device.web.store.v1",
+      "versions": [
+        {
+          "id": "version.device.web.store.v1",
+          "version": 1,
+          "title": "Banana Vision Store",
+          "source": "Banana Corp",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/store",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Reserve Banana Vision for 300 Banana Credits through VR Experience. This is an in-game order using fictional currency; no money, delivery address or physical headset is required."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Banking starts with 100 credits. Optional local opportunities award 100 credits each, once per campaign. A purchase never unlocks or blocks the investigation."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.security",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 510,
+      "initialVersionID": "version.device.web.security.v1",
+      "versions": [
+        {
+          "id": "version.device.web.security.v1",
+          "version": 1,
+          "title": "Account security centre",
+          "source": "Banana Corp",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/security",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "A prize offer is not the same as an official purchase. Requests to share an account profile may be impersonation attempts."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "If you share the demonstration profile with the prize service, the fictional account can lose up to 50 credits. Open Settings → Account security to revoke the shared session and recover the affected credits. Real iPhone accounts and personal information are not involved."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.mail.prize",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 600,
+      "initialVersionID": "version.device.mail.prize.v1",
+      "versions": [
+        {
+          "id": "version.device.mail.prize.v1",
+          "version": 1,
+          "title": "You have been selected: FREE Banana Vision",
+          "source": "Vision Rewards Desk",
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Vision Rewards Desk",
+              "recipients": [
+                "Device owner"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Claim a complimentary Banana Vision reservation. Share the demonstration account profile to verify your eligibility."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Offer portal: banana-prizes.example. This is a prize service message, not an official store receipt."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.mail.prize_reminder",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 600,
+      "initialVersionID": "version.device.mail.prize_reminder.v1",
+      "versions": [
+        {
+          "id": "version.device.mail.prize_reminder.v1",
+          "version": 1,
+          "title": "Final reminder: your headset reward",
+          "source": "Vision Rewards Desk",
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Vision Rewards Desk",
+              "recipients": [
+                "Device owner"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Your free-headset offer is still waiting. Open the offer and review the profile-sharing request."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "The official store accepts Banana Credits. This message asks for a profile instead."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.mail.bank_welcome",
+      "appSurface": "email",
+      "actAvailable": 1,
+      "order": 600,
+      "initialVersionID": "version.device.mail.bank_welcome.v1",
+      "versions": [
+        {
+          "id": "version.device.mail.bank_welcome.v1",
+          "version": 1,
+          "title": "Your Banana Credits account",
+          "source": "Banana Banking",
+          "payload": {
+            "type": "email",
+            "data": {
+              "sender": "Banana Banking",
+              "recipients": [
+                "Device owner"
+              ],
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Your fictional account begins with 100 Banana Credits. Open Banking to review the ledger and optional earning opportunities."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Credits cannot be purchased with real money, transferred outside the game or redeemed for real goods."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.task.orientation",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 520,
+      "initialVersionID": "version.device.web.task.orientation.v1",
+      "versions": [
+        {
+          "id": "version.device.web.task.orientation.v1",
+          "version": 1,
+          "title": "Wallet basics",
+          "source": "Banana Banking opportunities",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/opportunities/orientation",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Your balance and every purchase appear in Banking. Credits remain inside this phone, and completed opportunities cannot be claimed twice."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.task.survey",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 520,
+      "initialVersionID": "version.device.web.task.survey.v1",
+      "versions": [
+        {
+          "id": "version.device.web.task.survey.v1",
+          "version": 1,
+          "title": "Product interest survey",
+          "source": "Banana Banking opportunities",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/opportunities/survey",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Which Banana Vision experience would you try first? Choose an interest in Banking. Your answer stays on this phone."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.task.delivery",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 520,
+      "initialVersionID": "version.device.web.task.delivery.v1",
+      "versions": [
+        {
+          "id": "version.device.web.task.delivery.v1",
+          "version": 1,
+          "title": "Demonstration dispatch",
+          "source": "Banana Banking opportunities",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/opportunities/delivery",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "The sample dispatch lists one Banana Vision reservation and a virtual pickup location. Confirm that you reviewed the sample in Banking. No parcel or real-world delivery is arranged."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.web.prize",
+      "appSurface": "web",
+      "actAvailable": 1,
+      "order": 530,
+      "initialVersionID": "version.device.web.prize.v1",
+      "versions": [
+        {
+          "id": "version.device.web.prize.v1",
+          "version": 1,
+          "title": "Your complimentary headset offer",
+          "source": "Vision Rewards Desk",
+          "payload": {
+            "type": "web",
+            "data": {
+              "path": "/offers/free-headset",
+              "blocks": [
+                {
+                  "kind": "paragraph",
+                  "text": "Claim a FREE Banana Vision reservation by sharing the demonstration account profile on this phone."
+                },
+                {
+                  "kind": "paragraph",
+                  "text": "Prize service: banana-prizes.example. This offer is separate from the official Banana Vision store."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.shop",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 710,
+      "initialVersionID": "version.device.assistant.shop.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.shop.v1",
+          "version": 1,
+          "title": "How do I reserve Banana Vision?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.shop.assistant",
+                  "role": "assistant",
+                  "text": "Open VR Experience, Banking or banana.example/store. A reservation costs 300 Banana Credits and requires confirmation. It is an optional in-game order: no real payment or delivery, and no investigation access depends on it."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.credits",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 711,
+      "initialVersionID": "version.device.assistant.credits.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.credits.v1",
+          "version": 1,
+          "title": "How do I earn Banana Credits?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.credits.assistant",
+                  "role": "assistant",
+                  "text": "Open Banking and choose an opportunity. Wallet orientation, the product-interest survey and demonstration dispatch each award 100 credits once per campaign. Your account begins with 100 credits. Review the activity ledger to see each credit and debit."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "content.device.assistant.security",
+      "appSurface": "assistant",
+      "actAvailable": 1,
+      "order": 712,
+      "initialVersionID": "version.device.assistant.security.v1",
+      "versions": [
+        {
+          "id": "version.device.assistant.security.v1",
+          "version": 1,
+          "title": "How do I secure my account?",
+          "source": "Banana Assist",
+          "payload": {
+            "type": "assistant",
+            "data": {
+              "turns": [
+                {
+                  "id": "turn.device.security.assistant",
+                  "role": "assistant",
+                  "text": "Open Settings, then Account security. If a prize service used the demonstration profile, revoke that session to recover its disputed credits. An offer is not an official reservation. No real personal information is needed for these on-phone services."
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

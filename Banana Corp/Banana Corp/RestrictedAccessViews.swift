@@ -281,6 +281,6 @@ private struct DevelopmentPuzzleDemo: View {
     init() { access = RestrictedAccessStore(progression: story, catalogue: RestrictedAccessCatalogueLoader.loadDevelopmentFixture(data: RestrictedAccessDevelopmentFixture.data)) }
 }
 struct DevelopmentPuzzleEntry: View {
-    var body: some View { NavigationLink("Puzzle framework demo (isolated)") { DevelopmentPuzzleDemo() }.buttonStyle(.modernPhone) }
+    var body: some View { NavigationLink { DevelopmentPuzzleDemo() } label: { Text("Puzzle framework demo (isolated)").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle()) }.buttonStyle(.modernPhone) }
 }
 #endif

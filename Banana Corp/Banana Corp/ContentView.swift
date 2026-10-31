@@ -52,9 +52,10 @@ struct LaunchView_Previews: PreviewProvider {
 // Individual apps can use their own NavigationStack without changing OS routes.
 struct BananaOSView: View {
     @EnvironmentObject private var appState: AppState
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var presentedRoute: PhoneAppRoute?
+    private var reduceMotion: Bool { systemReduceMotion || appState.phoneLife.preferences.reduceMotion }
 
     private struct AppContentIdentity: Hashable {
         let route: PhoneAppRoute
@@ -66,7 +67,8 @@ struct BananaOSView: View {
             Color.black.ignoresSafeArea()
             HomeScreenView()
                 .environment(\.osEffectsEnabled, appState.navigation.isHomeReady)
-                .scaleEffect(reduceMotion || presentedRoute == nil ? 1 : 0.99)
+                // Once covered, keep the retained Home at its natural text geometry.
+                .scaleEffect(reduceMotion || presentedRoute == nil || appState.navigation.phase == .active ? 1 : 0.99)
                 // Keep Home state mounted, but stop rendering its scaled text once
                 // the opaque app transition completes. Public audits can otherwise
                 // inspect that covered layer despite accessibilityHidden below.
@@ -94,7 +96,7 @@ struct BananaOSView: View {
             }
         }
         .overlay(alignment: .top) {
-            if appState.presentation.event(at: Date())?.payload.interruption != nil {
+            if appState.phoneLife.preferences.banners && appState.presentation.event(at: Date())?.payload.interruption != nil {
                 GeometryReader { geometry in
                     OSInterruptionHost()
                         // Reserve the Home strip even in short/keyboard-constrained layouts.
@@ -111,6 +113,8 @@ struct BananaOSView: View {
             }
         }
         .environment(\.osPresentation, appState.presentation)
+        .environment(\.deviceHapticsEnabled, appState.phoneLife.preferences.haptics)
+        .environment(\.deviceReduceMotion, appState.phoneLife.preferences.reduceMotion)
         .tint(appState.presentation.resolved(at: Date()).visualPalette.accent)
         .clipped()
         .statusBarHidden(true)
@@ -168,6 +172,7 @@ struct BananaOSView: View {
         case .pong: PongGameView()
         case .xo: XOGameView()
         case .evidence: EvidenceVaultView()
+        case .banking: BankingView()
         }
     }
 }

@@ -78,6 +78,11 @@
 		24A12223DAA900EF20022C62 /* EndgameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172445D9A5575163D6EA5741 /* EndgameStore.swift */; };
 		8C6E7275E45023DEAAB556AB /* EndgameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80EC3DB401B50EF1ABE30D1 /* EndgameViews.swift */; };
 		A7E4C3688D7EEF645FB7E0E2 /* LateStoryJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */; };
+        EEA630000000000000000002 /* BrowserNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA630000000000000000001 /* BrowserNavigation.swift */; };
+        EEA630010000000000000002 /* ConversationInteractionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA630010000000000000001 /* ConversationInteractionViews.swift */; };
+        EEA630020000000000000002 /* AssistantQuestionMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA630020000000000000001 /* AssistantQuestionMatcher.swift */; };
+        EEA630030000000000000002 /* DeviceLifeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA630030000000000000001 /* DeviceLifeViews.swift */; };
+        EEA630100000000000000002 /* PhoneLifeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA630100000000000000001 /* PhoneLifeUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -146,6 +151,11 @@
 		172445D9A5575163D6EA5741 /* EndgameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndgameStore.swift; sourceTree = "<group>"; };
 		A80EC3DB401B50EF1ABE30D1 /* EndgameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndgameViews.swift; sourceTree = "<group>"; };
 		3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateStoryJourneyTests.swift; sourceTree = "<group>"; };
+        EEA630000000000000000001 /* BrowserNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigation.swift; sourceTree = "<group>"; };
+        EEA630010000000000000001 /* ConversationInteractionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationInteractionViews.swift; sourceTree = "<group>"; };
+        EEA630020000000000000001 /* AssistantQuestionMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantQuestionMatcher.swift; sourceTree = "<group>"; };
+        EEA630030000000000000001 /* DeviceLifeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLifeViews.swift; sourceTree = "<group>"; };
+        EEA630100000000000000001 /* PhoneLifeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneLifeUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +198,10 @@
 				EE9899EC2B6C3142003201BE /* Banana_CorpApp.swift */,
 				EE9899EE2B6C3142003201BE /* ContentView.swift */,
 				EEAA00112E28000000000001 /* AppTheme.swift */,
+                EEA630000000000000000001 /* BrowserNavigation.swift */,
+                EEA630010000000000000001 /* ConversationInteractionViews.swift */,
+                EEA630020000000000000001 /* AssistantQuestionMatcher.swift */,
+                EEA630030000000000000001 /* DeviceLifeViews.swift */,
                 EEA100012E3A000000000001 /* AppImageAsset.swift */,
 				EE9899FE2B6C33D9003201BE /* HomeScreenView.swift */,
 				EECC00012E29000000000001 /* HomeScreenLayout.swift */,
@@ -253,7 +267,7 @@
 			sourceTree = "<group>";
 		};
 		FE1800000000000000000002 /* Banana CorpTests */ = {isa = PBXGroup; children = (FE1800000000000000000003 /* IOSIntegrationTests.swift */,); path = "Banana CorpTests"; sourceTree = "<group>"; };
-		FE1800000000000000000016 /* Banana CorpUITests */ = {isa = PBXGroup; children = (3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */,FE1800000000000000000017 /* LaunchSmokeTests.swift */, FE1900000000000000000001 /* ActsJourneyTests.swift */, FE2000000000000000000001 /* AccessibilityAuditUITests.swift */, FE2000000000000000000003 /* StoryResetUITests.swift */,); path = "Banana CorpUITests"; sourceTree = "<group>"; };
+		FE1800000000000000000016 /* Banana CorpUITests */ = {isa = PBXGroup; children = (EEA630100000000000000001 /* PhoneLifeUITests.swift */,3C2118A2E6B76CA0636E41D4 /* LateStoryJourneyTests.swift */,FE1800000000000000000017 /* LaunchSmokeTests.swift */, FE1900000000000000000001 /* ActsJourneyTests.swift */, FE2000000000000000000001 /* AccessibilityAuditUITests.swift */, FE2000000000000000000003 /* StoryResetUITests.swift */,); path = "Banana CorpUITests"; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -355,6 +369,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEAA00122E28000000000001 /* AppTheme.swift in Sources */,
+                EEA630000000000000000002 /* BrowserNavigation.swift in Sources */,
+                EEA630010000000000000002 /* ConversationInteractionViews.swift in Sources */,
+                EEA630020000000000000002 /* AssistantQuestionMatcher.swift in Sources */,
+                EEA630030000000000000002 /* DeviceLifeViews.swift in Sources */,
                 EEA100022E3A000000000001 /* AppImageAsset.swift in Sources */,
 				EECC00022E29000000000001 /* HomeScreenLayout.swift in Sources */,
                 EEDD00022E30000000000001 /* BananaAppIcon.swift in Sources */,
@@ -409,7 +427,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FE1800000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FE1800000000000000000004 /* IOSIntegrationTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
-		FE180000000000000000001A = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A7E4C3688D7EEF645FB7E0E2 /* LateStoryJourneyTests.swift in Sources */, FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */, FE1900000000000000000002 /* ActsJourneyTests.swift in Sources */, FE2000000000000000000002 /* AccessibilityAuditUITests.swift in Sources */, FE2000000000000000000004 /* StoryResetUITests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
+		FE180000000000000000001A = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (EEA630100000000000000002 /* PhoneLifeUITests.swift in Sources */,A7E4C3688D7EEF645FB7E0E2 /* LateStoryJourneyTests.swift in Sources */, FE1800000000000000000018 /* LaunchSmokeTests.swift in Sources */, FE1900000000000000000002 /* ActsJourneyTests.swift in Sources */, FE2000000000000000000002 /* AccessibilityAuditUITests.swift in Sources */, FE2000000000000000000004 /* StoryResetUITests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */

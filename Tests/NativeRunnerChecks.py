@@ -113,18 +113,20 @@ def run_case(runner, failure=None, skip=False, shutdown_failure=False):
             assert len(invocations) == expected_count
         elif skip:
             assert result.returncode != 0 and len(invocations) == 1
+        elif shutdown_failure:
+            assert result.returncode == 70 and len(invocations) == 1, (result.returncode, result.stdout, result.stderr)
         else:
             assert result.returncode == 0, (result.stdout, result.stderr)
             assert len(invocations) == (4 if integration else 8)
             assert {entry[1][entry[1].index("-configuration") + 1] for entry in invocations} == {"Debug", "Release"}
         mutations = [args for name, args, _ in commands
-                     if name == "xcrun" and args[:1] == ["simctl"] and args[1] in ["shutdown", "delete"]]
+                     if name == "xcrun" and args[:1] == ["simctl"] and args[1] in ["shutdown", "delete", "erase"]]
         if integration:
             assert not mutations, "Integration runner must not delete the caller's simulator"
         else:
             created = [entry for entry in commands if entry[0] == "xcrun" and entry[1][:2] == ["simctl", "create"]]
             assert len(mutations) == len(created)
-            assert not any(args[1] == "delete" for args in mutations), "Journey QA must retain simulators"
+            assert not any(args[1] in ["delete", "erase"] for args in mutations), "Journey QA must retain simulators"
             retained_files = list(root.rglob("retained-simulators.jsonl"))
             assert len(retained_files) == 1
             records = [json.loads(line) for line in retained_files[0].read_text().splitlines()]
@@ -189,8 +191,8 @@ if name=='xcrun':
         pass
     elif args[:2]==['simctl','shutdown']:
         if os.environ.get('EXPERIENCE_SHUTDOWN_FAIL')=='1': sys.exit(71)
-    elif args[:2]==['simctl','delete']:
-        if os.environ.get('EXPERIENCE_DELETE_FAIL')=='1': sys.exit(72)
+    elif args[:2] in [['simctl','delete'],['simctl','erase']]:
+        raise RuntimeError('Automatic simulator deletion/erasure is forbidden')
     elif args[:2]==['simctl','get_app_container']:
         print(root/'container')
     elif args[:4]==['xcresulttool','get','test-results','summary']:
@@ -202,7 +204,7 @@ raise RuntimeError(('Unrecognized fake tool',name,args))
 
 
 def experience_case(label, *, summary=None, native_fail=False, export_fail=False,
-                    delete_fail=False, shutdown_fail=False, selected=None, expected=0):
+                    shutdown_fail=False, selected=None, expected=0):
     with tempfile.TemporaryDirectory(prefix='banana-experience-contract-') as directory:
         root=Path(directory)
         (root/'scripts').mkdir()
@@ -225,7 +227,6 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
         environment.update(PATH=str(root/'bin')+os.pathsep+environment['PATH'],MOCK_ROOT=str(root),
             EXPERIENCE_NATIVE_FAIL='1' if native_fail else '0',
             EXPERIENCE_EXPORT_FAIL='1' if export_fail else '0',
-            EXPERIENCE_DELETE_FAIL='1' if delete_fail else '0',
             EXPERIENCE_SHUTDOWN_FAIL='1' if shutdown_fail else '0')
         if summary is not None: environment['EXPERIENCE_SUMMARY']=json.dumps(summary)
         arguments=['com.apple.CoreSimulator.SimRuntime.iOS-18-0','com.apple.CoreSimulator.SimDeviceType.iPhone-16']
@@ -274,21 +275,32 @@ def experience_case(label, *, summary=None, native_fail=False, export_fail=False
             identifier=f'00000000-0000-0000-0000-{number:012d}'
             assert identifier in ledger[number]
             assert invocation[1][invocation[1].index('-destination')+1]=='platform=iOS Simulator,id='+identifier
-        mutations=[entry[1] for entry in entries if entry[0]=='xcrun' and entry[1][:2] in [['simctl','delete'],['simctl','shutdown']]]
-        assert len(mutations)==2*len(created), (label,mutations)
+        mutations=[entry[1] for entry in entries if entry[0]=='xcrun' and entry[1][:2] in [['simctl','delete'],['simctl','erase'],['simctl','shutdown']]]
+        assert len(mutations)==len(created), (label,mutations)
+        assert all(args[1]=='shutdown' for args in mutations), 'No automatic deletion or erasure'
+        retained=[json.loads(line) for line in (results/'retained-simulators.jsonl').read_text().splitlines()]
+        assert len(retained)==len(created)
+        for number,record in enumerate(retained,1):
+            assert record['udid']==f'00000000-0000-0000-0000-{number:012d}'
+            assert record['retained'] and record['created_by_runner']
+            assert record['shutdown_exit']==(71 if shutdown_fail else 0)
+            assert record['shutdown_succeeded']==(not shutdown_fail)
+            assert record['case']==cases[number-1]
+            assert record['runtime']==arguments[0] and record['device_type']==arguments[1]
+            assert Path(record['xcresult']).parent==results
         for args in mutations:
             assert args[2] in [f'00000000-0000-0000-0000-{number:012d}' for number in range(1,len(created)+1)]
-        # Serial ownership: each successful deletion precedes any next create.
+        # Serial ownership: successful shutdown/retention precedes any next create.
         active=False
         for tool,args,_ in entries:
             if tool=='xcrun' and args[:2]==['simctl','create']:
                 assert not active; active=True
-            if tool=='xcrun' and args[:2]==['simctl','delete'] and not delete_fail: active=False
+            if tool=='xcrun' and args[:2]==['simctl','shutdown'] and not shutdown_fail: active=False
         for log in results.glob('*.log'):
             if log.name in [case+'.log' for case in cases]:
                 assert 'mock experience test stdout' in log.read_text()
                 assert 'mock experience test diagnostic' in log.read_text()
-        if delete_fail:
+        if shutdown_fail:
             assert (results/'outstanding-owned-simulator.txt').read_text().strip()=='00000000-0000-0000-0000-000000000001'
             assert 'CLEANUP FAILED' in result.stderr
         else: assert not (results/'outstanding-owned-simulator.txt').exists()
@@ -309,9 +321,9 @@ experience_case('failure count rejected',summary=dict(passedTests=1,failedTests=
 experience_case('extra pass rejected',summary=dict(passedTests=2,failedTests=0,skippedTests=0),expected=-1)
 experience_case('export failure',export_fail=True,expected=43)
 experience_case('native failure takes precedence over export failure',native_fail=True,export_fail=True,expected=42)
-experience_case('delete failure retains owned UUID',delete_fail=True,expected=70)
-experience_case('native failure takes precedence over cleanup failure',native_fail=True,delete_fail=True,expected=42)
-experience_case('shutdown failure with successful delete',shutdown_fail=True)
+experience_case('shutdown failure retains owned UUID and fails runner',shutdown_fail=True,expected=70)
+experience_case('native failure takes precedence over cleanup failure',native_fail=True,shutdown_fail=True,expected=42)
+experience_case('shutdown failure does not start another case',selected=['Debug-reset','Release-absence'],shutdown_fail=True,expected=70)
 print('PASS: staged mock command contracts; no Apple build, XCTest, simulator, bundle, accessibility or gameplay validation was performed')
 
 experience_case('optional focused Dynamic Type both configurations',selected=['Debug-type','Release-type'])
@@ -323,3 +335,72 @@ experience_case('all seven optional Debug categories',selected=['Debug-category-
 experience_case('category skip rejected',selected=['Debug-category-contrast'],summary=dict(passedTests=0,failedTests=0,skippedTests=1),expected=-1)
 experience_case('category native failure',selected=['Debug-category-trait'],native_fail=True,expected=42)
 print('PASS MOCK ONLY: category guard/filter isolation; no native accessibility diagnostic execution')
+
+NEUTRAL_MOCK = r'''#!/usr/bin/env python3
+import json,os,pathlib,sys
+name=pathlib.Path(sys.argv[0]).name;args=sys.argv[1:]
+root=pathlib.Path(os.environ['MOCK_ROOT'])
+with (root/'commands.jsonl').open('a') as stream:stream.write(json.dumps([name,args])+'\n')
+if name=='xcodebuild':
+    if args==['-version']:print('Xcode 26.5\nBuild version MOCK');sys.exit()
+    assert args[-1]=='test' and 'ENABLE_TESTABILITY=YES' in args and 'CODE_SIGNING_ALLOWED=NO' in args
+    assert sum(word.startswith('-only-testing:') for word in args)==2
+    assert not any(word.startswith(('-retry','-test-iterations','-allowProvisioning','-launch')) for word in args)
+    pathlib.Path(args[args.index('-resultBundlePath')+1]).mkdir()
+    sys.exit(42 if os.environ.get('NEUTRAL_NATIVE_FAIL')=='1' else 0)
+if name=='xcrun':
+    if args==['simctl','list','runtimes','--json']:
+        print(json.dumps({'runtimes':[{'identifier':'com.apple.CoreSimulator.SimRuntime.iOS-26-5','version':'26.5','isAvailable':True}]}))
+    elif args==['simctl','list','devicetypes','--json']:
+        print(json.dumps({'devicetypes':[{'identifier':'com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro'}]}))
+    elif args[:2]==['simctl','create']:print('00000000-0000-0000-0000-000000000001')
+    elif args[:2] in [['simctl','boot'],['simctl','bootstatus']]:pass
+    elif args[:2]==['simctl','shutdown']:sys.exit(71 if os.environ.get('NEUTRAL_SHUTDOWN_FAIL')=='1' else 0)
+    elif args[:2] in [['simctl','delete'],['simctl','erase']]:raise RuntimeError('Automatic simulator deletion/erasure forbidden')
+    elif args[:4]==['xcresulttool','get','test-results','summary']:
+        print(json.dumps(dict(totalTestCount=2,passedTests=2,failedTests=0,skippedTests=0)))
+    else:raise RuntimeError(args)
+    sys.exit()
+raise RuntimeError(name)
+'''
+
+
+def neutral_retention_case(*, shutdown_fail=False, native_fail=False):
+    with tempfile.TemporaryDirectory(prefix='banana-neutral-retention-contract-') as directory:
+        root=Path(directory);fixture=root/'tools/diagnostics/neutral-shell'
+        fixture.mkdir(parents=True);(root/'bin').mkdir();(root/'Banana Corp').mkdir()
+        for name in ['NeutralShellReproApp.swift','NeutralShellReproUITests.swift',
+                     'NeutralShellRepro.xcodeproj/project.pbxproj',
+                     'NeutralShellRepro.xcodeproj/xcshareddata/xcschemes/NeutralShellRepro.xcscheme',
+                     'source-comparison.json','baseline-fixture-sha256.json','run.py','README.md']:
+            target=fixture/name;target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(ROOT/'tools/diagnostics/neutral-shell'/name,target)
+        for name in ['AGENTS.md','BANANA_CORP_GAME_BIBLE.md']:(root/name).write_text('neutral test fixture only\n')
+        for name in ['xcodebuild','xcrun']:
+            p=root/'bin'/name;p.write_text(NEUTRAL_MOCK);p.chmod(0o755)
+        env=os.environ.copy();env.update(PATH=str(root/'bin')+os.pathsep+env['PATH'],MOCK_ROOT=str(root),
+            NEUTRAL_SHUTDOWN_FAIL='1' if shutdown_fail else '0',NEUTRAL_NATIVE_FAIL='1' if native_fail else '0')
+        # Platform guard is faked only inside this isolated Python process; all Apple tools are mocks.
+        import sys
+        wrapper="import runpy,subprocess,sys;sys.platform='darwin';sys.argv=[sys.argv[1],'retention-contract'];runpy.run_path(sys.argv[0],run_name='__main__')"
+        result=subprocess.run([sys.executable,'-c',wrapper,str(fixture/'run.py')],env=env,text=True,capture_output=True,timeout=30)
+        expected=42 if native_fail else 2 if shutdown_fail else 0
+        assert result.returncode==expected,(result.returncode,result.stdout,result.stderr)
+        out=root/'validation/neutral-shell-repro-retention-contract'
+        commands=[json.loads(line) for line in (root/'commands.jsonl').read_text().splitlines()]
+        mutations=[args for name,args in commands if name=='xcrun' and args[:2] in [['simctl','shutdown'],['simctl','delete'],['simctl','erase']]]
+        assert mutations==[['simctl','shutdown','00000000-0000-0000-0000-000000000001']]
+        ownership=json.loads((out/'owned-simulator.json').read_text())
+        cleanup=json.loads((out/'cleanup.json').read_text())
+        assert cleanup['retained'] and cleanup['ownership_retained_for_followup']==ownership['udid']
+        assert cleanup['cleanup_failed']==shutdown_fail and cleanup['shutdown_succeeded']==(not shutdown_fail)
+        assert cleanup['outcomes']==[{'operation':'shutdown','owned_udid':ownership['udid'],'returncode':71 if shutdown_fail else 0}]
+        integrity=json.loads((out/'integrity.json').read_text())
+        assert integrity['fixture_unchanged'] and integrity['canonical_unchanged']
+        print('PASS MOCK neutral simulator retention:', 'native failure' if native_fail else 'native success', 'shutdown failure' if shutdown_fail else 'shutdown success')
+
+
+neutral_retention_case()
+neutral_retention_case(shutdown_fail=True)
+neutral_retention_case(shutdown_fail=True,native_fail=True)
+print('PASS MOCK ONLY: neutral ownership retained after success/failure, cleanup failure propagation and primary failure precedence; no simulator execution')

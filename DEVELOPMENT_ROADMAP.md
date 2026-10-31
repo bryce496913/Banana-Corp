@@ -1,17 +1,17 @@
 # Development roadmap
 
-Updated: 2026-10-28. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
+Updated: 2026-10-30. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [creator's development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md). Implementation inventory is evidence of work, not proof of a finished game. See [agent progress](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md).
 
 | Phase | Current state | Next concrete outcome |
 | --- | --- | --- |
 | A — Reconnaissance | Initial repository/history/code/asset/test audit complete | Keep inventory and blockers current after each focused PR |
-| B — Stabilization | Core offline progression covered; Apple build/device validation outstanding | Repair native QA invocation/logging, then execute actual Debug/Release builds on available Apple tooling |
+| B — Stabilization | Current signed Debug/Release Apple SDK builds and applicable Foundation checks pass; native accessibility findings under repair | Complete unsuppressed physical UI audit and current-source campaign validation |
 | C — Opening acts | Acts 1–2 implemented with preserved/unpreserved routes and local content | Verify actual launch, scrolling, accessibility, source replacement and relaunch on iOS 18/26 |
-| D — Conspiracy/takeover | Act 3 and explicit Act 4 entry implemented; full takeover/resistance absent | Prepare approved Act 4 dependency/presentation contracts; implement only established portions |
-| E — Final choice | Canonical endings described; playable route/ending evaluators absent | Settle explicit puzzle/route/cooperation/replay contracts before implementation |
+| D — Conspiracy/takeover | Approved Act 4 resistance/component/takeover graph implemented and model validated | Exercise its controls and persistence through the natural physical campaign |
+| E — Final choice | Approved Act 5, five outcomes and final-decision replay implemented; 20 model route/preservation combinations pass | Validate all outcomes, confirmation, relaunch and replay using native controls |
 | F — Polish/device QA | Modern OS, themed surfaces and motion infrastructure present; native proof absent | Close Apple build/QA, integrate approved art/media, then prepare a valid playtest installation route |
 
-## Verified inventory at reconnaissance
+## Historical inventory at reconnaissance (superseded by current status above)
 
 - One AppState owns OS navigation and shared story/content/access stores. Story save schema 2 holds version receipts, immutable Evidence snapshots, milestones and explicit events. No parallel narrative store is needed.
 - 15 reachable fictional app routes, including Evidence and three routed games. FlapFlap is an existing unrouted implementation; no new game gate or mechanics change is authorized by this audit.
@@ -25,15 +25,15 @@ Updated: 2026-10-28. Authority: [game bible](BANANA_CORP_GAME_BIBLE.md) and [cre
 1. **B-01 — Native QA runner reliability:** use invocation-local testability for hosted Release tests; retain compiler stderr; test failure propagation and owned simulator cleanup. First focused implementation in this pass.
 2. **B-02 — Apple compile and player journey:** run the existing native scripts with actual Xcode 26+ and installed iOS 18/26 runtimes, repair compiler/test failures, retain logs and xcresults. No paid hosted runner or new external access is authorized implicitly.
 3. **B-03 — Device behavior/performance:** inspect safe areas, scrolling, Reduce Motion, VoiceOver, Home/swipe reliability, app/game lifecycle, modal dismissal, Evidence retention and native memory/rendering. Fix observed defects rather than speculative rewrites.
-4. **D-01 — Act 4 implementation specification:** map established Signal/resistance, research accountability and takeover beats into explicit dependencies; distinguish approved facts from unresolved details. Prepare a reviewable proposal where design is still TBD, without activating it as canon. Engineering draft: [dependency and presentation specification](docs/ACT4_DEPENDENCY_SPECIFICATION.md); production contracts remain unresolved.
-5. **D-02 — Approved takeover/resistance implementation:** implement the agreed graph and recovery behavior; preserve mandatory/optional Observer independence, Maya's missing status and earned Assistant cooperation.
-6. **E-01 — Route design contracts:** exact LANTERN/component puzzles, Maya identity fragments/notes/baseline, DAWN stabilization, negotiation conditions, optional Observer clue acquisition/session refusal and replay/reset remain unresolved. Do not guess values or encode hidden scores.
+4. **D-01 — Act 4 native acceptance:** the creator approved [the completion plan](docs/STORY_COMPLETION_PROPOSAL.md), now incorporated in bible 1.14 and production. Verify component order, LANTERN, Assistant conflict, explicit 87% synthesis and Act 5 entry using normal controls.
+5. **D-02 — Recovery verification:** terminate/relaunch at late-act boundaries and retain earlier evidence, independent optional Observer clues and earned Assistant cooperation.
+6. **E-01 — Final-choice native acceptance:** exercise approved Maya D–F–A/440 Hz, ordered DAWN, explicit negotiation safeguards, Observer escape and all five endings through final-decision replay. Keep unresolved identities, physics and character fates unresolved; no hidden scores.
 7. **F-01 — Production art/media integration:** import approved derivatives through the typed asset map and structured content metadata; preserve versions. Planned registry items are not produced files, new identities or approved story beats.
 8. **F-02 — Playtest readiness:** only request hands-on testing after the intended scope passes available checks, real builds/install route exist, known missing material is disclosed, and critical blockers are resolved.
 
 ## Missing inputs and boundaries
 
-Apple SDKs/runtimes and an authorized connected iPhone are not present in the current Linux execution environment. No native build or physical result is claimed. Creating paid macOS CI, obtaining signing/distribution access, spending, external build distribution and App Store submission require the creator's consequential approval.
+Current execution is macOS with Xcode 26.5; signed Debug/Release builds pass. Physical iPhone 14 Pro testing uses a separate QA identity; latest attempt is blocked by its disconnected developer tunnel. iOS 18 runtime is absent, and disk pressure prevents a safe simulator campaign. Historical Linux limitations in older entries remain historical. Creating paid macOS CI, obtaining signing/distribution access, spending, external build distribution and App Store submission require the creator's consequential approval.
 
 The supplied directive approves the written Synthetic Reality direction. Actual mood-board/reference images and approved character/headset likeness sheets are not present in the repository; they were not independently reviewed. ChatGPT project conversations were not read in this audit; repo canon and explicitly supplied documents are the evidence used. Missing final puzzle/ending decisions must be documented or proposed, not silently inferred from inaccessible conversations.
 
@@ -86,3 +86,13 @@ The creator approved [the completion contract](docs/STORY_COMPLETION_PROPOSAL.md
 Actual generic iPhone Debug/Release builds pass. Applicable Foundation checks and natural catalogue integration cover4preservationpaths×5endings, including failure/restore/collection/evidence. These are model/compile results, not complete native gameplay or accessibility acceptance. No final endgame phone playtest or public distribution is claimed.
 
 Remaining priorities: compile XCTest/UI coverage for new controls; native all-ending UI journeys in bounded sessions; verify unsuppressed Home-layer audit candidate and other15app accessibility; iOS18 unavailable-runtime coverage; approved media/art polish and physical-playtest handoff once gates pass. Preserve the prior paused-phone limit and do not start phone tests without explicit ten-minute window authorization.
+
+
+## Current native milestone — 2026-10-30
+
+See [shared UI repair evidence](docs/shared-ui-accessibility.md). PR58 remains draft: its first shared-control audit completed Home/Mail before Browser contrast failed; the explicit Browser prompt repair builds successfully but awaits device reconnection. The creator authorizes ongoing phone testing through the next large milestone, superseding earlier ten-minute check-ins for this session; pause promptly if the phone is needed. Full current-source native acceptance is not yet established.
+
+
+## Approved interactive phone expansion — 2026-10-30
+
+Creator-authorized optional Browser/edge, authored chat, Settings, automated service/community replies, supplied art, fictional Banking/credits, headset reservation and recoverable prize phishing are the current engineering slice. See [feature contract and validation](docs/INTERACTIVE_PHONE_EXPANSION.md) and bible1.15. Candidate implementation is55app sources/16routes/117records; source-qualified SDK/device validation is pending. No change to essential five-act gates or ending requirements. Complete feature checks, then return to full-story native acceptance before a human playtest invitation.

@@ -49,6 +49,10 @@ Pass 8 authorizes the explicit Act 3 → Act 4 entry contract in [ACTS_1_3_RELEA
 
 Image planning uses [BANANA_CORP_ASSET_REGISTRY.md](BANANA_CORP_ASSET_REGISTRY.md) and [Assets/README.md](Assets/README.md). `Assets/Images/<prefix>/` is staging, not an app-bundle lookup path. Keep existing compiled assets intact until explicit integration work. Planned inventory/attached art conventions do not override bible identities, reveal order or TBD decisions; review ECHO-07 identity/avatar wording before production.
 
+## Approved interactive phone expansion — 2026-10-30
+
+The creator approved the optional interactive phone features in [the implementation contract](docs/INTERACTIVE_PHONE_EXPANSION.md), now canon in bible1.15: Browser local sites/recovery/edge Back, typed authored Assistant with repeated-company pushback, automated service/community replies, functional Settings, reviewed supplied art, Banking/fictional credits, optional headset reservation and recoverable prize phishing. Keep these independent of all essential story/ending gates and existing mini-game mechanics. No real payments, credentials or external account access. Preserve published versions and Evidence bytes; use the shared progression authority and additive optional phoneLife save data. Run `bash scripts/check-phone-life.sh` plus existing story/OS regressions; native UI/asset tests remain separate. The app now has16routes, including Banking.
+
 ## Autonomous development mandate
 
 The creator's [development directive](AUTONOMOUS_DEVELOPMENT_DIRECTIVE.md) authorizes routine engineering, coordinated agents, tests, focused branches/PRs and safe merges within `bryce496913/Banana-Corp`. Maintain [the roadmap](DEVELOPMENT_ROADMAP.md), [progress/handoff](AGENT_PROGRESS.md) and [QA plan](QA_TEST_PLAN.md). Preserve existing canon/TBD boundaries; delegation does not approve missing puzzle values, endings or identities. The written Synthetic Reality direction is approved; unavailable mood-board imagery must not be claimed as reviewed.

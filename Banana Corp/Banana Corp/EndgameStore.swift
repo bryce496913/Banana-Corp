@@ -106,7 +106,10 @@ enum EndgameContract {
         transact(allowingCompleted: true) { next in
             guard var progress = next.endgame, progress.currentEnding != nil,
                   let checkpoint = progress.decisionCheckpoint else { throw StoryActionError.prerequisitesNotMet }
-            let restored = try StorySaveCodec().decode(checkpoint).state
+            var restored = try StorySaveCodec().decode(checkpoint).state
+            if let preferences = next.phoneLife?.preferences {
+                var life = restored.phoneLife ?? PhoneLifeState(); life.preferences = preferences; restored.phoneLife = life
+            }
             guard restored.endgame == nil, restored.currentAct == .theFinalChoice else { throw StoryActionError.invalidRecord }
             progress.currentEnding = nil
             next = restored

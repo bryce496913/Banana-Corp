@@ -219,7 +219,7 @@ struct EndingCompletionView: View {
                     Button("Return to final decision") { apply(appState.story.restoreFinalDecision()) }
                         .buttonStyle(.appPrimary).accessibilityIdentifier("story.ending.restore")
                         .disabled(!appState.story.hasFinalDecisionCheckpoint)
-                    Button("New game") { newGame = true }.buttonStyle(.modernPhone)
+                    Button { newGame = true } label: { Text("New game").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle()) }.buttonStyle(.modernPhone)
                     if !appState.story.earnedEndings.isEmpty {
                         AppSectionHeader("Earned endings")
                         ForEach(EndgameEnding.allCases.filter { appState.story.earnedEndings.contains($0) }) { ending in
@@ -262,6 +262,8 @@ struct EarnedEndingCollectionView: View {
                    let item = appState.content.catalogue?.itemsByID["content.act5.ending." + selected.contentKey],
                    let version = item.versions.first(where: { $0.id == selected.versionID }) {
                     StoryReadableContent(version: version)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("story.ending.review.content.\(selected.contentKey)")
                 }
             }
         }
@@ -275,20 +277,22 @@ struct PlayerProgressSettings: View {
     @State private var failure = false
     var body: some View {
         AppSectionHeader("Campaign")
-        Button("New game") { newGame = true }.buttonStyle(.modernPhone)
+        Button { newGame = true } label: { Text("New game").frame(minHeight: AppTheme.Layout.touchTarget).contentShape(Rectangle()) }.buttonStyle(.modernPhone)
             .accessibilityIdentifier("story.new_game")
             .confirmationDialog("Start a new game?", isPresented: $newGame) {
                 Button("New game", role: .destructive) { apply(appState.resetStoryForNewGame()) }
-                Button("Cancel", role: .cancel) {}
+                    .accessibilityIdentifier("story.new_game.confirm")
+                Button("Cancel", role: .cancel) {}.accessibilityIdentifier("story.new_game.cancel")
             } message: { Text("Reset current story progress. Your Home layout and earned ending collection remain intact.") }
         if !appState.story.earnedEndings.isEmpty {
             NavigationLink("Review earned endings") { EarnedEndingCollectionView() }
                 .buttonStyle(.modernPhone).accessibilityIdentifier("story.ending.collection")
             Button("Clear ending history", role: .destructive) { clearHistory = true }
-                .buttonStyle(.modernPhone)
+                .buttonStyle(.modernPhone).accessibilityIdentifier("story.ending.history.clear")
                 .confirmationDialog("Clear earned ending history?", isPresented: $clearHistory) {
                     Button("Clear history", role: .destructive) { apply(appState.story.clearEndingHistory(confirmed: true)) }
-                    Button("Cancel", role: .cancel) {}
+                        .accessibilityIdentifier("story.ending.history.confirm")
+                    Button("Cancel", role: .cancel) {}.accessibilityIdentifier("story.ending.history.cancel")
                 } message: { Text("Remove the local ending collection without resetting this campaign.") }
         }
         Color.clear.frame(height: 0)

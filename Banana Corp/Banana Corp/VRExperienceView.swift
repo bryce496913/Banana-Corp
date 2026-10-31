@@ -8,6 +8,7 @@ struct VRExperienceView: View {
     var body: some View {
         PhoneShellView(title: "VR Experience", subtitle: "BANANA VISION") {
             AppScreenScroll {
+                HeadsetShopCard()
                 if let item = appState.content.availableItems(for: .web).first(where: { $0.id == "content.act1.vr_preview" }),
                    case .web(let preview) = item.version.payload {
                     Image(systemName: "visionpro").font(.system(size: 64)).foregroundStyle(AppTheme.Colors.accent).accessibilityHidden(true)
