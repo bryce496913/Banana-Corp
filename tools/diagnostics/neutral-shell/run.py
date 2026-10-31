@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Developer-only neutral input reproduction. Creates and deletes only its own simulator."""
+"""Developer-only neutral input reproduction. Creates, shuts down and retains only its own simulator."""
 import argparse
 import datetime
 import hashlib
@@ -156,7 +156,7 @@ def main():
         if owned is not None:
             outcomes = []
             with (results / 'cleanup.log').open('w') as log:
-                for operation in ['shutdown', 'delete']:
+                for operation in ['shutdown']:
                     try:
                         code = subprocess.run(['xcrun', 'simctl', operation, owned], stdout=log,
                                               stderr=subprocess.STDOUT, timeout=60).returncode
@@ -166,7 +166,8 @@ def main():
                     outcomes.append({'operation': operation, 'owned_udid': owned, 'returncode': code})
             cleanup_failed = any(item['returncode'] != 0 for item in outcomes)
             write('cleanup.json', {'outcomes': outcomes, 'cleanup_failed': cleanup_failed,
-                                   'ownership_retained_for_followup': owned if cleanup_failed else None})
+                                   'ownership_retained_for_followup': owned, 'retained': True,
+                                   'shutdown_succeeded': not cleanup_failed})
         try:
             after = inventory()
             write('hashes-after.json', after)
